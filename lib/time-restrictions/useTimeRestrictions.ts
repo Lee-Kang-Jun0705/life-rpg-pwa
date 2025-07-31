@@ -32,7 +32,7 @@ export function useTimeRestrictions(userId: string, statType?: StatType): UseTim
     } finally {
       setIsLoading(false)
     }
-  }, [statType])
+  }, [statType, timeService])
 
   const getTimeStats = useCallback(async (): Promise<TimeActivityStats | null> => {
     if (!userId) return null
@@ -54,15 +54,15 @@ export function useTimeRestrictions(userId: string, statType?: StatType): UseTim
       setError(err instanceof Error ? err : new Error('Failed to get time stats'))
       return null
     }
-  }, [userId])
+  }, [userId, timeService])
 
   const checkIfGoodTime = useCallback((checkStatType?: StatType): boolean => {
     return timeService.isGoodTimeForActivity(undefined, checkStatType || statType)
-  }, [statType])
+  }, [statType, timeService])
 
   const findNextGoodTime = useCallback((checkStatType?: StatType): { hour: number; name: string; bonus: boolean } | null => {
     return timeService.findNextGoodTime(checkStatType || statType)
-  }, [statType])
+  }, [statType, timeService])
 
   // 초기 로드
   useEffect(() => {

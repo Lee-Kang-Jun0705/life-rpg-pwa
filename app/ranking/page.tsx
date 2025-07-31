@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import type { RankingEntry, RankingFilter, UserRankingStats } from '@/lib/types/ranking'
 import { rankingService } from '@/lib/services/ranking-service'
@@ -33,9 +33,9 @@ export default function RankingPage() {
   // 데이터 로드
   useEffect(() => {
     loadData()
-  }, [filter])
+  }, [loadData])
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true)
       
@@ -56,7 +56,7 @@ export default function RankingPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filter])
 
   // 필터 변경
   const handleFilterChange = (newFilter: Partial<RankingFilter>) => {

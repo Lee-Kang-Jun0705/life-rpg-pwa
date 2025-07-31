@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { GAME_CONFIG } from '@/lib/config/game-config'
 import { dbHelpers } from '@/lib/database/client'
@@ -25,7 +25,7 @@ function CharacterInfo() {
   
   useEffect(() => {
     loadProfile()
-  }, [])
+  }, [loadProfile])
   
   // 프로필 변경 감지
   useEffect(() => {
@@ -38,9 +38,9 @@ function CharacterInfo() {
     return () => {
       window.removeEventListener('profile-updated', handleProfileUpdate)
     }
-  }, [])
+  }, [loadProfile])
   
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     
     try {
       const [userProfile, stats] = await Promise.all([
@@ -66,7 +66,7 @@ function CharacterInfo() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId])
   
   if (loading) {
     return (

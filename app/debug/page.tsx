@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { dbHelpers, waitForDatabase } from '@/lib/database/client'
 import { GAME_CONFIG } from '@/lib/types/dashboard'
 
@@ -31,9 +31,9 @@ export default function DebugPage() {
 
   useEffect(() => {
     checkDatabase()
-  }, [])
+  }, [checkDatabase])
 
-  const checkDatabase = async () => {
+  const checkDatabase = useCallback(async () => {
     try {
       console.log('🔍 Checking database...')
       
@@ -88,9 +88,9 @@ export default function DebugPage() {
         error: errorMessage
       })
     }
-  }
+  }, [checkUserData])
 
-  const checkUserData = async () => {
+  const checkUserData = useCallback(async () => {
     try {
       const userId = GAME_CONFIG.DEFAULT_USER_ID
       console.log('Checking user data for:', userId)
@@ -122,7 +122,7 @@ export default function DebugPage() {
         error: err instanceof Error ? err.message : 'Unknown error'
       })
     }
-  }
+  }, [])
 
   const initializeUserData = async () => {
     try {

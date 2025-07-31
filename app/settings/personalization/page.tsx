@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { PersonalizationService } from '@/lib/personalization/personalization-service'
 import { PersonalizationMode, StorageUsage } from '@/lib/personalization/types'
@@ -20,9 +20,9 @@ export default function PersonalizationSettingsPage() {
 
   useEffect(() => {
     loadSettings()
-  }, [user])
+  }, [loadSettings])
 
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     if (!user?.id) return
     
     try {
@@ -37,7 +37,7 @@ export default function PersonalizationSettingsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user?.id, personalizationService])
 
   const handleSaveMode = async () => {
     if (!user?.id || saving) return

@@ -113,9 +113,12 @@ export function useSpeechRecognition(
 
     return () => {
       service.destroy()
-      clearListeningTimeout()
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
     }
-  }, [isSupported, options.lang, options.continuous, options.interimResults, options.maxAlternatives])
+  }, [isSupported, options])
 
   // 타임아웃 정리
   const clearListeningTimeout = useCallback(() => {
@@ -143,7 +146,7 @@ export function useSpeechRecognition(
         })
       }, options.timeout)
     }
-  }, [isListening, isSupported, options.timeout])
+  }, [isListening, isSupported, options.timeout, stop])
 
   // 음성 인식 중지
   const stop = useCallback(() => {

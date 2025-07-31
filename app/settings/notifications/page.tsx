@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Toggle } from '@/components/ui/Toggle'
@@ -17,9 +17,9 @@ export default function NotificationSettingsPage() {
 
   useEffect(() => {
     loadSettings()
-  }, [])
+  }, [loadSettings])
 
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     setIsLoading(true)
     try {
       // 권한 상태 확인
@@ -35,7 +35,7 @@ export default function NotificationSettingsPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [pushManager])
 
   const handleRequestPermission = async () => {
     const result = await pushManager.requestPermission()
