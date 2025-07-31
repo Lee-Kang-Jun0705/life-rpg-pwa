@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
             break
 
           case 'player/stats':
-            const playerStats = await dbHelpers.getCharacterStatsList(userId)
+            const playerStats = await dbHelpers.getStats(userId)
             results['player/stats'] = playerStats
             break
 
