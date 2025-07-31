@@ -135,7 +135,7 @@ export class AICoachService {
       activities.map((a) => a.timestamp.toISOString().split('T')[0])
     )
     let streak = 0
-    let currentDate = new Date()
+    const currentDate = new Date()
     while (activeDays.has(currentDate.toISOString().split('T')[0])) {
       streak++
       currentDate.setDate(currentDate.getDate() - 1)

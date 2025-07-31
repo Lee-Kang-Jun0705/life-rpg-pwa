@@ -169,7 +169,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
         if (!target) return
         
         let message = ''
-        let messageType: BattleMessage['type'] = 'normal'
+        const messageType: BattleMessage['type'] = 'normal'
         
         switch (action.type) {
           case 'attack':

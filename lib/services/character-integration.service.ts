@@ -169,14 +169,14 @@ export class CharacterIntegrationService {
   ) {
     // 기본 스탯 (코어 스탯 기반)
     let hp = 100 + (coreStats.health * 20)
-    let mp = 50 + (coreStats.learning * 10)
+    const mp = 50 + (coreStats.learning * 10)
     let attack = 10 + (coreStats.achievement * 5)
     let defense = 5 + (coreStats.health * 3)
     let speed = 50 + (coreStats.relationship * 2)
     let critRate = 0.05 + (coreStats.achievement * 0.01)
     let critDamage = 1.5 + (coreStats.achievement * 0.05)
-    let dodge = 0.05 + (coreStats.relationship * 0.01)
-    let accuracy = 0.9 + (coreStats.learning * 0.01)
+    const dodge = 0.05 + (coreStats.relationship * 0.01)
+    const accuracy = 0.9 + (coreStats.learning * 0.01)
     let resistance = 0.1 + (coreStats.health * 0.01)
 
     // 장비 보너스 적용

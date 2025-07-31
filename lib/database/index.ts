@@ -1442,7 +1442,7 @@ export const dbHelpers = {
   async updateAchievementProgress(userId: string, achievementId: string, progress: number): Promise<boolean> {
     if (typeof window === 'undefined' || !db) return false
     
-    let achievement = await db.userAchievements
+    const achievement = await db.userAchievements
       .where(['userId', 'achievementId'])
       .equals([userId, achievementId])
       .first()

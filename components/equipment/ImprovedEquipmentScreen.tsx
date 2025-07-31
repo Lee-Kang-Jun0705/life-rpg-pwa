@@ -226,7 +226,7 @@ export function ImprovedEquipmentScreen() {
   }
 
   const calculateTotalStats = () => {
-    let totalStats = {
+    const totalStats = {
       attack: character?.combatStats?.attack || 0,
       defense: character?.combatStats?.defense || 0,
       hp: character?.combatStats?.hp || 100,

@@ -417,7 +417,7 @@ export const clientDbHelpers = {
     )).sort().reverse()
 
     let streak = 0
-    let currentDate = new Date()
+    const currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
 
     for (const dateStr of sortedDates) {

@@ -214,7 +214,7 @@ export function EquipmentScreen() {
 
   // 총 스탯 계산을 메모이제이션
   const totalStats = useMemo(() => {
-    let stats = {
+    const stats = {
       attack: 10,
       defense: 10,
       hp: 100,
