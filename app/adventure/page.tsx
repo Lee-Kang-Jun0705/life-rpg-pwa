@@ -23,23 +23,6 @@ function CharacterInfo() {
   const [totalLevel, setTotalLevel] = useState(0)
   const [loading, setLoading] = useState(true)
   
-  useEffect(() => {
-    loadProfile()
-  }, [loadProfile])
-  
-  // 프로필 변경 감지
-  useEffect(() => {
-    const handleProfileUpdate = () => {
-      loadProfile()
-    }
-    
-    window.addEventListener('profile-updated', handleProfileUpdate)
-    
-    return () => {
-      window.removeEventListener('profile-updated', handleProfileUpdate)
-    }
-  }, [loadProfile])
-  
   const loadProfile = useCallback(async () => {
     
     try {
@@ -67,6 +50,23 @@ function CharacterInfo() {
       setLoading(false)
     }
   }, [userId])
+  
+  useEffect(() => {
+    loadProfile()
+  }, [loadProfile])
+  
+  // 프로필 변경 감지
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      loadProfile()
+    }
+    
+    window.addEventListener('profile-updated', handleProfileUpdate)
+    
+    return () => {
+      window.removeEventListener('profile-updated', handleProfileUpdate)
+    }
+  }, [loadProfile])
   
   if (loading) {
     return (
