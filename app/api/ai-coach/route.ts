@@ -85,9 +85,9 @@ export async function POST(request: NextRequest) {
     사용자 질문: ${message}
     `
 
-    const messages = [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userContext }
+    const messages: AIMessage[] = [
+      { role: 'system' as const, content: systemPrompt },
+      { role: 'user' as const, content: userContext }
     ]
 
     let aiResponse: string

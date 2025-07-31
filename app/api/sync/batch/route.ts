@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         switch (req.endpoint) {
           case 'energy/state':
             const energyService = EnergyService.getInstance()
-            const energyState = await energyService.getEnergyState(userId)
+            const energyState = await energyService.getEnergy(userId)
             results['energy/state'] = energyState
             break
 

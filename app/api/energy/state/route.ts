@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
         current: state.current,
         max: state.max,
         regenRate: ENERGY_CONFIG.REGEN_RATE,
-        regenTime: ENERGY_CONFIG.REGEN_TIME
+        regenTime: ENERGY_CONFIG.REGEN_INTERVAL
       }
     })
   } catch (error) {
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
         current: state.current,
         max: state.max,
         regenRate: ENERGY_CONFIG.REGEN_RATE,
-        regenTime: ENERGY_CONFIG.REGEN_TIME
+        regenTime: ENERGY_CONFIG.REGEN_INTERVAL
       }
     })
   } catch (error) {
