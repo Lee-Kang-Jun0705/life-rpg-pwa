@@ -134,9 +134,9 @@ export class VerificationService {
    * 사진 업로드 검증 (준비 중)
    */
   async verifyPhotoUpload(
-    userId: string,
-    activityId: string,
-    photoData: string | File
+    _userId: string,
+    _activityId: string,
+    _photoData: string | File
   ): Promise<VerificationResult> {
     // TODO: 구현 예정
     // 1. 파일 크기 체크

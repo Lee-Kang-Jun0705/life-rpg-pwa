@@ -1,5 +1,4 @@
 import type { Stat } from '@/lib/database/types'
-import { calculateLevelFromExperience } from './stat-calculator'
 
 /**
  * 스탯 배열에서 중복을 제거하고 각 타입별로 가장 높은 레벨의 스탯만 반환

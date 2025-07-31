@@ -5,15 +5,15 @@
 
 import { db } from '@/lib/database'
 import { calculateLevelFromExperience } from '@/lib/utils/stat-calculator'
-import type { UserProfile, Stat, Activity } from '@/lib/database/types'
+import type { Activity } from '@/lib/database/types'
 
 export interface IntegrityIssue {
   type: 'LEVEL_MISMATCH' | 'EXPERIENCE_MISMATCH' | 'MISSING_DATA' | 'DUPLICATE_DATA' | 'ORPHAN_DATA'
   severity: 'critical' | 'warning' | 'info'
   table: string
   field?: string
-  expected?: any
-  actual?: any
+  expected?: unknown
+  actual?: unknown
   description: string
   suggestion?: string
 }
