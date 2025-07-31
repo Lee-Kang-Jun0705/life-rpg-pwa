@@ -310,7 +310,7 @@ export class DungeonService {
   
   // 난이도별 보상 배율 가져오기
   private getDifficultyMultiplier(difficulty: string): number {
-    const { DIFFICULTY_INFO } = require('@/lib/dungeon/dungeon-data')
+    import {  DIFFICULTY_INFO  } from '@/lib/dungeon/dungeon-data'
     return DIFFICULTY_INFO[difficulty]?.multiplier || 1.0
   }
 

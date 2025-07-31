@@ -104,9 +104,9 @@ class EquipmentEnhancementService {
   private toEnhanceableItem(item: GeneratedItem): EnhanceableItem {
     return {
       ...item,
-      enhancementLevel: (item as any).enhancementLevel || 0,
-      stats: (item as any).stats || item.baseStats,
-      quantity: (item as any).quantity || 1
+      enhancementLevel: (item as unknown).enhancementLevel || 0,
+      stats: (item as unknown).stats || item.baseStats,
+      quantity: (item as unknown).quantity || 1
     }
   }
 
@@ -148,7 +148,7 @@ class EquipmentEnhancementService {
       // 재료 체크
       for (const material of materials) {
         const item = inventoryService.getItem(material.id)
-        const itemQuantity = (item as any)?.quantity || 1
+        const itemQuantity = (item as unknown)?.quantity || 1
         if (!item || itemQuantity < material.quantity) {
           return { success: false, error: '재료가 부족합니다.' }
         }
@@ -223,7 +223,7 @@ class EquipmentEnhancementService {
           success: false,
           item: failureHandled.item,
           previousLevel: equipment.enhancementLevel || 0,
-          newLevel: (failureHandled.item as any).enhancementLevel || 0,
+          newLevel: (failureHandled.item as unknown).enhancementLevel || 0,
           statsImproved: {},
           goldCost,
           materialsUsed: materials
@@ -245,7 +245,7 @@ class EquipmentEnhancementService {
       const item = inventoryService.getItem(material.id)
       if (item && item.type === 'material') {
         // 재료 등급에 따른 보너스
-        const tierBonus = (item as any).tier || 1
+        const tierBonus = (item as unknown).tier || 1
         bonus += tierBonus * material.quantity * 2 // 티어당 2% 보너스
       }
     }
@@ -368,7 +368,7 @@ class EquipmentEnhancementService {
   getEnhancementMaterials(): GeneratedItem[] {
     return inventoryService.getItems().filter(item => 
       item.type === 'material' && 
-      ['stone', 'essence', 'crystal', 'fragment'].includes((item as any).subType || '')
+      ['stone', 'essence', 'crystal', 'fragment'].includes((item as unknown).subType || '')
     )
   }
 
@@ -389,16 +389,16 @@ class EquipmentEnhancementService {
     const recommendations: Array<{ id: string; quantity: number }> = []
     
     // 높은 티어 재료부터 추천
-    materials.sort((a, b) => ((b as any).tier || 1) - ((a as any).tier || 1))
+    materials.sort((a, b) => ((b as unknown).tier || 1) - ((a as unknown).tier || 1))
     
     let remainingBonus = needed
     for (const material of materials) {
       if (remainingBonus <= 0) break
       
-      const tier = (material as any).tier || 1
+      const tier = (material as unknown).tier || 1
       const bonusPerItem = tier * 2
       const quantity = Math.ceil(remainingBonus / bonusPerItem)
-      const materialQuantity = (material as any)?.quantity || 1
+      const materialQuantity = (material as unknown)?.quantity || 1
       
       if (materialQuantity >= quantity) {
         recommendations.push({ id: material.id, quantity })

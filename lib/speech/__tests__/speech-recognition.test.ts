@@ -31,7 +31,7 @@ global.window = {
     addFromString: jest.fn()
   })),
   webkitSpeechGrammarList: undefined
-} as any
+} as unknown
 
 // Speech Recognition API mock 환경에서 문제가 있으므로 스킵
 describe.skip('SpeechRecognitionService', () => {
@@ -53,7 +53,7 @@ describe.skip('SpeechRecognitionService', () => {
 
     it('should return false when SpeechRecognition is not available', () => {
       const originalSpeechRecognition = window.SpeechRecognition
-      window.SpeechRecognition = undefined as any
+      window.SpeechRecognition = undefined as unknown
       
       expect(SpeechRecognitionService.isSupported()).toBe(false)
       

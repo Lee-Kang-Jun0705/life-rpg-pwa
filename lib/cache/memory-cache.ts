@@ -142,7 +142,7 @@ class MemoryCache {
 export const memoryCache = new MemoryCache()
 
 // 캐시 데코레이터
-export function withCache<T extends (...args: any[]) => any>(
+export function withCache<T extends (...args: unknown[]) => any>(
   fn: T,
   keyGenerator: (...args: Parameters<T>) => string,
   ttl: number = 300000

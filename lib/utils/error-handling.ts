@@ -55,24 +55,24 @@ export class PermissionError extends AppError {
 }
 
 // 에러 타입 가드
-export function isAppError(error: unknown): error is AppError {
+export function isAppError(_error: unknown): error is AppError {
   return error instanceof AppError
 }
 
-export function isValidationError(error: unknown): error is ValidationError {
+export function isValidationError(_error: unknown): error is ValidationError {
   return error instanceof ValidationError
 }
 
-export function isDatabaseError(error: unknown): error is DatabaseError {
+export function isDatabaseError(_error: unknown): error is DatabaseError {
   return error instanceof DatabaseError
 }
 
-export function isNetworkError(error: unknown): error is NetworkError {
+export function isNetworkError(_error: unknown): error is NetworkError {
   return error instanceof NetworkError
 }
 
 // 에러 처리 헬퍼
-export function handleError(error: unknown): AppError {
+export function handleError(_error: unknown): AppError {
   if (isAppError(error)) {
     return error
   }
@@ -92,7 +92,7 @@ export function handleError(error: unknown): AppError {
 }
 
 // 에러 로깅
-export function logError(error: AppError | Error, context?: string) {
+export function logError(_error: AppError | Error, context?: string) {
   const errorInfo = {
     message: error.message,
     name: error.name,
@@ -116,7 +116,7 @@ export function logError(error: AppError | Error, context?: string) {
 
 // 재시도 로직
 export async function withRetry<T>(
-  fn: () => Promise<T>,
+  _fn: () => Promise<T>,
   maxRetries: number = 3,
   delay: number = 1000
 ): Promise<T> {
@@ -126,7 +126,7 @@ export async function withRetry<T>(
     try {
       return await fn()
     } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error))
+      lastError = error instanceof Error ? _error : new Error(String(error))
       
       if (attempt === maxRetries) {
         throw new AppError(
@@ -147,7 +147,7 @@ export async function withRetry<T>(
 
 // 안전한 비동기 실행
 export async function safeAsync<T>(
-  fn: () => Promise<T>,
+  _fn: () => Promise<T>,
   fallback?: T
 ): Promise<{ data?: T; error?: AppError }> {
   try {
@@ -156,7 +156,7 @@ export async function safeAsync<T>(
   } catch (error) {
     const appError = handleError(error)
     logError(appError)
-    return { error: appError, data: fallback }
+    return { _error: appError, data: fallback }
   }
 }
 
@@ -202,7 +202,7 @@ export function assertIsArray<T>(
 }
 
 // 에러 경계 컴포넌트용 유틸리티
-export function getErrorMessage(error: Error): string {
+export function getErrorMessage(_error: Error): string {
   if (isAppError(error)) {
     return error.message
   }
@@ -217,7 +217,7 @@ export function getErrorMessage(error: Error): string {
   }
 }
 
-export function getErrorRecoveryAction(error: Error): { 
+export function getErrorRecoveryAction(_error: Error): { 
   label: string; 
   action: () => void 
 } | null {

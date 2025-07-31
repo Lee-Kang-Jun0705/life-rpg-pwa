@@ -21,7 +21,7 @@ export class SyncQueue {
   }
 
   // 동기화 대기열에 추가
-  async addToQueue(item: Omit<SyncQueueItem, 'id' | 'timestamp' | 'retryCount'>) {
+  async addToQueue(_item: Omit<SyncQueueItem, 'id' | 'timestamp' | 'retryCount'>) {
     try {
       await db.syncQueue.add({
         ...item,
@@ -48,7 +48,7 @@ export class SyncQueue {
   }
 
   // 동기화 시도
-  async syncItem(item: SyncQueueItem): Promise<boolean> {
+  async syncItem(_item: SyncQueueItem): Promise<boolean> {
     try {
       // 실제 API 호출 (현재는 시뮬레이션)
       await this.simulateApiCall(item)
@@ -75,7 +75,7 @@ export class SyncQueue {
   }
 
   // API 호출 시뮬레이션
-  private async simulateApiCall(item: SyncQueueItem): Promise<void> {
+  private async simulateApiCall(_item: SyncQueueItem): Promise<void> {
     // 네트워크 상태 확인
     if (!navigator.onLine) {
       throw new Error('오프라인 상태')

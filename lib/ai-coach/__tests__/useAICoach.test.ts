@@ -55,7 +55,7 @@ const mockPersonalizedAdvice = [
 ]
 
 describe('useAICoach', () => {
-  let mockServiceInstance: any
+  let mockServiceInstance: unknown
 
   beforeEach(() => {
     mockServiceInstance = {

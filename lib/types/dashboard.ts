@@ -6,7 +6,7 @@ export interface Stat {
   userId: string
   type: 'health' | 'learning' | 'relationship' | 'achievement'
   level: number
-  experience: number
+  _experience: number
   totalActivities: number
   updatedAt: Date
 }
@@ -14,10 +14,10 @@ export interface Stat {
 export interface Activity {
   id?: number
   userId: string
-  statType: 'health' | 'learning' | 'relationship' | 'achievement'
+  _statType: 'health' | 'learning' | 'relationship' | 'achievement'
   activityName: string
   description?: string
-  experience: number
+  _experience: number
   timestamp: Date
   synced: boolean
 }
@@ -46,9 +46,9 @@ export interface DashboardState {
 
 export interface DashboardActions {
   loadUserData: () => Promise<void>
-  handleStatClick: (statType: string) => Promise<void>
-  handleVoiceInput: (transcript: string, activityType?: string | null) => Promise<void>
-  handleStatAction: (statType: string, action: string) => Promise<void>
+  handleStatClick: (_statType: string) => Promise<void>
+  handleVoiceInput: (_transcript: string, activityType?: string | null) => Promise<void>
+  handleStatAction: (_statType: string, _action: string) => Promise<void>
 }
 
 // 게임 설정은 config/game-config.ts에서 가져옴
@@ -62,15 +62,20 @@ export const STAT_TYPES: StatType[] = [
 ] as const
 
 // stat-calculator.ts의 함수를 재export하여 기존 코드 호환성 유지
+import { 
+  calculateLevelFromExperience,
+  calculateRequiredExperience,
+  calculateTotalExperience
+} from '@/lib/utils/stat-calculator'
+
 export { 
   calculateLevelFromExperience as calculateLevel,
   calculateRequiredExperience as getExpForNextLevel,
   calculateTotalExperience as getExpForLevel
-} from '@/lib/utils/stat-calculator'
+}
 
 // 경험치 진행도 계산 (stat-calculator 함수 사용)
 export const calculateProgress = (experience: number): number => {
-  const { calculateLevelFromExperience, calculateRequiredExperience } = require('@/lib/utils/stat-calculator')
   const { level, currentExp } = calculateLevelFromExperience(experience)
   const nextLevelExp = calculateRequiredExperience(level)
   const progress = (currentExp / nextLevelExp) * 100
@@ -84,7 +89,6 @@ export const calculateLevelDetails = (totalExperience: number): {
   nextLevelExp: number
   totalExpForCurrentLevel: number
 } => {
-  const { calculateLevelFromExperience, calculateRequiredExperience, calculateTotalExperience } = require('@/lib/utils/stat-calculator')
   const { level, currentExp } = calculateLevelFromExperience(totalExperience)
   const nextLevelExp = calculateRequiredExperience(level)
   const totalExpForCurrentLevel = calculateTotalExperience(level)

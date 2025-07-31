@@ -16,8 +16,8 @@ export class DungeonFactory {
   static createDailyDungeon(
     id: string,
     name: string,
-    difficulty: DifficultyLevel,
-    challenges: Challenge[]
+    _difficulty: DifficultyLevel,
+    _challenges: Challenge[]
   ): Dungeon {
     const resetTime = new Date()
     resetTime.setHours(24, 0, 0, 0)
@@ -27,7 +27,7 @@ export class DungeonFactory {
       name,
       description: `오늘의 ${name} 도전 과제를 완료하세요!`,
       difficulty,
-      type: 'daily',
+      _type: 'daily',
       status: 'available',
       requirements: {
         minLevel: this.getMinLevelByDifficulty(difficulty),
@@ -47,8 +47,8 @@ export class DungeonFactory {
   static createWeeklyDungeon(
     id: string,
     name: string,
-    difficulty: DifficultyLevel,
-    challenges: Challenge[]
+    _difficulty: DifficultyLevel,
+    _challenges: Challenge[]
   ): Dungeon {
     const resetTime = new Date()
     const dayOfWeek = resetTime.getDay()
@@ -61,7 +61,7 @@ export class DungeonFactory {
       name,
       description: `이번 주 ${name} 미션을 완료하고 특별 보상을 받으세요!`,
       difficulty,
-      type: 'weekly',
+      _type: 'weekly',
       status: 'available',
       requirements: {
         minLevel: this.getMinLevelByDifficulty(difficulty) + 5,
@@ -86,7 +86,7 @@ export class DungeonFactory {
       name: `무한의 탑 ${floor}층`,
       description: '끝없는 도전! 얼마나 높이 올라갈 수 있을까요?',
       difficulty,
-      type: 'infinite',
+      _type: 'infinite',
       status: 'available',
       requirements: {
         minLevel: Math.max(1, floor * 2),
@@ -97,7 +97,7 @@ export class DungeonFactory {
         coins: floor * 30,
         items: floor % 10 === 0 ? ['legendary-chest'] : []
       },
-      challenges: [],
+      _challenges: [],
       resetTime: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1년 후
       attempts: 0,
       stages: {
@@ -111,7 +111,7 @@ export class DungeonFactory {
   /**
    * 난이도에 따른 최소 레벨 계산
    */
-  private static getMinLevelByDifficulty(difficulty: DifficultyLevel): number {
+  private static getMinLevelByDifficulty(_difficulty: DifficultyLevel): number {
     const levelMap: Record<DifficultyLevel, number> = {
       easy: 1,
       normal: 5,
@@ -126,7 +126,7 @@ export class DungeonFactory {
   /**
    * 난이도에 따른 에너지 소모량 계산
    */
-  private static getEnergyByDifficulty(difficulty: DifficultyLevel): number {
+  private static getEnergyByDifficulty(_difficulty: DifficultyLevel): number {
     const energyMap: Record<DifficultyLevel, number> = {
       easy: 5,
       normal: 10,
@@ -142,8 +142,8 @@ export class DungeonFactory {
    * 난이도와 타입에 따른 보상 계산
    */
   private static getRewardsByDifficulty(
-    difficulty: DifficultyLevel, 
-    type: DungeonType
+    _difficulty: DifficultyLevel, 
+    _type: DungeonType
   ): Dungeon['rewards'] {
     const baseRewards = {
       easy: { exp: 50, coins: 30 },
@@ -175,7 +175,7 @@ export class DungeonFactory {
   /**
    * 보상 아이템 결정
    */
-  private static getRewardItems(difficulty: DifficultyLevel, type: DungeonType): string[] {
+  private static getRewardItems(_difficulty: DifficultyLevel, _type: DungeonType): string[] {
     const items: string[] = []
 
     // 난이도별 기본 아이템

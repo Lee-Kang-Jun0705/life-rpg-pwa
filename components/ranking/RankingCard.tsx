@@ -7,7 +7,7 @@ import { TrendingUp, TrendingDown, Minus, Crown, Users, Clock, Trophy } from 'lu
 
 interface RankingCardProps {
   entry: RankingEntry
-  category: string
+  _category: string
   showChange?: boolean
   isCurrentUser?: boolean
 }
@@ -148,7 +148,7 @@ export function RankingCard({ entry, category, showChange = true, isCurrentUser 
 }
 
 // 카테고리별 단위 반환
-function getCategoryUnit(category: string): string {
+function getCategoryUnit(_category: string): string {
   const units: Record<string, string> = {
     total_level: 'Level',
     combat_power: 'CP',

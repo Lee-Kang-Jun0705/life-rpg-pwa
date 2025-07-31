@@ -16,7 +16,7 @@ export function generateShortId(): string {
 }
 
 // 프리픽스가 있는 ID 생성
-export function generatePrefixedId(prefix: string): string {
+export function generatePrefixedId(_prefix?: string): string {
   return `${prefix}_${nanoid()}`
 }
 

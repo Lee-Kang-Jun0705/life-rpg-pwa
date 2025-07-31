@@ -134,7 +134,7 @@ export function EquipmentScreen() {
     try {
       // 현재 장착 아이템 정보 가져오기
       const currentEquipped = await dbHelpers.getPlayerData('equippedItems')
-      const equippedData = (currentEquipped?.data || {}) as any
+      const equippedData = (currentEquipped?.data || {}) as unknown
       equippedData[item.category] = itemId
       
       // 업데이트된 장착 정보 저장
@@ -162,7 +162,7 @@ export function EquipmentScreen() {
     try {
       // 현재 장착 아이템 정보 가져오기
       const currentEquipped = await dbHelpers.getPlayerData('equippedItems')
-      const equippedData = (currentEquipped?.data || {}) as any
+      const equippedData = (currentEquipped?.data || {}) as unknown
       delete equippedData[slot]
       
       // 업데이트된 장착 정보 저장

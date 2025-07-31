@@ -137,31 +137,31 @@ export const SPECIAL_ENHANCEMENT_ITEMS: EnhancementMaterial[] = [
 
 // 강화 비용 테이블
 export const ENHANCEMENT_COSTS = [
-  { level: 0, gold: 1000, materials: [{ id: 'basic-stone', amount: 1 }] },
-  { level: 1, gold: 2000, materials: [{ id: 'basic-stone', amount: 2 }] },
-  { level: 2, gold: 3000, materials: [{ id: 'basic-stone', amount: 3 }] },
-  { level: 3, gold: 5000, materials: [{ id: 'refined-stone', amount: 1 }] },
-  { level: 4, gold: 8000, materials: [{ id: 'rare-stone', amount: 1 }] },
-  { level: 5, gold: 12000, materials: [{ id: 'rare-stone', amount: 2 }] },
-  { level: 6, gold: 18000, materials: [{ id: 'blessed-stone', amount: 1 }] },
-  { level: 7, gold: 25000, materials: [{ id: 'epic-stone', amount: 1 }] },
-  { level: 8, gold: 35000, materials: [{ id: 'epic-stone', amount: 2 }] },
-  { level: 9, gold: 50000, materials: [{ id: 'protection-stone', amount: 1 }] },
-  { level: 10, gold: 75000, materials: [{ id: 'legendary-stone', amount: 1 }] },
-  { level: 11, gold: 100000, materials: [{ id: 'legendary-stone', amount: 2 }] },
-  { level: 12, gold: 150000, materials: [{ id: 'divine-stone', amount: 1 }] },
-  { level: 13, gold: 250000, materials: [{ id: 'mythic-stone', amount: 1 }] },
-  { level: 14, gold: 500000, materials: [{ id: 'mythic-stone', amount: 2 }] },
+  { _level: 0, gold: 1000, materials: [{ id: 'basic-stone', amount: 1 }] },
+  { _level: 1, gold: 2000, materials: [{ id: 'basic-stone', amount: 2 }] },
+  { _level: 2, gold: 3000, materials: [{ id: 'basic-stone', amount: 3 }] },
+  { _level: 3, gold: 5000, materials: [{ id: 'refined-stone', amount: 1 }] },
+  { _level: 4, gold: 8000, materials: [{ id: 'rare-stone', amount: 1 }] },
+  { _level: 5, gold: 12000, materials: [{ id: 'rare-stone', amount: 2 }] },
+  { _level: 6, gold: 18000, materials: [{ id: 'blessed-stone', amount: 1 }] },
+  { _level: 7, gold: 25000, materials: [{ id: 'epic-stone', amount: 1 }] },
+  { _level: 8, gold: 35000, materials: [{ id: 'epic-stone', amount: 2 }] },
+  { _level: 9, gold: 50000, materials: [{ id: 'protection-stone', amount: 1 }] },
+  { _level: 10, gold: 75000, materials: [{ id: 'legendary-stone', amount: 1 }] },
+  { _level: 11, gold: 100000, materials: [{ id: 'legendary-stone', amount: 2 }] },
+  { _level: 12, gold: 150000, materials: [{ id: 'divine-stone', amount: 1 }] },
+  { _level: 13, gold: 250000, materials: [{ id: 'mythic-stone', amount: 1 }] },
+  { _level: 14, gold: 500000, materials: [{ id: 'mythic-stone', amount: 2 }] },
 ]
 
 // 강화 보너스 계산
-export function getEnhancementBonus(level: number): number {
+export function getEnhancementBonus(_level: number): number {
   // 레벨당 10% 스탯 증가
   return level * 0.1
 }
 
 // 강화 실패 패널티
-export function getEnhancementFailurePenalty(level: number): {
+export function getEnhancementFailurePenalty(_level: number): {
   destruction: boolean
   levelDecrease: number
 } {

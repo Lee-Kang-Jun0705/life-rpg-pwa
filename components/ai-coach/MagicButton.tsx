@@ -7,7 +7,7 @@ import { Sparkles, Heart, Brain, Target, Users } from 'lucide-react'
 interface MagicButtonProps {
   emotion: string
   intensity: number
-  onAction: (action: string) => void
+  onAction: (_action: string) => void
 }
 
 const EMOTION_ACTIONS: Record<string, Array<{
@@ -79,8 +79,8 @@ export function MagicButton({ emotion, intensity, onAction }: MagicButtonProps) 
   return (
     <div className="relative">
       <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ _scale: 1.05 }}
+        whileTap={{ _scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
         className="relative w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 
           rounded-full shadow-lg hover:shadow-xl transition-all duration-300
@@ -92,7 +92,7 @@ export function MagicButton({ emotion, intensity, onAction }: MagicButtonProps) 
         <motion.div
           className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20"
           animate={{
-            scale: [1, 1.5, 1],
+            _scale: [1, 1.5, 1],
             opacity: [0, 0.3, 0]
           }}
           transition={{
@@ -107,7 +107,7 @@ export function MagicButton({ emotion, intensity, onAction }: MagicButtonProps) 
           className="absolute top-1 right-1 w-2 h-2 bg-white rounded-full"
           animate={{
             opacity: [0, 1, 0],
-            scale: [0, 1, 0]
+            _scale: [0, 1, 0]
           }}
           transition={{
             duration: 1.5,
@@ -120,9 +120,9 @@ export function MagicButton({ emotion, intensity, onAction }: MagicButtonProps) 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 10 }}
+            initial={{ opacity: 0, _scale: 0.8, _y: 10 }}
+            animate={{ opacity: 1, _scale: 1, _y: 0 }}
+            exit={{ opacity: 0, _scale: 0.8, _y: 10 }}
             className="absolute bottom-20 left-1/2 transform -translate-x-1/2 
               bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 
               min-w-[280px] z-50"
@@ -134,8 +134,8 @@ export function MagicButton({ emotion, intensity, onAction }: MagicButtonProps) 
               {recommendedActions.map((action, index) => (
                 <motion.button
                   key={action.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, _x: -20 }}
+                  animate={{ opacity: 1, _x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   onClick={() => handleActionSelect(action.id)}
                   className={`w-full p-3 rounded-xl bg-gradient-to-r ${action.color}

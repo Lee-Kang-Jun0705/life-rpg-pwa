@@ -55,7 +55,7 @@ jest.mock('../index', () => {
         return await mockDB.profiles.where('userId').equals(userId).first()
       },
 
-      async updateProfile(userId: string, updates: Partial<any>) {
+      async updateProfile(userId: string, updates: Partial<unknown>) {
         const profile = await this.getProfile(userId)
         if (profile) {
           return await mockDB.profiles.update(profile.id!, { ...updates, updatedAt: new Date() })
@@ -163,7 +163,7 @@ jest.mock('../index', () => {
 })
 
 // 전역 db 참조
-const { db } = global as any
+const { db } = global as unknown
 
 describe('dbHelpers', () => {
   const mockUserId = 'test-user-123'

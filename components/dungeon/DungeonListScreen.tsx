@@ -70,7 +70,7 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
         progressMap.set(dp.dungeonId, {
           dungeonId: dp.dungeonId,
           stageId: '',
-          status: dp.status as any,
+          status: dp.status as unknown,
           startTime: dp.lastAttemptAt || new Date(),
           currentStage: 1,
           totalStages: dungeons.find(d => d.id === dp.dungeonId)?.stages || 5,

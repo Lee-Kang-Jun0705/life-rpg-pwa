@@ -41,7 +41,7 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
     // 메모리 체크
     const memoryCheck = () => {
       if ('deviceMemory' in navigator) {
-        const memory = (navigator as any).deviceMemory
+        const memory = (navigator as unknown).deviceMemory
         if (memory <= 4) {
           setIsLowEndDevice(true)
         }
@@ -61,7 +61,7 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
     // 네트워크 속도 체크
     const networkCheck = () => {
       if ('connection' in navigator) {
-        const connection = (navigator as any).connection
+        const connection = (navigator as unknown).connection
         if (connection) {
           const effectiveType = connection.effectiveType
           if (effectiveType === 'slow-2g' || effectiveType === '2g') {

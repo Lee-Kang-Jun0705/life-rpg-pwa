@@ -52,7 +52,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             displayName: profile.name || '',
             email: profile.email || 'local@liferpg.app',
             photoURL: profile.avatar,
-            bio: (profile as any).bio
+            bio: (profile as unknown).bio
           }
         }))
       }
@@ -81,7 +81,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         await profileRepository.updateByUserId(userId, {
           name: updates.profile.displayName,
           avatar: updates.profile.photoURL
-        } as any)
+        } as unknown)
       }
 
       setSettings(newSettings)

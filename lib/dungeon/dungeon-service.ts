@@ -38,7 +38,7 @@ export class DungeonService {
   }
 
   // 사용 가능한 던전 목록 가져오기
-  async getAvailableDungeons(userId: string, userLevel: number = 1): Promise<Dungeon[]> {
+  async getAvailableDungeons(_userId: string, _userLevel: number = 1): Promise<Dungeon[]> {
     try {
       const db = getClientDatabase()
       if (!db) {
@@ -113,7 +113,7 @@ export class DungeonService {
   }
 
   // 던전 입장
-  async enterDungeon(dungeonId: string, userId: string): Promise<DungeonProgress | null> {
+  async enterDungeon(_dungeonId: string, _userId: string): Promise<DungeonProgress | null> {
     try {
       const dungeon = DUNGEON_TEMPLATES_ARRAY.find(d => d.id === dungeonId)
       if (!dungeon) return null
@@ -178,9 +178,9 @@ export class DungeonService {
 
   // 도전 과제 진행 상황 업데이트
   async updateChallengeProgress(
-    dungeonId: string,
-    challengeId: string,
-    userId: string,
+    _dungeonId: string,
+    _challengeId: string,
+    _userId: string,
     progressValue: number
   ): Promise<boolean> {
     try {
@@ -208,9 +208,9 @@ export class DungeonService {
 
   // 도전 과제 완료
   async completeChallenge(
-    dungeonId: string, 
-    challengeId: string, 
-    userId: string
+    _dungeonId: string, 
+    _challengeId: string, 
+    _userId: string
   ): Promise<{ success: boolean; completed?: boolean; rewards?: DungeonReward }> {
     try {
       const db = getClientDatabase()
@@ -268,7 +268,7 @@ export class DungeonService {
   }
 
   // 던전 통계
-  async getDungeonStats(userId: string): Promise<DungeonStats> {
+  async getDungeonStats(_userId: string): Promise<DungeonStats> {
     try {
       const db = getClientDatabase()
       if (!db) {
@@ -325,7 +325,7 @@ export class DungeonService {
   }
 
   // 요구사항 확인
-  private checkRequirements(dungeon: typeof DUNGEON_TEMPLATES_ARRAY[0], userLevel: number): boolean {
+  private checkRequirements(dungeon: typeof DUNGEON_TEMPLATES_ARRAY[0], _userLevel: number): boolean {
     if (dungeon.requirements.minLevel && userLevel < dungeon.requirements.minLevel) {
       return false
     }

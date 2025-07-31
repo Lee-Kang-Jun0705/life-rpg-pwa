@@ -10,9 +10,9 @@ import type { CalculatedStats } from '@/hooks/useDashboard/types'
 
 interface DashboardContentProps {
   stats: Stat[]
-  calculatedStats: CalculatedStats
-  isProcessing: Set<string>
-  onStatAction: (statType: string, action: string) => void
+  _calculatedStats: CalculatedStats
+  _isProcessing: Set<string>
+  onStatAction: (_statType: string, _action: string) => void
 }
 
 export const DashboardContent: React.FC<DashboardContentProps> = ({

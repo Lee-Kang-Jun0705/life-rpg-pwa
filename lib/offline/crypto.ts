@@ -13,7 +13,7 @@ export class CryptoUtil {
    * 비밀번호로부터 암호화 키 생성
    */
   private static async deriveKey(
-    password: string,
+    _password: string,
     salt: Uint8Array
   ): Promise<CryptoKey> {
     const encoder = new TextEncoder()
@@ -50,10 +50,10 @@ export class CryptoUtil {
    * 데이터 암호화
    */
   static async encrypt(
-    data: string,
-    password: string
+    _data: string,
+    _password: string
   ): Promise<{
-    encrypted: ArrayBuffer
+    _encrypted: ArrayBuffer
     salt: Uint8Array
     iv: Uint8Array
   }> {
@@ -85,8 +85,8 @@ export class CryptoUtil {
    * 데이터 복호화
    */
   static async decrypt(
-    encrypted: ArrayBuffer,
-    password: string,
+    _encrypted: ArrayBuffer,
+    _password: string,
     salt: Uint8Array,
     iv: Uint8Array
   ): Promise<string> {
@@ -112,7 +112,7 @@ export class CryptoUtil {
    * 암호화된 데이터를 Base64로 인코딩
    */
   static encodeEncryptedData(
-    encrypted: ArrayBuffer,
+    _encrypted: ArrayBuffer,
     salt: Uint8Array,
     iv: Uint8Array
   ): string {
@@ -131,8 +131,8 @@ export class CryptoUtil {
   /**
    * Base64로 인코딩된 데이터를 디코딩
    */
-  static decodeEncryptedData(encodedData: string): {
-    encrypted: ArrayBuffer
+  static decodeEncryptedData(_encodedData: string): {
+    _encrypted: ArrayBuffer
     salt: Uint8Array
     iv: Uint8Array
   } {
@@ -143,7 +143,7 @@ export class CryptoUtil {
     const encrypted = combined.slice(this.SALT_LENGTH + this.IV_LENGTH)
 
     return {
-      encrypted: encrypted.buffer,
+      _encrypted: encrypted.buffer,
       salt,
       iv
     }
@@ -154,7 +154,7 @@ export class CryptoUtil {
    */
   static async encryptObject<T>(
     obj: T,
-    password: string
+    _password: string
   ): Promise<string> {
     const jsonString = JSON.stringify(obj)
     const { encrypted, salt, iv } = await this.encrypt(jsonString, password)
@@ -165,8 +165,8 @@ export class CryptoUtil {
    * 암호화된 객체를 복호화
    */
   static async decryptObject<T>(
-    encryptedData: string,
-    password: string
+    _encryptedData: string,
+    _password: string
   ): Promise<T> {
     const { encrypted, salt, iv } = this.decodeEncryptedData(encryptedData)
     const jsonString = await this.decrypt(encrypted, password, salt, iv)
@@ -197,7 +197,7 @@ export class CryptoUtil {
   static async encryptFields<T extends Record<string, unknown>>(
     obj: T,
     fieldsToEncrypt: (keyof T)[],
-    password: string
+    _password: string
   ): Promise<T> {
     const result = { ...obj }
 
@@ -217,7 +217,7 @@ export class CryptoUtil {
   static async decryptFields<T extends Record<string, unknown>>(
     obj: T,
     fieldsToDecrypt: (keyof T)[],
-    password: string
+    _password: string
   ): Promise<T> {
     const result = { ...obj }
 

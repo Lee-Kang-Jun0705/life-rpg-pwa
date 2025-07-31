@@ -17,7 +17,7 @@ export class EquipmentService {
   }
 
   // 장비 인벤토리 로드
-  async loadInventory(userId: string): Promise<Equipment[]> {
+  async loadInventory(_userId: string): Promise<Equipment[]> {
     const { dbHelpers } = await import('@/lib/database')
     const userEquipments = await dbHelpers.getUserEquipments(userId)
     
@@ -55,7 +55,7 @@ export class EquipmentService {
   }
 
   // 장착된 장비 로드
-  async loadEquippedGear(userId: string): Promise<EquippedGear> {
+  async loadEquippedGear(_userId: string): Promise<EquippedGear> {
     const { dbHelpers } = await import('@/lib/database')
     const equippedItems = await dbHelpers.getEquippedItems(userId)
     
@@ -65,7 +65,7 @@ export class EquipmentService {
       const baseEquipment = EQUIPMENT_DATA.find(eq => eq.id === userEquip.equipmentId)
       if (!baseEquipment) continue
       
-      const equipment: Equipment = {
+      const _equipment: Equipment = {
         ...baseEquipment,
         enhancementLevel: userEquip.enhancementLevel,
         locked: false
@@ -90,8 +90,8 @@ export class EquipmentService {
 
   // 장비 장착
   async equipItem(
-    userId: string, 
-    equipment: Equipment,
+    _userId: string, 
+    _equipment: Equipment,
     slot?: 'accessory1' | 'accessory2' | 'accessory3'
   ): Promise<void> {
     const { dbHelpers } = await import('@/lib/database')
@@ -112,8 +112,8 @@ export class EquipmentService {
 
   // 장비 해제
   async unequipItem(
-    userId: string,
-    equipmentType: string,
+    _userId: string,
+    _equipmentType: string,
     slot?: 'accessory1' | 'accessory2' | 'accessory3'
   ): Promise<void> {
     const { dbHelpers } = await import('@/lib/database')
@@ -138,10 +138,10 @@ export class EquipmentService {
 
   // 장비 강화
   async enhanceEquipment(
-    userId: string,
-    equipment: Equipment,
+    _userId: string,
+    _equipment: Equipment,
     material?: EnhancementMaterial,
-    useProtection: boolean = false
+    _useProtection: boolean = false
   ): Promise<{
     success: boolean
     newLevel?: number
@@ -174,7 +174,7 @@ export class EquipmentService {
       return {
         success: true,
         newLevel: currentLevel + 1,
-        equipment: newEquipment,
+        _equipment: newEquipment,
       }
     } else {
       // 강화 실패
@@ -203,13 +203,13 @@ export class EquipmentService {
       return {
         success: false,
         newLevel: newLevel,
-        equipment: newEquipment,
+        _equipment: newEquipment,
       }
     }
   }
 
   // 장비 판매
-  async sellEquipment(userId: string, equipmentIds: string[]): Promise<number> {
+  async sellEquipment(_userId: string, _equipmentIds: string[]): Promise<number> {
     const { dbHelpers } = await import('@/lib/database')
     let totalGold = 0
     
@@ -243,7 +243,7 @@ export class EquipmentService {
   }
 
   // 장비 잠금/해제
-  async toggleEquipmentLock(userId: string, equipmentId: string): Promise<boolean> {
+  async toggleEquipmentLock(_userId: string, equipmentId: string): Promise<boolean> {
     // TODO: DB에서 장비 잠금 상태 토글
     console.log(`Toggling lock for equipment ${equipmentId}`)
     return true
@@ -262,7 +262,7 @@ export class EquipmentService {
   }
 
   // 장비 스탯 계산 (강화 포함)
-  calculateEnhancedStats(equipment: Equipment): Equipment['stats'] {
+  calculateEnhancedStats(_equipment: Equipment): Equipment['stats'] {
     const enhancementBonus = getEnhancementBonus(equipment.enhancementLevel || 0)
     const enhancedStats: Equipment['stats'] = {}
     
@@ -275,7 +275,7 @@ export class EquipmentService {
   }
 
   // 장비 비교
-  compareEquipment(equipment1: Equipment, equipment2: Equipment): {
+  compareEquipment(_equipment1: Equipment, _equipment2: Equipment): {
     betterStats: string[]
     worseStats: string[]
     powerDifference: number

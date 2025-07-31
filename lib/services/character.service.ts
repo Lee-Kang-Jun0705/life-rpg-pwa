@@ -60,7 +60,7 @@ class CharacterService {
   }
 
   // 경험치 추가
-  addExperience(amount: number): { leveledUp: boolean; newLevel: number } {
+  addExperience(_amount: number): { leveledUp: boolean; newLevel: number } {
     if (!this.character) return { leveledUp: false, newLevel: 0 }
 
     const oldLevel = this.character.level
@@ -108,7 +108,7 @@ class CharacterService {
   }
 
   // 골드 추가/제거
-  modifyGold(amount: number): boolean {
+  modifyGold(_amount: number): boolean {
     if (!this.character) return false
     
     if (this.character.gold + amount < 0) return false
@@ -166,7 +166,7 @@ class CharacterService {
   }
 
   // MP 사용
-  useMp(amount: number): boolean {
+  useMp(_amount: number): boolean {
     if (!this.character) return false
     
     if (this.character.combatStats[CombatStats.MP] < amount) return false
@@ -184,7 +184,7 @@ class CharacterService {
   }
 
   // 스탯 버프/디버프
-  modifyStat(stat: CombatStat, amount: number, duration?: number): void {
+  modifyStat(stat: CombatStat, _amount: number, duration?: number): void {
     if (!this.character) return
 
     // 임시 구현 - 추후 버프 시스템 구현 시 개선

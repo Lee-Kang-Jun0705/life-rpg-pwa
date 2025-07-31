@@ -72,7 +72,7 @@ export function MonsterDetailModal({ monster, entry, lore, onClose }: MonsterDet
               <div>
                 <h2 className="text-3xl font-bold">{monster.name}</h2>
                 <div className="flex items-center gap-3 mt-2 text-sm opacity-90">
-                  <span>Lv.{(monster as any).level || '1'}</span>
+                  <span>Lv.{(monster as unknown).level || '1'}</span>
                   <span>•</span>
                   <span className="capitalize">{monster.tier}</span>
                 </div>

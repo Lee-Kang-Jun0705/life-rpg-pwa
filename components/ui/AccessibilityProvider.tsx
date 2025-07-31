@@ -73,7 +73,7 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   // 저장된 설정 불러오기
   useEffect(() => {
     const savedHighContrast = localStorage.getItem('highContrast') === 'true'
-    const savedFontSize = localStorage.getItem('fontSize') as any || 'medium'
+    const savedFontSize = localStorage.getItem('fontSize') as unknown || 'medium'
     
     setIsHighContrast(savedHighContrast)
     setFontSize(savedFontSize)
@@ -192,7 +192,7 @@ export function AccessibilitySettings() {
             <button
               key={value}
               onClick={() => {
-                setFontSize(value as any)
+                setFontSize(value as unknown)
                 announceMessage(`폰트 크기가 ${label}로 변경되었습니다`)
               }}
               className={`

@@ -74,7 +74,7 @@ export function InventoryScreen({ onClose }: InventoryScreenProps) {
   }
 
   const handleUnequipItem = (slot: string) => {
-    if (inventoryService.unequipItem(slot as any)) {
+    if (inventoryService.unequipItem(slot as unknown)) {
       loadInventory()
       // 자동 저장
       persistenceService.saveInventory('player-1')

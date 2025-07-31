@@ -248,7 +248,7 @@ describe('AICoachService', () => {
     it('스탯 이름을 올바르게 반환해야 함', () => {
       const service = new AICoachService()
       // private 메서드 테스트를 위해 타입 캐스팅
-      const getStatName = (service as any).getStatName
+      const getStatName = (service as unknown).getStatName
 
       expect(getStatName('health')).toBe('건강')
       expect(getStatName('learning')).toBe('학습')
@@ -259,7 +259,7 @@ describe('AICoachService', () => {
 
     it('제안사항을 생성해야 함', () => {
       const service = new AICoachService()
-      const generateSuggestions = (service as any).generateSuggestions
+      const generateSuggestions = (service as unknown).generateSuggestions
 
       const suggestions = generateSuggestions('health', 5, 'declining', mockActivities)
 

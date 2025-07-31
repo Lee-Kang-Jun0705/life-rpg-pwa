@@ -159,8 +159,8 @@ export function calculateEquipmentPower(equipment: Equipment): number {
 
 // 세트 보너스 확인
 export function getActiveSetBonuses(
-  equippedGear: EquippedGear, 
-  equipmentSets: EquipmentSet[]
+  _equippedGear: EquippedGear, 
+  _equipmentSets: EquipmentSet[]
 ): { setId: string; bonuses: SetBonus[] }[] {
   const activeBonuses: { setId: string; bonuses: SetBonus[] }[] = []
   
@@ -189,8 +189,8 @@ export function getActiveSetBonuses(
 
 // 총 스탯 계산 (장비 + 세트 보너스)
 export function calculateTotalStats(
-  equippedGear: EquippedGear,
-  equipmentSets: EquipmentSet[]
+  _equippedGear: EquippedGear,
+  _equipmentSets: EquipmentSet[]
 ): EquipmentStats {
   const totalStats: EquipmentStats = {}
   

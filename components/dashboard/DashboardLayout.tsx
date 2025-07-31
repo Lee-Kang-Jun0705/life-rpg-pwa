@@ -3,7 +3,7 @@ import { LevelUpCelebration } from '@/components/ui/LevelUpCelebration'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
-  levelUpData: {
+  _levelUpData: {
     show: boolean
     level: number
     statType: string

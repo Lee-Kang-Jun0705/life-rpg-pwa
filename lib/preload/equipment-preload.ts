@@ -16,23 +16,23 @@ export async function preloadEquipmentData(userId: string) {
       dbHelpers.getPlayerData('equippedItems')
     ]).then(([profileData, inventoryData, equippedData]) => {
       // 인벤토리 아이템 처리
-      let items: any[] = []
+      let items: unknown[] = []
       if (inventoryData?.data && typeof inventoryData.data === 'object' && 'items' in inventoryData.data) {
-        items = (inventoryData.data as any).items || []
+        items = (inventoryData.data as unknown).items || []
       }
 
       // 장착 아이템 처리
-      const equipped: any = {}
+      const equipped: unknown = {}
       if (equippedData?.data && typeof equippedData.data === 'object') {
-        const equipData = equippedData.data as any
+        const equipData = equippedData.data as unknown
         if (equipData.weapon) {
-          equipped.weapon = items.find((item: any) => item.id === equipData.weapon)
+          equipped.weapon = items.find((item: unknown) => item.id === equipData.weapon)
         }
         if (equipData.armor) {
-          equipped.armor = items.find((item: any) => item.id === equipData.armor)
+          equipped.armor = items.find((item: unknown) => item.id === equipData.armor)
         }
         if (equipData.accessory) {
-          equipped.accessory = items.find((item: any) => item.id === equipData.accessory)
+          equipped.accessory = items.find((item: unknown) => item.id === equipData.accessory)
         }
       }
 

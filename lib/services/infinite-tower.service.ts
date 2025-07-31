@@ -535,7 +535,7 @@ export class InfiniteTowerService {
   /**
    * 마일스톤 보상 생성
    */
-  private generateMilestoneReward(floor: number): any {
+  private generateMilestoneReward(floor: number): unknown {
     // 층별 특별 보상
     const milestoneRewards: Record<number, any> = {
       10: { id: 'tower-badge-bronze', name: '청동 탑 배지', type: 'badge' },

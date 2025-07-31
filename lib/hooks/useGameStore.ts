@@ -17,7 +17,7 @@ export function useGameStore<T extends keyof GameState>(
   const slices = Array.isArray(slice) ? slice : [slice]
   const [state, setState] = useState(() => {
     if (Array.isArray(slice)) {
-      const result: any = {}
+      const result: unknown = {}
       slices.forEach(s => {
         result[s] = gameStore.getState(s)
       })
@@ -29,7 +29,7 @@ export function useGameStore<T extends keyof GameState>(
   useEffect(() => {
     // 초기 상태 설정
     if (Array.isArray(slice)) {
-      const result: any = {}
+      const result: unknown = {}
       slices.forEach(s => {
         result[s] = gameStore.getState(s)
       })
@@ -41,7 +41,7 @@ export function useGameStore<T extends keyof GameState>(
     // 구독
     const unsubscribe = gameStore.subscribe(slices, () => {
       if (Array.isArray(slice)) {
-        const result: any = {}
+        const result: unknown = {}
         slices.forEach(s => {
           result[s] = gameStore.getState(s)
         })

@@ -7,8 +7,8 @@ import type {
 
 // 기본 몬스터 스탯 계산
 function createMonsterStats(
-  level: number,
-  tier: MonsterTier,
+  _level: number,
+  _tier: MonsterTier,
   statModifiers?: Partial<CharacterStats>
 ): CharacterStats {
   const tierMultiplier = {
@@ -146,7 +146,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '초록 슬라임',
     description: '가장 약한 몬스터. 초보자에게 적합하다.',
     emoji: '🟢',
-    tier: 'common',
+    _tier: 'common',
     stats: createMonsterStats(1, 'common'),
     skills: [
       {
@@ -165,7 +165,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '파란 슬라임',
     description: '물 속성을 가진 슬라임',
     emoji: '🔵',
-    tier: 'common',
+    _tier: 'common',
     stats: createMonsterStats(2, 'common'),
     skills: [
       {
@@ -185,7 +185,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '붉은 버섯',
     description: '독을 품은 버섯 몬스터',
     emoji: '🍄',
-    tier: 'common',
+    _tier: 'common',
     stats: createMonsterStats(3, 'common'),
     skills: [
       {
@@ -230,7 +230,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '고블린 정찰병',
     description: '빠르고 교활한 고블린',
     emoji: '👺',
-    tier: 'common',
+    _tier: 'common',
     stats: createMonsterStats(4, 'common', { speed: 20 }),
     skills: [
       {
@@ -253,7 +253,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '회색 늑대',
     description: '무리를 지어 사냥하는 늑대',
     emoji: '🐺',
-    tier: 'common',
+    _tier: 'common',
     stats: createMonsterStats(5, 'common', { attack: 15 }),
     skills: [
       {
@@ -277,7 +277,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '동굴 박쥐',
     description: '어둠 속에서 공격하는 박쥐',
     emoji: '🦇',
-    tier: 'common',
+    _tier: 'common',
     stats: createMonsterStats(6, 'common', { evasion: 0.15 }),
     skills: [
       {
@@ -322,7 +322,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '오크 전사',
     description: '강력한 힘을 가진 오크',
     emoji: '👹',
-    tier: 'common',
+    _tier: 'common',
     stats: createMonsterStats(10, 'common', { hp: 200, attack: 30 }),
     skills: [
       {
@@ -346,7 +346,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '스켈레톤 전사',
     description: '죽음에서 되살아난 전사',
     emoji: '💀',
-    tier: 'common',
+    _tier: 'common',
     stats: createMonsterStats(12, 'common', { defense: 20 }),
     skills: [
       {
@@ -389,7 +389,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '하피',
     description: '날개를 가진 반인반조 몬스터',
     emoji: '🦅',
-    tier: 'common',
+    _tier: 'common',
     stats: createMonsterStats(14, 'common', { speed: 25, evasion: 0.2 }),
     skills: [
       {
@@ -425,7 +425,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '고블린 족장',
     description: '고블린들의 리더',
     emoji: '👺',
-    tier: 'elite',
+    _tier: 'elite',
     stats: createMonsterStats(15, 'elite'),
     skills: [
       {
@@ -476,7 +476,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '어둠의 마법사',
     description: '어둠의 마법을 다루는 마법사',
     emoji: '🧙',
-    tier: 'elite',
+    _tier: 'elite',
     stats: createMonsterStats(18, 'elite', { magicAttack: 50, mp: 200 }),
     skills: [
       {
@@ -535,7 +535,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '붉은 용',
     description: '화염을 다루는 강력한 용',
     emoji: '🐉',
-    tier: 'boss',
+    _tier: 'boss',
     stats: createMonsterStats(25, 'boss', { hp: 1000, attack: 80, magicAttack: 80 }),
     skills: [
       {
@@ -602,7 +602,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     name: '리치 킹',
     description: '죽음을 초월한 언데드의 왕',
     emoji: '👑',
-    tier: 'boss',
+    _tier: 'boss',
     stats: createMonsterStats(30, 'boss', { magicAttack: 100, magicDefense: 80 }),
     skills: [
       {
@@ -676,7 +676,7 @@ export function getMonsterById(id: string): MonsterData | undefined {
 }
 
 // 티어별 몬스터 목록
-export function getMonstersByTier(tier: MonsterTier): MonsterData[] {
+export function getMonstersByTier(_tier: MonsterTier): MonsterData[] {
   return Object.values(MONSTER_DATABASE).filter(m => m.tier === tier)
 }
 

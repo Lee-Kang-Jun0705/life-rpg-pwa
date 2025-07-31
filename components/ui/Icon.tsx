@@ -77,7 +77,7 @@ export function preloadIcons(icons: IconName[]) {
     const icon = iconMap[iconName]
     if (typeof icon === 'object' && 'preload' in icon) {
       // 동적 컴포넌트의 경우 프리로드
-      (icon as any).preload()
+      (icon as unknown).preload()
     }
   })
 }

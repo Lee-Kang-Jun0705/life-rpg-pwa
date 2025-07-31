@@ -12,12 +12,12 @@ export interface BackupMetadata {
 
 export interface BackupData {
   metadata: BackupMetadata
-  profiles: any[]
-  stats: any[]
-  activities: any[]
-  characters: any[]
-  missions: any[]
-  investments: any[]
+  profiles: unknown[]
+  stats: unknown[]
+  activities: unknown[]
+  characters: unknown[]
+  missions: unknown[]
+  investments: unknown[]
 }
 
 export class BackupManager {
@@ -138,7 +138,7 @@ export class BackupManager {
    * 프로필 데이터 복원
    */
   static async restoreProfile(backupData: string, password?: string): Promise<void> {
-    let profileBackup: any
+    let profileBackup: unknown
 
     if (password) {
       const decrypted = await CryptoUtil.decryptObject(backupData, password)

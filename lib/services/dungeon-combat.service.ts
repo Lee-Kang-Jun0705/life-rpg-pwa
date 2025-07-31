@@ -689,7 +689,7 @@ export class DungeonCombatService {
       if (Math.random() < dropChance) {
         const dropItem = itemGenerationService.generateDropItem(
           monster.level,
-          monster.type as any
+          monster.type as unknown
         )
         if (dropItem) {
           items.push(dropItem)
@@ -703,7 +703,7 @@ export class DungeonCombatService {
         for (let i = 0; i < bonusDropCount; i++) {
           const bonusDropItem = itemGenerationService.generateDropItem(
             monster.level,
-            monster.type as any
+            monster.type as unknown
           )
           if (bonusDropItem) {
             items.push(bonusDropItem)

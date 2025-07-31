@@ -40,7 +40,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
 
   async findById(id: string | number): Promise<T | undefined> {
     if (typeof window === 'undefined' || !this.table) return undefined
-    return await this.table.get(id as any)
+    return await this.table.get(id as unknown)
   }
 
   async findByUserId(userId: string): Promise<T[]> {
@@ -68,7 +68,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
       updatedAt: new Date()
     }
 
-    await this.table.update(id as any, updatedFields as any)
+    await this.table.update(id as unknown, updatedFields as unknown)
     
     const updatedEntity = {
       ...entity,
@@ -80,12 +80,12 @@ export abstract class BaseRepository<T extends BaseEntity> {
 
   async delete(id: string | number): Promise<void> {
     if (typeof window === 'undefined' || !this.table) return
-    await this.table.delete(id as any)
+    await this.table.delete(id as unknown)
   }
 
   async deleteMany(ids: (string | number)[]): Promise<void> {
     if (typeof window === 'undefined' || !this.table) return
-    await this.table.bulkDelete(ids as any)
+    await this.table.bulkDelete(ids as unknown)
   }
 
   async deleteByUserId(userId: string): Promise<void> {

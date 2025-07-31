@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 interface VoiceInputFallbackProps {
   show: boolean
   position: 'bottom-right' | 'bottom-center' | 'bottom-left'
-  onSubmit: (input: string) => void
+  onSubmit: (_input: string) => void
   onClose: () => void
 }
 
@@ -26,7 +26,7 @@ export function VoiceInputFallback({
     ? 'bottom-28 right-6' 
     : 'bottom-28 left-6'
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (_e: React.FormEvent) => {
     e.preventDefault()
     if (input.trim()) {
       onSubmit(input.trim())

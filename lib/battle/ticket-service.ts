@@ -14,10 +14,10 @@ export interface TicketState {
 
 export interface TicketTransaction {
   id: string
-  userId: string
+  _userId: string
   type: 'use' | 'daily_reset' | 'purchase' | 'reward'
-  amount: number
-  reason: string
+  _amount: number
+  _reason: string
   timestamp: Date
   beforeAmount: number
   afterAmount: number
@@ -42,7 +42,7 @@ export class BattleTicketService {
   }
 
   // 티켓 상태 가져오기
-  async getTicketState(userId: string): Promise<TicketState> {
+  async getTicketState(_userId: string): Promise<TicketState> {
     try {
       let ticketData = await db.battleTickets
         .where('userId')
@@ -79,7 +79,7 @@ export class BattleTicketService {
   }
 
   // 티켓 사용
-  async useTicket(userId: string, reason: string = '자동전투 입장'): Promise<boolean> {
+  async useTicket(_userId: string, _reason: string = '자동전투 입장'): Promise<boolean> {
     try {
       const ticketData = await db.battleTickets
         .where('userId')
@@ -102,8 +102,8 @@ export class BattleTicketService {
       await db.energyTransactions.add({
         userId,
         type: 'consume',
-        amount: -1,
-        reason: `[티켓] ${reason}`,
+        _amount: -1,
+        _reason: `[티켓] ${reason}`,
         timestamp: new Date(),
         beforeAmount: ticketData.count,
         afterAmount: newCount
@@ -122,7 +122,7 @@ export class BattleTicketService {
   }
 
   // 티켓 구매
-  async purchaseTickets(userId: string, goldCost: number): Promise<number> {
+  async purchaseTickets(_userId: string, _goldCost: number): Promise<number> {
     try {
       const ticketData = await db.battleTickets
         .where('userId')
@@ -154,8 +154,8 @@ export class BattleTicketService {
       await db.energyTransactions.add({
         userId,
         type: 'purchase',
-        amount: actualAmount,
-        reason: '[티켓] 구매',
+        _amount: actualAmount,
+        _reason: '[티켓] 구매',
         timestamp: new Date(),
         beforeAmount: ticketData.count,
         afterAmount: newCount
@@ -174,7 +174,7 @@ export class BattleTicketService {
   }
 
   // 보상으로 티켓 획득
-  async addTicketReward(userId: string, amount: number, reason: string): Promise<void> {
+  async addTicketReward(_userId: string, _amount: number, _reason: string): Promise<void> {
     try {
       const ticketData = await db.battleTickets
         .where('userId')
@@ -201,7 +201,7 @@ export class BattleTicketService {
         userId,
         type: 'bonus',
         amount,
-        reason: `[티켓] ${reason}`,
+        _reason: `[티켓] ${reason}`,
         timestamp: new Date(),
         beforeAmount: ticketData.count,
         afterAmount: newCount
@@ -218,7 +218,7 @@ export class BattleTicketService {
   }
 
   // 티켓 초기화
-  private async initializeTickets(userId: string): Promise<BattleTicketData> {
+  private async initializeTickets(_userId: string): Promise<BattleTicketData> {
     const initialData: BattleTicketData = {
       userId,
       count: TICKET_CONFIG.DAILY_TICKETS,
@@ -230,7 +230,7 @@ export class BattleTicketService {
   }
 
   // 일일 티켓 리셋
-  private async resetDailyTickets(userId: string): Promise<BattleTicketData> {
+  private async resetDailyTickets(_userId: string): Promise<BattleTicketData> {
     const newData = {
       count: TICKET_CONFIG.DAILY_TICKETS,
       lastReset: new Date()
@@ -245,8 +245,8 @@ export class BattleTicketService {
     await db.energyTransactions.add({
       userId,
       type: 'bonus',
-      amount: TICKET_CONFIG.DAILY_TICKETS,
-      reason: '[티켓] 일일 리셋',
+      _amount: TICKET_CONFIG.DAILY_TICKETS,
+      _reason: '[티켓] 일일 리셋',
       timestamp: new Date(),
       beforeAmount: 0,
       afterAmount: TICKET_CONFIG.DAILY_TICKETS
@@ -282,7 +282,7 @@ export class BattleTicketService {
   }
 
   // 남은 시간 계산 (초 단위)
-  async getTimeUntilReset(userId: string): Promise<number> {
+  async getTimeUntilReset(_userId: string): Promise<number> {
     const state = await this.getTicketState(userId)
     const now = new Date()
     return Math.floor((state.nextResetTime.getTime() - now.getTime()) / 1000)

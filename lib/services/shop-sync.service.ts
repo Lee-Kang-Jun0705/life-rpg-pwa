@@ -25,7 +25,7 @@ class ShopSyncService {
   /**
    * 상점에서 아이템 구매 처리
    */
-  async purchaseItem(userId: string, shopItem: ShopItem, quantity: number = 1): Promise<{
+  async purchaseItem(_userId: string, _shopItem: ShopItem, _quantity: number = 1): Promise<{
     success: boolean
     message: string
     goldSpent?: number
@@ -91,7 +91,7 @@ class ShopSyncService {
             rarity: baseItem.rarity,
             level: baseItem.level,
             baseStats: baseItem.baseStats,
-            quantity: 1
+            _quantity: 1
           })
         }
       } else {
@@ -136,7 +136,7 @@ class ShopSyncService {
   /**
    * 인벤토리에서 아이템 판매
    */
-  async sellItems(userId: string, itemUniqueIds: string[]): Promise<{
+  async sellItems(_userId: string, _itemUniqueIds: string[]): Promise<{
     success: boolean
     message: string
     goldEarned?: number
@@ -175,7 +175,7 @@ class ShopSyncService {
    * 플레이어 인벤토리 동기화
    * DB와 메모리 인벤토리 서비스 간 동기화
    */
-  async syncInventory(userId: string): Promise<void> {
+  async syncInventory(_userId: string): Promise<void> {
     try {
       const player = await playerService.getPlayer(userId)
       if (!player) return
@@ -197,7 +197,7 @@ class ShopSyncService {
 
         // 장착된 아이템 처리
         if (invItem.equipped && invItem.slot) {
-          inventoryService.equipItem(generatedItem.uniqueId, invItem.slot as any)
+          inventoryService.equipItem(generatedItem.uniqueId, invItem.slot as unknown)
         }
       }
 
@@ -210,10 +210,10 @@ class ShopSyncService {
   /**
    * 아이템 장착 동기화
    */
-  async syncEquipItem(userId: string, itemUniqueId: string, slot: string): Promise<boolean> {
+  async syncEquipItem(_userId: string, itemUniqueId: string, slot: string): Promise<boolean> {
     try {
       // 메모리에서 장착
-      const equipped = inventoryService.equipItem(itemUniqueId, slot as any)
+      const equipped = inventoryService.equipItem(itemUniqueId, slot as unknown)
       if (!equipped) return false
 
       // DB 업데이트
@@ -232,10 +232,10 @@ class ShopSyncService {
   /**
    * 아이템 장착 해제 동기화
    */
-  async syncUnequipItem(userId: string, slot: string): Promise<boolean> {
+  async syncUnequipItem(_userId: string, slot: string): Promise<boolean> {
     try {
       // 메모리에서 장착 해제
-      const unequipped = inventoryService.unequipItem(slot as any)
+      const unequipped = inventoryService.unequipItem(slot as unknown)
       if (!unequipped) return false
 
       // TODO: DB 업데이트 구현

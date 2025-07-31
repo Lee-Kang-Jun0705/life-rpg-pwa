@@ -17,8 +17,8 @@ export type ActivityQuality = typeof ACTIVITY_QUALITY[keyof typeof ACTIVITY_QUAL
 // 활동 타입
 export interface Activity {
   readonly id?: number;
-  readonly userId: string;
-  readonly statType: StatType;
+  readonly _userId: string;
+  readonly _statType: StatType;
   readonly activityName: string;
   readonly description?: string;
   readonly quality: ActivityQuality;
@@ -64,11 +64,11 @@ export interface ExpFormula {
   readonly baseExp: number;
   readonly growthRate: number;
   readonly exponent?: number;
-  readonly customFunction?: (level: number) => number;
+  readonly customFunction?: (_level: number) => number;
 }
 
 export interface LevelMilestone {
-  readonly level: number;
+  readonly _level: number;
   readonly requiredExp: number;
   readonly rewards?: MilestoneReward;
 }
@@ -178,8 +178,8 @@ export interface AbusePrevention {
 
 // 일일 경험치 제한
 export interface DailyExpLimit {
-  readonly userId: string;
-  readonly statType: StatType;
+  readonly _userId: string;
+  readonly _statType: StatType;
   readonly date: Date;
   readonly baseLimit: number;
   readonly bonusLimit: number;
@@ -193,10 +193,10 @@ export interface DailyExpLimit {
 
 // 레벨 정보
 export interface LevelInfo {
-  readonly level: number;
+  readonly _level: number;
   readonly currentExp: number;
   readonly requiredExp: number;
-  readonly totalExp: number;
+  readonly _totalExp: number;
   readonly progress: number; // 0-100
   readonly nextLevelExp: number;
   readonly prestigeLevel?: number;
@@ -230,11 +230,11 @@ export interface AppliedPenalty {
 
 // 통계 및 분석
 export interface ExpStatistics {
-  readonly userId: string;
+  readonly _userId: string;
   readonly period: StatPeriod;
-  readonly totalExp: number;
+  readonly _totalExp: number;
   readonly averageDaily: number;
-  readonly peakDay: { date: Date; exp: number };
+  readonly peakDay: { date: Date; _exp: number };
   readonly statDistribution: Record<StatType, number>;
   readonly qualityDistribution: Record<ActivityQuality, number>;
   readonly streakInfo: StreakInfo;
@@ -252,7 +252,7 @@ export interface StreakInfo {
 
 export interface ExpTrend {
   readonly period: string;
-  readonly exp: number;
+  readonly _exp: number;
   readonly growth: number; // percentage
   readonly activities: number;
 }
@@ -260,7 +260,7 @@ export interface ExpTrend {
 // 경험치 관련 이벤트
 export interface ExpEvent {
   readonly type: ExpEventType;
-  readonly userId: string;
+  readonly _userId: string;
   readonly timestamp: Date;
   readonly data: ExpEventData;
 }
@@ -285,10 +285,10 @@ export interface ExpEventData {
 
 // 헬퍼 함수 타입
 export interface ExpCalculator {
-  calculateRequiredExp(level: number): number;
-  calculateLevel(totalExp: number): LevelInfo;
-  calculateActivityExp(activity: Activity, context: ExpContext): ExpCalculationResult;
-  checkDailyLimit(userId: string, statType: StatType, exp: number): Promise<DailyLimitCheck>;
+  calculateRequiredExp(_level: number): number;
+  calculateLevel(_totalExp: number): LevelInfo;
+  calculateActivityExp(_activity: Activity, _context: ExpContext): ExpCalculationResult;
+  checkDailyLimit(_userId: string, _statType: StatType, _exp: number): Promise<DailyLimitCheck>;
 }
 
 export interface ExpContext {
@@ -299,8 +299,8 @@ export interface ExpContext {
 }
 
 export interface UserExpContext {
-  readonly userId: string;
-  readonly level: number;
+  readonly _userId: string;
+  readonly _level: number;
   readonly streakDays: number;
   readonly isPremium: boolean;
   readonly timezone: string;
@@ -333,7 +333,7 @@ export const EXP_CONSTANTS = {
 } as const;
 
 // 타입 가드
-export function isValidActivity(activity: unknown): activity is Activity {
+export function isValidActivity(_activity: unknown): activity is Activity {
   if (typeof activity !== 'object' || activity === null) return false;
   
   const a = activity as Record<string, unknown>;

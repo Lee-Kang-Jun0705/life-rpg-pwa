@@ -21,7 +21,7 @@ import { GameError } from '@/lib/types/game-common'
 // 데이터베이스 테이블 타입
 interface DailyContentData {
   id?: number
-  userId: string
+  _userId: string
   type: 'mission' | 'dungeon' | 'login' | 'weekly' | 'state'
   contentId: string
   data: string // JSON stringified data
@@ -68,7 +68,7 @@ export class DailyContentService {
   }
 
   // 일일 콘텐츠 초기화 또는 갱신
-  async initializeDailyContent(userId: string): Promise<DailyContentState> {
+  async initializeDailyContent(_userId: string): Promise<DailyContentState> {
     try {
       // 현재 상태 가져오기
       const currentState = await this.getDailyContentState(userId)
@@ -91,7 +91,7 @@ export class DailyContentService {
   }
 
   // 일일 콘텐츠 리셋
-  private async resetDailyContent(userId: string): Promise<DailyContentState> {
+  private async resetDailyContent(_userId: string): Promise<DailyContentState> {
     try {
       const now = new Date()
       const nextReset = this.getNextResetTime()
@@ -131,7 +131,7 @@ export class DailyContentService {
   }
 
   // 일일 미션 생성
-  private generateDailyMissions(expiresAt: Date): DailyMission[] {
+  private generateDailyMissions(_expiresAt: Date): DailyMission[] {
     const missions: DailyMission[] = []
     const templates = [...DAILY_MISSION_TEMPLATES]
     
@@ -170,7 +170,7 @@ export class DailyContentService {
   }
 
   // 출석 연속일수 업데이트
-  private async updateLoginStreak(userId: string): Promise<{ streak: number; rewards: DailyLogin[] }> {
+  private async updateLoginStreak(_userId: string): Promise<{ streak: number; rewards: DailyLogin[] }> {
     try {
       // 이전 출석 기록 가져오기
       const lastLogin = await energyDb.dailyContent
@@ -228,7 +228,7 @@ export class DailyContentService {
   }
 
   // 주간 도전 과제 생성 또는 가져오기
-  private async getOrCreateWeeklyChallenge(userId: string): Promise<WeeklyChallenge | undefined> {
+  private async getOrCreateWeeklyChallenge(_userId: string): Promise<WeeklyChallenge | undefined> {
     try {
       const now = new Date()
       const weekStart = new Date(now)
@@ -296,7 +296,7 @@ export class DailyContentService {
           items: ['legendary-chest', 'legendary-scroll'],
           title: '주간 마스터'
         },
-        progress: 0,
+        _progress: 0,
         isCompleted: false,
         isClaimed: false
       }
@@ -309,7 +309,7 @@ export class DailyContentService {
         data: JSON.stringify(weeklyChallenge),
         createdAt: now,
         updatedAt: now,
-        expiresAt: weekEnd
+        _expiresAt: weekEnd
       })
       
       return weeklyChallenge
@@ -320,7 +320,7 @@ export class DailyContentService {
   }
 
   // 일일 콘텐츠 상태 가져오기
-  async getDailyContentState(userId: string): Promise<DailyContentState | null> {
+  async getDailyContentState(_userId: string): Promise<DailyContentState | null> {
     try {
       const stateData = await energyDb.dailyContent
         .where(['userId', 'type'])
@@ -347,7 +347,7 @@ export class DailyContentService {
   }
 
   // 일일 콘텐츠 상태 저장
-  private async saveDailyContentState(userId: string, state: DailyContentState): Promise<void> {
+  private async saveDailyContentState(_userId: string, state: DailyContentState): Promise<void> {
     try {
       const now = new Date()
       
@@ -374,9 +374,9 @@ export class DailyContentService {
 
   // 일일 미션 진행도 업데이트
   async updateMissionProgress(
-    userId: string, 
-    missionId: string, 
-    progress: number
+    _userId: string, 
+    _missionId: string, 
+    _progress: number
   ): Promise<{ completed: boolean; rewards?: DailyMission['rewards'] }> {
     try {
       const state = await this.getDailyContentState(userId)
@@ -421,13 +421,13 @@ export class DailyContentService {
     } catch (error) {
       if (error instanceof GameError) throw error
       
-      console.error('Failed to update mission progress:', error)
+      console.error('Failed to update mission _progress:', error)
       throw new GameError('DAILY_CONTENT_ERROR', '미션 진행도 업데이트 실패')
     }
   }
 
   // 출석 보상 수령
-  async claimLoginReward(userId: string, day: number): Promise<DailyLogin['rewards'] | null> {
+  async claimLoginReward(_userId: string, _day: number): Promise<DailyLogin['rewards'] | null> {
     try {
       const state = await this.getDailyContentState(userId)
       if (!state) {
@@ -463,9 +463,9 @@ export class DailyContentService {
 
   // 요일 던전 입장 시 보너스 적용
   async applyDailyDungeonBonus(
-    userId: string, 
-    dungeonId: string,
-    baseRewards: { exp: number; gold: number; items?: string[] }
+    _userId: string, 
+    _dungeonId: string,
+    _baseRewards: { exp: number; gold: number; items?: string[] }
   ): Promise<{ exp: number; gold: number; items?: string[] }> {
     try {
       const state = await this.getDailyContentState(userId)
@@ -503,9 +503,9 @@ export class DailyContentService {
 
   // 주간 도전과제 진행도 업데이트
   async updateWeeklyChallengeProgress(
-    userId: string,
-    missionId: string,
-    progress: number
+    _userId: string,
+    _missionId: string,
+    _progress: number
   ): Promise<boolean> {
     try {
       const state = await this.getDailyContentState(userId)
@@ -532,13 +532,13 @@ export class DailyContentService {
       
       return mission.completed
     } catch (error) {
-      console.error('Failed to update weekly challenge progress:', error)
+      console.error('Failed to update weekly challenge _progress:', error)
       return false
     }
   }
 
   // 주간 도전과제 보상 수령
-  async claimWeeklyChallengeReward(userId: string): Promise<WeeklyChallenge['rewards'] | null> {
+  async claimWeeklyChallengeReward(_userId: string): Promise<WeeklyChallenge['rewards'] | null> {
     try {
       const state = await this.getDailyContentState(userId)
       if (!state || !state.weeklyChallenge) return null

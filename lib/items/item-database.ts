@@ -46,7 +46,7 @@ interface Equipment {
     type: string
     element?: string
     value?: number
-    [key: string]: any
+    [key: string]: unknown
   }>
 }
 
@@ -70,7 +70,7 @@ interface Consumable {
     type: string
     value?: number
     duration?: number
-    [key: string]: any
+    [key: string]: unknown
   }>
   cooldown?: number
   level?: number
@@ -119,7 +119,7 @@ interface SetBonusLevel {
   }
   effects?: Array<{
     type: string
-    [key: string]: any
+    [key: string]: unknown
   }>
 }
 
@@ -3152,7 +3152,7 @@ export function getItemsByRarity(rarity: ItemRarity): Item[] {
 export function getItemsByLevel(minLevel: number, maxLevel: number): Item[] {
   return Object.values(ALL_ITEMS).filter(
     item => {
-      const itemLevel = (item as any).level;
+      const itemLevel = (item as unknown).level;
       return itemLevel !== undefined && itemLevel >= minLevel && itemLevel <= maxLevel;
     }
   )
@@ -3163,7 +3163,7 @@ export function getSetBonus(setId: string): SetBonus | undefined {
 }
 
 export function getItemValue(item: Item, enchantLevel?: number): number {
-  let baseValue = (item as any).value || 0
+  let baseValue = (item as unknown).value || 0
   
   if (enchantLevel && enchantLevel > 0) {
     baseValue *= (1 + enchantLevel * 0.2)

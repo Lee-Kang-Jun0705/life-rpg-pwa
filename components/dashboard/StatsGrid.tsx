@@ -7,7 +7,7 @@ interface StatsGridProps {
   statTypes: StatType[]
   stats: Stat[]
   isProcessing: Set<string>
-  onStatAction: (statType: string, action: string) => void
+  onStatAction: (_statType: string, _action: string) => void
 }
 
 export const StatsGrid = React.memo(function StatsGrid({ 

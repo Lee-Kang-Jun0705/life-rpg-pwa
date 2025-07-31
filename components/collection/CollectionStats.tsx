@@ -14,8 +14,8 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
     <div className="mb-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, _y: 20 }}
+          animate={{ opacity: 1, _y: 0 }}
           className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-900/30 rounded-xl p-4"
         >
           <div className="flex items-center gap-3">
@@ -34,9 +34,9 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+          initial={{ opacity: 0, _y: 20 }}
+          animate={{ opacity: 1, _y: 0 }}
+          transition={{ _delay: 0.1 }}
           className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-900/30 rounded-xl p-4"
         >
           <div className="flex items-center gap-3">
@@ -55,9 +55,9 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          initial={{ opacity: 0, _y: 20 }}
+          animate={{ opacity: 1, _y: 0 }}
+          transition={{ _delay: 0.2 }}
           className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-900/30 rounded-xl p-4"
         >
           <div className="flex items-center gap-3">
@@ -76,9 +76,9 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          initial={{ opacity: 0, _y: 20 }}
+          animate={{ opacity: 1, _y: 0 }}
+          transition={{ _delay: 0.3 }}
           className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-900/30 rounded-xl p-4"
         >
           <div className="flex items-center gap-3">
@@ -99,9 +99,9 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
 
       {/* 전체 진행도 바 */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+        initial={{ opacity: 0, _y: 20 }}
+        animate={{ opacity: 1, _y: 0 }}
+        transition={{ _delay: 0.4 }}
         className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700"
       >
         <div className="flex items-center justify-between mb-2">
@@ -115,7 +115,7 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${stats.completionRate}%` }}
-            transition={{ duration: 1, delay: 0.5 }}
+            transition={{ duration: 1, _delay: 0.5 }}
             className="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full"
           />
         </div>
@@ -128,9 +128,9 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
       {/* 카테고리별 진행도 */}
       {stats.categoryProgress.length > 0 && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          initial={{ opacity: 0, _y: 20 }}
+          animate={{ opacity: 1, _y: 0 }}
+          transition={{ _delay: 0.6 }}
           className="mt-4"
         >
           <h3 className="font-medium mb-3">카테고리별 진행도</h3>
@@ -153,7 +153,7 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${percentage}%` }}
-                      transition={{ duration: 0.8, delay: 0.7 + index * 0.1 }}
+                      transition={{ duration: 0.8, _delay: 0.7 + index * 0.1 }}
                       className="bg-gradient-to-r from-blue-400 to-purple-500 h-full rounded-full"
                     />
                   </div>

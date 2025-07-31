@@ -113,7 +113,7 @@ export class ExperienceManager {
   // 활동 경험치 계산
   async calculateActivityExp(
     activity: Activity,
-    context: ExpContext
+    _context: ExpContext
   ): Promise<Result<ExpCalculationResult>> {
     try {
       // 활동 검증 먼저 수행
@@ -368,7 +368,7 @@ export class ExperienceManager {
 
   // 일일 제한 체크
   async checkDailyLimit(
-    userId: string,
+    _userId: string,
     statType: StatType,
     requestedExp: number
   ): Promise<DailyLimitCheck> {
@@ -425,8 +425,8 @@ export class ExperienceManager {
 
   // 다양성 보너스 계산
   private async calculateVarietyBonus(
-    userId: string,
-    currentStatType: StatType,
+    _userId: string,
+    _currentStatType: StatType,
     previousActivities: ReadonlyArray<Activity>
   ): Promise<number> {
     // 오늘 수행한 활동의 고유 종류 수 계산
@@ -456,7 +456,7 @@ export class ExperienceManager {
 
   // 반복 페널티 계산
   private async calculateRepetitionPenalty(
-    userId: string,
+    _userId: string,
     activityName: string,
     previousActivities: ReadonlyArray<Activity>
   ): Promise<number> {
@@ -524,7 +524,7 @@ export class ExperienceManager {
         const levelInfo = this.calculateLevel(grantedExp)
         
         await db.playerStats.add({
-          userId: activity.userId,
+          _userId: activity.userId,
           statType: activity.statType,
           level: levelInfo.level,
           experience: levelInfo.currentExp,

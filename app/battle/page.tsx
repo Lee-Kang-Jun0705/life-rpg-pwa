@@ -249,7 +249,7 @@ function MonsterCard({
   disabled 
 }: { 
   monster: MonsterData
-  onBattle: (monsterId: string) => void
+  _onBattle: (monsterId: string) => void
   disabled: boolean
 }) {
   const tierColors: Record<string, string> = {

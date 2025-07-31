@@ -10,7 +10,7 @@ export interface SyncMessage {
   tables?: string[]
   timestamp: number
   source: string
-  data?: any
+  data?: unknown
 }
 
 export class RealTimeSync {
@@ -101,7 +101,7 @@ export class RealTimeSync {
   /**
    * 데이터 변경 알림 브로드캐스트
    */
-  broadcast(type: SyncMessage['type'], tables?: string[], data?: any): void {
+  broadcast(type: SyncMessage['type'], tables?: string[], data?: unknown): void {
     if (!this.isInitialized) return
     
     const message: SyncMessage = {

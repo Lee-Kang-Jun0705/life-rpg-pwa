@@ -254,8 +254,8 @@ describe('OptimizedEnergyService - Extended Tests', () => {
       ;(dbHelpers.loadPlayerEnergyState as jest.Mock).mockResolvedValue(mockState)
       ;(dbHelpers.savePlayerEnergyState as jest.Mock).mockResolvedValue(undefined)
 
-      const events: any[] = []
-      const listener = (event: any) => events.push(event)
+      const events: unknown[] = []
+      const listener = (event: unknown) => events.push(event)
       
       // Add event listener
       service.addEventListener('energyChanged', listener)
@@ -276,8 +276,8 @@ describe('OptimizedEnergyService - Extended Tests', () => {
       ;(dbHelpers.loadPlayerEnergyState as jest.Mock).mockResolvedValue(mockState)
       ;(dbHelpers.savePlayerEnergyState as jest.Mock).mockResolvedValue(undefined)
 
-      const events: any[] = []
-      const listener = (event: any) => events.push(event)
+      const events: unknown[] = []
+      const listener = (event: unknown) => events.push(event)
       
       service.addEventListener('dailyBonusClaimed', listener)
 

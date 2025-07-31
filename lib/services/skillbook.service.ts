@@ -23,7 +23,7 @@ class SkillBookService {
   /**
    * 스킬북 사용
    */
-  async useSkillBook(itemUniqueId: string): Promise<{
+  async useSkillBook(_itemUniqueId: string): Promise<{
     success: boolean
     message: string
     skillId?: string
@@ -101,7 +101,7 @@ class SkillBookService {
   /**
    * 아이템이 스킬북인지 확인
    */
-  isSkillBook(item: GeneratedItem): boolean {
+  isSkillBook(_item: GeneratedItem): boolean {
     return item.type === 'consumable' && 
            item.consumableEffect?.type === 'skill_book' &&
            !!item.consumableEffect.skillId
@@ -110,7 +110,7 @@ class SkillBookService {
   /**
    * 스킬북으로 배울 수 있는 스킬 정보 가져오기
    */
-  getSkillBookInfo(item: GeneratedItem): {
+  getSkillBookInfo(_item: GeneratedItem): {
     skillId: string
     skillName: string
     skillDescription: string

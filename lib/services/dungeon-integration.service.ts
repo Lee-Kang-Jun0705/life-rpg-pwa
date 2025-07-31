@@ -19,15 +19,15 @@ import { leaderboardService } from './leaderboard.service'
 import { IdGenerators } from '@/lib/utils/id-generator'
 
 interface DungeonSession {
-  userId: string
-  dungeonId: string
+  _userId: string
+  _dungeonId: string
   progress: DungeonProgress
   currentCombatId?: string
-  rewards: {
+  _rewards: {
     gold: number
     items: GeneratedItem[]
   }
-  difficulty: 'easy' | 'normal' | 'hard' | 'expert' | 'legendary'
+  _difficulty?: 'easy' | 'normal' | 'hard' | 'expert' | 'legendary'
 }
 
 export class DungeonIntegrationService {
@@ -45,33 +45,33 @@ export class DungeonIntegrationService {
    * 던전 입장
    */
   async enterDungeon(
-    userId: string,
-    dungeonId: string,
+    _userId: string,
+    _dungeonId: string,
     character?: Character,
     difficulty?: 'easy' | 'normal' | 'hard' | 'expert' | 'legendary'
-  ): Promise<{ success: boolean; sessionId?: string; error?: string }> {
+  ): Promise<{ _success: boolean; sessionId?: string; error?: string }> {
     try {
       // 캐릭터 정보 가져오기 (전달되지 않은 경우에만)
       if (!character) {
         character = await this.getCharacter(userId)
       }
       if (!character) {
-        return { success: false, error: '캐릭터를 찾을 수 없습니다.' }
+        return { _success: false, error: '캐릭터를 찾을 수 없습니다.' }
       }
 
       // 던전 정보 가져오기
       const dungeon = await dungeonService.getDungeon(dungeonId)
       if (!dungeon) {
-        return { success: false, error: '던전을 찾을 수 없습니다.' }
+        return { _success: false, error: '던전을 찾을 수 없습니다.' }
       }
 
       // 입장 조건 체크
       if (character.level < dungeon.requirements.level) {
-        return { success: false, error: `레벨 ${dungeon.requirements.level} 이상 필요합니다.` }
+        return { _success: false, error: `레벨 ${dungeon.requirements.level} 이상 필요합니다.` }
       }
 
       if (character.energy < dungeon.requirements.energy) {
-        return { success: false, error: '에너지가 부족합니다.' }
+        return { _success: false, error: '에너지가 부족합니다.' }
       }
 
       // 에너지 차감
@@ -106,11 +106,11 @@ export class DungeonIntegrationService {
         userId,
         dungeonId,
         progress,
-        rewards: {
+        _rewards: {
           gold: 0,
           items: []
         },
-        difficulty: difficulty || dungeon.difficulty
+        _difficulty?: difficulty || dungeon.difficulty
       }
 
       this.sessions.set(sessionId, session)
@@ -121,17 +121,17 @@ export class DungeonIntegrationService {
       // 첫 스테이지 시작
       await this.startStage(sessionId, 1)
 
-      return { success: true, sessionId }
+      return { _success: true, sessionId }
     } catch (error) {
       console.error('Failed to enter dungeon:', error)
-      return { success: false, error: '던전 입장 중 오류가 발생했습니다.' }
+      return { _success: false, error: '던전 입장 중 오류가 발생했습니다.' }
     }
   }
 
   /**
    * 스테이지 시작
    */
-  private async startStage(sessionId: string, stageNumber: number): Promise<void> {
+  private async startStage(_sessionId: string, _stageNumber: number): Promise<void> {
     const session = this.sessions.get(sessionId)
     if (!session) return
 
@@ -139,14 +139,14 @@ export class DungeonIntegrationService {
     if (!dungeon) return
 
     // 스테이지 정보 가져오기 (임시)
-    const stage: DungeonStage = {
+    const _stage: DungeonStage = {
       id: `${session.dungeonId}_stage_${stageNumber}`,
-      dungeonId: session.dungeonId,
+      _dungeonId: session.dungeonId,
       stageNumber,
       name: `스테이지 ${stageNumber}`,
       description: `${dungeon.name}의 ${stageNumber}번째 스테이지`,
       monsters: this.generateStageMonsters(dungeon, stageNumber, session.difficulty),
-      rewards: {
+      _rewards: {
         gold: 100 * stageNumber, // 경험치 제거, 골드 2배 증가
         items: []
       },
@@ -171,7 +171,7 @@ export class DungeonIntegrationService {
         stage,
         { 
           type: 'dungeon', 
-          difficulty: (() => {
+          _difficulty?: (() => {
             const difficultyMap: Record<string, 'easy' | 'normal' | 'hard' | 'nightmare'> = {
               'easy': 'easy',
               'normal': 'normal',
@@ -193,12 +193,12 @@ export class DungeonIntegrationService {
    * 전투 행동 실행
    */
   async executeAction(
-    sessionId: string,
-    action: CombatAction
-  ): Promise<{ success: boolean; error?: string }> {
+    _sessionId: string,
+    _action: CombatAction
+  ): Promise<{ _success: boolean; error?: string }> {
     const session = this.sessions.get(sessionId)
     if (!session || !session.currentCombatId) {
-      return { success: false, error: '진행 중인 전투가 없습니다.' }
+      return { _success: false, error: '진행 중인 전투가 없습니다.' }
     }
 
     const result = dungeonCombatService.executePlayerAction(
@@ -220,7 +220,7 @@ export class DungeonIntegrationService {
   /**
    * 전투 종료 처리
    */
-  private async handleCombatEnd(sessionId: string, combatState: CombatState): Promise<void> {
+  private async handleCombatEnd(_sessionId: string, combatState: CombatState): Promise<void> {
     const session = this.sessions.get(sessionId)
     if (!session) return
 
@@ -283,7 +283,7 @@ export class DungeonIntegrationService {
   /**
    * 던전 완료
    */
-  private async completeDungeon(sessionId: string): Promise<void> {
+  private async completeDungeon(_sessionId: string): Promise<void> {
     const session = this.sessions.get(sessionId)
     if (!session) return
 
@@ -304,7 +304,7 @@ export class DungeonIntegrationService {
       clearTime: Math.floor(session.progress.completionTime / 1000), // 초 단위
       score: session.rewards.gold * 10 + session.rewards.items.length * 100, // 골드와 아이템으로 점수 계산
       perfectClear: session.progress.survivedWithFullHP,
-      dungeonId: session.dungeonId
+      _dungeonId: session.dungeonId
     })
 
     // 수집 기록 업데이트
@@ -331,7 +331,7 @@ export class DungeonIntegrationService {
   /**
    * 던전 세션 종료
    */
-  private async endDungeonSession(sessionId: string, success: boolean): Promise<void> {
+  private async endDungeonSession(_sessionId: string, _success: boolean): Promise<void> {
     const session = this.sessions.get(sessionId)
     if (!session) return
 
@@ -345,8 +345,8 @@ export class DungeonIntegrationService {
    * 보상 지급
    */
   private async grantRewards(
-    userId: string,
-    rewards: DungeonSession['rewards']
+    _userId: string,
+    _rewards: DungeonSession['rewards']
   ): Promise<void> {
     // 골드 지급
     const { characterIntegrationService } = await import('./character-integration.service')
@@ -382,7 +382,7 @@ export class DungeonIntegrationService {
   /**
    * 스테이지 몬스터 생성
    */
-  private generateStageMonsters(dungeon: Dungeon, stageNumber: number, sessionDifficulty?: string): MonsterData[] {
+  private generateStageMonsters(dungeon: Dungeon, _stageNumber: number, sessionDifficulty?: string): MonsterData[] {
     // 세션 난이도 우선, 없으면 던전 기본 난이도 사용
     const selectedDifficulty = sessionDifficulty || dungeon.difficulty
     
@@ -462,7 +462,7 @@ export class DungeonIntegrationService {
     }
     
     console.log('[generateStageMonsters]', {
-      dungeonId: dungeon.id,
+      _dungeonId: dungeon.id,
       dungeonType: dungeon.type,
       dungeonDifficulty: dungeon.difficulty,
       selectedDifficulty,
@@ -487,13 +487,13 @@ export class DungeonIntegrationService {
   /**
    * 유틸리티 함수
    */
-  private async getCharacter(userId: string): Promise<Character | null> {
+  private async getCharacter(_userId: string): Promise<Character | null> {
     const { characterIntegrationService } = await import('./character-integration.service')
     return characterIntegrationService.getCharacter(userId)
 
   }
 
-  private async consumeEnergy(userId: string, amount: number): Promise<void> {
+  private async consumeEnergy(_userId: string, _amount: number): Promise<void> {
     const { characterIntegrationService } = await import('./character-integration.service')
     await characterIntegrationService.useEnergy(userId, amount)
   }
@@ -507,7 +507,7 @@ export class DungeonIntegrationService {
     return IdGenerators.dungeonSession()
   }
 
-  private getUserIdFromSession(sessionId: string): string {
+  private getUserIdFromSession(_sessionId: string): string {
     const session = this.sessions.get(sessionId)
     return session?.userId || 'current-user'
   }
@@ -515,14 +515,14 @@ export class DungeonIntegrationService {
   /**
    * 현재 세션 가져오기
    */
-  getSession(sessionId: string): DungeonSession | null {
+  getSession(_sessionId: string): DungeonSession | null {
     return this.sessions.get(sessionId) || null
   }
 
   /**
    * 던전 포기
    */
-  async abandonDungeon(sessionId: string): Promise<void> {
+  async abandonDungeon(_sessionId: string): Promise<void> {
     const session = this.sessions.get(sessionId)
     if (!session) return
 
@@ -533,10 +533,10 @@ export class DungeonIntegrationService {
   /**
    * 다음 스테이지로 진행
    */
-  async proceedToNextStage(sessionId: string): Promise<{ success: boolean; combatId?: string; error?: string }> {
+  async proceedToNextStage(_sessionId: string): Promise<{ _success: boolean; combatId?: string; error?: string }> {
     const session = this.sessions.get(sessionId)
     if (!session) {
-      return { success: false, error: '세션을 찾을 수 없습니다.' }
+      return { _success: false, error: '세션을 찾을 수 없습니다.' }
     }
 
     // 다음 스테이지 번호
@@ -544,7 +544,7 @@ export class DungeonIntegrationService {
     
     // 최대 스테이지 체크
     if (nextStage > session.progress.totalStages) {
-      return { success: false, error: '모든 스테이지를 완료했습니다.' }
+      return { _success: false, error: '모든 스테이지를 완료했습니다.' }
     }
 
     // 진행 상태 업데이트
@@ -555,7 +555,7 @@ export class DungeonIntegrationService {
     await this.startStage(sessionId, nextStage)
 
     return { 
-      success: true, 
+      _success: true, 
       combatId: session.currentCombatId 
     }
   }
@@ -564,8 +564,8 @@ export class DungeonIntegrationService {
    * 던전 진행상황 DB 저장
    */
   private async saveDungeonProgress(
-    userId: string,
-    dungeonId: string,
+    _userId: string,
+    _dungeonId: string,
     status: 'available' | 'in_progress' | 'completed' | 'failed',
     rewards?: {
       coins?: number
@@ -604,7 +604,7 @@ export class DungeonIntegrationService {
   /**
    * 던전 진행상황 불러오기
    */
-  async getDungeonProgress(userId: string, dungeonId: string): Promise<DBDungeonProgress | null> {
+  async getDungeonProgress(_userId: string, _dungeonId: string): Promise<DBDungeonProgress | null> {
     try {
       return await dbHelpers.getDungeonProgress(userId, dungeonId)
     } catch (error) {
@@ -616,7 +616,7 @@ export class DungeonIntegrationService {
   /**
    * 사용자의 모든 던전 진행상황 불러오기
    */
-  async getAllDungeonProgress(userId: string): Promise<DBDungeonProgress[]> {
+  async getAllDungeonProgress(_userId: string): Promise<DBDungeonProgress[]> {
     try {
       return await dbHelpers.getAllDungeonProgress(userId)
     } catch (error) {

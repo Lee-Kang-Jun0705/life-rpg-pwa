@@ -17,11 +17,11 @@ describe('BackupManager', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     // Setup mock database tables
-    mockDb.profiles = mockProfiles as any
-    mockDb.stats = mockStats as any
-    mockDb.activities = mockActivities as any
-    mockDb.characters = mockCharacters as any
-    mockDb.settings = mockSettings as any
+    mockDb.profiles = mockProfiles as unknown
+    mockDb.stats = mockStats as unknown
+    mockDb.activities = mockActivities as unknown
+    mockDb.characters = mockCharacters as unknown
+    mockDb.settings = mockSettings as unknown
   })
 
   describe('createBackup', () => {
@@ -117,7 +117,7 @@ describe('BackupManager', () => {
       }
 
       // Mock validation
-      jest.spyOn(BackupManager as any, 'validateBackup').mockReturnValue(true)
+      jest.spyOn(BackupManager as unknown, 'validateBackup').mockReturnValue(true)
       
       // Mock database operations
       const mockTransaction = jest.fn((mode, ...args) => {
@@ -172,7 +172,7 @@ describe('BackupManager', () => {
       ;(CryptoUtil.decryptObject as jest.Mock).mockResolvedValue(decryptedBackup)
       
       // Mock validation
-      jest.spyOn(BackupManager as any, 'validateBackup').mockReturnValue(true)
+      jest.spyOn(BackupManager as unknown, 'validateBackup').mockReturnValue(true)
       
       // Mock transaction
       mockDb.transaction = jest.fn().mockResolvedValue(undefined)
@@ -187,7 +187,7 @@ describe('BackupManager', () => {
     it('should throw error for invalid backup format', async () => {
       const invalidBackup = { invalid: 'data' }
 
-      await expect(BackupManager.restoreBackup(invalidBackup as any))
+      await expect(BackupManager.restoreBackup(invalidBackup as unknown))
         .rejects.toThrow('유효하지 않은 백업 파일입니다')
     })
 
@@ -216,7 +216,7 @@ describe('BackupManager', () => {
         download: '',
         click: jest.fn()
       }
-      mockCreateElement.mockReturnValue(mockAnchor as any)
+      mockCreateElement.mockReturnValue(mockAnchor as unknown)
 
       // Mock URL methods
       const mockCreateObjectURL = jest.fn().mockReturnValue('blob:url')
@@ -248,16 +248,16 @@ describe('BackupManager', () => {
       // Mock FileReader
       const mockFileReader = {
         readAsText: jest.fn(),
-        onload: null as any,
-        onerror: null as any
+        onload: null as unknown,
+        onerror: null as unknown
       }
-      global.FileReader = jest.fn(() => mockFileReader) as any
+      global.FileReader = jest.fn(() => mockFileReader) as unknown
 
       // Create promise and trigger file read
       const importPromise = BackupManager.importFromFile(file)
       
       // Simulate successful file read
-      mockFileReader.onload({ target: { result: fileContent } } as any)
+      mockFileReader.onload({ target: { result: fileContent } } as unknown)
 
       const result = await importPromise
 
@@ -271,10 +271,10 @@ describe('BackupManager', () => {
       // Mock FileReader
       const mockFileReader = {
         readAsText: jest.fn(),
-        onload: null as any,
-        onerror: null as any
+        onload: null as unknown,
+        onerror: null as unknown
       }
-      global.FileReader = jest.fn(() => mockFileReader) as any
+      global.FileReader = jest.fn(() => mockFileReader) as unknown
 
       // Create promise and trigger error
       const importPromise = BackupManager.importFromFile(file)
@@ -305,7 +305,7 @@ describe('BackupManager', () => {
       }
 
       // Access private method through type assertion
-      const isValid = (BackupManager as any).validateBackup(validBackup)
+      const isValid = (BackupManager as unknown).validateBackup(validBackup)
       expect(isValid).toBe(true)
     })
 
@@ -321,7 +321,7 @@ describe('BackupManager', () => {
       ]
 
       invalidBackups.forEach(backup => {
-        const isValid = (BackupManager as any).validateBackup(backup)
+        const isValid = (BackupManager as unknown).validateBackup(backup)
         expect(isValid).toBe(false)
       })
     })
@@ -341,9 +341,9 @@ describe('BackupManager', () => {
         subtle: {
           digest: jest.fn().mockResolvedValue(mockDigest)
         }
-      } as any
+      } as unknown
 
-      const checksum = await (BackupManager as any).calculateChecksum(backup)
+      const checksum = await (BackupManager as unknown).calculateChecksum(backup)
 
       expect(checksum).toBe('01020304')
       expect(crypto.subtle.digest).toHaveBeenCalledWith(

@@ -63,7 +63,7 @@ class PlayerService {
   /**
    * 플레이어 전체 데이터 가져오기
    */
-  async getPlayer(userId: string): Promise<PlayerData | null> {
+  async getPlayer(_userId: string): Promise<PlayerData | null> {
     try {
       const [profile, resources, equipment, inventory] = await Promise.all([
         dbHelpers.getProfile(userId),
@@ -92,7 +92,7 @@ class PlayerService {
   /**
    * 골드 업데이트 (증가/감소)
    */
-  async updateGold(userId: string, amount: number): Promise<boolean> {
+  async updateGold(_userId: string, amount: number): Promise<boolean> {
     try {
       if (amount < 0) {
         // 골드 감소 (구매 등)
@@ -111,7 +111,7 @@ class PlayerService {
   /**
    * 아이템을 인벤토리에 추가
    */
-  async addItemToInventory(userId: string, options: AddItemOptions): Promise<boolean> {
+  async addItemToInventory(_userId: string, _options: AddItemOptions): Promise<boolean> {
     try {
       const { itemId, type, quantity = 1 } = options
       
@@ -129,7 +129,7 @@ class PlayerService {
           await dbHelpers.addEquipmentToInventory(
             userId,
             itemId,
-            type as any,
+            type as unknown,
             itemData.rarity || 'common'
           )
         }
@@ -149,7 +149,7 @@ class PlayerService {
   /**
    * 아이템 장착
    */
-  async equipItem(userId: string, itemId: string, slot: string): Promise<boolean> {
+  async equipItem(_userId: string, itemId: string, _slot: string): Promise<boolean> {
     try {
       const equipment = await dbHelpers.getEquipmentInventory(userId)
       const item = equipment?.items.find(i => i.itemId === itemId)
@@ -185,7 +185,7 @@ class PlayerService {
   /**
    * 아이템 장착 해제
    */
-  async unequipItem(userId: string, itemDbId: number): Promise<boolean> {
+  async unequipItem(_userId: string, itemDbId: number): Promise<boolean> {
     try {
       await db.equipmentInventory.update({
         where: { id: itemDbId },
@@ -206,7 +206,7 @@ class PlayerService {
   /**
    * 전체 인벤토리 가져오기 (장비 + 소모품/재료)
    */
-  private async getFullInventory(userId: string): Promise<PlayerInventoryItem[]> {
+  private async getFullInventory(_userId: string): Promise<PlayerInventoryItem[]> {
     try {
       const items: PlayerInventoryItem[] = []
       
@@ -219,7 +219,7 @@ class PlayerService {
             type: item.type,
             quantity: 1,
             equipped: item.isEquipped,
-            slot: item.equippedSlot || undefined,
+            _slot: item.equippedSlot || undefined,
             obtainedAt: item.obtainedAt,
             locked: false
           })
@@ -270,7 +270,7 @@ class PlayerService {
   /**
    * 아이템 판매
    */
-  async sellItems(userId: string, itemIds: string[]): Promise<number> {
+  async sellItems(_userId: string, itemIds: string[]): Promise<number> {
     try {
       let totalGold = 0
       

@@ -149,7 +149,7 @@ describe('데이터베이스 통합 테스트', () => {
     for (const { statType, experience } of activities) {
       await dbHelpers.addActivity({
         userId: testUserId,
-        statType: statType as any,
+        statType: statType as unknown,
         activityName: `${statType} 활동`,
         description: '테스트 활동',
         experience,

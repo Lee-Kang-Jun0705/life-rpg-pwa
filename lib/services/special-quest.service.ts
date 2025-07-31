@@ -49,7 +49,7 @@ const SPECIAL_QUESTS_DATA: SpecialQuest[] = [
         }
       ]
     },
-    difficulty: 'hard',
+    _difficulty: 'hard',
     stages: 5,
     estimatedTime: 30,
     maxAttempts: 3,
@@ -88,7 +88,7 @@ const SPECIAL_QUESTS_DATA: SpecialQuest[] = [
       ],
       achievementPoints: 100
     },
-    difficulty: 'legendary',
+    _difficulty: 'legendary',
     stages: 10,
     estimatedTime: 60,
     maxAttempts: 1,
@@ -122,7 +122,7 @@ const SPECIAL_QUESTS_DATA: SpecialQuest[] = [
         }
       ]
     },
-    difficulty: 'normal',
+    _difficulty: 'normal',
     stages: 3,
     estimatedTime: 20,
     status: 'available'
@@ -155,7 +155,7 @@ const SPECIAL_QUESTS_DATA: SpecialQuest[] = [
       ],
       achievementPoints: 50
     },
-    difficulty: 'extreme',
+    _difficulty: 'extreme',
     stages: 5,
     estimatedTime: 25,
     specialRules: ['단 한 번이라도 피해를 받으면 실패', '회복 아이템 사용 불가'],
@@ -192,7 +192,7 @@ export class SpecialQuestService {
    * 특별 퀘스트 목록 조회
    */
   async getSpecialQuests(
-    userId: string,
+    _userId: string,
     filter?: SpecialQuestFilter
   ): Promise<SpecialQuest[]> {
     let quests = Array.from(this.quests.values())
@@ -227,14 +227,14 @@ export class SpecialQuestService {
   /**
    * 특정 퀘스트 조회
    */
-  async getSpecialQuest(questId: string): Promise<SpecialQuest | null> {
+  async getSpecialQuest(_questId: string): Promise<SpecialQuest | null> {
     return this.quests.get(questId) || null
   }
 
   /**
    * 퀘스트 상태 업데이트
    */
-  private async updateQuestStatus(userId: string, quest: SpecialQuest): Promise<void> {
+  private async updateQuestStatus(_userId: string, quest: SpecialQuest): Promise<void> {
     const now = new Date()
 
     // 시간 제한 체크
@@ -273,7 +273,7 @@ export class SpecialQuestService {
    * 입장 조건 확인
    */
   private async checkRequirements(
-    userId: string,
+    _userId: string,
     requirements: SpecialQuest['requirements']
   ): Promise<boolean> {
     try {
@@ -323,8 +323,8 @@ export class SpecialQuestService {
    * 특별 퀘스트 시작
    */
   async startSpecialQuest(
-    userId: string,
-    questId: string
+    _userId: string,
+    _questId: string
   ): Promise<{ success: boolean; progress?: SpecialQuestProgress; error?: string }> {
     const quest = this.quests.get(questId)
     if (!quest) {
@@ -451,8 +451,8 @@ export class SpecialQuestService {
    * 퀘스트 진행 업데이트
    */
   async updateQuestProgress(
-    userId: string,
-    questId: string,
+    _userId: string,
+    _questId: string,
     updates: Partial<SpecialQuestProgress>
   ): Promise<SpecialQuestProgress | null> {
     const userProgressList = this.userProgress.get(userId) || []
@@ -468,8 +468,8 @@ export class SpecialQuestService {
    * 특별 퀘스트 완료
    */
   async completeSpecialQuest(
-    userId: string,
-    questId: string
+    _userId: string,
+    _questId: string
   ): Promise<{ success: boolean; record?: SpecialQuestRecord; error?: string }> {
     const quest = this.quests.get(questId)
     const userProgressList = this.userProgress.get(userId) || []
@@ -493,7 +493,7 @@ export class SpecialQuestService {
       questId,
       userId,
       completedAt: now,
-      clearTime: Math.floor(clearTime / 1000), // 초 단위
+      _clearTime: Math.floor(clearTime / 1000), // 초 단위
       attempts: progress.attempts,
       rewards,
       achievedObjectives: progress.specialObjectives
@@ -527,7 +527,7 @@ export class SpecialQuestService {
   /**
    * 특별 목표 달성 체크
    */
-  private checkSpecialObjectives(progress: SpecialQuestProgress, clearTime: number): void {
+  private checkSpecialObjectives(progress: SpecialQuestProgress, _clearTime: number): void {
     // 무피해 클리어
     const noDamageObj = progress.specialObjectives.find(obj => obj.id === 'no_damage_taken')
     if (noDamageObj && progress.deaths === 0) {
@@ -591,7 +591,7 @@ export class SpecialQuestService {
    */
   private async generateSpecialItem(
     baseItem: SpecialQuestItem,
-    difficulty: string
+    _difficulty: string
   ): Promise<SpecialQuestItem | null> {
     // 드롭 확률 체크
     if (Math.random() * 100 > baseItem.dropRate) {
@@ -632,7 +632,7 @@ export class SpecialQuestService {
       // 모든 스탯 20% 증가
       for (const [stat, value] of Object.entries(specialItem.baseStats)) {
         if (typeof value === 'number') {
-          (specialItem.baseStats as any)[stat] = Math.floor(value * 1.2)
+          (specialItem.baseStats as unknown)[stat] = Math.floor(value * 1.2)
         }
       }
     }
@@ -644,7 +644,7 @@ export class SpecialQuestService {
    * 보상 지급
    */
   private async grantRewards(
-    userId: string,
+    _userId: string,
     rewards: SpecialQuestRecord['rewards']
   ): Promise<void> {
     try {
@@ -676,7 +676,7 @@ export class SpecialQuestService {
    * 히든 퀘스트 트리거 확인
    */
   async checkHiddenQuestTriggers(
-    userId: string,
+    _userId: string,
     trigger: HiddenQuestTrigger
   ): Promise<HiddenQuest[]> {
     const triggeredQuests: HiddenQuest[] = []
@@ -707,22 +707,22 @@ export class SpecialQuestService {
   /**
    * 헬퍼 메서드들
    */
-  private async getCharacter(userId: string): Promise<Character | null> {
+  private async getCharacter(_userId: string): Promise<Character | null> {
     const { characterIntegrationService } = await import('./character-integration.service')
     return characterIntegrationService.getCharacter(userId)
   }
 
-  private async checkUserHasItem(userId: string, itemId: string): Promise<boolean> {
+  private async checkUserHasItem(_userId: string, _itemId: string): Promise<boolean> {
     // TODO: 인벤토리 서비스와 연동
     return true // 임시
   }
 
-  private async checkUserHasAchievement(userId: string, achievementId: string): Promise<boolean> {
+  private async checkUserHasAchievement(_userId: string, _achievementId: string): Promise<boolean> {
     // TODO: 업적 서비스와 연동
     return true // 임시
   }
 
-  private async getUserCollectionCount(userId: string, collectionType: string): Promise<number> {
+  private async getUserCollectionCount(_userId: string, _collectionType: string): Promise<number> {
     // TODO: 컬렉션 서비스와 연동
     return 0 // 임시
   }
@@ -737,7 +737,7 @@ export class SpecialQuestService {
   /**
    * 특별 퀘스트 통계
    */
-  async getQuestStats(userId: string): Promise<{
+  async getQuestStats(_userId: string): Promise<{
     totalCompleted: number
     perfectClears: number
     exclusiveItemsCollected: number

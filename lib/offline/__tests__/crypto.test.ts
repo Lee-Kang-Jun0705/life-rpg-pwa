@@ -180,7 +180,7 @@ describe.skip('CryptoUtil', () => {
       
       const encrypted = await CryptoUtil.encryptFields(
         dataWithNulls,
-        ['optional1', 'optional2', 'secret'] as any,
+        ['optional1', 'optional2', 'secret'] as unknown,
         testPassword
       )
       
@@ -190,7 +190,7 @@ describe.skip('CryptoUtil', () => {
       
       const decrypted = await CryptoUtil.decryptFields(
         encrypted,
-        ['optional1', 'optional2', 'secret'] as any,
+        ['optional1', 'optional2', 'secret'] as unknown,
         testPassword
       )
       

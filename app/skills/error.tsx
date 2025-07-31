@@ -5,7 +5,7 @@ export default function SkillsError({
   reset,
 }: {
   error: Error & { digest?: string }
-  reset: () => void
+  _reset: () => void
 }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">

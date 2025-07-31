@@ -25,7 +25,7 @@ import { skillCombos, checkComboActivation } from '@/lib/data/skill-combos'
 export class SkillExecutionService {
   private static instance: SkillExecutionService
   private cooldowns: Map<string, Map<string, number>> = new Map() // userId -> skillId -> cooldownEnd
-  private recentSkills: Map<string, { skillId: string; timestamp: number }[]> = new Map()
+  private recentSkills: Map<string, { _skillId: string; timestamp: number }[]> = new Map()
 
   static getInstance(): SkillExecutionService {
     if (!this.instance) {
@@ -38,11 +38,11 @@ export class SkillExecutionService {
    * 스킬 실행
    */
   executeSkill(
-    skillId: string,
-    casterId: string,
-    targets: string[],
-    context: SkillContext,
-    skillLevel: number = 1
+    _skillId: string,
+    _casterId: string,
+    _targets: string[],
+    _context: SkillContext,
+    _skillLevel: number = 1
   ): SkillExecutionResult {
     const skill = this.getSkill(skillId)
     if (!skill) {
@@ -86,8 +86,8 @@ export class SkillExecutionService {
 
     const result: SkillExecutionResult = {
       skillId,
-      caster: casterId,
-      targets: validTargets,
+      _caster: casterId,
+      _targets: validTargets,
       effects,
       combos: combo ? [combo.id] : undefined,
       timestamp: Date.now()
@@ -99,14 +99,14 @@ export class SkillExecutionService {
   /**
    * 스킬 가져오기
    */
-  private getSkill(skillId: string): Skill | null {
+  private getSkill(_skillId: string): Skill | null {
     return baseSkills[skillId] || null
   }
 
   /**
    * 쿨다운 체크
    */
-  isOnCooldown(userId: string, skillId: string): boolean {
+  isOnCooldown(_userId: string, _skillId: string): boolean {
     const userCooldowns = this.cooldowns.get(userId)
     if (!userCooldowns) return false
 
@@ -119,7 +119,7 @@ export class SkillExecutionService {
   /**
    * 남은 쿨다운 시간
    */
-  getRemainingCooldown(userId: string, skillId: string): number {
+  getRemainingCooldown(_userId: string, _skillId: string): number {
     const userCooldowns = this.cooldowns.get(userId)
     if (!userCooldowns) return 0
 
@@ -134,10 +134,10 @@ export class SkillExecutionService {
    * 쿨다운 설정
    */
   private setCooldown(
-    userId: string,
-    skillId: string,
-    baseCooldown: number,
-    skillLevel: number
+    _userId: string,
+    _skillId: string,
+    _baseCooldown: number,
+    _skillLevel: number
   ): void {
     if (!this.cooldowns.has(userId)) {
       this.cooldowns.set(userId, new Map())
@@ -154,7 +154,7 @@ export class SkillExecutionService {
   /**
    * MP 소비량 계산
    */
-  private calculateMPCost(skill: Skill, level: number): number {
+  private calculateMPCost(_skill: Skill, _level: number): number {
     let baseCost: number
     
     if (typeof skill.mpCost === 'number') {
@@ -172,10 +172,10 @@ export class SkillExecutionService {
    * 타겟 검증
    */
   private validateTargets(
-    skill: Skill,
-    casterId: string,
-    targets: string[],
-    context: SkillContext
+    _skill: Skill,
+    _casterId: string,
+    _targets: string[],
+    _context: SkillContext
   ): string[] {
     const validTargets: string[] = []
     const casterTeam = context.caster.id === casterId ? 'player' : 'enemy'
@@ -230,14 +230,14 @@ export class SkillExecutionService {
   /**
    * 적인지 확인
    */
-  private isEnemy(casterTeam: string, targetId: string, context: SkillContext): boolean {
+  private isEnemy(casterTeam: string, targetId: string, _context: SkillContext): boolean {
     // context에서 target 정보를 찾아서 팀 확인
     const target = context.targets.find(t => t.id === targetId)
     if (!target) return false
     
     // CombatParticipant에 team 속성이 있다면 사용
     if ('team' in target) {
-      return (target as any).team !== casterTeam
+      return (target as unknown).team !== casterTeam
     }
     
     // 없다면 ID 기반으로 판단
@@ -248,14 +248,14 @@ export class SkillExecutionService {
    * 스킬 효과 적용
    */
   private applySkillEffects(
-    skill: Skill,
-    level: number,
-    casterId: string,
-    targets: string[],
-    context: SkillContext
+    _skill: Skill,
+    _level: number,
+    _casterId: string,
+    _targets: string[],
+    _context: SkillContext
   ): Array<{
     targetId: string
-    effect: SkillEffect
+    _effect: SkillEffect
     actualValue: number
     isCritical?: boolean
     isResisted?: boolean
@@ -293,12 +293,12 @@ export class SkillExecutionService {
    * 단일 효과 적용
    */
   private applySingleEffect(
-    effect: SkillEffect,
-    level: number,
-    caster: SkillContext['caster'],
-    target: SkillContext['targets'][0],
-    skill: Skill,
-    context: SkillContext
+    _effect: SkillEffect,
+    _level: number,
+    _caster: SkillContext['caster'],
+    _target: SkillContext['targets'][0],
+    _skill: Skill,
+    _context: SkillContext
   ): {
     actualValue: number
     isCritical?: boolean
@@ -396,7 +396,7 @@ export class SkillExecutionService {
   /**
    * 스킬 사용 기록
    */
-  private recordSkillUsage(userId: string, skillId: string): void {
+  private recordSkillUsage(_userId: string, _skillId: string): void {
     if (!this.recentSkills.has(userId)) {
       this.recentSkills.set(userId, [])
     }
@@ -413,7 +413,7 @@ export class SkillExecutionService {
   /**
    * 콤보 체크
    */
-  private checkForCombo(userId: string): { id: string; name: string } | null {
+  private checkForCombo(_userId: string): { id: string; name: string } | null {
     const userSkills = this.recentSkills.get(userId) || []
     const combos = Object.values(skillCombos)
     
@@ -424,9 +424,9 @@ export class SkillExecutionService {
    * 스킬 레벨업
    */
   levelUpSkill(
-    userId: string,
-    skillId: string,
-    currentLevel: number
+    _userId: string,
+    _skillId: string,
+    _currentLevel: number
   ): { success: boolean; newLevel: number; cost: number } {
     const skill = this.getSkill(skillId)
     if (!skill) {
@@ -450,7 +450,7 @@ export class SkillExecutionService {
   /**
    * 레벨업 비용 계산
    */
-  private calculateLevelUpCost(currentLevel: number): number {
+  private calculateLevelUpCost(_currentLevel: number): number {
     const base = SKILL_LEVEL_CONFIG.expRequiredBase
     const multiplier = SKILL_LEVEL_CONFIG.expMultiplier
     return Math.floor(base * Math.pow(multiplier, currentLevel))
@@ -459,14 +459,14 @@ export class SkillExecutionService {
   /**
    * 모든 쿨다운 초기화
    */
-  clearAllCooldowns(userId: string): void {
+  clearAllCooldowns(_userId: string): void {
     this.cooldowns.delete(userId)
   }
 
   /**
    * 특정 스킬 쿨다운 초기화
    */
-  clearSkillCooldown(userId: string, skillId: string): void {
+  clearSkillCooldown(_userId: string, _skillId: string): void {
     const userCooldowns = this.cooldowns.get(userId)
     if (userCooldowns) {
       userCooldowns.delete(skillId)

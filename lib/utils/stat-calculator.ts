@@ -91,7 +91,7 @@ export function calculateRequiredExperience(level: number): number {
 /**
  * 총 경험치로부터 레벨 계산
  */
-export function calculateLevelFromExperience(totalExp: number): { level: number; currentExp: number } {
+export function calculateLevelFromExperience(_totalExp: number): { level: number; currentExp: number } {
   let level = 0
   let remainingExp = totalExp
   
@@ -127,7 +127,7 @@ export function calculateTotalExperience(level: number, currentExp: number = 0):
 /**
  * 전투력 계산
  */
-export function calculateCombatPower(stats: Record<CombatStat, number>): number {
+export function calculateCombatPower(_stats: Record<CombatStat, number>): number {
   const weights = {
     [CombatStats.HP]: 0.3,
     [CombatStats.MP]: 0.2,

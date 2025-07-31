@@ -107,7 +107,7 @@ export function MonsterCard({ monster, entry, lore }: MonsterCardProps) {
           {isDiscovered && (
             <>
               <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                <span>Lv.{(monster as any).level || '1'}</span>
+                <span>Lv.{(monster as unknown).level || '1'}</span>
                 <span>•</span>
                 <span className="capitalize">{monster.tier}</span>
               </div>

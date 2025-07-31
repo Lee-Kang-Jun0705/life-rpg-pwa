@@ -649,7 +649,7 @@ class SkillManagementService {
     console.time('restoreAllSkills-db')
     
     // 모든 데이터를 한 번에 DB에 저장
-    const dbPromises: Promise<any>[] = []
+    const dbPromises: Promise<unknown>[] = []
 
     // 학습한 스킬 저장
     for (const learned of data.learnedSkills) {

@@ -185,7 +185,7 @@ export interface LifeRPGDatabase {
   settings: Table<Setting>
   userEquipments: Table<UserEquipment>
   userResources: Table<UserResources>
-  transaction<T>(mode: string, table: Table<unknown>, callback: () => Promise<T>): Promise<T>
+  transaction<T>(_mode: string, _table: Table<unknown>, _callback: () => Promise<T>): Promise<T>
 }
 
 export interface ActivityVerification {

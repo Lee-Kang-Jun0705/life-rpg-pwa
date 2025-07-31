@@ -145,7 +145,7 @@ export interface AIConfig {
 }
 
 export class SecureAIStorage {
-  static async saveConfig(config: AIConfig): Promise<void> {
+  static async saveConfig(_config: AIConfig): Promise<void> {
     if (!db) {
       throw new Error('Database not initialized')
     }

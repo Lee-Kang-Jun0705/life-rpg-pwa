@@ -34,8 +34,8 @@ export function GameLayout({ children }: GameLayoutProps) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-gray-800">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, _y: 20 }}
+          animate={{ opacity: 1, _y: 0 }}
           className="text-center max-w-md"
         >
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />

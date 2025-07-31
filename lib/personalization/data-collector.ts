@@ -92,7 +92,7 @@ export class AdaptiveDataCollector {
    */
   async collectInteractionData(
     userId: string,
-    interaction: {
+    _interaction: {
       input: string
       response: string
       helpful?: boolean
@@ -109,7 +109,7 @@ export class AdaptiveDataCollector {
     await this.saveInteractionData(userId, data)
   }
 
-  private collectLightInteraction(interaction: {
+  private collectLightInteraction(_interaction: {
     input: string
     response: string
     helpful?: boolean
@@ -122,7 +122,7 @@ export class AdaptiveDataCollector {
     }
   }
 
-  private collectProInteraction(interaction: {
+  private collectProInteraction(_interaction: {
     input: string
     response: string
     helpful?: boolean
@@ -186,7 +186,7 @@ export class AdaptiveDataCollector {
     return 'general'
   }
 
-  private analyzeSentiment(text: string): string {
+  private analyzeSentiment(_text: string): string {
     // 간단한 감정 분석 (실제로는 더 정교한 분석 필요)
     const positiveWords = ['좋', '잘', '성공', '행복', '기쁨']
     const negativeWords = ['힘들', '실패', '어려', '피곤', '스트레스']
@@ -204,7 +204,7 @@ export class AdaptiveDataCollector {
     return 'neutral'
   }
 
-  private extractTopics(text: string): string[] {
+  private extractTopics(_text: string): string[] {
     // 간단한 토픽 추출
     const topics = []
     const topicKeywords = {
@@ -223,7 +223,7 @@ export class AdaptiveDataCollector {
     return topics
   }
 
-  private async saveInteractionData(userId: string, data: Record<string, unknown>): Promise<void> {
+  private async saveInteractionData(userId: string, _data: Record<string, unknown>): Promise<void> {
     // DB에 상호작용 데이터 저장
     const key = `ai_interaction_${userId}_${Date.now()}`
     
@@ -231,10 +231,10 @@ export class AdaptiveDataCollector {
       await db.metadata.put({
         id: Date.now(),
         key,
-        data: JSON.stringify(data)
+        _data: JSON.stringify(data)
       })
     } catch (error) {
-      console.error('Failed to save interaction data:', error)
+      console.error('Failed to save interaction _data:', error)
     }
   }
 }

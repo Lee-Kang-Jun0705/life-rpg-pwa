@@ -45,7 +45,7 @@ export interface ActivitySchema extends BaseEntity {
 export type MissionType = 'daily' | 'weekly' | 'monthly' | 'event'
 
 export interface MissionRequirements {
-  count: number
+  _count: number
   experience: number
 }
 
@@ -150,7 +150,7 @@ export interface PlayerDataSchema {
 // Setting 타입
 export interface SettingSchema extends BaseEntity {
   key: string
-  value: string
+  _value: string
 }
 
 /**
@@ -375,14 +375,14 @@ export class DataValidator {
    * 안전한 검증 (에러 시 null 반환)
    */
   static safeValidate<T>(
-    validator: (data: unknown) => T,
+    _validator: (data: unknown) => T,
     data: unknown
-  ): { success: true; data: T } | { success: false; error: Error } {
+  ): { success: true; data: T } | { success: false; _error: Error } {
     try {
       const result = validator(data)
       return { success: true, data: result }
     } catch (error) {
-      return { success: false, error: error as Error }
+      return { success: false, _error: error as Error }
     }
   }
 }
@@ -391,23 +391,23 @@ export class DataValidator {
  * 데이터베이스 쿼리 빌더 타입
  */
 export interface QueryBuilder<T> {
-  where<K extends keyof T>(field: K, value: T[K]): QueryBuilder<T>
-  equals<V>(value: V): QueryBuilder<T>
-  notEquals<V>(value: V): QueryBuilder<T>
-  greaterThan<V>(value: V): QueryBuilder<T>
-  lessThan<V>(value: V): QueryBuilder<T>
-  between<V>(min: V, max: V): QueryBuilder<T>
-  in<V>(values: V[]): QueryBuilder<T>
-  orderBy(field: keyof T, direction?: 'asc' | 'desc'): QueryBuilder<T>
-  limit(count: number): QueryBuilder<T>
-  offset(count: number): QueryBuilder<T>
-  and(condition: (item: T) => boolean): QueryBuilder<T>
-  or(condition: (item: T) => boolean): QueryBuilder<T>
+  where<K extends keyof T>(_field: K, _value: T[K]): QueryBuilder<T>
+  equals<V>(_value: V): QueryBuilder<T>
+  notEquals<V>(_value: V): QueryBuilder<T>
+  greaterThan<V>(_value: V): QueryBuilder<T>
+  lessThan<V>(_value: V): QueryBuilder<T>
+  between<V>(_min: V, _max: V): QueryBuilder<T>
+  in<V>(_values: V[]): QueryBuilder<T>
+  orderBy(_field: keyof T, direction?: 'asc' | 'desc'): QueryBuilder<T>
+  limit(_count: number): QueryBuilder<T>
+  offset(_count: number): QueryBuilder<T>
+  and(_condition: (item: T) => boolean): QueryBuilder<T>
+  or(_condition: (item: T) => boolean): QueryBuilder<T>
   toArray(): Promise<T[]>
   first(): Promise<T | undefined>
   count(): Promise<number>
   delete(): Promise<number>
-  update(updates: Partial<T>): Promise<number>
+  update(_updates: Partial<T>): Promise<number>
 }
 
 /**
@@ -439,8 +439,8 @@ export interface TransactionScope {
 export interface Migration {
   version: number
   name: string
-  up(db: TransactionScope): Promise<void>
-  down(db: TransactionScope): Promise<void>
+  up(_db: TransactionScope): Promise<void>
+  down(_db: TransactionScope): Promise<void>
 }
 
 /**
@@ -450,11 +450,11 @@ export type DatabaseEvent =
   | { type: 'created'; table: string; data: unknown }
   | { type: 'updated'; table: string; id: string | number; changes: Partial<unknown> }
   | { type: 'deleted'; table: string; id: string | number }
-  | { type: 'error'; error: Error }
-  | { type: 'synced'; table: string; count: number }
+  | { type: 'error'; _error: Error }
+  | { type: 'synced'; table: string; _count: number }
 
 export interface DatabaseEventHandler {
-  (event: DatabaseEvent): void | Promise<void>
+  (_event: DatabaseEvent): void | Promise<void>
 }
 
 /**
@@ -468,8 +468,8 @@ export interface DatabaseConfig {
   IDBKeyRange?: typeof IDBKeyRange
   migrations?: Migration[]
   onReady?: () => void | Promise<void>
-  onError?: (error: Error) => void
-  onVersionChange?: (oldVersion: number, newVersion: number) => void | Promise<void>
+  onError?: (_error: Error) => void
+  onVersionChange?: (_oldVersion: number, _newVersion: number) => void | Promise<void>
 }
 
 /**
