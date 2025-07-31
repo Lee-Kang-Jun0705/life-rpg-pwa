@@ -1,0 +1,158 @@
+/* 접근성 개선을 위한 스타일 */
+
+/* 포커스 스타일 개선 */
+:focus-visible {
+  outline: 2px solid var(--focus-color, #4169E1);
+  outline-offset: 2px;
+}
+
+/* 고대비 모드 */
+@media (prefers-contrast: high) {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --border-color: #000000;
+    --focus-color: #0066cc;
+  }
+
+  .dark {
+    --background: #000000;
+    --foreground: #ffffff;
+    --border-color: #ffffff;
+    --focus-color: #66b3ff;
+  }
+
+  /* 버튼 고대비 */
+  button, .button {
+    border: 2px solid var(--border-color);
+  }
+
+  /* 링크 고대비 */
+  a {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+
+  /* 카드 고대비 */
+  .card {
+    border: 2px solid var(--border-color);
+  }
+}
+
+/* 모션 감소 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 스크린 리더 전용 텍스트 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus {
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* 키보드 네비게이션 표시 */
+.keyboard-navigation *:focus {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* 다크모드 색상 개선 */
+.dark {
+  /* 배경색 계층 */
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #252525;
+  
+  /* 텍스트 색상 계층 */
+  --text-primary: #f0f0f0;
+  --text-secondary: #b0b0b0;
+  --text-tertiary: #808080;
+  
+  /* 경계선 색상 */
+  --border-primary: #333333;
+  --border-secondary: #404040;
+  
+  /* 상태 색상 */
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #f87171;
+  --info: #60a5fa;
+}
+
+/* 큰 텍스트 모드 */
+.text-large {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-large h1 {
+  font-size: 2.5rem;
+}
+
+.text-large h2 {
+  font-size: 2rem;
+}
+
+.text-large h3 {
+  font-size: 1.75rem;
+}
+
+/* 터치 타겟 최소 크기 */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[tabindex]:not([tabindex="-1"]) {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* 색약 모드 */
+.colorblind-safe {
+  /* 색상 대신 패턴이나 아이콘 사용 권장 */
+  --success-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M0,4 L4,0' stroke='%234ade80' stroke-width='1'/%3E%3C/svg%3E");
+  --error-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M0,0 L4,4 M4,0 L0,4' stroke='%23f87171' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+/* 읽기 모드 */
+.reading-mode {
+  max-width: 65ch;
+  margin: 0 auto;
+  line-height: 1.8;
+  font-size: 1.125rem;
+  background-color: #fffef9;
+  color: #333333;
+  padding: 2rem;
+}
+
+.dark .reading-mode {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}

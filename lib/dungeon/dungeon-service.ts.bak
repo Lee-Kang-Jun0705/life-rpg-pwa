@@ -1,0 +1,1053 @@
+import { 
+  Dungeon, 
+  DungeonProgress, 
+  Challenge, 
+  DifficultyLevel,
+  DungeonType,
+  DungeonStats,
+  DungeonReward,
+  DungeonStatus
+} from './types'
+import { EnergyService } from '../energy/energy-service'
+import { DUNGEON_ENERGY_COST } from '../types/energy'
+import { StageService } from './stage-service'
+import { DUNGEON_STAGES_MAP } from './stage-data'
+import { DungeonRepository } from './dungeon-repository'
+import { DungeonFactory } from './dungeon-factory'
+import { DUNGEON_TEMPLATES } from './dungeon-templates'
+import { db } from '../database/client'
+import { DUNGEON_DATA } from './dungeon-data'
+
+// 필요한 인터페이스 추가
+interface DungeonProgressData extends Omit<DungeonProgress, 'id'> {
+  id?: number
+}
+
+// DUNGEON_TEMPLATES를 배열로 변환하며 필수 필드 추가
+const DUNGEON_TEMPLATES_ARRAY: Dungeon[] = [
+  // 일일 던전 - 건강의 시련
+  {
+    id: 'daily-health-1',
+    name: '건강의 시련',
+    description: '오늘의 건강 목표를 달성하고 보상을 획득하세요!',
+    imageUrl: '/images/dungeons/health.png',
+    difficulty: 'normal' as DifficultyLevel,
+    type: 'daily' as DungeonType,
+    requirements: {
+      minLevel: 1,
+      energy: 10
+    },
+    rewards: {
+      exp: 50,
+      gold: 30,
+      items: []
+    },
+    challenges: DUNGEON_TEMPLATES.daily.health.challenges,
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 3,
+    isAvailable: false,
+    isCompleted: false,
+    attempts: 0
+  },
+  // 일일 던전 - 지식의 전당
+  {
+    id: 'daily-learning-1',
+    name: '지식의 전당',
+    description: '학습 목표를 달성하고 지혜를 쌓으세요!',
+    imageUrl: '/images/dungeons/learning.png',
+    difficulty: 'normal' as DifficultyLevel,
+    type: 'daily' as DungeonType,
+    requirements: {
+      minLevel: 1,
+      energy: 10
+    },
+    rewards: {
+      exp: 50,
+      gold: 30,
+      items: []
+    },
+    challenges: DUNGEON_TEMPLATES.daily.learning.challenges,
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 3,
+    isAvailable: false,
+    isCompleted: false,
+    attempts: 0
+  },
+  // 일일 던전 - 인연의 고리
+  {
+    id: 'daily-relation-1',
+    name: '인연의 고리',
+    description: '소중한 사람들과 시간을 보내세요',
+    imageUrl: '/images/dungeons/relationship.png',
+    difficulty: 'normal' as DifficultyLevel,
+    type: 'daily' as DungeonType,
+    requirements: {
+      minLevel: 1,
+      energy: 10
+    },
+    rewards: {
+      exp: 45,
+      gold: 25,
+      items: []
+    },
+    challenges: DUNGEON_TEMPLATES.daily.relationship.challenges,
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 3,
+    isAvailable: false,
+    isCompleted: false,
+    attempts: 0
+  },
+  // 일일 던전 - 성취의 길
+  {
+    id: 'daily-achieve-1',
+    name: '성취의 길',
+    description: '목표를 달성하고 성취감을 느껴보세요',
+    imageUrl: '/images/dungeons/achievement.png',
+    difficulty: 'normal' as DifficultyLevel,
+    type: 'daily' as DungeonType,
+    requirements: {
+      minLevel: 1,
+      energy: 10
+    },
+    rewards: {
+      exp: 50,
+      gold: 30,
+      items: []
+    },
+    challenges: DUNGEON_TEMPLATES.daily.achievement.challenges,
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 3,
+    isAvailable: false,
+    isCompleted: false,
+    attempts: 0
+  },
+  // 주간 던전 - 균형의 시험
+  {
+    id: 'weekly-balanced-1',
+    name: '균형의 시험',
+    description: '모든 스탯을 골고루 향상시키세요',
+    imageUrl: '/images/dungeons/balanced.png',
+    difficulty: 'hard' as DifficultyLevel,
+    type: 'weekly' as DungeonType,
+    requirements: {
+      minLevel: 5,
+      energy: 20
+    },
+    rewards: {
+      exp: 150,
+      gold: 100,
+      items: []
+    },
+    challenges: DUNGEON_TEMPLATES.weekly.balanced.challenges,
+    resetTime: new Date(new Date().setDate(new Date().getDate() + (7 - new Date().getDay()))),
+    maxAttempts: 1,
+    isAvailable: false,
+    isCompleted: false,
+    attempts: 0
+  },
+  // 주간 던전 - 집중 훈련장
+  {
+    id: 'weekly-intensive-1',
+    name: '집중 훈련장',
+    description: '특정 분야에 집중하여 실력을 키우세요',
+    imageUrl: '/images/dungeons/intensive.png',
+    difficulty: 'hard' as DifficultyLevel,
+    type: 'weekly' as DungeonType,
+    requirements: {
+      minLevel: 5,
+      energy: 20
+    },
+    rewards: {
+      exp: 200,
+      gold: 150,
+      items: []
+    },
+    challenges: DUNGEON_TEMPLATES.weekly.intensive.challenges,
+    resetTime: new Date(new Date().setDate(new Date().getDate() + (7 - new Date().getDay()))),
+    maxAttempts: 1,
+    isAvailable: false,
+    isCompleted: false,
+    attempts: 0
+  },
+  // 특별 던전 - 극한의 도전
+  {
+    id: 'special-challenge-1',
+    name: '극한의 도전',
+    description: '한계를 뛰어넘는 특별한 도전!',
+    imageUrl: '/images/dungeons/challenge.png',
+    difficulty: 'nightmare' as DifficultyLevel,
+    type: 'special' as DungeonType,
+    requirements: {
+      minLevel: 10,
+      energy: 30
+    },
+    rewards: {
+      exp: 500,
+      gold: 300,
+      items: []
+    },
+    challenges: DUNGEON_TEMPLATES.special.challenge.challenges,
+    resetTime: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+    maxAttempts: 1,
+    isAvailable: false,
+    isCompleted: false,
+    attempts: 0
+  }
+]
+
+// 더미 던전 데이터는 이미 import된 DUNGEON_TEMPLATES 사용
+    name: '건강의 시련',
+    description: '오늘의 건강 목표를 달성하고 보상을 획득하세요!',
+    imageUrl: '/icons/dungeon-health.png',
+    difficulty: 'easy',
+    type: 'daily',
+    requirements: {
+      minLevel: 1
+    },
+    rewards: {
+      exp: 50,
+      coins: 30,
+      items: ['health-potion']
+    },
+    challenges: [
+      {
+        id: 'ch-1',
+        title: '10분 스트레칭',
+        description: '간단한 스트레칭으로 하루를 시작하세요',
+        type: 'stat',
+        targetStat: 'health',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-2',
+        title: '물 3잔 마시기',
+        description: '오전 중에 물을 3잔 이상 마시세요',
+        type: 'action',
+        targetValue: 3,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 1
+  },
+  {
+    id: 'daily-relation-1',
+    name: '인연의 고리',
+    description: '소중한 사람들과 시간을 보내세요',
+    imageUrl: '/icons/dungeon-relation.png',
+    difficulty: 'easy',
+    type: 'daily',
+    requirements: {
+      minLevel: 1
+    },
+    rewards: {
+      exp: 45,
+      coins: 25,
+      items: ['wisdom-scroll']
+    },
+    challenges: [
+      {
+        id: 'ch-11',
+        title: '안부 인사',
+        description: '가족이나 친구에게 간단한 안부를 전하세요',
+        type: 'stat',
+        targetStat: 'relationship',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-12',
+        title: '감사 일기',
+        description: '오늘 감사한 일 1가지를 기록하세요',
+        type: 'action',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 1
+  },
+  
+  // ===== 보통 난이도 던전 =====
+  {
+    id: 'daily-study-1',
+    name: '지식의 던전',
+    description: '학습 목표를 달성하고 지혜를 쌓으세요!',
+    imageUrl: '/icons/dungeon-study.png',
+    difficulty: 'normal',
+    type: 'daily',
+    requirements: {
+      minLevel: 2
+    },
+    rewards: {
+      exp: 75,
+      coins: 50,
+      items: ['wisdom-scroll', 'exp-booster']
+    },
+    challenges: [
+      {
+        id: 'ch-3',
+        title: '10페이지 읽기',
+        description: '책이나 글을 10페이지 읽어보세요',
+        type: 'stat',
+        targetStat: 'learning',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-4',
+        title: '유튜브 강의 1개',
+        description: '교육 영상을 하나 시청하세요',
+        type: 'action',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 1
+  },
+  {
+    id: 'daily-achievement-1',
+    name: '성취의 요새',
+    description: '목표를 달성하고 성취감을 느껴보세요',
+    imageUrl: '/icons/dungeon-achievement.png',
+    difficulty: 'normal',
+    type: 'daily',
+    requirements: {
+      minLevel: 3
+    },
+    rewards: {
+      exp: 80,
+      coins: 60,
+      items: ['exp-booster']
+    },
+    challenges: [
+      {
+        id: 'ch-13',
+        title: '할 일 2개 완료',
+        description: '오늘 계획한 일 중 2개를 완료하세요',
+        type: 'stat',
+        targetStat: 'achievement',
+        targetValue: 2,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-14',
+        title: '작은 목표 달성',
+        description: '오늘의 작은 목표 하나를 달성하세요',
+        type: 'action',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 1
+  },
+
+  // ===== 어려움 난이도 던전 =====
+  {
+    id: 'daily-hard-balance',
+    name: '균형의 성소',
+    description: '모든 영역에서 균형잡힌 성장을 이루세요',
+    imageUrl: '/icons/dungeon-balance.png',
+    difficulty: 'hard',
+    type: 'daily',
+    requirements: {
+      minLevel: 5,
+      requiredStats: [
+        { stat: 'health', minValue: 15 },
+        { stat: 'learning', minValue: 15 }
+      ]
+    },
+    rewards: {
+      exp: 150,
+      coins: 100,
+      items: ['mystic-ring', 'exp-booster']
+    },
+    challenges: [
+      {
+        id: 'ch-20',
+        title: '30분 운동',
+        description: '운동을 30분 이상 하세요',
+        type: 'stat',
+        targetStat: 'health',
+        targetValue: 2,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-21',
+        title: '전문 자료 학습',
+        description: '전문 분야 자료를 30분 이상 학습하세요',
+        type: 'stat',
+        targetStat: 'learning',
+        targetValue: 2,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-22',
+        title: '협업 활동',
+        description: '동료와 함께 업무를 진행하세요',
+        type: 'stat',
+        targetStat: 'relationship',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-23',
+        title: '중요 업무 3개',
+        description: '중요한 업무 3개를 완료하세요',
+        type: 'stat',
+        targetStat: 'achievement',
+        targetValue: 3,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 2
+  },
+
+  // ===== 악몽 난이도 던전 =====
+  {
+    id: 'daily-nightmare-master',
+    name: '마스터의 시련',
+    description: '극한의 도전을 통해 진정한 마스터가 되세요',
+    imageUrl: '/icons/dungeon-master.png',
+    difficulty: 'nightmare',
+    type: 'daily',
+    requirements: {
+      minLevel: 10,
+      requiredStats: [
+        { stat: 'health', minValue: 30 },
+        { stat: 'learning', minValue: 30 },
+        { stat: 'relationship', minValue: 20 },
+        { stat: 'achievement', minValue: 25 }
+      ]
+    },
+    rewards: {
+      exp: 300,
+      coins: 200,
+      items: ['legendary-sword', 'champion-armor']
+    },
+    challenges: [
+      {
+        id: 'ch-30',
+        title: '1시간 집중 운동',
+        description: '운동에만 집중하여 1시간을 채우세요',
+        type: 'stat',
+        targetStat: 'health',
+        targetValue: 4,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-31',
+        title: '100페이지 읽기',
+        description: '책을 100페이지 이상 읽으세요',
+        type: 'stat',
+        targetStat: 'learning',
+        targetValue: 4,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-32',
+        title: '모임 주최/참여',
+        description: '5명 이상의 모임을 주최하거나 참여하세요',
+        type: 'stat',
+        targetStat: 'relationship',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-33',
+        title: '주요 목표 달성',
+        description: '이번 달의 주요 목표를 하나 달성하세요',
+        type: 'stat',
+        targetStat: 'achievement',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-34',
+        title: '프레젠테이션',
+        description: '프레젠테이션이나 발표를 진행하세요',
+        type: 'action',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+    resetTime: new Date(new Date().setHours(24, 0, 0, 0)),
+    maxAttempts: 3
+  },
+  {
+    id: 'weekly-boss-1',
+    name: '주간 보스: 꾸준함의 시험',
+    description: '일주일 동안 꾸준히 도전하고 특별한 보상을 획듍하세요!',
+    imageUrl: '/icons/dungeon-boss.png',
+    difficulty: 'hard',
+    type: 'weekly',
+    requirements: {
+      minLevel: 5,
+      requiredStats: [
+        { stat: 'health', minValue: 20 },
+        { stat: 'learning', minValue: 20 }
+      ]
+    },
+    rewards: {
+      exp: 300,
+      coins: 200,
+      items: ['legendary-sword', 'boss-badge'],
+      achievementId: 'weekly-boss-slayer'
+    },
+    challenges: [
+      {
+        id: 'ch-5',
+        title: '주 4일 운동',
+        description: '이번 주에 4일 이상 운동하세요',
+        type: 'stat',
+        targetStat: 'health',
+        targetValue: 4,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-6',
+        title: '주간 목표 달성',
+        description: '이번 주의 주요 목표 1개를 달성하세요',
+        type: 'stat',
+        targetStat: 'achievement',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-7',
+        title: '학습 시간 7시간',
+        description: '이번 주 누적 학습 시간 7시간 달성',
+        type: 'stat',
+        targetStat: 'learning',
+        targetValue: 7,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-8',
+        title: '사회적 활동 3회',
+        description: '친구나 가족과 의미있는 시간 3회 이상',
+        type: 'stat',
+        targetStat: 'relationship',
+        targetValue: 3,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+    resetTime: new Date(new Date().setDate(new Date().getDate() + (7 - new Date().getDay()))),
+    maxAttempts: 3
+  },
+
+  // ===== 스페셜 던전 =====
+  {
+    id: 'special-event-1',
+    name: '특별: 월간 도약 프로젝트',
+    description: '이번 달 크게 성장할 수 있는 도전!',
+    imageUrl: '/icons/dungeon-special.png',
+    difficulty: 'normal',
+    type: 'special',
+    requirements: {
+      minLevel: 1
+    },
+    rewards: {
+      exp: 100,
+      coins: 100,
+      items: ['exp-booster', 'dungeon-key']
+    },
+    challenges: [
+      {
+        id: 'ch-40',
+        title: '대형 목표 설정',
+        description: '이번 달의 핵심 목표를 설정하고 계획을 세우세요',
+        type: 'action',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-41',
+        title: '중간 점검',
+        description: '월간 목표의 50% 이상을 달성하세요',
+        type: 'action',
+        targetValue: 50,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-42',
+        title: '최종 달성',
+        description: '월간 목표를 완전히 달성하세요',
+        type: 'action',
+        targetValue: 100,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+    resetTime: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1), // 다음 달 1일
+    maxAttempts: 1
+  },
+  {
+    id: 'special-marathon-1',
+    name: '특별: 극한 도전',
+    description: '한계를 뛰어넘는 특별한 도전!',
+    imageUrl: '/icons/dungeon-marathon.png',
+    difficulty: 'hard',
+    type: 'special',
+    requirements: {
+      minLevel: 7,
+      requiredStats: [
+        { stat: 'achievement', minValue: 30 }
+      ]
+    },
+    rewards: {
+      exp: 500,
+      coins: 300,
+      items: ['champion-armor', 'exp-booster', 'dungeon-key']
+    },
+    challenges: [
+      {
+        id: 'ch-50',
+        title: '모든 스탯 10 상승',
+        description: '모든 스탯을 10씩 올리세요',
+        type: 'action',
+        targetValue: 40,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-51',
+        title: '전문가 수준 달성',
+        description: '한 분야에서 전문가 수준에 도달하세요',
+        type: 'action',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-52',
+        title: '대회/시험 통과',
+        description: '어려운 대회나 시험에 도전하고 통과하세요',
+        type: 'action',
+        targetValue: 1,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+    resetTime: new Date(new Date().setMonth(new Date().getMonth() + 1)), // 1개월 후
+    maxAttempts: 1
+  },
+
+  // ===== 주간 챌린지 던전 =====
+  {
+    id: 'weekly-challenge-1',
+    name: '주간: 균형잡힌 삶',
+    description: '모든 스탯을 골고루 향상시키세요',
+    imageUrl: '/icons/dungeon-weekly.png',
+    difficulty: 'normal',
+    type: 'weekly',
+    requirements: {
+      minLevel: 3
+    },
+    rewards: {
+      exp: 150,
+      coins: 100,
+      items: ['exp-booster', 'mystic-ring']
+    },
+    challenges: [
+      {
+        id: 'ch-60',
+        title: '건강 활동 3회',
+        description: '이번 주에 건강 관련 활동을 3회 수행하세요',
+        type: 'stat',
+        targetStat: 'health',
+        targetValue: 3,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-61',
+        title: '학습 활동 3회',
+        description: '이번 주에 학습 관련 활동을 3회 수행하세요',
+        type: 'stat',
+        targetStat: 'learning',
+        targetValue: 3,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-62',
+        title: '관계 활동 3회',
+        description: '이번 주에 관계 관련 활동을 3회 수행하세요',
+        type: 'stat',
+        targetStat: 'relationship',
+        targetValue: 3,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      },
+      {
+        id: 'ch-63',
+        title: '성취 활동 3회',
+        description: '이번 주에 성취 관련 활동을 3회 수행하세요',
+        type: 'stat',
+        targetStat: 'achievement',
+        targetValue: 3,
+        currentValue: 0,
+        completed: false,
+        createdAt: new Date()
+      }
+    ],
+
+export class DungeonService {
+  private static instance: DungeonService
+  private energyService: EnergyService
+  
+  constructor() {
+    this.energyService = EnergyService.getInstance()
+  }
+  
+  static getInstance(): DungeonService {
+    if (!DungeonService.instance) {
+      DungeonService.instance = new DungeonService()
+    }
+    return DungeonService.instance
+  }
+
+  // 사용 가능한 던전 목록 가져오기
+  async getAvailableDungeons(userId: string, userLevel: number): Promise<Dungeon[]> {
+    try {
+      // IndexedDB에서 던전 진행 상황 가져오기
+      const progressRecords = await db.dungeonProgress
+        .where('userId')
+        .equals(userId)
+        .toArray()
+
+      // 플레이어 에너지 상태 가져오기
+      const energyState = await this.energyService.getPlayerEnergyState(userId)
+      
+      // 스테이지 서비스 인스턴스
+      const stageService = StageService.getInstance()
+
+      const now = new Date()
+      
+      return await Promise.all(DUNGEON_TEMPLATES_ARRAY.map(async template => {
+        const progress = progressRecords.find(p => p.dungeonId === template.id)
+        const isCompleted = !!(progress?.status === 'completed' && 
+          progress.completedAt && 
+          progress.completedAt > template.resetTime)
+
+        const attempts = progress?.attempts || 0
+        const energyRequired = DUNGEON_ENERGY_COST[template.difficulty as keyof typeof DUNGEON_ENERGY_COST] || 20
+        const hasEnoughEnergy = energyState.energy.current >= energyRequired
+
+        const isAvailable = this.checkRequirements(template, userLevel) && 
+          (!template.maxAttempts || attempts < template.maxAttempts) &&
+          !isCompleted &&
+          hasEnoughEnergy
+
+        // 스테이지 정보 가져오기
+        let stageInfo = {
+          hasStages: false,
+          totalStages: 0,
+          completedStages: 0,
+          currentStage: 0
+        }
+
+        if (DUNGEON_STAGES_MAP[template.id]) {
+          const dungeonStages = DUNGEON_STAGES_MAP[template.id]
+          const stageProgress = await stageService.getDungeonStageProgress(userId, template.id)
+          
+          stageInfo = {
+            hasStages: true,
+            totalStages: dungeonStages.totalStages,
+            completedStages: stageProgress.filter(s => s.status === 'completed').length,
+            currentStage: stageProgress.findIndex(s => s.status === 'available') + 1
+          }
+        }
+
+        return {
+          ...template,
+          isAvailable,
+          isCompleted,
+          completedAt: progress?.completedAt,
+          attempts,
+          energyRequired,
+          hasEnoughEnergy,
+          ...stageInfo
+        } as Dungeon & { energyRequired: number; hasEnoughEnergy: boolean }
+      }))
+    } catch (error) {
+      console.error('Failed to get dungeons:', error)
+      return []
+    }
+  }
+
+  // 던전 입장
+  async enterDungeon(dungeonId: string, userId: string): Promise<DungeonProgress | null> {
+    try {
+      const dungeon = DUNGEON_TEMPLATES_ARRAY.find(d => d.id === dungeonId)
+      if (!dungeon) return null
+
+      // 에너지 체크
+      const energyCheck = await this.energyService.checkEnergy(userId, dungeon.difficulty)
+      if (!energyCheck.hasEnough) {
+        throw new Error(`에너지가 부족합니다. 필요: ${energyCheck.required}, 현재: ${energyCheck.current}`)
+      }
+
+      // 에너지 소비
+      const energyResult = await this.energyService.consumeEnergy(
+        userId,
+        energyCheck.required,
+        `던전 입장: ${dungeon.name}`
+      )
+
+      if (!energyResult.success) {
+        throw new Error(energyResult.error || '에너지 소비 실패')
+      }
+
+      // 기존 진행 상황 확인
+      const existing = await db.dungeonProgress
+        .where(['dungeonId', 'userId'])
+        .equals([dungeonId, userId])
+        .first()
+
+      const attempts = (existing?.attempts || 0) + 1
+
+      const progressData: DungeonProgressData = {
+        dungeonId,
+        userId,
+        startedAt: new Date(),
+        completedChallenges: [],
+        totalProgress: 0,
+        status: 'in_progress',
+        attempts
+      }
+
+      if (existing?.id) {
+        await db.dungeonProgress.put({ ...progressData, id: existing.id })
+      } else {
+        await db.dungeonProgress.add(progressData)
+      }
+
+      return progressData
+    } catch (error) {
+      console.error('Failed to enter dungeon:', error)
+      // 에너지 환불 (실패 시)
+      if (error instanceof Error && error.message.includes('에너지')) {
+        // 에너지 관련 오류는 그대로 전달
+        throw error
+      }
+      return null
+    }
+  }
+
+  // 도전 과제 진행 상황 업데이트
+  async updateChallengeProgress(
+    dungeonId: string,
+    challengeId: string,
+    userId: string,
+    progressValue: number
+  ): Promise<boolean> {
+    try {
+      const dungeon = DUNGEON_TEMPLATES_ARRAY.find(d => d.id === dungeonId)
+      if (!dungeon) return false
+
+      const challenge = dungeon.challenges.find(c => c.id === challengeId)
+      if (!challenge) return false
+
+      // 도전 과제 진행 상황 업데이트
+      challenge.currentValue = Math.min(progressValue, challenge.targetValue)
+      
+      // 목표 달성 시 자동 완료
+      if (challenge.currentValue >= challenge.targetValue) {
+        const result = await this.completeChallenge(dungeonId, challengeId, userId)
+        return result.success
+      }
+
+      return true
+    } catch (error) {
+      console.error('Failed to update challenge progress:', error)
+      return false
+    }
+  }
+
+  // 도전 과제 완료
+  async completeChallenge(
+    dungeonId: string, 
+    challengeId: string, 
+    userId: string
+  ): Promise<{ success: boolean; completed?: boolean; rewards?: DungeonReward }> {
+    try {
+      const progress = await db.dungeonProgress
+        .where(['dungeonId', 'userId'])
+        .equals([dungeonId, userId])
+        .first()
+
+      if (!progress || progress.status !== 'in_progress') return { success: false }
+
+      const dungeon = DUNGEON_TEMPLATES_ARRAY.find(d => d.id === dungeonId)
+      if (!dungeon) return { success: false }
+
+      // 이미 완료한 도전인지 확인
+      if (progress.completedChallenges.includes(challengeId)) return { success: false }
+
+      // 도전 과제를 완료 상태로 변경
+      const challenge = dungeon.challenges.find(c => c.id === challengeId)
+      if (challenge) {
+        challenge.completed = true
+        challenge.completedAt = new Date()
+      }
+
+      // 도전 완료 처리
+      progress.completedChallenges.push(challengeId)
+      progress.totalProgress = (progress.completedChallenges.length / dungeon.challenges.length) * 100
+
+      // 모든 도전 완료 시
+      if (progress.completedChallenges.length === dungeon.challenges.length) {
+        progress.status = 'completed'
+        progress.completedAt = new Date()
+        
+        // 던전 완료 상태를 DB에 저장 (중요!)
+        if (progress.id) {
+          await db.dungeonProgress.put(progress)
+        }
+        
+        // 보상 정보 반환
+        return { success: true, completed: true, rewards: dungeon.rewards }
+      }
+
+      // 진행 상황 저장
+      if (progress.id) {
+        await db.dungeonProgress.put(progress)
+      }
+      return { success: true }
+    } catch (error) {
+      console.error('Failed to complete challenge:', error)
+      return { success: false }
+    }
+  }
+
+  // 던전 통계
+  async getDungeonStats(userId: string): Promise<DungeonStats> {
+    try {
+      const allProgress = await db.dungeonProgress
+        .where('userId')
+        .equals(userId)
+        .toArray()
+
+      const completed = allProgress.filter(p => p.status === 'completed')
+      const totalAttempts = allProgress.length
+      const totalCompleted = completed.length
+
+      return {
+        totalCompleted,
+        totalAttempts,
+        successRate: totalAttempts > 0 ? (totalCompleted / totalAttempts) * 100 : 0,
+        currentStreak: 0, // TODO: 연속 클리어 계산
+        bestStreak: 0,
+        favoriteType: 'daily',
+        totalRewardsEarned: {
+          exp: 0, // TODO: 실제 보상 집계
+          coins: 0,
+          items: 0
+        }
+      }
+    } catch (error) {
+      console.error('Failed to get dungeon stats:', error)
+      return {
+        totalCompleted: 0,
+        totalAttempts: 0,
+        successRate: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+        favoriteType: 'daily',
+        totalRewardsEarned: { exp: 0, coins: 0, items: 0 }
+      }
+    }
+  }
+
+  // 요구사항 확인
+  private checkRequirements(dungeon: typeof DUNGEON_TEMPLATES_ARRAY[0], userLevel: number): boolean {
+    if (dungeon.requirements.minLevel && userLevel < dungeon.requirements.minLevel) {
+      return false
+    }
+
+    // TODO: 스탯 요구사항 확인 (character-service와 연동 필요)
+    
+    return true
+  }
+
+  // 던전 리셋 (일일/주간)
+  async resetDungeons(): Promise<void> {
+    const now = new Date()
+    
+    for (const template of DUNGEON_TEMPLATES_ARRAY) {
+      if (now > template.resetTime) {
+        // 리셋 시간 업데이트
+        if (template.type === 'daily') {
+          template.resetTime = new Date(now.setHours(24, 0, 0, 0))
+        } else if (template.type === 'weekly') {
+          template.resetTime = new Date(now.setDate(now.getDate() + (7 - now.getDay())))
+        }
+
+        // 진행 상황 리셋
+        await db.dungeonProgress
+          .where('dungeonId')
+          .equals(template.id)
+          .modify({ attempts: 0, status: 'abandoned' })
+      }
+    }
+  }
+}

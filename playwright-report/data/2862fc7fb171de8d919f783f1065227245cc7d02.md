@@ -1,0 +1,48 @@
+# Page snapshot
+
+```yaml
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - heading "Life RPG" [level=1]
+  - 'button "현재 테마: 시스템"':
+    - img
+- main:
+  - heading "모험 & 성장" [level=1]
+  - paragraph: 당신의 영웅적인 여정이 시작됩니다
+  - text: ⚔️
+  - heading "내 프로필" [level=2]
+  - text: Lv.0 • 전투력 0
+  - button "퀘스트"
+  - button "탐험"
+  - button "일일"
+  - button "상점"
+  - button "장비"
+  - heading "퀘스트 관리" [level=2]
+  - paragraph: 당신의 모험을 기록하고 보상을 획득하세요
+  - paragraph: 진행 중인 퀘스트
+  - paragraph: "0"
+  - paragraph: "0"
+  - paragraph: 메인 완료
+  - paragraph: "0"
+  - paragraph: 일일 완료
+  - paragraph: "0"
+  - paragraph: 사이드 완료
+  - paragraph: "0"
+  - paragraph: 이벤트 완료
+  - button "진행 중"
+  - button "메인 2"
+  - button "일일 3"
+  - button "사이드 2"
+  - button "이벤트 1"
+  - heading "진행 중" [level=2]
+  - button "전체"
+  - button "수행 가능"
+  - button "진행 중"
+  - button "완료됨"
+  - paragraph: 진행 중인 퀘스트가 없습니다
+- button "메뉴 열기"
+- button "게임 수동 저장"
+- text: "마지막 저장: 방금 전"
+- alert: Life RPG
+```

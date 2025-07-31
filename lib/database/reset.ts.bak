@@ -1,0 +1,59 @@
+import { db } from './index'
+
+/**
+ * 데이터베이스를 완전히 초기화합니다.
+ * 주의: 모든 데이터가 삭제됩니다!
+ */
+export async function resetDatabase() {
+  try {
+    console.log('🔄 데이터베이스 초기화 시작...')
+    
+    // 데이터베이스 삭제
+    await db.delete()
+    console.log('✅ 기존 데이터베이스 삭제 완료')
+    
+    // 데이터베이스 재생성
+    await db.open()
+    console.log('✅ 새 데이터베이스 생성 완료')
+    
+    return true
+  } catch (error) {
+    console.error('❌ 데이터베이스 초기화 실패:', error)
+    return false
+  }
+}
+
+/**
+ * 개발 환경에서만 사용하는 디버그 함수
+ */
+export async function debugDatabase() {
+  if (process.env.NODE_ENV !== 'development') {
+    console.warn('⚠️ debugDatabase는 개발 환경에서만 사용 가능합니다.')
+    return
+  }
+  
+  try {
+    const version = await db.verno
+    console.log(`📊 현재 데이터베이스 버전: ${version}`)
+    
+    const tables = db.tables.map(table => table.name)
+    console.log('📋 테이블 목록:', tables)
+    
+    // 각 테이블의 레코드 수 확인
+    for (const table of db.tables) {
+      const count = await table.count()
+      console.log(`  - ${table.name}: ${count}개 레코드`)
+    }
+  } catch (error) {
+    console.error('❌ 데이터베이스 디버그 실패:', error)
+  }
+}
+
+// 브라우저 콘솔에서 사용할 수 있도록 전역 객체에 추가
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  (window as any).__resetDatabase = resetDatabase
+  (window as any).__debugDatabase = debugDatabase
+  console.log('💡 개발자 도구 콘솔에서 사용 가능:')
+  console.log('  - __resetDatabase() : 데이터베이스 초기화')
+  console.log('  - __debugDatabase() : 데이터베이스 상태 확인')
+}

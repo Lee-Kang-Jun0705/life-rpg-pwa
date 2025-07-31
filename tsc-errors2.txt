@@ -1,0 +1,204 @@
+components/collection/MonsterCollectionScreen.tsx(10,26): error TS2307: Cannot find module '@/lib/toast/context' or its corresponding type declarations.
+components/dungeon/DungeonCard.tsx(55,10): error TS2678: Type '"in_progress"' is not comparable to type 'DungeonStatus'.
+components/dungeon/DungeonCard.tsx(76,20): error TS2367: This comparison appears to be unintentional because the types 'DungeonStatus' and '"in_progress"' have no overlap.
+components/equipment/ImprovedEquipmentScreen.tsx(37,20): error TS2339: Property 'character' does not exist on type 'UserProfile'.
+components/equipment/ImprovedEquipmentScreen.tsx(38,30): error TS2339: Property 'character' does not exist on type 'UserProfile'.
+components/equipment/ImprovedEquipmentScreen.tsx(100,26): error TS2339: Property 'stats' does not exist on type 'Character'.
+components/equipment/ImprovedEquipmentScreen.tsx(101,27): error TS2339: Property 'stats' does not exist on type 'Character'.
+components/equipment/ImprovedEquipmentScreen.tsx(102,22): error TS2339: Property 'stats' does not exist on type 'Character'.
+components/equipment/ImprovedEquipmentScreen.tsx(103,22): error TS2339: Property 'stats' does not exist on type 'Character'.
+components/equipment/ImprovedEquipmentScreen.tsx(183,33): error TS2339: Property 'avatar' does not exist on type 'Character'.
+components/equipment/ImprovedEquipmentScreen.tsx(431,11): error TS2322: Type '(material: EnhancementMaterial | undefined, useProtection: boolean | undefined) => Promise<{ success: true; newLevel: number; equipment: any; destroyed?: undefined; } | { ...; } | { ...; }>' is not assignable to type '(material?: EnhancementMaterial | undefined, useProtection?: boolean | undefined) => Promise<{ success: boolean; newLevel?: number | undefined; destroyed?: boolean | undefined; equipment?: Equipment | undefined; }>'.
+  Type 'Promise<{ success: true; newLevel: number; equipment: any; destroyed?: undefined; } | { success: false; destroyed: unknown; newLevel?: undefined; equipment?: undefined; } | { success: false; newLevel?: undefined; equipment?: undefined; destroyed?: undefined; }>' is not assignable to type 'Promise<{ success: boolean; newLevel?: number | undefined; destroyed?: boolean | undefined; equipment?: Equipment | undefined; }>'.
+    Type '{ success: true; newLevel: number; equipment: any; destroyed?: undefined; } | { success: false; destroyed: unknown; newLevel?: undefined; equipment?: undefined; } | { success: false; newLevel?: undefined; equipment?: undefined; destroyed?: undefined; }' is not assignable to type '{ success: boolean; newLevel?: number | undefined; destroyed?: boolean | undefined; equipment?: Equipment | undefined; }'.
+      Type '{ success: false; destroyed: unknown; newLevel?: undefined; equipment?: undefined; }' is not assignable to type '{ success: boolean; newLevel?: number | undefined; destroyed?: boolean | undefined; equipment?: Equipment | undefined; }'.
+        Types of property 'destroyed' are incompatible.
+          Type 'unknown' is not assignable to type 'boolean | undefined'.
+components/shop/ImprovedShopScreen.tsx(70,20): error TS2339: Property 'character' does not exist on type 'UserProfile'.
+components/shop/ImprovedShopScreen.tsx(71,30): error TS2339: Property 'character' does not exist on type 'UserProfile'.
+components/shop/ImprovedShopScreen.tsx(82,48): error TS2367: This comparison appears to be unintentional because the types '"weapon" | "armor" | "accessory" | "material" | "special"' and '"misc"' have no overlap.
+components/shop/ImprovedShopScreen.tsx(88,14): error TS2367: This comparison appears to be unintentional because the types 'ItemCategory' and '"cosmetic"' have no overlap.
+components/shop/ImprovedShopScreen.tsx(277,29): error TS2339: Property 'discount' does not exist on type 'ShopItem'.
+components/shop/ImprovedShopScreen.tsx(279,34): error TS2339: Property 'discount' does not exist on type 'ShopItem'.
+components/shop/ImprovedShopScreen.tsx(292,33): error TS2339: Property 'currency' does not exist on type 'ShopItem'.
+components/shop/ImprovedShopScreen.tsx(300,33): error TS2339: Property 'originalPrice' does not exist on type 'ShopItem'.
+components/shop/ImprovedShopScreen.tsx(302,37): error TS2339: Property 'originalPrice' does not exist on type 'ShopItem'.
+components/shop/ImprovedShopScreen.tsx(307,31): error TS2339: Property 'stock' does not exist on type 'ShopItem'.
+components/shop/ImprovedShopScreen.tsx(309,39): error TS2339: Property 'stock' does not exist on type 'ShopItem'.
+components/shop/ImprovedShopScreen.tsx(364,42): error TS2322: Type 'ItemEffect[]' is not assignable to type 'ReactNode'.
+  Type 'ItemEffect[]' is not assignable to type 'Iterable<ReactNode>'.
+    The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+      Type 'IteratorResult<ItemEffect, undefined>' is not assignable to type 'IteratorResult<ReactNode, any>'.
+        Type 'IteratorYieldResult<ItemEffect>' is not assignable to type 'IteratorResult<ReactNode, any>'.
+          Type 'IteratorYieldResult<ItemEffect>' is not assignable to type 'IteratorYieldResult<ReactNode>'.
+            Type 'ItemEffect' is not assignable to type 'ReactNode'.
+              Type 'ItemEffect' is missing the following properties from type 'ReactPortal': children, props, key
+components/shop/ImprovedShopScreen.tsx(371,33): error TS2339: Property 'currency' does not exist on type 'ShopItem'.
+components/skills/SkillScreen.tsx(53,9): error TS2801: This condition will always return true since this 'Promise<boolean>' is always defined.
+components/skills/SkillScreen.tsx(59,9): error TS2801: This condition will always return true since this 'Promise<boolean>' is always defined.
+components/skills/SkillScreen.tsx(65,9): error TS2801: This condition will always return true since this 'Promise<boolean>' is always defined.
+components/skills/SkillScreen.tsx(71,9): error TS2801: This condition will always return true since this 'Promise<boolean>' is always defined.
+components/tabs/ShopTab.tsx(19,20): error TS2345: Argument of type 'ShopItem[]' is not assignable to parameter of type 'SetStateAction<ShopItem[]>'.
+  Type 'import("C:/Users/USER/life-rpg-pwa_2/lib/shop/types").ShopItem[]' is not assignable to type 'import("C:/Users/USER/life-rpg-pwa_2/lib/types/shop").ShopItem[]'.
+    Type 'ShopItem' is missing the following properties from type 'ShopItem': stackable, createdAt, updatedAt
+components/tabs/ShopTab.tsx(24,40): error TS2345: Argument of type 'import("C:/Users/USER/life-rpg-pwa_2/lib/types/shop").ShopItem' is not assignable to parameter of type 'import("C:/Users/USER/life-rpg-pwa_2/lib/shop/types").ShopItem'.
+  Property 'isEquippable' is missing in type 'import("C:/Users/USER/life-rpg-pwa_2/lib/types/shop").ShopItem' but required in type 'import("C:/Users/USER/life-rpg-pwa_2/lib/shop/types").ShopItem'.
+hooks/useAchievementToast.ts(3,10): error TS2724: '"@/lib/achievements/achievement-service"' has no exported member named 'achievementService'. Did you mean 'AchievementService'?
+hooks/useAchievementToast.ts(19,9): error TS7006: Parameter 'n' implicitly has an 'any' type.
+hooks/useAchievementToast.ts(26,18): error TS7006: Parameter 'a' implicitly has an 'any' type.
+hooks/useAchievementToast.ts(26,21): error TS7006: Parameter 'b' implicitly has an 'any' type.
+hooks/useQuests.ts(18,24): error TS2345: Argument of type 'Map<string, unknown>' is not assignable to parameter of type 'SetStateAction<Map<string, QuestProgress>>'.
+  Type 'Map<string, unknown>' is not assignable to type 'Map<string, QuestProgress>'.
+    Type 'unknown' is not assignable to type 'QuestProgress'.
+lib/achievements/achievement-service.ts(374,50): error TS2345: Argument of type 'AchievementSystemState' is not assignable to parameter of type 'AchievementStateData'.
+  Type 'AchievementSystemState' is missing the following properties from type 'AchievementStateData': unlockedAchievements, claimedAchievements, trackedProgress, statistics
+lib/ai-coach/ai-coach-service.ts(91,83): error TS2345: Argument of type 'import("C:/Users/USER/life-rpg-pwa_2/lib/database/types").Activity[]' is not assignable to parameter of type 'import("C:/Users/USER/life-rpg-pwa_2/lib/types/dashboard").Activity[]'.
+  Type 'import("C:/Users/USER/life-rpg-pwa_2/lib/database/types").Activity' is not assignable to type 'import("C:/Users/USER/life-rpg-pwa_2/lib/types/dashboard").Activity'.
+    Types of property 'synced' are incompatible.
+      Type 'boolean | undefined' is not assignable to type 'boolean'.
+        Type 'undefined' is not assignable to type 'boolean'.
+lib/collection/collection-service.ts(288,51): error TS2559: Type 'CollectionState' has no properties in common with type 'CollectionStateData'.
+lib/data/monsters.ts(84,7): error TS2353: Object literal may only specify known properties, and 'stat' does not exist in type 'SkillEffect'.
+lib/data/monsters.ts(110,7): error TS2353: Object literal may only specify known properties, and 'stat' does not exist in type 'SkillEffect'.
+lib/data/monsters.ts(170,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "aggressive"; drops: ({ itemId: string; dropRate: number; minQuantity: number; maxQuantity: number; } | { ...; })[]; resistances: { ...; }; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/data/monsters.ts(187,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "balanced"; drops: ({ itemId: string; dropRate: number; } | { itemId: string; dropRate: number; minQuantity: number; maxQuantity: number; })[]; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/data/monsters.ts(200,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "aggressive"; drops: { itemId: string; dropRate: number; }[]; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/data/monsters.ts(214,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "aggressive"; drops: ({ itemId: string; dropRate: number; } | { itemId: string; dropRate: number; minQuantity: number; maxQuantity: number; })[]; resistances: { ...; }; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/data/monsters.ts(232,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "defensive"; drops: ({ itemId: string; dropRate: number; minQuantity: number; maxQuantity: number; } | { ...; })[]; resistances: { ...; }; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/data/monsters.ts(250,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "strategic"; drops: { itemId: string; dropRate: number; }[]; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/data/monsters.ts(265,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "aggressive"; drops: ({ itemId: string; dropRate: number; } | { itemId: string; dropRate: number; minQuantity: number; maxQuantity: number; })[]; resistances: { ...; }; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/data/monsters.ts(284,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "aggressive"; drops: { itemId: string; dropRate: number; }[]; resistances: { fire: number; dark: number; holy: number; }; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/data/monsters.ts(303,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "strategic"; drops: ({ itemId: string; dropRate: number; } | { itemId: string; dropRate: number; minQuantity: number; maxQuantity: number; })[]; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/data/monsters.ts(317,3): error TS2741: Property 'dropRate' is missing in type '{ name: string; icon: string; description: string; type: string; skills: string[]; aiPattern: "strategic"; drops: ({ itemId: string; dropRate: number; } | { itemId: string; dropRate: number; minQuantity: number; maxQuantity: number; })[]; resistances: { ...; }; }' but required in type 'Omit<MonsterData, "id" | "level" | "hp" | "attack" | "defense" | "speed">'.
+lib/database/client-helpers.ts(371,11): error TS18047: 'db' is possibly 'null'.
+lib/database/client-helpers.ts(371,32): error TS18047: 'db' is possibly 'null'.
+lib/database/client-helpers.ts(371,35): error TS2339: Property 'metadata' does not exist on type 'LifeRPGDatabase'.
+lib/database/client-helpers.ts(372,13): error TS18047: 'db' is possibly 'null'.
+lib/database/client-helpers.ts(372,16): error TS2339: Property 'metadata' does not exist on type 'LifeRPGDatabase'.
+lib/database/client-helpers.ts(383,28): error TS18047: 'db' is possibly 'null'.
+lib/database/client-helpers.ts(383,31): error TS2339: Property 'metadata' does not exist on type 'LifeRPGDatabase'.
+lib/database/client-helpers.ts(390,11): error TS18047: 'db' is possibly 'null'.
+lib/database/client-helpers.ts(390,32): error TS18047: 'db' is possibly 'null'.
+lib/database/client-helpers.ts(390,35): error TS2339: Property 'metadata' does not exist on type 'LifeRPGDatabase'.
+lib/database/client-helpers.ts(391,13): error TS18047: 'db' is possibly 'null'.
+lib/database/client-helpers.ts(391,16): error TS2339: Property 'metadata' does not exist on type 'LifeRPGDatabase'.
+lib/database/client-helpers.ts(402,28): error TS18047: 'db' is possibly 'null'.
+lib/database/client-helpers.ts(402,31): error TS2339: Property 'metadata' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-repository.ts(100,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(changeCallback: (obj: DungeonProgressData, ctx: { value: DungeonProgressData; }) => boolean | void): PromiseExtended<number>', gave the following error.
+    Object literal may only specify known properties, and 'updatedAt' does not exist in type '(obj: DungeonProgressData, ctx: { value: DungeonProgressData; }) => boolean | void'.
+  Overload 2 of 2, '(changes: UpdateSpec<DungeonProgressData>): PromiseExtended<number>', gave the following error.
+    Object literal may only specify known properties, and 'updatedAt' does not exist in type 'UpdateSpec<DungeonProgressData>'.
+lib/dungeon/dungeon-repository.ts(135,47): error TS2367: This comparison appears to be unintentional because the types '"in_progress" | "failed" | "abandoned"' and '"cleared"' have no overlap.
+lib/dungeon/dungeon-repository.ts(156,26): error TS2339: Property 'currentStage' does not exist on type 'DungeonProgressData'.
+lib/dungeon/dungeon-service.ts(50,40): error TS2339: Property 'dungeonProgress' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-service.ts(64,47): error TS7006: Parameter 'p' implicitly has an 'any' type.
+lib/dungeon/dungeon-service.ts(144,33): error TS2339: Property 'dungeonProgress' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-service.ts(158,9): error TS2353: Object literal may only specify known properties, and 'attempts' does not exist in type 'DungeonProgressData'.
+lib/dungeon/dungeon-service.ts(162,18): error TS2339: Property 'dungeonProgress' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-service.ts(164,18): error TS2339: Property 'dungeonProgress' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-service.ts(167,7): error TS2322: Type 'DungeonProgressData' is not assignable to type 'DungeonProgress'.
+  Types of property 'id' are incompatible.
+    Type 'number | undefined' is not assignable to type 'string | undefined'.
+      Type 'number' is not assignable to type 'string'.
+lib/dungeon/dungeon-service.ts(221,33): error TS2339: Property 'dungeonProgress' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-service.ts(252,20): error TS2339: Property 'dungeonProgress' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-service.ts(261,18): error TS2339: Property 'dungeonProgress' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-service.ts(286,13): error TS2322: Type 'never[]' is not assignable to type 'number'.
+lib/dungeon/dungeon-service.ts(291,36): error TS2339: Property 'dungeonProgress' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-service.ts(296,44): error TS7006: Parameter 'p' implicitly has an 'any' type.
+lib/dungeon/dungeon-service.ts(354,20): error TS2339: Property 'dungeonProgress' does not exist on type 'LifeRPGDatabase'.
+lib/dungeon/dungeon-templates-array.ts(18,7): error TS2353: Object literal may only specify known properties, and 'energy' does not exist in type '{ minLevel?: number | undefined; requiredStats?: StatRequirement[] | undefined; requiredTickets?: number | undefined; requiredEnergy?: number | undefined; }'.
+lib/dungeon/dungeon-templates-array.ts(22,7): error TS2353: Object literal may only specify known properties, and 'gold' does not exist in type 'DungeonReward'.
+lib/dungeon/dungeon-templates-array.ts(42,7): error TS2353: Object literal may only specify known properties, and 'energy' does not exist in type '{ minLevel?: number | undefined; requiredStats?: StatRequirement[] | undefined; requiredTickets?: number | undefined; requiredEnergy?: number | undefined; }'.
+lib/dungeon/dungeon-templates-array.ts(46,7): error TS2353: Object literal may only specify known properties, and 'gold' does not exist in type 'DungeonReward'.
+lib/dungeon/dungeon-templates-array.ts(66,7): error TS2353: Object literal may only specify known properties, and 'energy' does not exist in type '{ minLevel?: number | undefined; requiredStats?: StatRequirement[] | undefined; requiredTickets?: number | undefined; requiredEnergy?: number | undefined; }'.
+lib/dungeon/dungeon-templates-array.ts(70,7): error TS2353: Object literal may only specify known properties, and 'gold' does not exist in type 'DungeonReward'.
+lib/dungeon/dungeon-templates-array.ts(90,7): error TS2353: Object literal may only specify known properties, and 'energy' does not exist in type '{ minLevel?: number | undefined; requiredStats?: StatRequirement[] | undefined; requiredTickets?: number | undefined; requiredEnergy?: number | undefined; }'.
+lib/dungeon/dungeon-templates-array.ts(94,7): error TS2353: Object literal may only specify known properties, and 'gold' does not exist in type 'DungeonReward'.
+lib/dungeon/dungeon-templates-array.ts(114,7): error TS2353: Object literal may only specify known properties, and 'energy' does not exist in type '{ minLevel?: number | undefined; requiredStats?: StatRequirement[] | undefined; requiredTickets?: number | undefined; requiredEnergy?: number | undefined; }'.
+lib/dungeon/dungeon-templates-array.ts(118,7): error TS2353: Object literal may only specify known properties, and 'gold' does not exist in type 'DungeonReward'.
+lib/dungeon/dungeon-templates-array.ts(138,7): error TS2353: Object literal may only specify known properties, and 'energy' does not exist in type '{ minLevel?: number | undefined; requiredStats?: StatRequirement[] | undefined; requiredTickets?: number | undefined; requiredEnergy?: number | undefined; }'.
+lib/dungeon/dungeon-templates-array.ts(142,7): error TS2353: Object literal may only specify known properties, and 'gold' does not exist in type 'DungeonReward'.
+lib/dungeon/dungeon-templates-array.ts(162,7): error TS2353: Object literal may only specify known properties, and 'energy' does not exist in type '{ minLevel?: number | undefined; requiredStats?: StatRequirement[] | undefined; requiredTickets?: number | undefined; requiredEnergy?: number | undefined; }'.
+lib/dungeon/dungeon-templates-array.ts(166,7): error TS2353: Object literal may only specify known properties, and 'gold' does not exist in type 'DungeonReward'.
+lib/dungeon/hooks/useDungeonState.ts(69,7): error TS2322: Type 'DungeonProgress | null' is not assignable to type 'boolean'.
+  Type 'null' is not assignable to type 'boolean'.
+lib/dungeon/hooks/useDungeonState.ts(124,28): error TS2339: Property 'completeDungeon' does not exist on type 'DungeonService'.
+lib/experience/dashboard-integration.ts(216,5): error TS2322: Type 'import("C:/Users/USER/life-rpg-pwa_2/lib/database/index").Activity[]' is not assignable to type 'import("C:/Users/USER/life-rpg-pwa_2/lib/types/experience").Activity[]'.
+  Property 'synced' is missing in type 'import("C:/Users/USER/life-rpg-pwa_2/lib/database/index").Activity' but required in type 'import("C:/Users/USER/life-rpg-pwa_2/lib/types/experience").Activity'.
+lib/experience/dashboard-integration.ts(387,56): error TS2345: Argument of type 'import("C:/Users/USER/life-rpg-pwa_2/lib/database/index").Activity[]' is not assignable to parameter of type 'import("C:/Users/USER/life-rpg-pwa_2/lib/types/experience").Activity[]'.
+  Property 'synced' is missing in type 'import("C:/Users/USER/life-rpg-pwa_2/lib/database/index").Activity' but required in type 'import("C:/Users/USER/life-rpg-pwa_2/lib/types/experience").Activity'.
+lib/services/collection.service.ts(16,34): error TS2307: Cannot find module '@/lib/types/monster' or its corresponding type declarations.
+lib/services/collection.service.ts(20,23): error TS2307: Cannot find module '@/lib/utils/toast' or its corresponding type declarations.
+lib/services/collection.service.ts(165,36): error TS2339: Property 'getCollectionData' does not exist on type '{ getProfile(userId: string): Promise<UserProfile | null>; updateProfile(userId: string, updates: Partial<UserProfile>): Promise<...>; ... 59 more ...; getCompletedDungeons(userId: string): Promise<...>; }'.
+lib/services/collection.service.ts(184,23): error TS2551: Property 'saveCollectionData' does not exist on type '{ getProfile(userId: string): Promise<UserProfile | null>; updateProfile(userId: string, updates: Partial<UserProfile>): Promise<...>; ... 59 more ...; getCompletedDungeons(userId: string): Promise<...>; }'. Did you mean 'saveCollectionState'?
+lib/services/collection.service.ts(442,9): error TS18048: 'm.monster.description' is possibly 'undefined'.
+lib/services/dungeon-combat.service.ts(404,9): error TS2353: Object literal may only specify known properties, and 'damage' does not exist in type 'DamageResult'.
+lib/services/dungeon-combat.service.ts(436,7): error TS18004: No value exists in scope for the shorthand property 'isDodged'. Either declare one or provide an initializer.
+lib/services/dungeon-combat.service.ts(636,30): error TS2365: Operator '>' cannot be applied to types 'DamageResult' and 'number'.
+lib/services/dungeon-combat.service.ts(644,31): error TS2365: Operator '>' cannot be applied to types 'DamageResult' and 'number'.
+lib/services/dungeon-combat.service.ts(654,20): error TS2339: Property 'targetHp' does not exist on type 'ActionResult'.
+lib/services/dungeon-combat.service.ts(654,37): error TS18048: 'result.damage' is possibly 'undefined'.
+lib/services/dungeon-combat.service.ts(654,60): error TS2339: Property 'targetHp' does not exist on type 'ActionResult'.
+lib/services/dungeon-combat.service.ts(795,12): error TS2552: Cannot find name 'CombatStats'. Did you mean 'CombatState'?
+lib/services/dungeon-combat.service.ts(822,24): error TS2339: Property 'speed' does not exist on type 'DungeonMonster'.
+lib/services/dungeon-combat.service.ts(823,66): error TS2339: Property 'type' does not exist on type 'DungeonMonster'.
+lib/services/dungeon-combat.service.ts(824,70): error TS2339: Property 'type' does not exist on type 'DungeonMonster'.
+lib/services/dungeon-combat.service.ts(825,60): error TS2339: Property 'type' does not exist on type 'DungeonMonster'.
+lib/services/dungeon-combat.service.ts(826,66): error TS2339: Property 'type' does not exist on type 'DungeonMonster'.
+lib/services/dungeon-combat.service.ts(827,70): error TS2339: Property 'type' does not exist on type 'DungeonMonster'.
+lib/services/dungeon-combat.service.ts(828,12): error TS2552: Cannot find name 'CombatStats'. Did you mean 'CombatState'?
+lib/services/dungeon-integration.service.ts(13,26): error TS2305: Module '"@/lib/database/client"' has no exported member 'DungeonProgress'.
+lib/services/dungeon-integration.service.ts(310,38): error TS2339: Property 'totalUnique' does not exist on type 'CollectionStats'.
+lib/services/dungeon-integration.service.ts(515,48): error TS2339: Property 'getDungeonProgress' does not exist on type '{ getProfile(userId: string): Promise<UserProfile | null>; updateProfile(userId: string, updates: Partial<UserProfile>): Promise<...>; ... 18 more ...; calculateActivityStreak(activities: Activity[]): number; }'.
+lib/services/dungeon-integration.service.ts(518,25): error TS2339: Property 'updateDungeonProgress' does not exist on type '{ getProfile(userId: string): Promise<UserProfile | null>; updateProfile(userId: string, updates: Partial<UserProfile>): Promise<...>; ... 18 more ...; calculateActivityStreak(activities: Activity[]): number; }'.
+lib/services/dungeon-integration.service.ts(526,25): error TS2339: Property 'createDungeonProgress' does not exist on type '{ getProfile(userId: string): Promise<UserProfile | null>; updateProfile(userId: string, updates: Partial<UserProfile>): Promise<...>; ... 18 more ...; calculateActivityStreak(activities: Activity[]): number; }'.
+lib/services/dungeon-integration.service.ts(548,30): error TS2339: Property 'getDungeonProgress' does not exist on type '{ getProfile(userId: string): Promise<UserProfile | null>; updateProfile(userId: string, updates: Partial<UserProfile>): Promise<...>; ... 18 more ...; calculateActivityStreak(activities: Activity[]): number; }'.
+lib/services/dungeon-integration.service.ts(560,30): error TS2339: Property 'getAllDungeonProgress' does not exist on type '{ getProfile(userId: string): Promise<UserProfile | null>; updateProfile(userId: string, updates: Partial<UserProfile>): Promise<...>; ... 18 more ...; calculateActivityStreak(activities: Activity[]): number; }'.
+lib/services/dungeon-service.ts(63,16): error TS7053: Element implicitly has an 'any' type because expression of type 'DungeonType' can't be used to index type '{ story: number; daily: number; raid: number; special: number; challenge: number; infinite: number; }'.
+  Property 'weekly' does not exist on type '{ story: number; daily: number; raid: number; special: number; challenge: number; infinite: number; }'.
+lib/services/dungeon-service.ts(63,36): error TS7053: Element implicitly has an 'any' type because expression of type 'DungeonType' can't be used to index type '{ story: number; daily: number; raid: number; special: number; challenge: number; infinite: number; }'.
+  Property 'weekly' does not exist on type '{ story: number; daily: number; raid: number; special: number; challenge: number; infinite: number; }'.
+lib/services/dungeon-service.ts(311,25): error TS2339: Property 'level' does not exist on type '{}'.
+lib/services/dungeon-service.ts(321,25): error TS2339: Property 'energy' does not exist on type '{}'.
+lib/services/dungeon-service.ts(331,25): error TS2339: Property 'battleTickets' does not exist on type '{}'.
+lib/services/dungeon-service.ts(344,32): error TS2339: Property 'attack' does not exist on type '{}'.
+lib/services/dungeon-service.ts(345,33): error TS2339: Property 'defense' does not exist on type '{}'.
+lib/services/dungeon-service.ts(346,28): error TS2339: Property 'maxHp' does not exist on type '{}'.
+lib/services/dungeon-service.ts(358,25): error TS2339: Property 'equippedItems' does not exist on type '{}'.
+lib/services/dungeon-service.ts(386,46): error TS2339: Property 'energy' does not exist on type '{}'.
+lib/services/dungeon-service.ts(387,42): error TS2339: Property 'id' does not exist on type '{}'.
+lib/services/dungeon-service.ts(388,7): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(key: any, changes: (obj: Character, ctx: { value: any; primKey: IndexableType; }) => boolean | void): PromiseExtended<number>', gave the following error.
+    Object literal may only specify known properties, and 'energy' does not exist in type '(obj: Character, ctx: { value: any; primKey: IndexableType; }) => boolean | void'.
+  Overload 2 of 2, '(key: any, changes: UpdateSpec<Character>): PromiseExtended<number>', gave the following error.
+    Object literal may only specify known properties, and 'energy' does not exist in type 'UpdateSpec<Character>'.
+lib/services/dungeon-service.ts(401,47): error TS2339: Property 'battleTickets' does not exist on type '{}'.
+lib/services/dungeon-service.ts(402,42): error TS2339: Property 'id' does not exist on type '{}'.
+lib/services/dungeon-service.ts(403,7): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(key: any, changes: (obj: Character, ctx: { value: any; primKey: IndexableType; }) => boolean | void): PromiseExtended<number>', gave the following error.
+    Object literal may only specify known properties, and 'battleTickets' does not exist in type '(obj: Character, ctx: { value: any; primKey: IndexableType; }) => boolean | void'.
+  Overload 2 of 2, '(key: any, changes: UpdateSpec<Character>): PromiseExtended<number>', gave the following error.
+    Object literal may only specify known properties, and 'battleTickets' does not exist in type 'UpdateSpec<Character>'.
+lib/services/dungeon-service.ts(419,30): error TS2339: Property 'experience' does not exist on type '{}'.
+lib/services/dungeon-service.ts(419,50): error TS18046: 'rewards' is of type 'unknown'.
+lib/services/dungeon-service.ts(420,24): error TS2339: Property 'gold' does not exist on type '{}'.
+lib/services/dungeon-service.ts(420,38): error TS18046: 'rewards' is of type 'unknown'.
+lib/services/dungeon-service.ts(425,33): error TS18046: 'updates.experience' is of type 'unknown'.
+lib/services/dungeon-service.ts(426,31): error TS2339: Property 'level' does not exist on type '{}'.
+lib/services/dungeon-service.ts(430,42): error TS2339: Property 'id' does not exist on type '{}'.
+lib/services/dungeon-service.ts(433,9): error TS18046: 'rewards' is of type 'unknown'.
+lib/services/dungeon-service.ts(433,26): error TS18046: 'rewards' is of type 'unknown'.
+lib/services/dungeon-service.ts(434,28): error TS18046: 'rewards' is of type 'unknown'.
+lib/services/dungeon-service.ts(435,18): error TS2339: Property 'items' does not exist on type 'LifeRPGDatabase'.
+lib/services/dungeon-service.ts(480,7): error TS2741: Property 'weekly' is missing in type '{ story: { cleared: number; totalTime: number; averageStars: number; }; daily: { cleared: number; totalTime: number; averageStars: number; }; raid: { cleared: number; totalTime: number; averageStars: number; }; special: { ...; }; challenge: { ...; }; infinite: { ...; }; }' but required in type 'Record<DungeonType, { cleared: number; totalTime: number; averageStars: number; }>'.
+lib/services/equipment-enhancement.service.ts(6,47): error TS2305: Module '"@/lib/types/item-system"' has no exported member 'Rarity'.
+lib/services/equipment-enhancement.service.ts(10,23): error TS2307: Cannot find module '@/lib/contexts/ToastContext' or its corresponding type declarations.
+lib/services/equipment-enhancement.service.ts(131,11): error TS18048: 'equipment.enhancementLevel' is possibly 'undefined'.
+lib/services/equipment-enhancement.service.ts(137,9): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+lib/services/equipment-enhancement.service.ts(157,63): error TS2538: Type 'undefined' cannot be used as an index type.
+lib/services/leaderboard.service.ts(161,45): error TS2339: Property 'getAllDungeonProgress' does not exist on type '{ getProfile(userId: string): Promise<UserProfile | null>; updateProfile(userId: string, updates: Partial<UserProfile>): Promise<...>; ... 18 more ...; calculateActivityStreak(activities: Activity[]): number; }'.
+lib/services/leaderboard.service.ts(163,56): error TS7006: Parameter 'd' implicitly has an 'any' type.
+lib/utils/motion.ts(4,41): error TS2307: Cannot find module 'framer-motion/dist/framer-motion' or its corresponding type declarations.

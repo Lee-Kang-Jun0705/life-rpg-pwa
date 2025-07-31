@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 배경 -->
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+  
+  <!-- Life RPG 아이콘 -->
+  <g transform="translate(100, 120)">
+    <!-- 방패 형태 -->
+    <path d="M156 0 C156 0 312 0 312 0 C312 60 312 120 280 180 C248 240 156 272 156 272 C156 272 64 240 32 180 C0 120 0 60 0 0 Z" 
+          fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.3)" stroke-width="4"/>
+    
+    <!-- 중앙 보석 -->
+    <circle cx="156" cy="100" r="40" fill="#ffd700" opacity="0.8"/>
+    <circle cx="156" cy="100" r="25" fill="#fff" opacity="0.6"/>
+    
+    <!-- 레벨업 효과 -->
+    <g opacity="0.7">
+      <circle cx="156" cy="60" r="8" fill="#ffd700"/>
+      <circle cx="200" cy="80" r="6" fill="#ff6b6b"/>
+      <circle cx="112" cy="80" r="6" fill="#4ecdc4"/>
+      <circle cx="180" cy="140" r="5" fill="#45b7d1"/>
+      <circle cx="132" cy="140" r="5" fill="#96ceb4"/>
+    </g>
+    
+    <!-- "L" 텍스트 -->
+    <text x="140" y="120" font-family="Arial Black" font-size="60" font-weight="bold" fill="#333" opacity="0.8">L</text>
+  </g>
+  
+  <!-- 하단 텍스트 -->
+  <text x="256" y="450" font-family="Arial" font-size="32" font-weight="bold" fill="white" text-anchor="middle" opacity="0.9">Life RPG</text>
+</svg>

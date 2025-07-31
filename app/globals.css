@@ -1,0 +1,440 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '../styles/accessibility.css';
+
+@layer base {
+  :root {
+    /* 폰트 시스템 */
+    --font-sans: var(--font-inter), var(--font-noto-sans-kr), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 237 97% 64%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    
+    /* 캔디 컬러 팔레트 🍭 */
+    --candy-pink: #FFB6C1;
+    --candy-blue: #87CEEB;
+    --candy-yellow: #FFEB9C;
+    --candy-green: #98FB98;
+    --candy-purple: #DDA0DD;
+    --candy-orange: #FFDAB9;
+    --candy-mint: #B5EAD7;
+    --candy-coral: #FFB5BA;
+    
+    /* 스탯 그라데이션 🌈 */
+    --stat-health-start: #FF6B6B;
+    --stat-health-end: #FFB6C1;
+    --stat-learning-start: #4ECDC4;
+    --stat-learning-end: #87CEEB;
+    --stat-relationship-start: #95E1D3;
+    --stat-relationship-end: #98FB98;
+    --stat-achievement-start: #FFD93D;
+    --stat-achievement-end: #FFEB9C;
+    
+    /* 스탯 색상 (기존 호환성 유지) */
+    --stat-health: 0 84% 60%;
+    --stat-learning: 217 91% 60%;
+    --stat-relationship: 158 64% 52%;
+    --stat-achievement: 38 92% 50%;
+    
+    /* 접근성 */
+    --focus-color: #4169E1;
+    --animation-duration: 300ms;
+    
+    /* 새로운 디자인 변수 */
+    --card-radius: 2rem;
+    --button-radius: 2.5rem;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 15px 40px rgba(0, 0, 0, 0.15);
+    --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.3);
+    
+    /* 크기 변수 */
+    --emoji-giant: 5rem;
+    --emoji-large: 3rem;
+    --emoji-medium: 2rem;
+    --stat-card-min-height: 200px;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 0 0% 100%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 100%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 237 97% 64%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    
+    /* 다크모드 캔디 컬러 팔레트 🌙 */
+    --candy-pink: #FF6B9D;
+    --candy-blue: #66D9EF;
+    --candy-yellow: #FFD93D;
+    --candy-green: #7FFF7F;
+    --candy-purple: #C77DFF;
+    --candy-orange: #FFB347;
+    --candy-mint: #72F2D9;
+    --candy-coral: #FF6B6B;
+    
+    /* 다크모드 스탯 그라데이션 */
+    --stat-health-start: #FF6B6B;
+    --stat-health-end: #FF6B9D;
+    --stat-learning-start: #66D9EF;
+    --stat-learning-end: #A8E6CF;
+    --stat-relationship-start: #7FFF7F;
+    --stat-relationship-end: #72F2D9;
+    --stat-achievement-start: #FFD93D;
+    --stat-achievement-end: #FFB347;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    scroll-margin: 5rem;
+    letter-spacing: -0.025em;
+  }
+  
+  h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    font-weight: 800;
+  }
+  
+  @media (min-width: 1024px) {
+    h1 {
+      font-size: 3rem;
+      line-height: 1;
+    }
+  }
+  
+  h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-weight: 600;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 600;
+  }
+  
+  h4 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+  }
+}
+
+@layer components {
+  /* 모바일 최적화 터치 영역 */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+  
+  /* 스탯 버튼 기본 스타일 */
+  .stat-button {
+    @apply relative overflow-hidden transition-all duration-300 transform active:scale-95;
+  }
+  
+  /* 부드러운 그림자 */
+  .shadow-soft {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 통통 튀는 카드 */
+  .card-bouncy {
+    @apply rounded-[2rem] p-8 transition-all duration-300;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-bouncy:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* 터치 최적화 */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  button, a, [role="button"], .clickable {
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+  
+  /* 스크롤 성능 최적화 */
+  .scrollable {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+  
+  /* 터치 반응성 개선 */
+  .touch-active:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  /* 3D 버블 버튼 */
+  .button-3d {
+    @apply relative transition-all duration-200;
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
+    touch-action: manipulation;
+  }
+  
+  .button-3d:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 바운스 애니메이션 */
+  @keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.5); }
+  }
+  
+  .animate-bounce-in {
+    animation: bounceIn 0.6s ease-out;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  /* 그라데이션 배경 */
+  .gradient-health {
+    background: linear-gradient(135deg, var(--stat-health-start), var(--stat-health-end));
+  }
+  
+  .gradient-learning {
+    background: linear-gradient(135deg, var(--stat-learning-start), var(--stat-learning-end));
+  }
+  
+  .gradient-relationship {
+    background: linear-gradient(135deg, var(--stat-relationship-start), var(--stat-relationship-end));
+  }
+  
+  .gradient-achievement {
+    background: linear-gradient(135deg, var(--stat-achievement-start), var(--stat-achievement-end));
+  }
+
+  /* 스크롤바 숨기기 */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
+  
+  /* 큰 이모지 스타일 */
+  .emoji-giant {
+    font-size: var(--emoji-giant);
+    line-height: 1;
+  }
+  
+  .emoji-large {
+    font-size: var(--emoji-large);
+    line-height: 1;
+  }
+  
+  .emoji-medium {
+    font-size: var(--emoji-medium);
+    line-height: 1;
+  }
+  
+  /* 반짝이는 애니메이션 */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+  
+  /* 접근성을 위한 포커스 스타일 */
+  .focus-ring:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--primary));
+  }
+}
+
+@layer utilities {
+  /* 텍스트 밸런싱 */
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* 안전 영역 패딩 (모바일 노치 대응) */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* 스크롤바 숨기기 */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* 키보드 네비게이션 */
+  body:not(.keyboard-nav) *:focus {
+    outline: none;
+  }
+  
+  /* 고대비 모드 */
+  .high-contrast {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
+    --primary: 60 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --border: 0 0% 50%;
+  }
+  
+  .high-contrast * {
+    background-color: black !important;
+    color: white !important;
+    border-color: white !important;
+  }
+  
+  .high-contrast a,
+  .high-contrast button {
+    background-color: yellow !important;
+    color: black !important;
+    border: 2px solid white !important;
+  }
+  
+  /* 폰트 크기 설정 */
+  .font-small {
+    font-size: 0.875rem;
+  }
+  
+  .font-medium {
+    font-size: 1rem;
+  }
+  
+  .font-large {
+    font-size: 1.125rem;
+  }
+  
+  .font-extra-large {
+    font-size: 1.25rem;
+  }
+  
+  /* 포커스 표시 강화 */
+  .keyboard-nav *:focus {
+    outline: 3px solid #4169E1 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* 스크린 리더 전용 */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  
+  /* 애니메이션 축소 모드 */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    .animate-float,
+    .animate-bounce-in,
+    .animate-wiggle,
+    .animate-pulse-glow,
+    .animate-rubber-band,
+    .animate-jello,
+    .animate-shimmer {
+      animation: none !important;
+    }
+  }
+}

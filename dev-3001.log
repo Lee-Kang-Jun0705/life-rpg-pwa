@@ -1,0 +1,2643 @@
+
+> life-rpg-pwa@1.0.0 dev
+> next dev -p 3000 -p 3001
+
+   ▲ Next.js 15.4.3
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.219.104:3001
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+ ✓ Starting...
+ ○ (pwa) PWA support is disabled.
+ ✓ Ready in 1844ms
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+   ▲ Next.js 15.4.3
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.219.104:3001
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+ ✓ Starting...
+ ✓ (pwa) Compiling for server...
+ ✓ (pwa) Compiling for server...
+ ✓ (pwa) Compiling for client (static)...
+ ○ (pwa) Service worker: C:\Users\USER\life-rpg-pwa_2\public\service-worker.js
+ ○ (pwa)   URL: /service-worker.js
+ ○ (pwa)   Scope: /
+ ○ (pwa) Building in development mode, caching and precaching are disabled for the most part. This means that offline support is disabled, but you can continue developing other functions in service worker.
+ ✓ Ready in 4.1s
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+   ▲ Next.js 15.4.3
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.219.104:3001
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+ ✓ Starting...
+ ✓ (pwa) Compiling for server...
+ ✓ (pwa) Compiling for server...
+ ✓ (pwa) Compiling for client (static)...
+ ○ (pwa) Service worker: C:\Users\USER\life-rpg-pwa_2\public\service-worker.js
+ ○ (pwa)   URL: /service-worker.js
+ ○ (pwa)   Scope: /
+ ○ (pwa) Building in development mode, caching and precaching are disabled for the most part. This means that offline support is disabled, but you can continue developing other functions in service worker.
+ ✓ Ready in 3.8s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 1090ms (108 modules)
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 13.2s (1692 modules)
+ GET /dashboard 200 in 14854ms
+ GET /dashboard 200 in 14832ms
+ ✓ Compiled in 2.8s (783 modules)
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 142ms
+ GET /dashboard 200 in 82ms
+ GET /dashboard 200 in 155ms
+ GET /dashboard 200 in 157ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 109ms
+ GET /dashboard 200 in 121ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 163ms
+ GET /dashboard 200 in 232ms
+ GET /dashboard 200 in 305ms
+ GET /dashboard 200 in 111ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 100ms
+ GET /dashboard 200 in 75ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 58ms
+ GET /dashboard 200 in 82ms
+ GET /dashboard 200 in 85ms
+ GET /dashboard 200 in 71ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 132ms
+ GET /dashboard 200 in 85ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 116ms
+ GET /dashboard 200 in 116ms
+ GET /dashboard 200 in 67ms
+ GET /dashboard 200 in 64ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 97ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 68ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+ GET /dashboard 200 in 68ms
+ GET /dashboard 200 in 84ms
+ GET /dashboard 200 in 116ms
+ GET /dashboard 200 in 91ms
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully
+Failed to save character: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save inventory: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+Failed to save skills: [Error [DatabaseClosedError]: MissingAPIError IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+  inner: [Error [MissingAPIError]: IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb] {
+    inner: null
+  }
+}
+All data saved successfully

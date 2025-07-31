@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Tailwind CSS v4 Configuration */
+@theme {
+  /* Colors */
+  --color-candy-pink: #FFB6C1;
+  --color-candy-blue: #87CEEB;
+  --color-candy-yellow: #FFEB9C;
+  --color-candy-green: #98FB98;
+  --color-candy-purple: #DDA0DD;
+  --color-candy-orange: #FFDAB9;
+  --color-candy-mint: #B5EAD7;
+  --color-candy-coral: #FFB5BA;
+  
+  /* Stat colors */
+  --color-stat-health: #EF4444;
+  --color-stat-learning: #3B82F6;
+  --color-stat-relationship: #10B981;
+  --color-stat-achievement: #F59E0B;
+  
+  /* Font sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+}

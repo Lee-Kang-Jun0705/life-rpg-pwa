@@ -1,0 +1,95 @@
+# E2E 테스트 파일 백업 목록
+# 삭제 전 기록용
+
+## 중복 파일 그룹
+
+### Dashboard 관련 (통합 필요)
+- dashboard.spec.ts
+- dashboard-comprehensive-test.spec.ts
+- dashboard-functionality.spec.ts
+- dashboard-health-check.spec.ts
+- dashboard-mobile-responsive-test.spec.ts
+- dashboard-mobile-simple-test.spec.ts
+- check-dashboard-mobile.spec.ts
+- debug-dashboard-loading.spec.ts
+
+### Dungeon 관련 (통합 필요)
+- dungeon-test.spec.ts
+- dungeon-system.spec.ts
+- dungeon-battle-test.spec.ts
+- dungeon-battle-advanced.spec.ts
+- dungeon-battle-complete-test.spec.ts
+- dungeon-combat-test.spec.ts
+- dungeon-complete-flow.spec.ts
+- dungeon-comprehensive-test.spec.ts
+- dungeon-data-test.spec.ts
+- dungeon-difficulty-test.spec.ts
+- dungeon-direct-test.spec.ts
+- dungeon-final-test.spec.ts
+- dungeon-integration.spec.ts
+- dungeon-page-content.spec.ts
+- dungeon-quick-difficulty-test.spec.ts
+- dungeon-quick-test.spec.ts
+- dungeon-render-test.spec.ts
+- dungeon-service-debug.spec.ts
+- dungeon-structure-debug.spec.ts
+- dungeon-structure-test.spec.ts
+- integrated-dungeon.spec.ts
+- simple-dungeon-test.spec.ts
+- test-dungeon-page-content.spec.ts
+- verify-dungeon-page.spec.ts
+
+### AI Coach 관련 (통합 필요)
+- ai-coach-test.spec.ts
+- ai-coach-chat-test.spec.ts
+- ai-coach-debug.spec.ts
+- ai-coach-final-test.spec.ts
+
+### Performance 관련 (통합 필요)
+- performance-test.spec.ts
+- performance-and-responsiveness-test.spec.ts
+- performance-and-stress-test.spec.ts
+- performance-comparison.spec.ts
+- performance-navigation-test.spec.ts
+- performance-optimization.spec.ts
+- performance-regression.spec.ts
+- simple-performance-test.spec.ts
+
+### Error/Debug 관련 (대부분 삭제)
+- debug-test.spec.ts
+- debug-page.spec.ts
+- debug-404-errors.spec.ts
+- debug-console-errors.spec.ts
+- debug-stat-card.spec.ts
+- db-debug.spec.ts
+- network-debug.spec.ts
+- page-content-debug.spec.ts
+- check-404-error.spec.ts
+- check-500-error.spec.ts
+- check-console-errors.spec.ts
+- console-error-detection.spec.ts
+- console-error-test.spec.ts
+- quick-console-check.spec.ts
+- api-error-check.spec.ts
+- comprehensive-error-check.spec.ts
+- detailed-error-check.spec.ts
+
+### Game Flow 관련 (통합 필요)
+- complete-game-flow.spec.ts
+- complete-game-integration.spec.ts
+- full-game-integration.spec.ts
+- full-game-play.spec.ts
+- full-game-system-test.spec.ts
+- final-game-test.spec.ts
+- improved-game-test.spec.ts
+
+### 기타 중복
+- basic-test.spec.ts
+- simple-test.spec.ts
+- comprehensive-test.spec.ts
+- final-test.spec.ts
+- test-fixes.spec.ts
+
+## 유지할 파일
+- constants.ts (설정 파일)
+- README.md (문서)

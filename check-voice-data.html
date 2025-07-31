@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>음성 데이터 확인</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .activity-name {
+            max-width: 400px;
+            word-wrap: break-word;
+        }
+        .stat-type {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .health { background-color: #fee; color: #c00; }
+        .learning { background-color: #eef; color: #00c; }
+        .relationship { background-color: #efe; color: #0c0; }
+        .achievement { background-color: #fef; color: #c0c; }
+        .timestamp {
+            color: #666;
+            font-size: 14px;
+        }
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .filter {
+            margin: 20px 0;
+        }
+        .filter input {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 음성 활동 기록 확인</h1>
+        
+        <button onclick="loadActivities()">활동 새로고침</button>
+        <button onclick="clearFilter()">필터 초기화</button>
+        
+        <div class="filter">
+            <input type="text" id="searchInput" placeholder="활동 이름으로 검색..." onkeyup="filterActivities()">
+        </div>
+        
+        <div id="content">
+            <p>데이터를 불러오는 중...</p>
+        </div>
+    </div>
+
+    <script>
+        // Dexie 로드 (CDN)
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/dexie@latest/dist/dexie.js';
+        script.onload = () => {
+            loadActivities();
+        };
+        document.head.appendChild(script);
+
+        async function loadActivities() {
+            try {
+                // 데이터베이스 열기
+                const db = new Dexie('LifeRPGDB');
+                db.version(3).stores({
+                    activities: '++id, userId, statType, timestamp'
+                });
+
+                // 모든 활동 가져오기 (최신순)
+                const activities = await db.activities
+                    .orderBy('timestamp')
+                    .reverse()
+                    .limit(100)
+                    .toArray();
+
+                displayActivities(activities);
+            } catch (error) {
+                document.getElementById('content').innerHTML = `
+                    <div class="no-data">
+                        <p>❌ 데이터를 불러오는 중 오류가 발생했습니다.</p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayActivities(activities) {
+            const content = document.getElementById('content');
+            
+            if (activities.length === 0) {
+                content.innerHTML = '<div class="no-data">활동 기록이 없습니다.</div>';
+                return;
+            }
+
+            const voiceActivities = activities.filter(a => 
+                a.activityName && 
+                a.activityName !== '직접 활동' && 
+                !a.activityName.includes('미션') &&
+                !a.activityName.includes('업적') &&
+                !a.activityName.includes('던전')
+            );
+
+            let html = `
+                <h2>음성으로 기록된 활동 (${voiceActivities.length}개)</h2>
+                <table id="activitiesTable">
+                    <thead>
+                        <tr>
+                            <th>시간</th>
+                            <th>스탯 타입</th>
+                            <th>활동 이름</th>
+                            <th>경험치</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            voiceActivities.forEach(activity => {
+                const date = new Date(activity.timestamp);
+                const timeStr = date.toLocaleString('ko-KR');
+                
+                html += `
+                    <tr>
+                        <td class="timestamp">${timeStr}</td>
+                        <td><span class="stat-type ${activity.statType}">${getStatName(activity.statType)}</span></td>
+                        <td class="activity-name">${activity.activityName}</td>
+                        <td>${activity.experience} EXP</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+                <h3>전체 활동 통계</h3>
+                <p>총 활동 수: ${activities.length}개</p>
+                <p>음성 기록: ${voiceActivities.length}개</p>
+                <p>직접 클릭: ${activities.filter(a => a.activityName === '직접 활동').length}개</p>
+            `;
+
+            content.innerHTML = html;
+        }
+
+        function getStatName(type) {
+            const names = {
+                health: '건강',
+                learning: '학습',
+                relationship: '관계',
+                achievement: '성취'
+            };
+            return names[type] || type;
+        }
+
+        function filterActivities() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('activitiesTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const activityName = tr[i].getElementsByClassName('activity-name')[0];
+                if (activityName) {
+                    const txtValue = activityName.textContent || activityName.innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        tr[i].style.display = '';
+                    } else {
+                        tr[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function clearFilter() {
+            document.getElementById('searchInput').value = '';
+            filterActivities();
+        }
+    </script>
+</body>
+</html>
