@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { EnergyService } from '@/lib/services/energy-service'
+import { EnergyService } from '@/lib/energy/energy-service'
 import { BattleTicketService } from '@/lib/battle/ticket-service'
 import { GAME_CONFIG } from '@/lib/types/dashboard'
 import { ENERGY_CONFIG } from '@/lib/types/energy'
@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     const ticketService = BattleTicketService.getInstance()
 
     // 현재 상태 가져오기
-    const energyState = await energyService.getEnergyState(userId)
+    const energyState = await energyService.getPlayerEnergyState(userId)
     const ticketState = await ticketService.getTicketState(userId)
 
     // 변경 사항 확인

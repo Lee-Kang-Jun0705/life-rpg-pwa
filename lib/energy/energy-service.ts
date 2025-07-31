@@ -29,7 +29,7 @@ export class EnergyService {
   }
 
   // 플레이어 에너지 상태 가져오기
-  async getPlayerEnergyState(_userId: string): Promise<PlayerEnergyState> {
+  async getPlayerEnergyState(userId: string): Promise<PlayerEnergyState> {
     try {
       // IndexedDB에서 에너지 정보 가져오기
       let energyData = await db.playerEnergy
@@ -110,7 +110,7 @@ export class EnergyService {
 
   // 에너지 소비
   async consumeEnergy(
-    _userId: string, 
+    userId: string, 
     amount: number, 
     _reason: string
   ): Promise<EnergyUpdateResult> {
@@ -171,7 +171,7 @@ export class EnergyService {
 
   // 에너지 회복
   async restoreEnergy(
-    _userId: string,
+    userId: string,
     amount: number,
     _reason: string,
     allowOverflow: boolean = false
@@ -235,7 +235,7 @@ export class EnergyService {
   }
 
   // 일일 보너스 수령
-  async claimDailyBonus(_userId: string): Promise<EnergyUpdateResult> {
+  async claimDailyBonus(userId: string): Promise<EnergyUpdateResult> {
     try {
       const energyData = await db.playerEnergy
         .where('userId')
@@ -288,7 +288,7 @@ export class EnergyService {
 
   // 에너지 체크 (던전 입장 가능 여부)
   async checkEnergy(
-    _userId: string,
+    userId: string,
     dungeonType: string
   ): Promise<EnergyCheckResult> {
     const state = await this.getPlayerEnergyState(userId)
@@ -306,7 +306,7 @@ export class EnergyService {
   }
 
   // 일일 제한 확인
-  async getDailyLimits(_userId: string): Promise<DailyLimits> {
+  async getDailyLimits(userId: string): Promise<DailyLimits> {
     const now = new Date()
     const resetTime = new Date(now)
     resetTime.setHours(ENERGY_CONSTANTS.DAILY_RESET_HOUR, 0, 0, 0)
@@ -346,7 +346,7 @@ export class EnergyService {
   }
 
   // 에너지 회복 타이머 정보
-  async getEnergyRegenTimer(_userId: string): Promise<EnergyRegenTimer> {
+  async getEnergyRegenTimer(userId: string): Promise<EnergyRegenTimer> {
     const state = await this.getPlayerEnergyState(userId)
     const now = new Date()
     
@@ -374,7 +374,7 @@ export class EnergyService {
   }
 
   // 플레이어 에너지 초기화
-  private async initializePlayerEnergy(_userId: string) {
+  private async initializePlayerEnergy(userId: string) {
     const initialEnergy = {
       userId,
       current: ENERGY_CONFIG.MAX_ENERGY,
@@ -396,7 +396,7 @@ export class EnergyService {
   }
 
   // 레벨업 시 에너지 충전
-  async onLevelUp(_userId: string): Promise<void> {
+  async onLevelUp(userId: string): Promise<void> {
     if (ENERGY_CONFIG.LEVEL_UP_REFILL) {
       await this.restoreEnergy(
         userId,
@@ -408,7 +408,7 @@ export class EnergyService {
   }
 
   // 에너지 구매
-  async purchaseEnergy(_userId: string, _cost: number): Promise<EnergyUpdateResult> {
+  async purchaseEnergy(userId: string, _cost: number): Promise<EnergyUpdateResult> {
     const { dbHelpers } = await import('@/lib/database')
     
     // 프리미엄 화폐로 비용 차감
@@ -430,7 +430,7 @@ export class EnergyService {
   }
 
   // 인벤토리에서 에너지 포션 가져오기
-  private async getEnergyPotionsFromInventory(_userId: string) {
+  private async getEnergyPotionsFromInventory(userId: string) {
     const { dbHelpers } = await import('@/lib/database')
     const potions = await dbHelpers.getInventoryItems(userId, 'consumable')
     
@@ -445,7 +445,7 @@ export class EnergyService {
   }
 
   // 인벤토리에서 프리미엄 티켓 가져오기
-  private async getPremiumTicketsFromInventory(_userId: string) {
+  private async getPremiumTicketsFromInventory(userId: string) {
     const { dbHelpers } = await import('@/lib/database')
     const tickets = await dbHelpers.getInventoryItems(userId, 'consumable')
     

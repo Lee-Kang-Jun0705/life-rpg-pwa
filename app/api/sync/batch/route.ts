@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { dbHelpers } from '@/lib/database/client'
-import { EnergyService } from '@/lib/services/energy-service'
+import { EnergyService } from '@/lib/energy/energy-service'
 import { BattleTicketService } from '@/lib/battle/ticket-service'
 import { GAME_CONFIG } from '@/lib/types/dashboard'
 
