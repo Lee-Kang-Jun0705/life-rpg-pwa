@@ -166,9 +166,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   reactStrictMode: true,
   
-  // 빌드 시 린트 비활성화 (임시)
+  // 빌드 시 린트 활성화
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   
   // 타입 체크 활성화
