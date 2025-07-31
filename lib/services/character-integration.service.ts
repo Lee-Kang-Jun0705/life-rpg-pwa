@@ -169,7 +169,7 @@ export class CharacterIntegrationService {
   ) {
     // 기본 스탯 (코어 스탯 기반)
     let hp = 100 + (coreStats.health * 20)
-    const mp = 50 + (coreStats.learning * 10)
+    let mp = 50 + (coreStats.learning * 10)
     let attack = 10 + (coreStats.achievement * 5)
     let defense = 5 + (coreStats.health * 3)
     let speed = 50 + (coreStats.relationship * 2)

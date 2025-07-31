@@ -3,6 +3,13 @@
  * 자주 사용되는 데이터를 메모리에 캐싱하여 성능 향상
  */
 
+// 캐시 설정 상수
+const CACHE_CONFIG = {
+  MAX_SIZE: 100, // 최대 캐시 항목 수
+  CLEANUP_INTERVAL: 60000, // 1분마다 정리
+  DEFAULT_TTL: 300000, // 기본 TTL 5분
+} as const
+
 interface CacheItem<T> {
   data: T
   timestamp: number
@@ -10,9 +17,9 @@ interface CacheItem<T> {
 }
 
 class MemoryCache {
-  private cache: Map<string, CacheItem<any>> = new Map()
-  private maxSize: number = 100 // 최대 캐시 항목 수
-  private cleanupInterval: number = 60000 // 1분마다 정리
+  private cache: Map<string, CacheItem<unknown>> = new Map()
+  private maxSize: number = CACHE_CONFIG.MAX_SIZE
+  private cleanupInterval: number = CACHE_CONFIG.CLEANUP_INTERVAL
 
   constructor() {
     // 주기적으로 만료된 캐시 정리
@@ -24,7 +31,7 @@ class MemoryCache {
   /**
    * 캐시에 데이터 저장
    */
-  set<T>(key: string, data: T, ttl: number = 300000): void { // 기본 5분
+  set<T>(key: string, data: T, ttl: number = CACHE_CONFIG.DEFAULT_TTL): void {
     // 캐시 크기 제한 확인
     if (this.cache.size >= this.maxSize) {
       // 가장 오래된 항목 제거

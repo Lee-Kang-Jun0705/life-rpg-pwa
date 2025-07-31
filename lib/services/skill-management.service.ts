@@ -159,7 +159,7 @@ class SkillManagementService {
     this.learnedSkills.set(skillId, learned)
     
     // DB에 저장 (async 호출하지만 결과 기다리지 않음)
-    dbHelpers.saveLearnedSkill({
+    void dbHelpers.saveLearnedSkill({
       userId: this.userId,
       skillId,
       level: 1,
@@ -187,7 +187,7 @@ class SkillManagementService {
     }
     
     // DB에서 삭제 (async 호출하지만 결과 기다리지 않음)
-    dbHelpers.deleteLearnedSkill(this.userId, skillId)
+    void dbHelpers.deleteLearnedSkill(this.userId, skillId)
       .catch(error => console.error('Failed to delete learned skill:', error))
     
     return true
