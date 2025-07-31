@@ -1,5 +1,7 @@
 # Life RPG PWA - 오프라인 개인용 자기계발 앱
 
+[![Deployed on Vercel](https://vercel.com/button)](https://life-rpg-pwa-250731.vercel.app)
+
 > ⚠️ **프로젝트 성격**: 이 앱은 **완전한 오프라인 개인용 서비스**입니다. 
 > - 모든 데이터는 사용자의 기기에만 저장됩니다
 > - 서버나 클라우드를 사용하지 않습니다
