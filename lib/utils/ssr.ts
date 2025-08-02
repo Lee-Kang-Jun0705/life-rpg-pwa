@@ -92,8 +92,10 @@ export const safeSessionStorage = {
  * SSR 안전 JSON 파싱
  */
 export function safeJSONParse<T>(value: string | null, defaultValue: T): T {
-  if (!value) return defaultValue
-  
+  if (!value) {
+    return defaultValue
+  }
+
   try {
     return JSON.parse(value)
   } catch {

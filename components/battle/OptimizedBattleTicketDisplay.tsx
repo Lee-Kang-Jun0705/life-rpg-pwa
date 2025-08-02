@@ -12,37 +12,37 @@ interface OptimizedBattleTicketDisplayProps {
   onPurchase?: () => void
 }
 
-export function OptimizedBattleTicketDisplay({ 
-  userId, 
-  compact = false, 
+export function OptimizedBattleTicketDisplay({
+  userId,
+  compact = false,
   onTicketChange,
-  onPurchase 
+  onPurchase
 }: OptimizedBattleTicketDisplayProps) {
   const [ticketState, setTicketState] = useState<TicketState | null>(null)
   const [loading, setLoading] = useState(true)
   const [displayTime, setDisplayTime] = useState<string>('0:00')
   const nextResetTime = useRef<Date | null>(null)
-  
+
   const ticketService = BattleTicketService.getInstance()
   const visibility = useVisibilityManager()
 
   // 티켓 상태 로드
-  const loadTicketState = useCallback(async () => {
+  const loadTicketState = useCallback(async() => {
     try {
       const state = await ticketService.getTicketState(userId)
       setTicketState(state)
-      
+
       // 다음 리셋 시간 계산 (매일 오전 5시)
       const now = new Date()
       const reset = new Date()
       reset.setHours(5, 0, 0, 0)
-      
+
       if (reset <= now) {
         reset.setDate(reset.getDate() + 1)
       }
-      
+
       nextResetTime.current = reset
-      
+
       if (onTicketChange) {
         onTicketChange(state.count)
       }
@@ -55,21 +55,23 @@ export function OptimizedBattleTicketDisplay({
 
   // 시간 표시 업데이트 (실제 서버 호출 없음)
   const updateTimeDisplay = useCallback(() => {
-    if (!nextResetTime.current) return
-    
+    if (!nextResetTime.current) {
+      return
+    }
+
     const now = new Date()
     const diff = nextResetTime.current.getTime() - now.getTime()
-    
+
     if (diff <= 0) {
       // 리셋 시간이 지났으면 새로 로드
       loadTicketState()
       return
     }
-    
+
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
     const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-    
+
     if (hours > 0) {
       setDisplayTime(`${hours}시간 ${minutes}분`)
     } else if (minutes > 0) {
@@ -86,22 +88,24 @@ export function OptimizedBattleTicketDisplay({
 
   // 시간 표시만 업데이트 (실제 계산은 클라이언트에서)
   useEffect(() => {
-    if (!ticketState || !nextResetTime.current) return
-    
+    if (!ticketState || !nextResetTime.current) {
+      return
+    }
+
     // 초기 표시
     updateTimeDisplay()
-    
+
     // 남은 시간에 따라 업데이트 주기 결정
     const now = new Date()
     const diff = nextResetTime.current.getTime() - now.getTime()
     const hours = Math.floor(diff / (1000 * 60 * 60))
-    
+
     // 1시간 이상 남았으면 분 단위로만 업데이트
     const updateInterval = hours > 0 ? 60000 : 1000
-    
+
     // visibility manager 사용하여 인터벌 등록
     visibility.registerInterval('ticket-countdown', updateTimeDisplay, updateInterval)
-    
+
     return () => visibility.clearInterval('ticket-countdown')
   }, [ticketState, updateTimeDisplay, visibility])
 
@@ -113,22 +117,24 @@ export function OptimizedBattleTicketDisplay({
         loadTicketState()
       }
     }
-    
+
     window.addEventListener('focus', handleFocus)
     return () => window.removeEventListener('focus', handleFocus)
   }, [loadTicketState])
 
   // 티켓 구매
-  const handlePurchase = async () => {
-    if (!onPurchase) return
-    
+  const handlePurchase = async() => {
+    if (!onPurchase) {
+      return
+    }
+
     await onPurchase()
     // 구매 후 상태 새로고침
     loadTicketState()
   }
 
   if (loading || !ticketState) {
-    return <div className="animate-pulse bg-gray-200 rounded h-8 w-32"></div>
+    return <div className="animate-pulse bg-gray-200 rounded h-8 w-32" />
   }
 
   if (compact) {
@@ -153,7 +159,7 @@ export function OptimizedBattleTicketDisplay({
             {ticketState.count}장
           </span>
         </div>
-        
+
         <div className="text-sm text-gray-600">
           매일 오전 5시에 10장 지급
         </div>

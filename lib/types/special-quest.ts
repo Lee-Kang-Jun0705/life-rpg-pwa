@@ -8,7 +8,7 @@
 import type { DungeonItem } from './dungeon'
 
 // 특별 퀘스트 타입
-export type SpecialQuestType = 
+export type SpecialQuestType =
   | 'event'        // 이벤트 퀘스트 (기간 한정)
   | 'achievement'  // 업적 달성 보상 퀘스트
   | 'collection'   // 수집 보상 퀘스트 (특정 아이템/몬스터 수집)
@@ -31,10 +31,10 @@ export interface SpecialQuest {
   type: SpecialQuestType
   icon: string
   backgroundImage?: string
-  
+
   // 입장 조건
   requirements: SpecialQuestRequirement[]
-  
+
   // 특별 보상 (경험치 없음, 아이템과 골드만)
   rewards: {
     gold: number
@@ -42,12 +42,12 @@ export interface SpecialQuest {
     guaranteedItems?: SpecialQuestItem[] // 확정 보상
     achievementPoints?: number
   }
-  
+
   // 퀘스트 정보
   difficulty: 'easy' | 'normal' | 'hard' | 'extreme' | 'legendary'
   stages: number
   estimatedTime: number // 분
-  
+
   // 제한 사항
   maxAttempts?: number // 최대 도전 횟수 (없으면 무제한)
   remainingAttempts?: number
@@ -55,12 +55,12 @@ export interface SpecialQuest {
   availableUntil?: Date // 종료 시간
   cooldownHours?: number // 재도전 쿨다운 (시간)
   lastAttemptAt?: Date
-  
+
   // 특수 규칙
   specialRules?: string[]
   allowedSkills?: string[] // 특정 스킬만 사용 가능
   bannedItems?: string[] // 특정 아이템 사용 금지
-  
+
   // 상태
   status: 'locked' | 'available' | 'completed' | 'expired'
   completedAt?: Date
@@ -81,21 +81,21 @@ export interface SpecialQuestProgress {
   status: 'in_progress' | 'completed' | 'failed' | 'abandoned'
   startTime: Date
   endTime?: Date
-  
+
   // 진행 상황
   currentStage: number
   totalStages: number
   completedObjectives: string[]
-  
+
   // 획득 보상
   earnedGold: number
   earnedItems: SpecialQuestItem[]
-  
+
   // 통계
   attempts: number
   deaths: number
   revivals: number
-  
+
   // 특별 목표 달성
   specialObjectives: {
     id: string
@@ -112,14 +112,14 @@ export interface SpecialQuestRecord {
   completedAt: Date
   clearTime: number
   attempts: number
-  
+
   // 획득 보상
   rewards: {
     gold: number
     items: SpecialQuestItem[]
     achievementPoints?: number
   }
-  
+
   // 달성 목표
   achievedObjectives: string[]
   perfectClear: boolean // 모든 특별 목표 달성
@@ -134,14 +134,14 @@ export interface EventQuest extends SpecialQuest {
     start: Date
     end: Date
   }
-  
+
   // 이벤트 특별 보상
   eventCurrency?: {
     name: string
     icon: string
     amount: number
   }
-  
+
   // 이벤트 랭킹
   rankingEnabled?: boolean
   rankingRewards?: {
@@ -175,7 +175,7 @@ export interface CollectionQuest extends SpecialQuest {
     required: number // 필요한 개수
     current: number // 현재 수집한 개수
   }
-  
+
   // 단계별 보상
   milestoneRewards?: {
     collected: number

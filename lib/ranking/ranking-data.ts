@@ -297,7 +297,7 @@ export const USER_RANKING_HISTORY = {
     { week: '30주차', rank: 15, score: 456789, category: 'total_level' },
     { week: '29주차', rank: 18, score: 432109, category: 'total_level' },
     { week: '28주차', rank: 22, score: 398765, category: 'total_level' },
-    { week: '27주차', rank: 25, score: 365432, category: 'total_level' },
+    { week: '27주차', rank: 25, score: 365432, category: 'total_level' }
   ],
   bestRanks: {
     total_level: { rank: 12, week: '26주차' },

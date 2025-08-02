@@ -18,9 +18,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'heal', value: 50 },
     value: 20,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   health_potion: {
     id: 'health_potion',
     name: '체력 포션',
@@ -32,9 +32,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'heal', value: 150 },
     value: 50,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   greater_health_potion: {
     id: 'greater_health_potion',
     name: '상급 체력 포션',
@@ -46,9 +46,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'heal', value: 300 },
     value: 120,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   super_health_potion: {
     id: 'super_health_potion',
     name: '최상급 체력 포션',
@@ -60,9 +60,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'heal', value: 600 },
     value: 300,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   elixir_of_life: {
     id: 'elixir_of_life',
     name: '생명의 엘릭서',
@@ -74,7 +74,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'heal', value: 9999 },
     value: 1000,
     stackable: true,
-    maxStack: 10,
+    maxStack: 10
   },
 
   // === 마나 회복 포션 ===
@@ -89,9 +89,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'mana', value: 30 },
     value: 25,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   mana_potion: {
     id: 'mana_potion',
     name: '마나 포션',
@@ -103,9 +103,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'mana', value: 80 },
     value: 60,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   greater_mana_potion: {
     id: 'greater_mana_potion',
     name: '상급 마나 포션',
@@ -117,7 +117,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'mana', value: 150 },
     value: 150,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   // === 상태이상 치료 ===
@@ -132,9 +132,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'cure', status: ['poison'] },
     value: 40,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   burn_salve: {
     id: 'burn_salve',
     name: '화상 연고',
@@ -146,9 +146,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'cure', status: ['burn'] },
     value: 40,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   paralyze_heal: {
     id: 'paralyze_heal',
     name: '마비 치료제',
@@ -160,9 +160,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'cure', status: ['paralyze'] },
     value: 60,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   panacea: {
     id: 'panacea',
     name: '만병통치약',
@@ -174,7 +174,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'cure', status: ['all'] },
     value: 500,
     stackable: true,
-    maxStack: 20,
+    maxStack: 20
   },
 
   // === 버프 포션 ===
@@ -189,9 +189,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'buff', stat: 'attack', value: 0.2, duration: 300 },
     value: 100,
     stackable: true,
-    maxStack: 20,
+    maxStack: 20
   },
-  
+
   defense_potion: {
     id: 'defense_potion',
     name: '방어의 포션',
@@ -203,9 +203,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'buff', stat: 'defense', value: 0.2, duration: 300 },
     value: 100,
     stackable: true,
-    maxStack: 20,
+    maxStack: 20
   },
-  
+
   speed_potion: {
     id: 'speed_potion',
     name: '신속의 포션',
@@ -217,9 +217,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'buff', stat: 'speed', value: 0.3, duration: 300 },
     value: 120,
     stackable: true,
-    maxStack: 20,
+    maxStack: 20
   },
-  
+
   berserk_potion: {
     id: 'berserk_potion',
     name: '광폭화 포션',
@@ -228,8 +228,8 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     rarity: 'rare',
     level: 25,
     baseStats: {},
-    consumableEffect: { 
-      type: 'buff', 
+    consumableEffect: {
+      type: 'buff',
       effects: [
         { stat: 'attack', value: 0.5, duration: 180 },
         { stat: 'defense', value: -0.25, duration: 180 }
@@ -237,9 +237,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     },
     value: 400,
     stackable: true,
-    maxStack: 10,
+    maxStack: 10
   },
-  
+
   invisibility_potion: {
     id: 'invisibility_potion',
     name: '투명 포션',
@@ -251,7 +251,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'buff', stat: 'stealth', value: 1, duration: 30 },
     value: 350,
     stackable: true,
-    maxStack: 10,
+    maxStack: 10
   },
 
   // === 음식류 ===
@@ -266,9 +266,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'heal', value: 30 },
     value: 10,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   meat: {
     id: 'meat',
     name: '고기',
@@ -280,9 +280,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'heal', value: 80 },
     value: 30,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   feast: {
     id: 'feast',
     name: '축제 음식',
@@ -291,7 +291,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     rarity: 'uncommon',
     level: 15,
     baseStats: {},
-    consumableEffect: { 
+    consumableEffect: {
       type: 'combo',
       effects: [
         { type: 'heal', value: 200 },
@@ -300,9 +300,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     },
     value: 200,
     stackable: true,
-    maxStack: 20,
+    maxStack: 20
   },
-  
+
   dragon_meat: {
     id: 'dragon_meat',
     name: '용의 고기',
@@ -311,7 +311,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     rarity: 'epic',
     level: 40,
     baseStats: {},
-    consumableEffect: { 
+    consumableEffect: {
       type: 'combo',
       effects: [
         { type: 'heal', value: 500 },
@@ -320,7 +320,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     },
     value: 1500,
     stackable: true,
-    maxStack: 10,
+    maxStack: 10
   },
 
   // === 특수 소비 아이템 ===
@@ -335,9 +335,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'teleport', destination: 'town' },
     value: 200,
     stackable: true,
-    maxStack: 20,
+    maxStack: 20
   },
-  
+
   resurrection_scroll: {
     id: 'resurrection_scroll',
     name: '부활 주문서',
@@ -349,9 +349,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'resurrection', hpRestore: 0.5 },
     value: 1000,
     stackable: true,
-    maxStack: 5,
+    maxStack: 5
   },
-  
+
   experience_potion: {
     id: 'experience_potion',
     name: '경험의 포션',
@@ -363,9 +363,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'experience', value: 100 },
     value: 800,
     stackable: true,
-    maxStack: 10,
+    maxStack: 10
   },
-  
+
   lucky_dice: {
     id: 'lucky_dice',
     name: '행운의 주사위',
@@ -377,9 +377,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'buff', stat: 'dropRate', value: 0.5, duration: 600 },
     value: 600,
     stackable: true,
-    maxStack: 10,
+    maxStack: 10
   },
-  
+
   skill_reset_potion: {
     id: 'skill_reset_potion',
     name: '스킬 초기화 포션',
@@ -391,7 +391,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'skillReset' },
     value: 2000,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
 
   // === 폭탄/투척 아이템 ===
@@ -406,9 +406,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'damage', element: 'fire', value: 150, aoe: true },
     value: 80,
     stackable: true,
-    maxStack: 50,
+    maxStack: 50
   },
-  
+
   ice_bomb: {
     id: 'ice_bomb',
     name: '얼음 폭탄',
@@ -420,9 +420,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'damage', element: 'ice', value: 100, freeze: 0.5 },
     value: 90,
     stackable: true,
-    maxStack: 50,
+    maxStack: 50
   },
-  
+
   smoke_bomb: {
     id: 'smoke_bomb',
     name: '연막탄',
@@ -434,7 +434,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'blind', duration: 10, aoe: true },
     value: 150,
     stackable: true,
-    maxStack: 30,
+    maxStack: 30
   },
 
   // === 특별 이벤트 아이템 ===
@@ -446,7 +446,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     rarity: 'epic',
     level: 1,
     baseStats: {},
-    consumableEffect: { 
+    consumableEffect: {
       type: 'combo',
       effects: [
         { type: 'heal', value: 9999 },
@@ -455,9 +455,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     },
     value: 5000,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
-  
+
   golden_apple: {
     id: 'golden_apple',
     name: '황금 사과',
@@ -469,7 +469,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'permanent', stat: 'maxHp', value: 50 },
     value: 10000,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
 
   // === 낚시/요리 재료 ===
@@ -484,9 +484,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'heal', value: 20 },
     value: 15,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   herb: {
     id: 'herb',
     name: '약초',
@@ -498,9 +498,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'heal', value: 10 },
     value: 8,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   mushroom: {
     id: 'mushroom',
     name: '버섯',
@@ -512,7 +512,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'mana', value: 20 },
     value: 12,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   // === 퀘스트 아이템 ===
@@ -526,9 +526,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     baseStats: {},
     consumableEffect: { type: 'key', unlocks: 'special_dungeon' },
     value: 1000,
-    stackable: false,
+    stackable: false
   },
-  
+
   boss_summon_scroll: {
     id: 'boss_summon_scroll',
     name: '보스 소환 주문서',
@@ -540,9 +540,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'summon', boss: 'world_boss' },
     value: 5000,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
-  
+
   treasure_map: {
     id: 'treasure_map',
     name: '보물 지도',
@@ -553,9 +553,9 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     baseStats: {},
     consumableEffect: { type: 'quest', reveals: 'hidden_treasure' },
     value: 2000,
-    stackable: false,
+    stackable: false
   },
-  
+
   mysterious_fragment: {
     id: 'mysterious_fragment',
     name: '신비한 조각',
@@ -567,7 +567,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'collect', required: 5, reward: 'legendary_item' },
     value: 3000,
     stackable: true,
-    maxStack: 5,
+    maxStack: 5
   },
 
   // 스킬북
@@ -582,7 +582,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'skill_book', skillId: 'basic_attack' },
     value: 100,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
   skill_book_power_strike: {
     id: 'skill_book_power_strike',
@@ -595,7 +595,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'skill_book', skillId: 'power_strike' },
     value: 500,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
   skill_book_healing: {
     id: 'skill_book_healing',
@@ -608,7 +608,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'skill_book', skillId: 'healing' },
     value: 400,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
   skill_book_fireball: {
     id: 'skill_book_fireball',
@@ -621,7 +621,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'skill_book', skillId: 'fireball' },
     value: 1000,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
   skill_book_lightning_bolt: {
     id: 'skill_book_lightning_bolt',
@@ -634,7 +634,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'skill_book', skillId: 'lightning_bolt' },
     value: 1500,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
   skill_book_shield_barrier: {
     id: 'skill_book_shield_barrier',
@@ -647,7 +647,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'skill_book', skillId: 'shield_barrier' },
     value: 1200,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
   skill_book_berserk: {
     id: 'skill_book_berserk',
@@ -660,7 +660,7 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'skill_book', skillId: 'berserk' },
     value: 3000,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   },
   skill_book_meteor_strike: {
     id: 'skill_book_meteor_strike',
@@ -673,6 +673,6 @@ export const CONSUMABLE_ITEMS: Record<string, Item> = {
     consumableEffect: { type: 'skill_book', skillId: 'meteor_strike' },
     value: 10000,
     stackable: true,
-    maxStack: 1,
+    maxStack: 1
   }
 }

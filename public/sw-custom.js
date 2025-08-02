@@ -35,7 +35,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames
-          .filter(name => name.startsWith('life-rpg-') && 
+          .filter(name => name.startsWith('life-rpg-') &&
                          !name.includes(CACHE_VERSION))
           .map(name => {
             console.log('[SW] Deleting old cache:', name)
@@ -65,8 +65,8 @@ self.addEventListener('fetch', (event) => {
   }
 
   // 정적 자원 - 캐시 우선, 실패시 네트워크
-  if (request.destination === 'image' || 
-      request.destination === 'script' || 
+  if (request.destination === 'image' ||
+      request.destination === 'script' ||
       request.destination === 'style' ||
       request.destination === 'font') {
     event.respondWith(cacheFirstStrategy(request))
@@ -109,7 +109,7 @@ self.addEventListener('fetch', (event) => {
 async function cacheFirstStrategy(request) {
   const cache = await caches.open(STATIC_CACHE_NAME)
   const cachedResponse = await cache.match(request)
-  
+
   if (cachedResponse) {
     // 백그라운드에서 업데이트
     fetch(request)
@@ -119,7 +119,7 @@ async function cacheFirstStrategy(request) {
         }
       })
       .catch(() => {})
-    
+
     return cachedResponse
   }
 
@@ -156,21 +156,21 @@ async function networkFirstStrategy(request) {
     if (cachedResponse) {
       return cachedResponse
     }
-    
+
     // API 요청 실패시 오프라인 응답
     if (request.url.includes('/api/')) {
       return new Response(
-        JSON.stringify({ 
-          error: '오프라인 상태입니다', 
-          offline: true 
+        JSON.stringify({
+          error: '오프라인 상태입니다',
+          offline: true
         }), {
-        status: 503,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+          status: 503,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
     }
-    
+
     throw error
   }
 }
@@ -185,7 +185,9 @@ self.addEventListener('sync', (event) => {
 
 // 푸시 알림 수신
 self.addEventListener('push', (event) => {
-  if (!event.data) return
+  if (!event.data) {
+    return
+  }
 
   const data = event.data.json()
   const options = {

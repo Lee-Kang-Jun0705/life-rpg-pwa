@@ -1077,9 +1077,9 @@ export const EXTENDED_MONSTER_DATABASE: { [id: string]: MonsterData } = {
           id: 'berserk',
           name: '광폭화',
           type: 'buff',
-          stats: { 
-            attack: 60, 
-            defense: -20, 
+          stats: {
+            attack: 60,
+            defense: -20,
             speed: 20,
             criticalDamage: 0.5,
             critRate: 0.01,

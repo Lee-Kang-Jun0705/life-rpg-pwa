@@ -8,8 +8,8 @@ interface LoadingSpinnerProps {
   className?: string
 }
 
-export function LoadingSpinner({ 
-  size = 'medium', 
+export function LoadingSpinner({
+  size = 'medium',
   message,
   className = ''
 }: LoadingSpinnerProps) {
@@ -22,8 +22,8 @@ export function LoadingSpinner({
   return (
     <div className={`flex flex-col items-center justify-center ${className}`}>
       <div className={`${sizeClasses[size]} relative`}>
-        <div className="absolute inset-0 rounded-full border-4 border-gray-300"></div>
-        <div className="absolute inset-0 rounded-full border-4 border-purple-600 border-t-transparent animate-spin"></div>
+        <div className="absolute inset-0 rounded-full border-4 border-gray-300" />
+        <div className="absolute inset-0 rounded-full border-4 border-purple-600 border-t-transparent animate-spin" />
       </div>
       {message && (
         <p className="mt-4 text-gray-300 text-sm">{message}</p>

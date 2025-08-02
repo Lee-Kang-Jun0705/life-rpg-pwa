@@ -5,11 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import type { CombatState, CombatAction } from '@/lib/types/combat-system'
 import { CombatStats } from '@/lib/types/game-core'
 import { dungeonCombatService } from '@/lib/services/dungeon-combat.service'
-import { 
-  Sword, 
-  Shield, 
-  Zap, 
-  Heart, 
+import {
+  Sword,
+  Shield,
+  Zap,
+  Heart,
   Battery,
   Sparkles,
   Flame,
@@ -80,7 +80,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
   const [playerTurnReady, setPlayerTurnReady] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [lastProcessedTurn, setLastProcessedTurn] = useState(0)
-  
+
   // HP 애니메이션을 위한 상태
   const [playerHpDisplay, setPlayerHpDisplay] = useState(100)
   const [enemyHpDisplays, setEnemyHpDisplays] = useState<Record<string, number>>({})
@@ -101,36 +101,36 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
       const state = dungeonCombatService.getCombatState(combatId)
       if (state) {
         setCombatState(state)
-        
+
         // HP 표시 초기화
         const player = state.participants.find(p => p.type === 'player')
         if (player && playerHpDisplay === 100) {
           setPlayerHpDisplay(player.currentHp)
         }
-        
+
         // 적 HP 업데이트 (변경된 경우에만)
         const enemies = state.participants.filter(p => p.team === 'enemy')
         setEnemyHpDisplays(prevDisplays => {
           let hasChanges = false
           const newDisplays: Record<string, number> = {}
-          
+
           enemies.forEach(enemy => {
             if (prevDisplays[enemy.id] !== enemy.currentHp) {
               hasChanges = true
             }
             newDisplays[enemy.id] = enemy.currentHp
           })
-          
+
           return hasChanges ? newDisplays : prevDisplays
         })
-        
+
         // 새로운 액션 처리
         if (state.history.length > lastProcessedTurn) {
           const newActions = state.history.slice(lastProcessedTurn)
           processNewActions(newActions, state)
           setLastProcessedTurn(state.history.length)
         }
-        
+
         // 플레이어 턴 체크
         if (state.currentTurn === player?.id && !playerTurnReady) {
           setPlayerTurnReady(true)
@@ -138,7 +138,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
         } else if (state.currentTurn !== player?.id) {
           setPlayerTurnReady(false)
         }
-        
+
         // 전투 종료 체크
         if (state.phase === 'victory' || state.phase === 'defeat') {
           if (state.phase === 'victory') {
@@ -162,28 +162,32 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
   const processNewActions = (actions: CombatAction[], state: CombatState) => {
     actions.forEach(action => {
       const actor = state.participants.find(p => p.id === action.actorId)
-      if (!actor) return
-      
+      if (!actor) {
+        return
+      }
+
       action.results.forEach(result => {
         const target = state.participants.find(p => p.id === result.targetId)
-        if (!target) return
-        
+        if (!target) {
+          return
+        }
+
         let message = ''
         const messageType: BattleMessage['type'] = 'normal'
-        
+
         switch (action.type) {
           case 'attack':
             if (result.damage && !result.damage.isDodged) {
               const critText = result.damage.isCritical ? ' (치명타!)' : ''
               message = `${actor.name}의 공격! ${target.name}에게 ${result.damage.amount}의 데미지${critText}`
               addBattleMessage(message, result.damage.isCritical ? 'critical' : 'damage')
-              
+
               if (result.damage.isCritical) {
                 soundService.playEffect('critical_hit')
               } else {
                 soundService.playEffect('hit')
               }
-              
+
               animateDamage(target.id, result.damage.amount)
             } else if (result.damage && result.damage.isDodged) {
               message = `${actor.name}의 공격! ${target.name}이(가) 회피!`
@@ -191,12 +195,12 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
               soundService.playEffect('miss')
             }
             break
-            
+
           case 'skill':
             const skill = skillManagementService.getSkill(action.skillId!)
             if (skill) {
               soundService.playEffect('skill_use')
-              
+
               if (result.damage && !result.damage.isDodged) {
                 const critText = result.damage.isCritical ? ' (치명타!)' : ''
                 message = `${actor.name}의 ${skill.name}! ${target.name}에게 ${result.damage.amount}의 데미지${critText}`
@@ -207,13 +211,13 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                 addBattleMessage(message, 'miss')
                 soundService.playEffect('miss')
               }
-              
+
               if (result.healing) {
                 message = `${actor.name}의 ${skill.name}! ${target.name}의 HP가 ${result.healing} 회복!`
                 addBattleMessage(message, 'heal')
                 animateHeal(target.id, result.healing)
               }
-              
+
               // 상태 효과 처리
               if (result.statusEffects && result.statusEffects.length > 0) {
                 result.statusEffects.forEach(effect => {
@@ -226,7 +230,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
               }
             }
             break
-            
+
           case 'defend':
             message = `${actor.name}의 방어! 방어력이 50% 상승!`
             addBattleMessage(message, 'status')
@@ -240,13 +244,13 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
   // 데미지 애니메이션
   const animateDamage = (targetId: string, damage: number) => {
     const player = combatState?.participants.find(p => p.type === 'player')
-    
+
     if (targetId === player?.id) {
       // 플레이어 데미지
       const newHp = Math.max(0, playerHpDisplay - damage)
       const step = damage / 20
       let currentHp = playerHpDisplay
-      
+
       const damageInterval = setInterval(() => {
         currentHp -= step
         if (currentHp <= newHp) {
@@ -264,13 +268,13 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
   // 회복 애니메이션
   const animateHeal = (targetId: string, healing: number) => {
     const player = combatState?.participants.find(p => p.type === 'player')
-    
+
     if (targetId === player?.id && player) {
       const maxHp = player.stats[CombatStats.HP]
       const newHp = Math.min(maxHp, playerHpDisplay + healing)
       const step = healing / 20
       let currentHp = playerHpDisplay
-      
+
       const healInterval = setInterval(() => {
         currentHp += step
         if (currentHp >= newHp) {
@@ -299,13 +303,17 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
   }, [battleMessages])
 
   // 행동 실행
-  const executeAction = async (type: CombatAction['type'], targetId?: string, skillId?: string, itemId?: string) => {
-    if (!combatState || isAnimating) return
-    
+  const executeAction = async(type: CombatAction['type'], targetId?: string, skillId?: string, itemId?: string) => {
+    if (!combatState || isAnimating) {
+      return
+    }
+
     const player = combatState.participants.find(p => p.type === 'player')
     const isPlayerTurn = combatState.currentTurn === player?.id
-    
-    if (!player || !isPlayerTurn) return
+
+    if (!player || !isPlayerTurn) {
+      return
+    }
 
     setIsAnimating(true)
     setShowSkillMenu(false)
@@ -331,7 +339,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
     }
 
     dungeonCombatService.executePlayerAction(combatId, action)
-    
+
     setTimeout(() => {
       setIsAnimating(false)
       setSelectedTarget(null)
@@ -342,9 +350,9 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
         <div className="text-center">
-          <motion.div 
+          <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
             className="inline-block"
           >
             <Sparkles className="w-12 h-12 text-purple-500 mb-4" />
@@ -400,7 +408,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
         >
           <X className="w-6 h-6 text-gray-300 hover:text-white" />
         </motion.button>
-        
+
         {/* 적 영역 */}
         <div className="flex-1 relative">
           <div className="absolute inset-0 flex items-center justify-center p-4">
@@ -409,7 +417,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                 const hpPercent = enemy.currentHp / enemy.stats[CombatStats.HP] * 100
                 const isSelected = selectedTarget === enemy.id
                 const isDead = enemy.currentHp <= 0
-                
+
                 return (
                   <motion.div
                     key={enemy.id}
@@ -430,7 +438,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                         transition={{ duration: 1, repeat: Infinity }}
                       />
                     )}
-                    
+
                     {/* 적 스프라이트 */}
                     <motion.div
                       className={`text-8xl mb-4 text-center ${isDead ? 'grayscale opacity-50' : ''}`}
@@ -443,7 +451,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                     >
                       {isDead ? '💀' : '👾'}
                     </motion.div>
-                    
+
                     {/* HP 바 */}
                     <div className="bg-gray-800/80 backdrop-blur rounded-lg p-3">
                       <div className="flex justify-between items-center mb-2">
@@ -453,8 +461,8 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                       <div className="bg-gray-700 rounded-full h-4 overflow-hidden relative">
                         <motion.div
                           className={`h-full ${
-                            hpPercent > 50 ? 'bg-green-500' : 
-                            hpPercent > 20 ? 'bg-yellow-500' : 'bg-red-500'
+                            hpPercent > 50 ? 'bg-green-500' :
+                              hpPercent > 20 ? 'bg-yellow-500' : 'bg-red-500'
                           }`}
                           initial={{ width: '100%' }}
                           animate={{ width: `${hpPercent}%` }}
@@ -491,7 +499,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                     }
                   >
                     <div className="flex items-center gap-4 mb-3">
-                      <motion.div 
+                      <motion.div
                         className="text-5xl"
                         animate={
                           isAnimating && combatState.currentTurn === player.id ? {
@@ -507,7 +515,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                           <h3 className="text-white font-bold text-lg">{player.name}</h3>
                           <span className="text-yellow-400">Lv.{player.level}</span>
                         </div>
-                        
+
                         {/* HP 바 */}
                         <div className="mt-2">
                           <div className="flex justify-between text-sm mb-1">
@@ -521,17 +529,17 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                           <div className="bg-gray-700 rounded-full h-5 overflow-hidden relative">
                             <motion.div
                               className={`h-full ${
-                                playerHpDisplay / player.stats[CombatStats.HP] > 0.5 ? 'bg-green-500' : 
-                                playerHpDisplay / player.stats[CombatStats.HP] > 0.2 ? 'bg-yellow-500' : 'bg-red-500'
+                                playerHpDisplay / player.stats[CombatStats.HP] > 0.5 ? 'bg-green-500' :
+                                  playerHpDisplay / player.stats[CombatStats.HP] > 0.2 ? 'bg-yellow-500' : 'bg-red-500'
                               }`}
-                              animate={{ 
-                                width: `${(playerHpDisplay / player.stats[CombatStats.HP]) * 100}%` 
+                              animate={{
+                                width: `${(playerHpDisplay / player.stats[CombatStats.HP]) * 100}%`
                               }}
                               transition={{ duration: 0.5 }}
                             />
                           </div>
                         </div>
-                        
+
                         {/* MP 바 */}
                         <div className="mt-2">
                           <div className="flex justify-between text-sm mb-1">
@@ -546,8 +554,8 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                             <motion.div
                               className="bg-blue-500 h-full"
                               initial={{ width: '100%' }}
-                              animate={{ 
-                                width: `${(player.currentMp / player.stats[CombatStats.MP]) * 100}%` 
+                              animate={{
+                                width: `${(player.currentMp / player.stats[CombatStats.MP]) * 100}%`
                               }}
                             />
                           </div>
@@ -580,7 +588,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                         <Sword className="w-5 h-5" />
                         공격
                       </motion.button>
-                      
+
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -590,7 +598,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                         <Sparkles className="w-5 h-5" />
                         스킬
                       </motion.button>
-                      
+
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -600,7 +608,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                         <Shield className="w-5 h-5" />
                         방어
                       </motion.button>
-                      
+
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -626,7 +634,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       {availableSkills.map(({ slot, skill, learned }) => {
                         const canUse = player && player.currentMp >= (typeof skill!.mpCost === 'number' ? skill!.mpCost : skill!.mpCost.base)
-                        
+
                         return (
                           <motion.button
                             key={slot}
@@ -672,7 +680,7 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
             )}
           </div>
         </div>
-        
+
         {/* 전투 로그 영역 - 화면 하단 고정 */}
         <div className="bg-gray-800 border-t border-gray-700 max-h-32 overflow-y-auto p-2">
           <div className="text-xs text-gray-400 mb-1">전투 로그</div>
@@ -686,11 +694,11 @@ export function PokemonStyleBattleScreen({ combatId, onBattleEnd }: PokemonStyle
                 transition={{ duration: 0.2 }}
                 className={`text-sm py-1 px-2 mb-1 rounded ${
                   msg.type === 'damage' ? 'text-red-400' :
-                  msg.type === 'heal' ? 'text-green-400' :
-                  msg.type === 'critical' ? 'text-yellow-400' :
-                  msg.type === 'status' ? 'text-purple-400' :
-                  msg.type === 'miss' ? 'text-gray-400' :
-                  'text-gray-300'
+                    msg.type === 'heal' ? 'text-green-400' :
+                      msg.type === 'critical' ? 'text-yellow-400' :
+                        msg.type === 'status' ? 'text-purple-400' :
+                          msg.type === 'miss' ? 'text-gray-400' :
+                            'text-gray-300'
                 }`}
               >
                 <span className="text-gray-500">[{new Date(msg.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span> {msg.text}

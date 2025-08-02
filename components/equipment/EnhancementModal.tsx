@@ -33,7 +33,7 @@ export function EnhancementModal({ equipment, onEnhance, onClose, userGold }: En
   const costInfo = ENHANCEMENT_COSTS[currentLevel]
   const penalty = getEnhancementFailurePenalty(currentLevel)
   const baseSuccessRate = calculateEnhancementSuccessRate(currentLevel)
-  const materialSuccessRate = selectedMaterial 
+  const materialSuccessRate = selectedMaterial
     ? calculateEnhancementSuccessRate(currentLevel, selectedMaterial)
     : baseSuccessRate
 
@@ -49,7 +49,7 @@ export function EnhancementModal({ equipment, onEnhance, onClose, userGold }: En
     }
   )
 
-  const handleEnhance = async () => {
+  const handleEnhance = async() => {
     if (!costInfo || userGold < costInfo.gold) {
       alert('골드가 부족합니다')
       return
@@ -61,7 +61,7 @@ export function EnhancementModal({ equipment, onEnhance, onClose, userGold }: En
     try {
       const enhanceResult = await onEnhance(selectedMaterial || undefined, useProtection)
       setResult(enhanceResult)
-      
+
       // 성공 시 장비 정보 업데이트
       if (enhanceResult.success && enhanceResult.equipment) {
         equipment.enhancementLevel = enhanceResult.newLevel || currentLevel + 1
@@ -75,7 +75,9 @@ export function EnhancementModal({ equipment, onEnhance, onClose, userGold }: En
   }
 
   const getResultMessage = () => {
-    if (!result) return null
+    if (!result) {
+      return null
+    }
 
     if (result.destroyed) {
       return '장비가 파괴되었습니다! 😱'
@@ -87,9 +89,15 @@ export function EnhancementModal({ equipment, onEnhance, onClose, userGold }: En
   }
 
   const getResultColor = () => {
-    if (!result) return ''
-    if (result.destroyed) return 'text-red-600'
-    if (result.success) return 'text-green-600'
+    if (!result) {
+      return ''
+    }
+    if (result.destroyed) {
+      return 'text-red-600'
+    }
+    if (result.success) {
+      return 'text-green-600'
+    }
     return 'text-orange-600'
   }
 
@@ -205,9 +213,9 @@ export function EnhancementModal({ equipment, onEnhance, onClose, userGold }: En
                     className={`
                       p-3 rounded-lg border-2 text-left transition-all
                       ${selectedMaterial?.id === material.id
-                        ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
-                      }
+                    ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                  }
                     `}
                   >
                     <div className="font-medium text-sm">{material.name}</div>
@@ -288,7 +296,7 @@ export function EnhancementModal({ equipment, onEnhance, onClose, userGold }: En
                   <>
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                       className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                     />
                     강화 중...

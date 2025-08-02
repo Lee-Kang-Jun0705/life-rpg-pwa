@@ -49,7 +49,9 @@ export function formatCompactNumber(num: number): string {
 
 // 퍼센트 계산 유틸리티
 export function calculatePercentage(current: number, max: number): number {
-  if (max === 0) return 0
+  if (max === 0) {
+    return 0
+  }
   return Math.round((current / max) * 100)
 }
 
@@ -72,8 +74,12 @@ export function sortBy<T>(array: T[], keyFn: (item: T) => number | string): T[] 
   return [...array].sort((a, b) => {
     const aKey = keyFn(a)
     const bKey = keyFn(b)
-    if (aKey < bKey) return -1
-    if (aKey > bKey) return 1
+    if (aKey < bKey) {
+      return -1
+    }
+    if (aKey > bKey) {
+      return 1
+    }
     return 0
   })
 }
@@ -128,7 +134,7 @@ export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export function debounce<T extends (...args: unknown[]) => unknown>(
+export function debounce<T extends(...args: unknown[]) => unknown>(
   fn: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -139,7 +145,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
   }
 }
 
-export function throttle<T extends (...args: unknown[]) => unknown>(
+export function throttle<T extends(...args: unknown[]) => unknown>(
   fn: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -186,7 +192,9 @@ export function safeLocalStorage() {
 
   return {
     getItem: (key: string): string | null => {
-      if (!isAvailable) return null
+      if (!isAvailable) {
+        return null
+      }
       try {
         return localStorage.getItem(key)
       } catch {
@@ -194,7 +202,9 @@ export function safeLocalStorage() {
       }
     },
     setItem: (key: string, value: string): boolean => {
-      if (!isAvailable) return false
+      if (!isAvailable) {
+        return false
+      }
       try {
         localStorage.setItem(key, value)
         return true
@@ -203,7 +213,9 @@ export function safeLocalStorage() {
       }
     },
     removeItem: (key: string): boolean => {
-      if (!isAvailable) return false
+      if (!isAvailable) {
+        return false
+      }
       try {
         localStorage.removeItem(key)
         return true
@@ -212,7 +224,9 @@ export function safeLocalStorage() {
       }
     },
     clear: (): boolean => {
-      if (!isAvailable) return false
+      if (!isAvailable) {
+        return false
+      }
       try {
         localStorage.clear()
         return true

@@ -1,5 +1,5 @@
-import type { 
-  Activity, 
+import type {
+  Activity,
   ActivityQuality,
   ExpCalculationResult,
   ExpContext,
@@ -44,16 +44,16 @@ export class DashboardIntegration {
     try {
       // 활동 품질 결정
       const quality = this.determineQuality(activityData)
-      
+
       // 활동명 추출
       const activityName = this.extractActivityName(activityData.description)
-      
+
       // 이전 활동 조회
       const previousActivities = await this.getRecentActivities(userId, 24) // 24시간
-      
+
       // 연속 활동일 수 조회
       const streakDays = await this.getStreakDays(userId)
-      
+
       // 활동 객체 생성
       const activity: Activity = {
         userId,
@@ -71,7 +71,7 @@ export class DashboardIntegration {
           voiceTranscript: activityData.isVoiceInput ? activityData.description : undefined
         }
       }
-      
+
       // 경험치 계산 컨텍스트
       const context: ExpContext = {
         user: {
@@ -84,37 +84,37 @@ export class DashboardIntegration {
         time: new Date(),
         previousActivities
       }
-      
+
       // 경험치 계산
       const expResult = await this.expManager.calculateActivityExp(activity, context)
-      
+
       if (!expResult.success) {
         return { success: false, error: expResult.error }
       }
-      
+
       const calculatedExp = expResult.data.finalExp
-      
+
       // 활동 기록 및 스탯 업데이트
       const recordResult = await this.expManager.recordActivity(
         { ...activity, experience: calculatedExp },
         calculatedExp
       )
-      
+
       if (!recordResult.success) {
         return { success: false, error: recordResult.error }
       }
-      
+
       // 기존 대시보드 데이터와 동기화
       await this.syncWithDashboard(userId, statType, calculatedExp)
-      
+
       // 레벨업 확인
       const levelInfo = ExpCalculator.calculateLevel(
         await this.getTotalExp(userId, statType)
       )
-      
+
       const previousLevel = await this.getUserLevel(userId, statType)
       const leveledUp = levelInfo.level > previousLevel
-      
+
       return {
         success: true,
         data: {
@@ -140,27 +140,27 @@ export class DashboardIntegration {
     mediaUrl?: string
   }): ActivityQuality {
     const description = activityData.description.trim()
-    
+
     // S급: 미디어 첨부
     if (activityData.mediaUrl) {
       return 'S'
     }
-    
+
     // A급: 시간 정보 + 상세 설명
     if (activityData.timeSpent && activityData.timeSpent >= 10 && description.length > 50) {
       return 'A'
     }
-    
+
     // B급: 구체적 설명
     if (description.length > 20 && this.hasDetailedContent(description)) {
       return 'B'
     }
-    
+
     // C급: 기본 설명
     if (description.length > 5) {
       return 'C'
     }
-    
+
     // D급: 최소 입력
     return 'D'
   }
@@ -181,7 +181,7 @@ export class DashboardIntegration {
       /때문에/,
       /위해/
     ]
-    
+
     return patterns.some(pattern => pattern.test(description))
   }
 
@@ -189,11 +189,11 @@ export class DashboardIntegration {
   private extractActivityName(description: string): string {
     // 첫 문장이나 주요 동사를 활동명으로 추출
     const firstSentence = description.split(/[.!?]/)[0].trim()
-    
+
     if (firstSentence.length <= 20) {
       return firstSentence
     }
-    
+
     // 주요 동사 추출 (간단한 규칙 기반)
     const verbs = ['운동', '공부', '독서', '요리', '청소', '산책', '명상', '글쓰기']
     for (const verb of verbs) {
@@ -201,7 +201,7 @@ export class DashboardIntegration {
         return verb
       }
     }
-    
+
     // 기본값: 처음 20자
     return description.substring(0, 20) + '...'
   }
@@ -212,7 +212,7 @@ export class DashboardIntegration {
     hours: number
   ): Promise<Activity[]> {
     const since = new Date(Date.now() - hours * 60 * 60 * 1000)
-    
+
     return await db.activities
       .where('userId')
       .equals(userId)
@@ -232,7 +232,7 @@ export class DashboardIntegration {
       .where('[userId+statType]')
       .equals([userId, statType])
       .first()
-    
+
     return stat?.level || 1
   }
 
@@ -242,7 +242,7 @@ export class DashboardIntegration {
       .where('[userId+statType]')
       .equals([userId, statType])
       .first()
-    
+
     return stat?.totalExp || 0
   }
 
@@ -257,20 +257,20 @@ export class DashboardIntegration {
       .where('id')
       .equals('character')
       .first()
-    
+
     if (characterData?.data && typeof characterData.data === 'object' && !Array.isArray(characterData.data)) {
       const dataObj = characterData.data as { stats?: Record<string, number> }
       const stats = dataObj.stats || {}
       const currentValue = stats[statType] || 0
-      
+
       // 경험치를 스탯 포인트로 변환 (10 exp = 1 point)
       const pointsGained = Math.floor(expGained / 10)
-      
+
       stats[statType] = Math.min(
         currentValue + pointsGained,
         100 // Maximum stat value
       )
-      
+
       await db.playerData.put({
         id: 'character',
         data: { ...dataObj, stats },
@@ -285,7 +285,7 @@ export class DashboardIntegration {
     statType: StatType
   ): Promise<DailyProgress> {
     const limitResult = await this.limitService.getDailyLimit(userId, statType)
-    
+
     if (!limitResult.success) {
       return {
         currentExp: 0,
@@ -295,10 +295,10 @@ export class DashboardIntegration {
         bonusLimit: 0
       }
     }
-    
+
     const limit = limitResult.data
     const totalLimit = limit.baseLimit + limit.bonusLimit
-    
+
     return {
       currentExp: limit.currentExp,
       dailyLimit: totalLimit,
@@ -312,17 +312,17 @@ export class DashboardIntegration {
   async getAllStatLevels(userId: string): Promise<Record<StatType, LevelSummary>> {
     const statTypes: StatType[] = ['health', 'learning', 'relationship', 'achievement']
     const levels: Record<string, LevelSummary> = {}
-    
+
     for (const statType of statTypes) {
       const stat = await db.playerStats
         .where('[userId+statType]')
         .equals([userId, statType])
         .first()
-      
+
       if (stat) {
         const levelInfo = ExpCalculator.calculateLevel(stat.totalExp)
         const dailyProgress = await this.getDailyProgress(userId, statType)
-        
+
         levels[statType] = {
           level: levelInfo.level,
           currentExp: levelInfo.currentExp,
@@ -342,7 +342,7 @@ export class DashboardIntegration {
         }
       }
     }
-    
+
     return levels as Record<StatType, LevelSummary>
   }
 
@@ -356,26 +356,26 @@ export class DashboardIntegration {
         return new Date(activity.timestamp) >= weekAgo
       })
       .toArray()
-    
+
     const statBreakdown: Record<string, number> = {}
     const dailyExp: Record<string, number> = {}
     let totalExp = 0
-    
+
     for (const activity of activities) {
       totalExp += activity.experience
-      
+
       // 스탯별 분류
       statBreakdown[activity.statType] = (statBreakdown[activity.statType] || 0) + activity.experience
-      
+
       // 일별 분류
       const dateKey = new Date(activity.timestamp).toISOString().split('T')[0]
       dailyExp[dateKey] = (dailyExp[dateKey] || 0) + activity.experience
     }
-    
+
     const avgDaily = Object.keys(dailyExp).length > 0
       ? totalExp / Object.keys(dailyExp).length
       : 0
-    
+
     return {
       totalExp,
       totalActivities: activities.length,
@@ -393,11 +393,11 @@ export class DashboardIntegration {
     const distribution: Record<string, number> = {
       D: 0, C: 0, B: 0, A: 0, S: 0
     }
-    
+
     for (const activity of activities) {
       distribution[activity.quality]++
     }
-    
+
     return distribution as Record<ActivityQuality, number>
   }
 }

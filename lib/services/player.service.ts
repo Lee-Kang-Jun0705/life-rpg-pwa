@@ -50,9 +50,9 @@ export interface AddItemOptions {
 
 class PlayerService {
   private static instance: PlayerService
-  
+
   private constructor() {}
-  
+
   static getInstance(): PlayerService {
     if (!PlayerService.instance) {
       PlayerService.instance = new PlayerService()
@@ -72,7 +72,9 @@ class PlayerService {
         this.getFullInventory(userId)
       ])
 
-      if (!profile || !resources) return null
+      if (!profile || !resources) {
+        return null
+      }
 
       return {
         id: userId,
@@ -114,7 +116,7 @@ class PlayerService {
   async addItemToInventory(_userId: string, _options: AddItemOptions): Promise<boolean> {
     try {
       const { itemId, type, quantity = 1 } = options
-      
+
       // 아이템 데이터 확인
       const itemData = ALL_ITEMS[itemId]
       if (!itemData) {
@@ -153,7 +155,7 @@ class PlayerService {
     try {
       const equipment = await dbHelpers.getEquipmentInventory(userId)
       const item = equipment?.items.find(i => i.itemId === itemId)
-      
+
       if (!item) {
         console.error('Item not found in equipment inventory')
         return false
@@ -168,7 +170,7 @@ class PlayerService {
       // 새 아이템 장착
       await db.equipmentInventory.update({
         where: { id: item.id },
-        data: { 
+        data: {
           isEquipped: true,
           equippedSlot: slot
         }
@@ -189,7 +191,7 @@ class PlayerService {
     try {
       await db.equipmentInventory.update({
         where: { id: itemDbId },
-        data: { 
+        data: {
           isEquipped: false,
           equippedSlot: null
         }
@@ -209,7 +211,7 @@ class PlayerService {
   private async getFullInventory(_userId: string): Promise<PlayerInventoryItem[]> {
     try {
       const items: PlayerInventoryItem[] = []
-      
+
       // 장비 인벤토리
       const equipment = await dbHelpers.getEquipmentInventory(userId)
       if (equipment) {
@@ -231,7 +233,7 @@ class PlayerService {
         .where('userId')
         .equals(userId)
         .toArray()
-      
+
       inventory.forEach(item => {
         items.push({
           itemId: item.itemId,
@@ -254,16 +256,18 @@ class PlayerService {
    * 장비 데이터 매핑
    */
   private mapEquipmentData(equipment: EquipmentInventory | null): PlayerEquipment {
-    if (!equipment) return {}
-    
+    if (!equipment) {
+      return {}
+    }
+
     const equipped: PlayerEquipment = {}
-    
+
     equipment.items.forEach(item => {
       if (item.isEquipped && item.equippedSlot) {
         equipped[item.equippedSlot as keyof PlayerEquipment] = item.itemId
       }
     })
-    
+
     return equipped
   }
 
@@ -273,19 +277,21 @@ class PlayerService {
   async sellItems(_userId: string, itemIds: string[]): Promise<number> {
     try {
       let totalGold = 0
-      
+
       for (const itemId of itemIds) {
         const itemData = ALL_ITEMS[itemId]
-        if (!itemData) continue
-        
+        if (!itemData) {
+          continue
+        }
+
         // TODO: 인벤토리에서 아이템 제거 로직
         totalGold += itemData.value
       }
-      
+
       if (totalGold > 0) {
         await this.updateGold(userId, totalGold)
       }
-      
+
       return totalGold
     } catch (error) {
       console.error('Failed to sell items:', error)

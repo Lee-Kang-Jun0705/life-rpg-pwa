@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { 
+import {
   Swords,
   Shield,
   Heart,
@@ -28,15 +28,15 @@ interface DungeonStatsProps {
   showAdvancedStats?: boolean
 }
 
-export function DungeonStats({ 
-  stats, 
+export function DungeonStats({
+  stats,
   title = '전투 통계',
-  showAdvancedStats = false 
+  showAdvancedStats = false
 }: DungeonStatsProps) {
   return (
     <div className="bg-gray-800 rounded-xl p-6">
       <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
-      
+
       {/* 기본 통계 */}
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="bg-gray-700/50 rounded-lg p-3">

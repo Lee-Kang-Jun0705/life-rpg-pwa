@@ -17,9 +17,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 10,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   copper_ore: {
     id: 'copper_ore',
     name: '구리 광석',
@@ -30,9 +30,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 8,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   silver_ore: {
     id: 'silver_ore',
     name: '은광석',
@@ -43,9 +43,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 50,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   gold_ore: {
     id: 'gold_ore',
     name: '금광석',
@@ -56,9 +56,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 100,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   mithril_ore: {
     id: 'mithril_ore',
     name: '미스릴 광석',
@@ -69,9 +69,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 300,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   adamantium_ore: {
     id: 'adamantium_ore',
     name: '아다만티움 광석',
@@ -82,7 +82,7 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 800,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
 
   // === 보석류 ===
@@ -96,9 +96,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 80,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   rough_sapphire: {
     id: 'rough_sapphire',
     name: '다듬지 않은 사파이어',
@@ -109,9 +109,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 80,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   rough_emerald: {
     id: 'rough_emerald',
     name: '다듬지 않은 에메랄드',
@@ -122,9 +122,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 80,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   rough_diamond: {
     id: 'rough_diamond',
     name: '다듬지 않은 다이아몬드',
@@ -135,9 +135,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 200,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   star_fragment: {
     id: 'star_fragment',
     name: '별의 조각',
@@ -148,7 +148,7 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 500,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   // === 가죽/천 재료 ===
@@ -162,9 +162,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 25,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   bear_pelt: {
     id: 'bear_pelt',
     name: '곰 가죽',
@@ -175,9 +175,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 40,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   silk_thread: {
     id: 'silk_thread',
     name: '비단실',
@@ -188,9 +188,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 60,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   magic_cloth: {
     id: 'magic_cloth',
     name: '마법 천',
@@ -201,9 +201,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 150,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   dragon_leather: {
     id: 'dragon_leather',
     name: '용가죽',
@@ -214,7 +214,7 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 1000,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   // === 몬스터 재료 ===
@@ -228,9 +228,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 15,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   orc_fang: {
     id: 'orc_fang',
     name: '오크 송곳니',
@@ -241,9 +241,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 35,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   troll_blood: {
     id: 'troll_blood',
     name: '트롤의 피',
@@ -254,9 +254,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 90,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   dragon_scale: {
     id: 'dragon_scale',
     name: '용의 비늘',
@@ -267,9 +267,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 500,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   phoenix_feather: {
     id: 'phoenix_feather',
     name: '불사조 깃털',
@@ -280,7 +280,7 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 2000,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   // === 마법 재료 ===
@@ -294,9 +294,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 20,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   elemental_essence: {
     id: 'elemental_essence',
     name: '원소 정수',
@@ -307,9 +307,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 100,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   arcane_crystal: {
     id: 'arcane_crystal',
     name: '비전 수정',
@@ -320,9 +320,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 250,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   void_essence: {
     id: 'void_essence',
     name: '공허의 정수',
@@ -333,7 +333,7 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 750,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   // === 강화 재료 ===
@@ -347,9 +347,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 50,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   enhancement_stone_advanced: {
     id: 'enhancement_stone_advanced',
     name: '상급 강화석',
@@ -360,9 +360,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 200,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   enhancement_stone_master: {
     id: 'enhancement_stone_master',
     name: '마스터 강화석',
@@ -373,9 +373,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 500,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   protection_scroll: {
     id: 'protection_scroll',
     name: '보호 주문서',
@@ -386,7 +386,7 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 1000,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   // === 특수 재료 ===
@@ -400,9 +400,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 400,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   soul_shard: {
     id: 'soul_shard',
     name: '영혼의 파편',
@@ -413,9 +413,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 600,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   time_crystal: {
     id: 'time_crystal',
     name: '시간의 수정',
@@ -426,9 +426,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 1500,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   chaos_orb: {
     id: 'chaos_orb',
     name: '혼돈의 구슬',
@@ -439,7 +439,7 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 3000,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   // === 제작 재료 ===
@@ -453,9 +453,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 5,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   hardwood: {
     id: 'hardwood',
     name: '단단한 나무',
@@ -466,9 +466,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 25,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   enchanted_wood: {
     id: 'enchanted_wood',
     name: '마법 나무',
@@ -479,9 +479,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 120,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
-  
+
   living_root: {
     id: 'living_root',
     name: '살아있는 뿌리',
@@ -492,9 +492,9 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 350,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
-  
+
   world_tree_branch: {
     id: 'world_tree_branch',
     name: '세계수의 가지',
@@ -505,6 +505,6 @@ export const MATERIAL_ITEMS: Record<string, Item> = {
     baseStats: {},
     value: 5000,
     stackable: true,
-    maxStack: 10,
+    maxStack: 10
   }
 }

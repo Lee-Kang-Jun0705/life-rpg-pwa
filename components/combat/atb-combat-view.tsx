@@ -10,9 +10,9 @@ import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
-import { 
-  Heart, Shield, Zap, Swords, Clock, FastForward, 
-  Pause, Play, Settings, Sparkles 
+import {
+  Heart, Shield, Zap, Swords, Clock, FastForward,
+  Pause, Play, Settings, Sparkles
 } from 'lucide-react'
 
 interface CombatRewards {
@@ -86,7 +86,7 @@ export function ATBCombatView({ combatId, onBattleEnd }: ATBCombatViewProps) {
   if (!combatState) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     )
   }
@@ -133,7 +133,7 @@ export function ATBCombatView({ combatId, onBattleEnd }: ATBCombatViewProps) {
         {/* 플레이어 측 */}
         <div className="w-1/3">
           {playerCombatant && (
-            <CombatantCard 
+            <CombatantCard
               combatant={playerCombatant}
               isPlayer={true}
             />
@@ -217,7 +217,7 @@ function CombatantCard({ combatant, isPlayer }: { combatant: ATBCombatant; isPla
             <span>{combatant.stats.currentHp}/{combatant.stats.maxHp}</span>
           </div>
           <Progress value={hpPercent} className="h-2 bg-gray-700">
-            <div 
+            <div
               className="h-full bg-gradient-to-r from-red-600 to-red-400 transition-all"
               style={{ width: `${hpPercent}%` }}
             />
@@ -235,7 +235,7 @@ function CombatantCard({ combatant, isPlayer }: { combatant: ATBCombatant; isPla
               <span>{combatant.stats.currentMp}/{combatant.stats.maxMp}</span>
             </div>
             <Progress value={mpPercent} className="h-2 bg-gray-700">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all"
                 style={{ width: `${mpPercent}%` }}
               />
@@ -253,10 +253,10 @@ function CombatantCard({ combatant, isPlayer }: { combatant: ATBCombatant; isPla
             <span>{Math.floor(atbPercent)}%</span>
           </div>
           <Progress value={atbPercent} className="h-3 bg-gray-700">
-            <div 
+            <div
               className={`h-full transition-all ${
-                atbPercent >= 100 
-                  ? 'bg-gradient-to-r from-yellow-400 to-yellow-300 animate-pulse' 
+                atbPercent >= 100
+                  ? 'bg-gradient-to-r from-yellow-400 to-yellow-300 animate-pulse'
                   : 'bg-gradient-to-r from-yellow-600 to-yellow-500'
               }`}
               style={{ width: `${atbPercent}%` }}
@@ -295,7 +295,7 @@ function CombatantCard({ combatant, isPlayer }: { combatant: ATBCombatant; isPla
 // 행동 표시 컴포넌트
 function ActionDisplay({ action }: { action: CombatAction }) {
   const actor = action.actorId.includes('player') ? '플레이어' : '몬스터'
-  
+
   return (
     <div className="text-white">
       <div className="text-lg font-bold mb-1">

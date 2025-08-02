@@ -69,7 +69,7 @@ export interface CollectionFilter {
 }
 
 // 도감 정렬 옵션
-export type CollectionSortOption = 
+export type CollectionSortOption =
   | 'id'
   | 'name'
   | 'level'

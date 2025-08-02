@@ -9,10 +9,10 @@ import { InventoryFilters } from './InventoryFilters'
 import { inventoryService, type InventoryState } from '@/lib/services/inventory.service'
 import { persistenceService } from '@/lib/services/persistence.service'
 import type { GeneratedItem, InventoryItem, ItemFilter, ItemSortOption } from '@/lib/types/item-system'
-import { 
-  Package, 
-  Filter, 
-  Search, 
+import {
+  Package,
+  Filter,
+  Search,
   Coins,
   Grid3X3,
   User,
@@ -43,7 +43,7 @@ export function InventoryScreen({ onClose }: InventoryScreenProps) {
     maxSlots: 50,
     usedSlots: 0
   })
-  
+
   const [selectedItem, setSelectedItem] = useState<GeneratedItem | null>(null)
   const [filter, setFilter] = useState<ItemFilter>({})
   const [sortBy, setSortBy] = useState<ItemSortOption>('obtainedAt')
@@ -116,12 +116,12 @@ export function InventoryScreen({ onClose }: InventoryScreenProps) {
     }
   }
 
-  const handleUseItem = async (item: GeneratedItem) => {
+  const handleUseItem = async(item: GeneratedItem) => {
     // 스킬북인 경우
     if (item.type === 'consumable' && item.consumableEffect?.type === 'skill_book') {
       const { skillBookService } = await import('@/lib/services/skillbook.service')
       const result = await skillBookService.useSkillBook(item.uniqueId)
-      
+
       if (result.success) {
         // 성공 알림
         console.log(result.message)

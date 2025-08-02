@@ -28,8 +28,8 @@ const STAT_NAMES: Record<StatType, string> = {
   achievement: '성취'
 }
 
-export function BalanceIndicator({ 
-  userId, 
+export function BalanceIndicator({
+  userId,
   className,
   showDetails = true,
   compact = false
@@ -38,7 +38,7 @@ export function BalanceIndicator({
 
   if (isLoading) {
     return (
-      <div className={cn("animate-pulse", className)}>
+      <div className={cn('animate-pulse', className)}>
         <div className="h-24 bg-gray-200 rounded-lg" />
       </div>
     )
@@ -49,25 +49,41 @@ export function BalanceIndicator({
   }
 
   const getBalanceColor = (score: number) => {
-    if (score >= 90) return 'text-green-600'
-    if (score >= 70) return 'text-blue-600'
-    if (score >= 50) return 'text-yellow-600'
-    if (score >= 30) return 'text-orange-600'
+    if (score >= 90) {
+      return 'text-green-600'
+    }
+    if (score >= 70) {
+      return 'text-blue-600'
+    }
+    if (score >= 50) {
+      return 'text-yellow-600'
+    }
+    if (score >= 30) {
+      return 'text-orange-600'
+    }
     return 'text-red-600'
   }
 
   const getProgressColor = (score: number) => {
-    if (score >= 90) return 'bg-green-500'
-    if (score >= 70) return 'bg-blue-500'
-    if (score >= 50) return 'bg-yellow-500'
-    if (score >= 30) return 'bg-orange-500'
+    if (score >= 90) {
+      return 'bg-green-500'
+    }
+    if (score >= 70) {
+      return 'bg-blue-500'
+    }
+    if (score >= 50) {
+      return 'bg-yellow-500'
+    }
+    if (score >= 30) {
+      return 'bg-orange-500'
+    }
     return 'bg-red-500'
   }
 
   if (compact) {
     return (
-      <div className={cn("flex items-center gap-2", className)}>
-        <TrendingUp className={cn("w-4 h-4", getBalanceColor(balanceState.balanceScore))} />
+      <div className={cn('flex items-center gap-2', className)}>
+        <TrendingUp className={cn('w-4 h-4', getBalanceColor(balanceState.balanceScore))} />
         <span className="text-sm font-medium">
           균형: {balanceState.balanceScore}%
         </span>
@@ -81,17 +97,17 @@ export function BalanceIndicator({
   }
 
   return (
-    <div className={cn("space-y-3", className)}>
+    <div className={cn('space-y-3', className)}>
       {/* 균형 점수 */}
       <div>
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-medium">스탯 균형도</h3>
-          <span className={cn("text-sm font-bold", getBalanceColor(balanceState.balanceScore))}>
+          <span className={cn('text-sm font-bold', getBalanceColor(balanceState.balanceScore))}>
             {balanceState.balanceScore}%
           </span>
         </div>
-        <Progress 
-          value={balanceState.balanceScore} 
+        <Progress
+          value={balanceState.balanceScore}
           className="h-2"
           indicatorClassName={getProgressColor(balanceState.balanceScore)}
         />
@@ -103,22 +119,22 @@ export function BalanceIndicator({
           const statType = stat as StatType
           const isHighest = statType === balanceState.highestStat.type
           const isLowest = statType === balanceState.lowestStat.type
-          
+
           return (
-            <div 
+            <div
               key={stat}
               className={cn(
-                "flex items-center gap-2 p-2 rounded-lg border",
-                isHighest && "border-green-300 bg-green-50",
-                isLowest && "border-red-300 bg-red-50",
-                !isHighest && !isLowest && "border-gray-200 bg-gray-50"
+                'flex items-center gap-2 p-2 rounded-lg border',
+                isHighest && 'border-green-300 bg-green-50',
+                isLowest && 'border-red-300 bg-red-50',
+                !isHighest && !isLowest && 'border-gray-200 bg-gray-50'
               )}
             >
               <div className={cn(
-                "flex items-center justify-center w-8 h-8 rounded-full",
-                isHighest && "bg-green-200 text-green-700",
-                isLowest && "bg-red-200 text-red-700",
-                !isHighest && !isLowest && "bg-gray-200 text-gray-700"
+                'flex items-center justify-center w-8 h-8 rounded-full',
+                isHighest && 'bg-green-200 text-green-700',
+                isLowest && 'bg-red-200 text-red-700',
+                !isHighest && !isLowest && 'bg-gray-200 text-gray-700'
               )}>
                 {STAT_ICONS[statType]}
               </div>
@@ -136,18 +152,18 @@ export function BalanceIndicator({
       {/* 경험치 보너스/페널티 */}
       {balanceState.balanceMultiplier !== 1 && (
         <div className={cn(
-          "flex items-center gap-2 p-2 rounded-lg",
-          balanceState.balanceMultiplier > 1 ? "bg-blue-50" : "bg-orange-50"
+          'flex items-center gap-2 p-2 rounded-lg',
+          balanceState.balanceMultiplier > 1 ? 'bg-blue-50' : 'bg-orange-50'
         )}>
           <TrendingUp className={cn(
-            "w-4 h-4",
-            balanceState.balanceMultiplier > 1 ? "text-blue-600" : "text-orange-600"
+            'w-4 h-4',
+            balanceState.balanceMultiplier > 1 ? 'text-blue-600' : 'text-orange-600'
           )} />
           <span className={cn(
-            "text-sm font-medium",
-            balanceState.balanceMultiplier > 1 ? "text-blue-800" : "text-orange-800"
+            'text-sm font-medium',
+            balanceState.balanceMultiplier > 1 ? 'text-blue-800' : 'text-orange-800'
           )}>
-            균형 {balanceState.balanceMultiplier > 1 ? '보너스' : '페널티'}: 
+            균형 {balanceState.balanceMultiplier > 1 ? '보너스' : '페널티'}:
             {balanceState.balanceMultiplier > 1 ? '+' : ''}{Math.round((balanceState.balanceMultiplier - 1) * 100)}%
           </span>
         </div>
@@ -185,7 +201,7 @@ export function BalanceIndicator({
       {/* 레벨 격차 정보 */}
       {showDetails && balanceState.levelGap > 5 && (
         <div className="text-xs text-gray-600 text-center">
-          레벨 격차: {balanceState.levelGap} 
+          레벨 격차: {balanceState.levelGap}
           (최고 Lv.{balanceState.highestStat.level} - 최저 Lv.{balanceState.lowestStat.level})
         </div>
       )}

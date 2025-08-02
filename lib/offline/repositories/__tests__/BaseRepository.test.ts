@@ -35,20 +35,20 @@ describe('BaseRepository', () => {
   let repository: TestRepository
   const testUserId = 'test-user-123'
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     // 새로운 데이터베이스 인스턴스 생성
     db = new TestDatabase()
     await db.open()
     repository = new TestRepository(db)
   })
 
-  afterEach(async () => {
+  afterEach(async() => {
     // 데이터베이스 정리
     await db.delete()
   })
 
   describe('create', () => {
-    it('새로운 엔티티를 생성해야 함', async () => {
+    it('새로운 엔티티를 생성해야 함', async() => {
       const testData: Omit<TestEntity, 'id' | 'createdAt' | 'updatedAt'> = {
         userId: testUserId,
         name: 'Test Entity',
@@ -66,7 +66,7 @@ describe('BaseRepository', () => {
       expect(result.updatedAt).toBeInstanceOf(Date)
     })
 
-    it('ID가 제공된 경우 사용해야 함', async () => {
+    it('ID가 제공된 경우 사용해야 함', async() => {
       const customId = 'custom-id-123'
       const testData: Partial<TestEntity> = {
         id: customId,
@@ -82,7 +82,7 @@ describe('BaseRepository', () => {
   })
 
   describe('findById', () => {
-    it('ID로 엔티티를 찾아야 함', async () => {
+    it('ID로 엔티티를 찾아야 함', async() => {
       const created = await repository.create({
         userId: testUserId,
         name: 'Test Entity',
@@ -96,7 +96,7 @@ describe('BaseRepository', () => {
       expect(found?.name).toBe('Test Entity')
     })
 
-    it('존재하지 않는 ID에 대해 undefined를 반환해야 함', async () => {
+    it('존재하지 않는 ID에 대해 undefined를 반환해야 함', async() => {
       const found = await repository.findById('non-existent-id')
 
       expect(found).toBeUndefined()
@@ -104,7 +104,7 @@ describe('BaseRepository', () => {
   })
 
   describe('findByUserId', () => {
-    it('userId로 모든 엔티티를 찾아야 함', async () => {
+    it('userId로 모든 엔티티를 찾아야 함', async() => {
       // 여러 엔티티 생성
       await repository.create({ userId: testUserId, name: 'Entity 1', value: 100 })
       await repository.create({ userId: testUserId, name: 'Entity 2', value: 200 })
@@ -118,7 +118,7 @@ describe('BaseRepository', () => {
       expect(results.map(r => r.name)).toContain('Entity 2')
     })
 
-    it('엔티티가 없는 경우 빈 배열을 반환해야 함', async () => {
+    it('엔티티가 없는 경우 빈 배열을 반환해야 함', async() => {
       const results = await repository.findByUserId('non-existent-user')
 
       expect(results).toEqual([])
@@ -126,7 +126,7 @@ describe('BaseRepository', () => {
   })
 
   describe('update', () => {
-    it('엔티티를 업데이트해야 함', async () => {
+    it('엔티티를 업데이트해야 함', async() => {
       const created = await repository.create({
         userId: testUserId,
         name: 'Original Name',
@@ -150,7 +150,7 @@ describe('BaseRepository', () => {
       expect(updated.updatedAt.getTime()).toBeGreaterThan(originalCreatedAt.getTime())
     })
 
-    it('존재하지 않는 ID에 대해 에러를 던져야 함', async () => {
+    it('존재하지 않는 ID에 대해 에러를 던져야 함', async() => {
       await expect(
         repository.update('non-existent-id', { name: 'Updated' })
       ).rejects.toThrow()
@@ -158,7 +158,7 @@ describe('BaseRepository', () => {
   })
 
   describe('delete', () => {
-    it('엔티티를 삭제해야 함', async () => {
+    it('엔티티를 삭제해야 함', async() => {
       const created = await repository.create({
         userId: testUserId,
         name: 'To Delete',
@@ -171,7 +171,7 @@ describe('BaseRepository', () => {
       expect(found).toBeUndefined()
     })
 
-    it('존재하지 않는 ID 삭제 시 에러를 던지지 않아야 함', async () => {
+    it('존재하지 않는 ID 삭제 시 에러를 던지지 않아야 함', async() => {
       await expect(
         repository.delete('non-existent-id')
       ).resolves.not.toThrow()
@@ -179,7 +179,7 @@ describe('BaseRepository', () => {
   })
 
   describe('findAll', () => {
-    it('모든 엔티티를 반환해야 함', async () => {
+    it('모든 엔티티를 반환해야 함', async() => {
       await repository.create({ userId: 'user1', name: 'Entity 1', value: 100 })
       await repository.create({ userId: 'user2', name: 'Entity 2', value: 200 })
       await repository.create({ userId: 'user3', name: 'Entity 3', value: 300 })
@@ -194,7 +194,7 @@ describe('BaseRepository', () => {
   })
 
   describe('deleteByUserId', () => {
-    it('특정 userId의 모든 엔티티를 삭제해야 함', async () => {
+    it('특정 userId의 모든 엔티티를 삭제해야 함', async() => {
       await repository.create({ userId: testUserId, name: 'Entity 1', value: 100 })
       await repository.create({ userId: testUserId, name: 'Entity 2', value: 200 })
       await repository.create({ userId: 'other-user', name: 'Entity 3', value: 300 })
@@ -210,7 +210,7 @@ describe('BaseRepository', () => {
   })
 
   describe('count', () => {
-    it('전체 엔티티 수를 반환해야 함', async () => {
+    it('전체 엔티티 수를 반환해야 함', async() => {
       await repository.create({ userId: 'user1', name: 'Entity 1', value: 100 })
       await repository.create({ userId: 'user2', name: 'Entity 2', value: 200 })
       await repository.create({ userId: 'user3', name: 'Entity 3', value: 300 })
@@ -220,7 +220,7 @@ describe('BaseRepository', () => {
       expect(count).toBe(3)
     })
 
-    it('빈 테이블에서 0을 반환해야 함', async () => {
+    it('빈 테이블에서 0을 반환해야 함', async() => {
       const count = await repository.count()
 
       expect(count).toBe(0)
@@ -228,7 +228,7 @@ describe('BaseRepository', () => {
   })
 
   describe('exists', () => {
-    it('엔티티가 존재하는 경우 true를 반환해야 함', async () => {
+    it('엔티티가 존재하는 경우 true를 반환해야 함', async() => {
       const created = await repository.create({
         userId: testUserId,
         name: 'Test Entity',
@@ -240,7 +240,7 @@ describe('BaseRepository', () => {
       expect(exists).toBe(true)
     })
 
-    it('엔티티가 존재하지 않는 경우 false를 반환해야 함', async () => {
+    it('엔티티가 존재하지 않는 경우 false를 반환해야 함', async() => {
       const exists = await repository.exists('non-existent-id')
 
       expect(exists).toBe(false)
@@ -248,8 +248,8 @@ describe('BaseRepository', () => {
   })
 
   describe('Transaction 처리', () => {
-    it('트랜잭션 내에서 여러 작업을 수행해야 함', async () => {
-      const results = await db.transaction('rw', db.testEntities, async () => {
+    it('트랜잭션 내에서 여러 작업을 수행해야 함', async() => {
+      const results = await db.transaction('rw', db.testEntities, async() => {
         const entity1 = await repository.create({
           userId: testUserId,
           name: 'Transaction Entity 1',
@@ -266,7 +266,7 @@ describe('BaseRepository', () => {
       })
 
       expect(results).toHaveLength(2)
-      
+
       const allEntities = await repository.findByUserId(testUserId)
       expect(allEntities).toHaveLength(2)
     })

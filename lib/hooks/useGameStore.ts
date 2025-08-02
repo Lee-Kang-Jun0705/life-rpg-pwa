@@ -65,7 +65,7 @@ export function useProfile() {
   const isLoading = useGameStore('isLoading')
   const error = useGameStore('error')
 
-  const initializeProfile = useCallback(async (userId: string = GAME_CONFIG.DEFAULT_USER_ID) => {
+  const initializeProfile = useCallback(async(userId: string = GAME_CONFIG.DEFAULT_USER_ID) => {
     await gameStore.initialize(userId)
   }, [])
 
@@ -85,9 +85,9 @@ export function useStats() {
   const processingStats = useRef(new Set<string>())
   const [isProcessing, setIsProcessing] = useState<Set<string>>(new Set())
 
-  const updateStat = useCallback(async (
-    statType: StatType, 
-    experience: number, 
+  const updateStat = useCallback(async(
+    statType: StatType,
+    experience: number,
     activityName: string
   ) => {
     if (processingStats.current.has(statType)) {
@@ -119,7 +119,7 @@ export function useStats() {
 export function useCombatStats() {
   const combat = useGameStore('combat')
 
-  const heal = useCallback(async (type: 'hp' | 'mp', amount: number) => {
+  const heal = useCallback(async(type: 'hp' | 'mp', amount: number) => {
     await gameStore.heal(type, amount)
   }, [])
 
@@ -145,11 +145,11 @@ export function useGameState() {
     return unsubscribe
   }, [])
 
-  const initializeGame = useCallback(async (userId: string = GAME_CONFIG.DEFAULT_USER_ID) => {
+  const initializeGame = useCallback(async(userId: string = GAME_CONFIG.DEFAULT_USER_ID) => {
     await gameStore.initialize(userId)
   }, [])
 
-  const refreshData = useCallback(async () => {
+  const refreshData = useCallback(async() => {
     await gameStore.refreshFromDatabase()
   }, [])
 
@@ -177,19 +177,19 @@ export function useGameDashboard() {
     }
   }, [])
 
-  const handleStatClick = useCallback(async (statType: string) => {
+  const handleStatClick = useCallback(async(statType: string) => {
     const experience = Math.floor(
       Math.random() * (GAME_CONFIG.MAX_EXPERIENCE_GAIN - GAME_CONFIG.MIN_EXPERIENCE_GAIN + 1)
     ) + GAME_CONFIG.MIN_EXPERIENCE_GAIN
-    
+
     await updateStat(statType as StatType, experience, '직접 활동')
   }, [updateStat])
 
-  const handleStatAction = useCallback(async (statType: string, action: string) => {
+  const handleStatAction = useCallback(async(statType: string, action: string) => {
     const experience = Math.floor(
       Math.random() * (GAME_CONFIG.MAX_EXPERIENCE_GAIN - GAME_CONFIG.MIN_EXPERIENCE_GAIN + 1)
     ) + GAME_CONFIG.MIN_EXPERIENCE_GAIN
-    
+
     await updateStat(statType as StatType, experience, action)
   }, [updateStat])
 
@@ -217,11 +217,11 @@ export function useGameDashboard() {
     loading,
     error,
     isProcessing: new Set<string>(),
-    loadUserData: async () => gameStore.refreshFromDatabase(),
+    loadUserData: async() => gameStore.refreshFromDatabase(),
     handleStatClick,
-    handleVoiceInput: async () => {}, // 별도 구현 필요
+    handleVoiceInput: async() => {}, // 별도 구현 필요
     handleStatAction,
-    retry: async () => gameStore.refreshFromDatabase(),
+    retry: async() => gameStore.refreshFromDatabase(),
     updateStat,
     calculatedStats
   }

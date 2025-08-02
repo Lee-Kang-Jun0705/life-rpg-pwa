@@ -31,5 +31,5 @@ export const scaleIn = {
 // 기본 transition
 export const defaultTransition = {
   duration: 0.3,
-  ease: "easeInOut"
+  ease: 'easeInOut'
 }

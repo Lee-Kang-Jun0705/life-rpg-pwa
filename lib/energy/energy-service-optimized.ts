@@ -21,7 +21,7 @@ export class OptimizedEnergyService {
     const cached = this.cachedStates.get(userId)
     const lastCalc = this.lastCalculationTime.get(userId) || 0
     const now = Date.now()
-    
+
     // 초기 로드 또는 캐시 만료 (10분)
     if (!cached || now - lastCalc > 10 * 60 * 1000) {
       const dbState = await this.loadFromDatabase(userId)
@@ -33,13 +33,13 @@ export class OptimizedEnergyService {
     // 시간 경과에 따른 에너지 회복 계산
     const timeDiff = now - cached.lastEnergyUpdate.getTime()
     const regenCycles = Math.floor(timeDiff / (ENERGY_CONFIG.REGEN_INTERVAL * 1000))
-    
+
     if (regenCycles > 0) {
       const newEnergy = Math.min(
         cached.energy.current + (regenCycles * ENERGY_CONFIG.REGEN_AMOUNT),
         cached.energy.max
       )
-      
+
       // 상태 업데이트
       const updatedState: PlayerEnergyState = {
         ...cached,
@@ -49,51 +49,55 @@ export class OptimizedEnergyService {
         },
         lastEnergyUpdate: new Date(cached.lastEnergyUpdate.getTime() + (regenCycles * ENERGY_CONFIG.REGEN_INTERVAL * 1000))
       }
-      
+
       this.cachedStates.set(userId, updatedState)
-      
+
       // 10회복마다 DB 저장 (비동기)
       if (regenCycles >= 10) {
         this.saveToDatabase(userId, updatedState).catch(console.error)
       }
-      
+
       return updatedState
     }
-    
+
     return cached
   }
 
   // 다음 회복까지 남은 시간 계산 (실시간)
   getTimeUntilNextRegen(state: PlayerEnergyState): number {
-    if (state.energy.current >= state.energy.max) return 0
-    
+    if (state.energy.current >= state.energy.max) {
+      return 0
+    }
+
     const now = Date.now()
     const lastUpdate = state.lastEnergyUpdate.getTime()
     const timeSinceLastRegen = (now - lastUpdate) / 1000
     const timeUntilNext = ENERGY_CONFIG.REGEN_INTERVAL - (timeSinceLastRegen % ENERGY_CONFIG.REGEN_INTERVAL)
-    
+
     return Math.ceil(timeUntilNext)
   }
 
   // 전체 회복까지 시간 계산
   getTimeUntilFull(state: PlayerEnergyState): number {
-    if (state.energy.current >= state.energy.max) return 0
-    
+    if (state.energy.current >= state.energy.max) {
+      return 0
+    }
+
     const energyNeeded = state.energy.max - state.energy.current
     const cyclesNeeded = Math.ceil(energyNeeded / ENERGY_CONFIG.REGEN_AMOUNT)
     const timeUntilNext = this.getTimeUntilNextRegen(state)
-    
+
     return timeUntilNext + ((cyclesNeeded - 1) * ENERGY_CONFIG.REGEN_INTERVAL)
   }
 
   // 에너지 사용 (즉시 DB 저장)
   async consumeEnergy(userId: string, amount: number): Promise<PlayerEnergyState> {
     const state = await this.calculateEnergyState(userId)
-    
+
     if (state.energy.current < amount) {
       throw new Error('에너지가 부족합니다')
     }
-    
+
     const updatedState: PlayerEnergyState = {
       ...state,
       energy: {
@@ -102,30 +106,30 @@ export class OptimizedEnergyService {
       },
       totalEnergyUsed: state.totalEnergyUsed + amount
     }
-    
+
     // 즉시 저장
     await this.saveToDatabase(userId, updatedState)
     this.cachedStates.set(userId, updatedState)
     this.lastCalculationTime.set(userId, Date.now())
-    
+
     return updatedState
   }
 
   // 일일 보너스 (사용자 액션)
   async claimDailyBonus(userId: string): Promise<PlayerEnergyState> {
     const state = await this.calculateEnergyState(userId)
-    
+
     // 보너스 수령 가능 여부 체크
     if (state.lastDailyBonus) {
       const lastClaim = new Date(state.lastDailyBonus)
       const now = new Date()
       const timeDiff = now.getTime() - lastClaim.getTime()
-      
+
       if (timeDiff < 24 * 60 * 60 * 1000) {
         throw new Error('일일 보너스는 24시간마다 받을 수 있습니다')
       }
     }
-    
+
     const updatedState: PlayerEnergyState = {
       ...state,
       energy: {
@@ -135,12 +139,12 @@ export class OptimizedEnergyService {
       lastDailyBonus: new Date(),
       dailyBonusStreak: this.calculateBonusStreak(state.lastDailyBonus, state.dailyBonusStreak)
     }
-    
+
     // 즉시 저장
     await this.saveToDatabase(userId, updatedState)
     this.cachedStates.set(userId, updatedState)
     this.lastCalculationTime.set(userId, Date.now())
-    
+
     return updatedState
   }
 
@@ -150,14 +154,14 @@ export class OptimizedEnergyService {
     const now = Date.now()
     const lastUpdate = state.lastEnergyUpdate.getTime()
     const offlineTime = now - lastUpdate
-    
+
     // 최대 24시간까지만 계산
     const maxOfflineTime = 24 * 60 * 60 * 1000
     const effectiveTime = Math.min(offlineTime, maxOfflineTime)
-    
+
     const regenCycles = Math.floor(effectiveTime / (ENERGY_CONFIG.REGEN_INTERVAL * 1000))
     const energyGained = regenCycles * ENERGY_CONFIG.REGEN_AMOUNT
-    
+
     if (energyGained > 0) {
       const updatedState: PlayerEnergyState = {
         ...state,
@@ -167,14 +171,14 @@ export class OptimizedEnergyService {
         },
         lastEnergyUpdate: new Date()
       }
-      
+
       await this.saveToDatabase(userId, updatedState)
       this.cachedStates.set(userId, updatedState)
       this.lastCalculationTime.set(userId, now)
-      
+
       return updatedState
     }
-    
+
     return state
   }
 
@@ -198,7 +202,7 @@ export class OptimizedEnergyService {
     } catch (error) {
       console.error('Failed to load energy state:', error)
     }
-    
+
     // 기본값
     return {
       userId,
@@ -225,12 +229,14 @@ export class OptimizedEnergyService {
 
   // 보너스 연속일수 계산
   private calculateBonusStreak(lastBonus: Date | null, currentStreak: number): number {
-    if (!lastBonus) return 1
-    
+    if (!lastBonus) {
+      return 1
+    }
+
     const now = new Date()
     const diff = now.getTime() - lastBonus.getTime()
     const daysDiff = Math.floor(diff / (24 * 60 * 60 * 1000))
-    
+
     return daysDiff === 1 ? currentStreak + 1 : 1
   }
 }

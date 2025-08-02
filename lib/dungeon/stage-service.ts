@@ -2,18 +2,18 @@
 // 던전 내 스테이지 진행 및 관리
 
 import { dbHelpers } from '@/lib/database'
-import type { 
-  Stage, 
-  StageProgress, 
-  StageResult, 
+import type {
+  Stage,
+  StageProgress,
+  StageResult,
   StageClearRating,
-  StageObjective 
+  StageObjective
 } from '@/lib/types/stage'
-import { 
-  getStagesForDungeon, 
-  getStageById, 
+import {
+  getStagesForDungeon,
+  getStageById,
   getBattleConfig,
-  DUNGEON_STAGES_MAP 
+  DUNGEON_STAGES_MAP
 } from './stage-data'
 import { calculateStars } from '@/lib/types/stage'
 import { GameError } from '@/lib/types/game-common'
@@ -22,6 +22,16 @@ interface ProgressObjective {
   id: string
   current: number
   completed: boolean
+}
+
+// 스테이지 진행 상황 맵 타입
+interface StageProgressMap {
+  stageId: string
+  cleared: boolean
+  stars: number
+  bestTime?: number
+  objectives: ProgressObjective[]
+  completedAt?: Date
 }
 
 // 스테이지 진행 데이터 인터페이스
@@ -41,7 +51,7 @@ export interface StageProgressData {
 
 export class StageService {
   private static instance: StageService
-  
+
   static getInstance(): StageService {
     if (!StageService.instance) {
       StageService.instance = new StageService()
@@ -51,18 +61,20 @@ export class StageService {
 
   // 던전의 스테이지 진행 상황 가져오기
   async getDungeonStageProgress(
-    userId: string, 
+    userId: string,
     dungeonId: string
   ): Promise<StageProgress[]> {
     try {
       const stages = getStagesForDungeon(dungeonId)
-      if (!stages.length) return []
+      if (!stages.length) {
+        return []
+      }
 
       // DB에서 스테이지별 진행 상황 가져오기
       const progressData = await dbHelpers.getDungeonStageProgress(userId, dungeonId)
 
       // 스테이지별 진행 상황 맵 생성
-      const progressMap = new Map<string, any>()
+      const progressMap = new Map<string, StageProgressMap>()
       progressData.forEach(progress => {
         try {
           progressMap.set(progress.stageId, {
@@ -77,13 +89,13 @@ export class StageService {
           })
         }
       })
-      
+
       return stages.map((stage, index) => {
         const progress = progressMap.get(stage.id)
-        
+
         // 잠금 해제 조건 확인
         let isUnlocked = index === 0 // 첫 스테이지는 항상 열림
-        
+
         if (stage.unlockCondition && index > 0) {
           switch (stage.unlockCondition.type) {
             case 'clear_previous':
@@ -101,7 +113,7 @@ export class StageService {
               break
           }
         }
-        
+
         return {
           stageId: stage.id,
           status: progress?.status || (isUnlocked ? 'available' : 'locked'),
@@ -141,7 +153,7 @@ export class StageService {
       // 스테이지 진행 가능 여부 확인
       const progress = await this.getDungeonStageProgress(userId, dungeonId)
       const stageProgress = progress.find(p => p.stageId === stageId)
-      
+
       if (!stageProgress || stageProgress.status === 'locked') {
         throw new GameError('STAGE_ERROR', '아직 잠긴 스테이지입니다')
       }
@@ -151,11 +163,13 @@ export class StageService {
         status: 'in_progress',
         lastAttemptDate: new Date()
       })
-      
+
       return true
     } catch (error) {
-      if (error instanceof GameError) throw error
-      
+      if (error instanceof GameError) {
+        throw error
+      }
+
       throw new GameError(
         'STAGE_ERROR',
         '스테이지 시작 중 오류가 발생했습니다',
@@ -206,7 +220,7 @@ export class StageService {
       const isFirstClear = true
       const baseRewards = { ...stage.rewards }
       const bonusRewards: { exp?: number; gold?: number; items?: string[] } = {}
-      
+
       // 별 개수에 따른 보너스
       if (stars >= 3) {
         bonusRewards.exp = Math.floor(baseRewards.exp * 0.5)
@@ -268,8 +282,10 @@ export class StageService {
 
       return stageResult
     } catch (error) {
-      if (error instanceof GameError) throw error
-      
+      if (error instanceof GameError) {
+        throw error
+      }
+
       throw new GameError(
         'STAGE_ERROR',
         '스테이지 완료 처리 중 오류가 발생했습니다',
@@ -338,7 +354,9 @@ export class StageService {
   ): Promise<boolean> {
     try {
       const dungeonStages = DUNGEON_STAGES_MAP[dungeonId]
-      if (!dungeonStages) return false
+      if (!dungeonStages) {
+        return false
+      }
 
       const progress = await this.getDungeonStageProgress(userId, dungeonId)
       const completedStages = progress.filter(p => p.status === 'completed').length

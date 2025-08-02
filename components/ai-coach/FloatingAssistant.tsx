@@ -27,8 +27,12 @@ export function FloatingAssistant({ onQuickAction }: FloatingAssistantProps) {
   // 시간대별 인사말
   const getGreeting = () => {
     const hour = new Date().getHours()
-    if (hour < 12) return '☀️ 좋은 아침이에요!'
-    if (hour < 18) return '🌤️ 오후도 힘차게!'
+    if (hour < 12) {
+      return '☀️ 좋은 아침이에요!'
+    }
+    if (hour < 18) {
+      return '🌤️ 오후도 힘차게!'
+    }
     return '🌙 오늘 하루 어떠셨나요?'
   }
 
@@ -48,8 +52,10 @@ export function FloatingAssistant({ onQuickAction }: FloatingAssistantProps) {
   }
 
   const handleSendMessage = () => {
-    if (!message.trim()) return
-    
+    if (!message.trim()) {
+      return
+    }
+
     setIsTyping(true)
     // 실제 메시지 처리 로직
     setTimeout(() => {
@@ -58,7 +64,9 @@ export function FloatingAssistant({ onQuickAction }: FloatingAssistantProps) {
     }, 1500)
   }
 
-  if (!mounted) return null
+  if (!mounted) {
+    return null
+  }
 
   return createPortal(
     <>
@@ -77,10 +85,10 @@ export function FloatingAssistant({ onQuickAction }: FloatingAssistantProps) {
         >
           <span className="text-2xl animate-pulse" aria-hidden="true">🤖</span>
         </Button>
-        
+
         {/* 툴팁 - 스크린 리더 사용자를 위한 개선 */}
         {!isOpen && (
-          <div 
+          <div
             className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-3 py-1 rounded-full whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity"
             role="tooltip"
             aria-hidden="true"
@@ -169,7 +177,7 @@ export function FloatingAssistant({ onQuickAction }: FloatingAssistantProps) {
                   <Send className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               {isTyping && (
                 <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
                   <div className="flex gap-1">

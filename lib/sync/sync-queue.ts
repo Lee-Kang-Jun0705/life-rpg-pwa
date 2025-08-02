@@ -12,7 +12,7 @@ export interface SyncQueueItem {
 
 export class SyncQueue {
   private static instance: SyncQueue
-  
+
   static getInstance(): SyncQueue {
     if (!SyncQueue.instance) {
       SyncQueue.instance = new SyncQueue()
@@ -52,12 +52,12 @@ export class SyncQueue {
     try {
       // 실제 API 호출 (현재는 시뮬레이션)
       await this.simulateApiCall(item)
-      
+
       // 성공 시 대기열에서 제거
       if (item.id) {
         await db.syncQueue.delete(item.id)
       }
-      
+
       console.log('동기화 성공:', item)
       return true
     } catch (error) {
@@ -68,7 +68,7 @@ export class SyncQueue {
           lastError: error instanceof Error ? error.message : '알 수 없는 오류'
         })
       }
-      
+
       console.error('동기화 실패:', error)
       return false
     }
@@ -83,7 +83,7 @@ export class SyncQueue {
 
     // 실제 구현에서는 여기서 API 호출
     console.log('API 호출 시뮬레이션:', item)
-    
+
     // 랜덤하게 실패 시뮬레이션 (테스트용)
     if (Math.random() < 0.1) {
       throw new Error('서버 오류')

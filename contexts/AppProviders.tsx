@@ -89,8 +89,8 @@ export function withFeatureProvider<P extends object>(
       <Component {...props} />
     </Provider>
   )
-  
+
   WithProvider.displayName = `withProvider(${Component.displayName || Component.name})`
-  
+
   return WithProvider
 }

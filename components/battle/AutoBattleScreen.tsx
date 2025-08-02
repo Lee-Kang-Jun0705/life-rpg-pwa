@@ -8,6 +8,7 @@ import { getMonsterById } from '@/lib/battle/monsters'
 import { GAME_CONFIG } from '@/lib/types/dashboard'
 import { BattleTicketService } from '@/lib/battle/ticket-service'
 import { Ticket, AlertCircle } from 'lucide-react'
+import { backgroundStyles, getButtonStyle, layoutStyles } from '@/lib/utils/style-utils'
 import { AutoBattleScreen as CommonAutoBattleScreen } from '@/components/common/AutoBattleScreen'
 
 interface AutoBattleScreenProps {
@@ -28,30 +29,30 @@ export function AutoBattleScreen({ monsterId, onBattleEnd }: AutoBattleScreenPro
 
   // 전투 초기화
   useEffect(() => {
-    const initBattle = async () => {
+    const initBattle = async() => {
       try {
         setIsLoading(true)
-        
+
         // 티켓 체크 및 사용
         if (!ticketUsed) {
           const ticketState = await ticketService.getTicketState(GAME_CONFIG.DEFAULT_USER_ID)
           if (!ticketState.canUseFreeTicket) {
             throw new Error('전투 티켓이 부족합니다')
           }
-          
+
           // 티켓 사용
           const success = await ticketService.useTicket(
             GAME_CONFIG.DEFAULT_USER_ID,
             '자동전투 입장'
           )
-          
+
           if (!success) {
             throw new Error('티켓 사용에 실패했습니다')
           }
-          
+
           setTicketUsed(true)
         }
-        
+
         // 몬스터 데이터 가져오기
         const monsterData = getMonsterById(monsterId)
         if (!monsterData) {
@@ -91,11 +92,11 @@ export function AutoBattleScreen({ monsterId, onBattleEnd }: AutoBattleScreenPro
   }, [monsterId, battleSpeed, ticketUsed])
 
   // 전투 시작
-  const startBattle = async (manager: AutoBattleManager) => {
+  const startBattle = async(manager: AutoBattleManager) => {
     const result = await manager.startBattle(
       (action) => {
         setActions(prev => [...prev, action])
-        
+
         // 자동 스크롤
         if (actionLogRef.current) {
           setTimeout(() => {
@@ -119,7 +120,7 @@ export function AutoBattleScreen({ monsterId, onBattleEnd }: AutoBattleScreenPro
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-gradient-to-b from-indigo-900 to-purple-900 flex items-center justify-center">
+      <div className={backgroundStyles.battle + ' ' + backgroundStyles.overlayCenter}>
         <div className="text-white text-2xl">전투 준비 중...</div>
       </div>
     )
@@ -139,7 +140,7 @@ export function AutoBattleScreen({ monsterId, onBattleEnd }: AutoBattleScreenPro
   const enemyMpPercent = (battleState.enemy.stats.mp / battleState.enemy.stats.maxMp) * 100
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-b from-indigo-900 to-purple-900 flex flex-col">
+    <div className={backgroundStyles.battle + ' ' + backgroundStyles.overlay + ' flex flex-col'}>
       {/* 전투 필드 */}
       <div className="flex-1 relative overflow-hidden">
         {/* 배경 효과 */}
@@ -237,10 +238,10 @@ export function AutoBattleScreen({ monsterId, onBattleEnd }: AutoBattleScreenPro
           >
             <div className="text-center">
               <h2 className={`text-6xl font-bold mb-4 ${
-                battleState.actions.some(a => a.attacker === battleState.player.id && 
+                battleState.actions.some(a => a.attacker === battleState.player.id &&
                   battleState.enemy.stats.hp <= 0) ? 'text-yellow-400' : 'text-red-500'
               }`}>
-                {battleState.actions.some(a => a.attacker === battleState.player.id && 
+                {battleState.actions.some(a => a.attacker === battleState.player.id &&
                   battleState.enemy.stats.hp <= 0) ? '승리!' : '패배...'}
               </h2>
               <p className="text-2xl text-white">
@@ -287,14 +288,14 @@ function CharacterStatus({
   return (
     <div className="bg-black/50 rounded-lg p-3 backdrop-blur">
       <h3 className="text-white font-bold mb-2">{name}</h3>
-      
+
       {/* HP 바 */}
       <div className="w-40 mb-2">
         <div className="bg-gray-700 rounded-full h-4 overflow-hidden">
           <motion.div
             className={`h-full ${
-              isEnemy 
-                ? 'bg-gradient-to-r from-red-500 to-pink-500' 
+              isEnemy
+                ? 'bg-gradient-to-r from-red-500 to-pink-500'
                 : 'bg-gradient-to-r from-green-500 to-emerald-500'
             }`}
             animate={{ width: `${hpPercent}%` }}
@@ -305,7 +306,7 @@ function CharacterStatus({
           HP: {hp} / {maxHp}
         </p>
       </div>
-      
+
       {/* MP 바 */}
       <div className="w-40">
         <div className="bg-gray-700 rounded-full h-3 overflow-hidden">
@@ -327,8 +328,8 @@ function CharacterStatus({
             <span
               key={index}
               className={`text-xs px-2 py-1 rounded ${
-                effect.type === 'buff' 
-                  ? 'bg-green-600/50 text-green-200' 
+                effect.type === 'buff'
+                  ? 'bg-green-600/50 text-green-200'
                   : 'bg-red-600/50 text-red-200'
               }`}
             >
@@ -344,13 +345,27 @@ function CharacterStatus({
 // 전투 이펙트 컴포넌트
 function BattleEffect({ action }: { action: BattleAction }) {
   const getEffectEmoji = () => {
-    if (action.skill.element === 'fire') return '🔥'
-    if (action.skill.element === 'ice') return '❄️'
-    if (action.skill.element === 'electric') return '⚡'
-    if (action.skill.type === 'heal') return '✨'
-    if (action.skill.type === 'buff') return '⬆️'
-    if (action.skill.type === 'debuff') return '⬇️'
-    if (action.skill.damageType === 'physical') return '⚔️'
+    if (action.skill.element === 'fire') {
+      return '🔥'
+    }
+    if (action.skill.element === 'ice') {
+      return '❄️'
+    }
+    if (action.skill.element === 'electric') {
+      return '⚡'
+    }
+    if (action.skill.type === 'heal') {
+      return '✨'
+    }
+    if (action.skill.type === 'buff') {
+      return '⬆️'
+    }
+    if (action.skill.type === 'debuff') {
+      return '⬇️'
+    }
+    if (action.skill.damageType === 'physical') {
+      return '⚔️'
+    }
     return '💥'
   }
 
@@ -392,40 +407,40 @@ const BattleLog = React.forwardRef<
     actions: BattleAction[]
     battleSpeed: number
     onSpeedChange: (speed: number) => void
-  }
->(({ actions, battleSpeed, onSpeedChange }, ref) => {
-  return (
-    <div className="h-48 bg-black/70 border-t border-gray-700">
-      <div className="flex items-center justify-between p-2 border-b border-gray-700">
-        <h3 className="text-white font-bold">전투 로그</h3>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-400">속도:</span>
-          <div className="flex gap-1">
-            {[0.5, 1, 2, 3].map(speed => (
-              <button
-                key={speed}
-                onClick={() => onSpeedChange(speed)}
-                className={`px-2 py-1 text-xs rounded ${
-                  battleSpeed === speed 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
-              >
-                {speed}x
-              </button>
-            ))}
+      }
+      >(({ actions, battleSpeed, onSpeedChange }, ref) => {
+        return (
+          <div className="h-48 bg-black/70 border-t border-gray-700">
+            <div className="flex items-center justify-between p-2 border-b border-gray-700">
+              <h3 className="text-white font-bold">전투 로그</h3>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-400">속도:</span>
+                <div className="flex gap-1">
+                  {[0.5, 1, 2, 3].map(speed => (
+                    <button
+                      key={speed}
+                      onClick={() => onSpeedChange(speed)}
+                      className={`px-2 py-1 text-xs rounded ${
+                        battleSpeed === speed
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      }`}
+                    >
+                      {speed}x
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div ref={ref} className="h-full overflow-y-auto p-2 space-y-1">
+              {actions.map((action) => (
+                <BattleLogEntry key={action.id} action={action} />
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
-      
-      <div ref={ref} className="h-full overflow-y-auto p-2 space-y-1">
-        {actions.map((action) => (
-          <BattleLogEntry key={action.id} action={action} />
-        ))}
-      </div>
-    </div>
-  )
-})
+        )
+      })
 
 BattleLog.displayName = 'BattleLog'
 
@@ -438,8 +453,8 @@ function BattleLogEntry({ action }: { action: BattleAction }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={`text-sm p-2 rounded ${
-        isPlayerAction 
-          ? 'bg-blue-600/30 text-blue-200' 
+        isPlayerAction
+          ? 'bg-blue-600/30 text-blue-200'
           : 'bg-red-600/30 text-red-200'
       }`}
     >
@@ -447,9 +462,9 @@ function BattleLogEntry({ action }: { action: BattleAction }) {
         {isPlayerAction ? '플레이어' : '적'}
       </span>
       {' '}의 {action.skill.name}!
-      
+
       {action.isEvaded && <span className="ml-2 text-gray-400">회피됨!</span>}
-      
+
       {action.damage && !action.isEvaded && (
         <span className="ml-2">
           {action.damage} 데미지
@@ -458,15 +473,15 @@ function BattleLogEntry({ action }: { action: BattleAction }) {
           {action.elementalBonus && action.elementalBonus < 1 && ' (저항!)'}
         </span>
       )}
-      
+
       {action.healing && (
         <span className="ml-2">{action.healing} HP 회복</span>
       )}
-      
+
       {action.statusEffectApplied && (
         <span className="ml-2">{action.statusEffectApplied} 효과 적용</span>
       )}
-      
+
       {action.comboCount && action.comboCount > 1 && (
         <span className="ml-2 text-yellow-300">{action.comboCount}연속 콤보!</span>
       )}

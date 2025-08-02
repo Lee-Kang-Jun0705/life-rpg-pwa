@@ -39,7 +39,7 @@ export const StatSelectionModal = React.memo(function StatSelectionModal({
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className="relative max-w-sm w-full"
           >
             <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 relative overflow-hidden">

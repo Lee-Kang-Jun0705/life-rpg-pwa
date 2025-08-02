@@ -4,15 +4,15 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import { db } from '@/lib/database/client'
 import type { PlayerDataValue } from '@/lib/database/types'
 import { dbHelpers } from '@/lib/database'
-import { 
-  ShopState, 
-  ShopItem, 
-  InventoryItem, 
-  PlayerInventory, 
+import {
+  ShopState,
+  ShopItem,
+  InventoryItem,
+  PlayerInventory,
   ItemCategory,
   ItemRarity,
   PurchaseRecord,
-  DEFAULT_SHOP_ITEMS 
+  DEFAULT_SHOP_ITEMS
 } from './types'
 import { ALL_ITEMS } from '@/lib/data/items'
 import type { Item } from '@/lib/types/item-system'
@@ -22,43 +22,75 @@ import { shopSyncService } from '@/lib/services/shop-sync.service'
 // 아이콘 매핑 함수
 function getItemIcon(item: Item): string {
   const name = item.name.toLowerCase()
-  
+
   if (item.type === 'weapon') {
-    if (name.includes('검') || name.includes('sword')) return '🗡️'
-    if (name.includes('도끼') || name.includes('axe')) return '🪓'
-    if (name.includes('창') || name.includes('spear')) return '🎯'
-    if (name.includes('활') || name.includes('bow')) return '🏹'
-    if (name.includes('지팡이') || name.includes('staff')) return '🪄'
+    if (name.includes('검') || name.includes('sword')) {
+      return '🗡️'
+    }
+    if (name.includes('도끼') || name.includes('axe')) {
+      return '🪓'
+    }
+    if (name.includes('창') || name.includes('spear')) {
+      return '🎯'
+    }
+    if (name.includes('활') || name.includes('bow')) {
+      return '🏹'
+    }
+    if (name.includes('지팡이') || name.includes('staff')) {
+      return '🪄'
+    }
     return '⚔️'
   }
-  
+
   if (item.type === 'armor') {
-    if (name.includes('투구') || name.includes('helm')) return '🦖'
-    if (name.includes('부츠') || name.includes('boot')) return '👢'
-    if (name.includes('장갑') || name.includes('glove')) return '🧤'
+    if (name.includes('투구') || name.includes('helm')) {
+      return '🦖'
+    }
+    if (name.includes('부츠') || name.includes('boot')) {
+      return '👢'
+    }
+    if (name.includes('장갑') || name.includes('glove')) {
+      return '🧤'
+    }
     return '🛽️'
   }
-  
+
   if (item.type === 'accessory') {
-    if (name.includes('반지') || name.includes('ring')) return '💍'
-    if (name.includes('목걸이') || name.includes('necklace')) return '📿'
+    if (name.includes('반지') || name.includes('ring')) {
+      return '💍'
+    }
+    if (name.includes('목걸이') || name.includes('necklace')) {
+      return '📿'
+    }
     return '💎'
   }
-  
+
   if (item.type === 'consumable') {
-    if (name.includes('포션') || name.includes('potion')) return '🧪'
-    if (name.includes('빵') || name.includes('음식')) return '🍖'
-    if (name.includes('주문서') || name.includes('scroll')) return '📜'
+    if (name.includes('포션') || name.includes('potion')) {
+      return '🧪'
+    }
+    if (name.includes('빵') || name.includes('음식')) {
+      return '🍖'
+    }
+    if (name.includes('주문서') || name.includes('scroll')) {
+      return '📜'
+    }
     return '🧪'
   }
-  
+
   if (item.type === 'material') {
-    if (name.includes('광석') || name.includes('ore')) return '⛏️'
-    if (name.includes('보석')) return '💎'
-    if (name.includes('가죽')) return '🧿'
+    if (name.includes('광석') || name.includes('ore')) {
+      return '⛏️'
+    }
+    if (name.includes('보석')) {
+      return '💎'
+    }
+    if (name.includes('가죽')) {
+      return '🧿'
+    }
     return '🪵'
   }
-  
+
   return '📦'
 }
 
@@ -96,7 +128,9 @@ const DEFAULT_SHOP_STATE: ShopState = {
 
 // 타입 가드 함수들
 function isInventoryData(data: unknown): data is PlayerInventory {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const obj = data as Record<string, unknown>
   return (
     Array.isArray(obj.items) &&
@@ -107,7 +141,9 @@ function isInventoryData(data: unknown): data is PlayerInventory {
 }
 
 function isPurchaseRecord(data: unknown): data is PurchaseRecord {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const obj = data as Record<string, unknown>
   return (
     typeof obj.itemId === 'string' &&
@@ -124,19 +160,21 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const timerIdRef = React.useRef(`shop-load-${Date.now()}`)
 
   // 안전한 데이터 로드 함수
-  const loadShopData = useCallback(async () => {
-    if (isInitialized) return // 이미 초기화된 경우 skip
-    
+  const loadShopData = useCallback(async() => {
+    if (isInitialized) {
+      return
+    } // 이미 초기화된 경우 skip
+
     try {
       setIsLoading(true)
-      
+
       // DB 연결 상태 확인
       if (!db || !db.playerData) {
         console.warn('⚠️ Database not ready, using default data')
         setState(DEFAULT_SHOP_STATE)
         return
       }
-      
+
       // 병렬로 데이터 로드
       const [inventoryResult, historyResult] = await Promise.all([
         db.playerData.get('inventory').catch(error => {
@@ -148,13 +186,13 @@ export function ShopProvider({ children }: { children: ReactNode }) {
           return null
         })
       ])
-      
+
       // 인벤토리 데이터 처리
       let inventory = DEFAULT_INVENTORY
       if (inventoryResult?.data && isInventoryData(inventoryResult.data)) {
         inventory = inventoryResult.data
       }
-      
+
       // 구매 이력 처리
       let purchaseHistory: PurchaseRecord[] = []
       if (historyResult?.data && Array.isArray(historyResult.data)) {
@@ -162,12 +200,12 @@ export function ShopProvider({ children }: { children: ReactNode }) {
           .filter(isPurchaseRecord)
           .map((record) => ({
             ...record,
-            purchaseDate: record.purchaseDate instanceof Date 
-              ? record.purchaseDate 
+            purchaseDate: record.purchaseDate instanceof Date
+              ? record.purchaseDate
               : new Date(record.purchaseDate)
           }))
       }
-      
+
       // 모든 아이템을 ShopItem으로 변환
       const allShopItems = Object.values(ALL_ITEMS).map(item => ({
         id: item.id,
@@ -194,14 +232,14 @@ export function ShopProvider({ children }: { children: ReactNode }) {
           })
         ]
       }))
-      
+
       setState({
         items: allShopItems,
         inventory,
         selectedCategory: 'all',
         purchaseHistory
       })
-      
+
       setIsInitialized(true)
     } catch (error) {
       console.error('🚫 Shop data load error:', error)
@@ -226,7 +264,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, [loadShopData])
 
   // 인벤토리 저장 (디바운스 적용)
-  const saveInventory = useCallback(async (inventory: PlayerInventory) => {
+  const saveInventory = useCallback(async(inventory: PlayerInventory) => {
     try {
       if (!db || !db.playerData) {
         console.warn('⚠️ Cannot save inventory: database not ready')
@@ -238,7 +276,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
         data: inventory as PlayerDataValue,
         updatedAt: new Date()
       })
-      
+
       setState(prev => ({ ...prev, inventory }))
     } catch (error) {
       console.error('❌ Failed to save inventory:', error)
@@ -246,7 +284,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, [])
 
   // 구매 이력 저장
-  const savePurchaseHistory = useCallback(async (history: PurchaseRecord[]) => {
+  const savePurchaseHistory = useCallback(async(history: PurchaseRecord[]) => {
     try {
       if (!db || !db.playerData) {
         console.warn('⚠️ Cannot save purchase history: database not ready')
@@ -258,7 +296,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
         data: history as PlayerDataValue,
         updatedAt: new Date()
       })
-      
+
       setState(prev => ({ ...prev, purchaseHistory: history }))
     } catch (error) {
       console.error('❌ Failed to save purchase history:', error)
@@ -266,11 +304,11 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, [])
 
   // 아이템 구매
-  const purchaseItem = useCallback(async (item: ShopItem, quantity: number = 1): Promise<boolean> => {
+  const purchaseItem = useCallback(async(item: ShopItem, quantity = 1): Promise<boolean> => {
     try {
       // 동기화 서비스를 통한 구매 처리
       const result = await shopSyncService.purchaseItem('current-user', item, quantity)
-      
+
       if (!result.success) {
         console.error('❌ Purchase failed:', result.message)
         return false
@@ -278,12 +316,14 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
       // 플레이어 데이터 다시 불러오기
       const player = await playerService.getPlayer('current-user')
-      if (!player) return false
+      if (!player) {
+        return false
+      }
 
       // UI 상태 업데이트
       const newInventory = { ...state.inventory }
       const existingItem = newInventory.items.find(invItem => invItem.id === item.id)
-      
+
       if (existingItem) {
         existingItem.quantity += quantity
       } else {
@@ -295,7 +335,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
         }
         newInventory.items.push(inventoryItem)
       }
-      
+
       newInventory.coins = player.gold
 
       // 구매 기록 저장
@@ -313,7 +353,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
         saveInventory(newInventory),
         savePurchaseHistory(newHistory)
       ])
-      
+
       console.log(result.message)
       return true
     } catch (error) {
@@ -323,9 +363,11 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, [state.inventory, state.purchaseHistory, saveInventory, savePurchaseHistory])
 
   // 아이템 장착
-  const equipItem = useCallback(async (itemId: string): Promise<boolean> => {
+  const equipItem = useCallback(async(itemId: string): Promise<boolean> => {
     const item = state.inventory.items.find(item => item.id === itemId)
-    if (!item || !item.isEquippable) return false
+    if (!item || !item.isEquippable) {
+      return false
+    }
 
     const newInventory = { ...state.inventory }
     const itemCategory = item.category
@@ -335,13 +377,17 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       const currentEquippedId = newInventory.equippedItems[itemCategory]
       if (currentEquippedId) {
         const currentItem = newInventory.items.find(i => i.id === currentEquippedId)
-        if (currentItem) currentItem.isEquipped = false
+        if (currentItem) {
+          currentItem.isEquipped = false
+        }
       }
 
       // 새 아이템 장착
       newInventory.equippedItems[itemCategory] = itemId
       const targetItem = newInventory.items.find(i => i.id === itemId)
-      if (targetItem) targetItem.isEquipped = true
+      if (targetItem) {
+        targetItem.isEquipped = true
+      }
 
       await saveInventory(newInventory)
       return true
@@ -351,18 +397,22 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, [state.inventory, saveInventory])
 
   // 아이템 장착 해제
-  const unequipItem = useCallback(async (itemId: string): Promise<boolean> => {
+  const unequipItem = useCallback(async(itemId: string): Promise<boolean> => {
     const item = state.inventory.items.find(item => item.id === itemId)
-    if (!item || !item.isEquipped) return false
+    if (!item || !item.isEquipped) {
+      return false
+    }
 
     const newInventory = { ...state.inventory }
     const itemCategory = item.category
 
     if (itemCategory === 'weapon' || itemCategory === 'armor' || itemCategory === 'accessory') {
       delete newInventory.equippedItems[itemCategory]
-      
+
       const targetItem = newInventory.items.find(i => i.id === itemId)
-      if (targetItem) targetItem.isEquipped = false
+      if (targetItem) {
+        targetItem.isEquipped = false
+      }
 
       await saveInventory(newInventory)
       return true
@@ -372,16 +422,18 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, [state.inventory, saveInventory])
 
   // 소모품 사용
-  const useConsumableItem = useCallback(async (itemId: string): Promise<boolean> => {
+  const useConsumableItem = useCallback(async(itemId: string): Promise<boolean> => {
     const item = state.inventory.items.find(item => item.id === itemId)
-    if (!item || item.category !== 'consumable' || item.quantity <= 0) return false
+    if (!item || item.category !== 'consumable' || item.quantity <= 0) {
+      return false
+    }
 
     const newInventory = { ...state.inventory }
     const itemIndex = newInventory.items.findIndex(item => item.id === itemId)
-    
+
     if (itemIndex >= 0) {
       newInventory.items[itemIndex].quantity -= 1
-      
+
       if (newInventory.items[itemIndex].quantity <= 0) {
         newInventory.items.splice(itemIndex, 1)
       }
@@ -430,16 +482,18 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, [state.inventory])
 
   // 코인 추가
-  const addCoins = useCallback(async (amount: number) => {
+  const addCoins = useCallback(async(amount: number) => {
     const newInventory = { ...state.inventory }
     newInventory.coins += amount
     await saveInventory(newInventory)
   }, [state.inventory, saveInventory])
 
   // 코인 사용
-  const spendCoins = useCallback(async (amount: number): Promise<boolean> => {
-    if (state.inventory.coins < amount) return false
-    
+  const spendCoins = useCallback(async(amount: number): Promise<boolean> => {
+    if (state.inventory.coins < amount) {
+      return false
+    }
+
     const newInventory = { ...state.inventory }
     newInventory.coins -= amount
     await saveInventory(newInventory)
@@ -447,10 +501,10 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   }, [state.inventory, saveInventory])
 
   // 아이템 추가
-  const addItemToInventory = useCallback(async (item: ShopItem, quantity: number = 1) => {
+  const addItemToInventory = useCallback(async(item: ShopItem, quantity = 1) => {
     const newInventory = { ...state.inventory }
     const existingItem = newInventory.items.find(invItem => invItem.id === item.id)
-    
+
     if (existingItem) {
       if (item.maxStack && existingItem.quantity < item.maxStack) {
         existingItem.quantity = Math.min(existingItem.quantity + quantity, item.maxStack)
@@ -464,7 +518,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       }
       newInventory.items.push(inventoryItem)
     }
-    
+
     await saveInventory(newInventory)
   }, [state.inventory, saveInventory])
 

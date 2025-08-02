@@ -76,8 +76,8 @@ export class BattleSystem {
   private playerState: PlayerBattleState
   private monsterState: Monster & { currentHp: number; currentMp: number; statusEffects: StatusEffect[] }
   private battleLog: BattleLog[] = []
-  private turn: number = 0
-  private isPlayerTurn: boolean = true
+  private turn = 0
+  private isPlayerTurn = true
 
   constructor(player: PlayerBattleState, monster: Monster) {
     this.playerState = { ...player }
@@ -87,7 +87,7 @@ export class BattleSystem {
       currentMp: monster.stats.mp,
       statusEffects: []
     }
-    
+
     // 전투 시작 메시지
     this.addLog({
       message: `${monster.name}과(와)의 전투가 시작되었습니다!`,
@@ -120,7 +120,9 @@ export class BattleSystem {
   }
 
   get winner() {
-    if (!this.isBattleOver) return null
+    if (!this.isBattleOver) {
+      return null
+    }
     return this.playerState.hp > 0 ? 'player' : 'monster'
   }
 
@@ -133,9 +135,9 @@ export class BattleSystem {
     const variance = 0.8 + Math.random() * 0.4 // 80% ~ 120%
     const isCritical = Math.random() < attacker.critRate
     const critMultiplier = isCritical ? 2 : 1
-    
+
     const finalDamage = Math.floor(baseDamage * variance * critMultiplier)
-    
+
     return { damage: finalDamage, isCritical }
   }
 
@@ -194,7 +196,9 @@ export class BattleSystem {
   }
 
   executePlayerAction(action: BattleAction): BattleLog[] {
-    if (!this.isPlayerTurn || this.isBattleOver) return []
+    if (!this.isPlayerTurn || this.isBattleOver) {
+      return []
+    }
 
     this.battleLog = []
 
@@ -206,8 +210,8 @@ export class BattleSystem {
         )
         this.monsterState.currentHp = Math.max(0, this.monsterState.currentHp - damage)
         this.addLog({
-          message: isCritical 
-            ? `플레이어의 강력한 일격! ${this.monsterState.name}에게 치명타!` 
+          message: isCritical
+            ? `플레이어의 강력한 일격! ${this.monsterState.name}에게 치명타!`
             : `플레이어가 ${this.monsterState.name}을(를) 공격했습니다!`,
           type: isCritical ? 'critical' : 'damage',
           value: damage
@@ -215,7 +219,9 @@ export class BattleSystem {
         break
 
       case 'skill':
-        if (!action.skillId) break
+        if (!action.skillId) {
+          break
+        }
         const skill = this.playerState.skills.find(s => s.id === action.skillId)
         if (!skill || skill.currentCooldown > 0 || this.playerState.mp < skill.mpCost) {
           this.addLog({
@@ -282,22 +288,24 @@ export class BattleSystem {
   }
 
   private executeMonsterTurn() {
-    if (this.isBattleOver) return
+    if (this.isBattleOver) {
+      return
+    }
 
     // Simple AI: Choose random skill or basic attack
     const availableSkills = this.monsterState.skills.filter(
       skill => this.monsterState.currentMp >= skill.mpCost
     )
-    
+
     const useSkill = availableSkills.length > 0 && Math.random() < 0.5
-    
+
     if (useSkill) {
       const skill = availableSkills[Math.floor(Math.random() * availableSkills.length)]
       this.monsterState.currentMp -= skill.mpCost
-      
+
       const damage = skill.damage
       this.playerState.hp = Math.max(0, this.playerState.hp - damage)
-      
+
       this.addLog({
         message: `${this.monsterState.name}이(가) ${skill.name} 스킬을 사용했습니다!`,
         type: 'damage',
@@ -324,7 +332,7 @@ export class BattleSystem {
       )
       this.playerState.hp = Math.max(0, this.playerState.hp - damage)
       this.addLog({
-        message: isCritical 
+        message: isCritical
           ? `${this.monsterState.name}의 강력한 일격! 플레이어에게 치명타!`
           : `${this.monsterState.name}이(가) 플레이어를 공격했습니다!`,
         type: isCritical ? 'critical' : 'damage',
@@ -336,7 +344,9 @@ export class BattleSystem {
   }
 
   getBattleRewards() {
-    if (!this.isBattleOver || this.winner !== 'player') return null
+    if (!this.isBattleOver || this.winner !== 'player') {
+      return null
+    }
 
     const rewards = { ...this.monsterState.rewards }
     const droppedItems: string[] = []

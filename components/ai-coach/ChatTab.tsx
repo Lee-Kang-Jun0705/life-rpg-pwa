@@ -34,7 +34,7 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
 
   // API 키 확인
   useEffect(() => {
-    const checkApiKey = async () => {
+    const checkApiKey = async() => {
       const config = await SecureAIStorage.getConfig()
       setHasApiKey(!!config?.apiKey)
     }
@@ -45,13 +45,13 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const generateCoachingResponse = useCallback(async (userMessage: string): Promise<string> => {
+  const generateCoachingResponse = useCallback(async(userMessage: string): Promise<string> => {
     const message = userMessage.toLowerCase()
-    
+
     // 감정 상태 고려
-    const emotionContext = currentEmotion ? 
+    const emotionContext = currentEmotion ?
       `(사용자 감정: ${currentEmotion})` : ''
-    
+
     // AI API 호출 시도
     try {
       const response = await fetch('/api/ai-coach', {
@@ -64,7 +64,7 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
           activityPattern
         })
       })
-      
+
       if (response.ok) {
         const data = await response.json()
         return data.response
@@ -76,10 +76,10 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
     // 폴백: 로컬 응답 생성
     if (message.includes('분석')) {
       const totalLevel = userStats.reduce((sum, stat) => sum + (stat.level || 0), 0)
-      const avgGrowth = growthAnalyses.length > 0 
-        ? growthAnalyses.reduce((sum, g) => sum + g.growthRate, 0) / growthAnalyses.length 
+      const avgGrowth = growthAnalyses.length > 0
+        ? growthAnalyses.reduce((sum, g) => sum + g.growthRate, 0) / growthAnalyses.length
         : 0
-      
+
       return `📊 종합 분석 결과:\n\n` +
         `총 레벨: ${totalLevel}\n` +
         `일일 평균 성장률: ${avgGrowth.toFixed(1)} EXP\n` +
@@ -114,7 +114,7 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
         return emotionResponses[currentEmotion]
       }
     }
-    
+
     return '구체적인 질문을 해주시면 더 정확한 조언을 드릴 수 있어요! 😊\n\n' +
       '예시:\n' +
       '• "내 성장 분석해줘"\n' +
@@ -122,8 +122,10 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
       '• "건강 레벨 올리는 방법"'
   }, [currentEmotion, userStats, growthAnalyses, activityPattern, personalizedAdvice])
 
-  const handleSendMessage = useCallback(async () => {
-    if (!input.trim() || isLoading) return
+  const handleSendMessage = useCallback(async() => {
+    if (!input.trim() || isLoading) {
+      return
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -135,7 +137,7 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
     setMessages(prev => [...prev, userMessage])
     setInput('')
     setIsLoading(true)
-    
+
     // 대화 기록에 추가
     addToHistory({
       id: userMessage.id,
@@ -147,14 +149,14 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
 
     try {
       const aiResponse = await generateCoachingResponse(userMessage.content)
-      
+
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: aiResponse,
         timestamp: new Date()
       }])
-      
+
       // AI 응답도 기록에 추가
       addToHistory({
         id: (Date.now() + 1).toString(),
@@ -185,7 +187,7 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-candy-blue border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-8 h-8 border-4 border-candy-blue border-t-transparent rounded-full mx-auto mb-4" />
           <p className="text-gray-600 dark:text-gray-400">확인 중...</p>
         </div>
       </div>
@@ -229,7 +231,7 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
       </div>
 
       {/* 새로운 대화형 AI 컴포넌트 - 감정 상태 자동 연동 */}
-      <ConversationalAI 
+      <ConversationalAI
         onActionSuggestion={handleActionSuggestion}
       />
 
@@ -240,86 +242,86 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
         </summary>
         <div className="mt-4">
           <Card className="h-[60vh] flex flex-col">
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              <div
-                className={`max-w-[80%] p-4 rounded-[2rem] animate-bounce-in ${
-                  message.role === 'user'
-                    ? 'bg-gradient-to-r from-candy-blue to-candy-purple text-white shadow-soft'
-                    : 'bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-soft'
-                }`}
-              >
-                <p className="whitespace-pre-wrap">{message.content}</p>
-                <p className="text-xs opacity-70 mt-2">
-                  {message.timestamp.toLocaleTimeString()}
-                </p>
-              </div>
-            </div>
-          ))}
-          {isLoading && (
-            <div className="flex justify-start">
-              <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
-                <div className="flex space-x-2">
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[80%] p-4 rounded-[2rem] animate-bounce-in ${
+                      message.role === 'user'
+                        ? 'bg-gradient-to-r from-candy-blue to-candy-purple text-white shadow-soft'
+                        : 'bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-soft'
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap">{message.content}</p>
+                    <p className="text-xs opacity-70 mt-2">
+                      {message.timestamp.toLocaleTimeString()}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                    <div className="flex space-x-2">
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" />
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
             </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
 
-        <div className="border-t p-4">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="메시지를 입력하세요..."
-              className="flex-1 px-4 py-3 rounded-[2rem] border-0
+            <div className="border-t p-4">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="메시지를 입력하세요..."
+                  className="flex-1 px-4 py-3 rounded-[2rem] border-0
                        bg-gray-100 dark:bg-gray-800
                        focus:outline-none focus:ring-2 focus:ring-candy-blue"
-              disabled={isLoading}
-            />
-            <Button 
-              onClick={handleSendMessage} 
-              disabled={!input.trim() || isLoading}
-              className="rounded-[2rem] px-6 bg-gradient-to-r from-candy-blue to-candy-purple"
-            >
-              <span className="text-xl">💬</span>
-            </Button>
-          </div>
-        </div>
-      </Card>
+                  disabled={isLoading}
+                />
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={!input.trim() || isLoading}
+                  className="rounded-[2rem] px-6 bg-gradient-to-r from-candy-blue to-candy-purple"
+                >
+                  <span className="text-xl">💬</span>
+                </Button>
+              </div>
+            </div>
+          </Card>
 
-      {/* 빠른 질문 */}
-      <div className="mt-6">
-        <h3 className="font-semibold mb-3">💬 빠른 질문</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          {[
-            '오늘의 추천 활동',
-            '내 성장 분석해줘',
-            '약점 개선 방법',
-            '습관 만들기 팁'
-          ].map((question) => (
-            <Button
-              key={question}
-              variant="outline"
-              size="sm"
-              onClick={() => setInput(question)}
-              className="text-xs"
-            >
-              {question}
-            </Button>
-          ))}
-        </div>
-      </div>
+          {/* 빠른 질문 */}
+          <div className="mt-6">
+            <h3 className="font-semibold mb-3">💬 빠른 질문</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              {[
+                '오늘의 추천 활동',
+                '내 성장 분석해줘',
+                '약점 개선 방법',
+                '습관 만들기 팁'
+              ].map((question) => (
+                <Button
+                  key={question}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setInput(question)}
+                  className="text-xs"
+                >
+                  {question}
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
       </details>
     </>

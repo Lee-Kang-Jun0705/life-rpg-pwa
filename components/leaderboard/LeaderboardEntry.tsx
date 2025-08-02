@@ -26,8 +26,10 @@ export function LeaderboardEntry({ entry, isCurrentUser }: LeaderboardEntryProps
 
   // 순위 변동 표시
   const getRankChange = () => {
-    if (!entry.previousRank) return null
-    
+    if (!entry.previousRank) {
+      return null
+    }
+
     const change = entry.previousRank - entry.rank
     if (change > 0) {
       return (

@@ -15,21 +15,23 @@ export default function PersonalizationSettingsPage() {
   const [storageUsage, setStorageUsage] = useState<StorageUsage | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  
+
   const personalizationService = PersonalizationService.getInstance()
 
   useEffect(() => {
     loadSettings()
   }, [loadSettings])
 
-  const loadSettings = useCallback(async () => {
-    if (!user?.id) return
-    
+  const loadSettings = useCallback(async() => {
+    if (!user?.id) {
+      return
+    }
+
     try {
       setLoading(true)
       const settings = await personalizationService.getSettings(user.id)
       setMode(settings.mode)
-      
+
       const usage = await personalizationService.calculateStorageUsage(user.id)
       setStorageUsage(usage)
     } catch (error) {
@@ -39,16 +41,18 @@ export default function PersonalizationSettingsPage() {
     }
   }, [user?.id, personalizationService])
 
-  const handleSaveMode = async () => {
-    if (!user?.id || saving) return
-    
+  const handleSaveMode = async() => {
+    if (!user?.id || saving) {
+      return
+    }
+
     try {
       setSaving(true)
       await personalizationService.changeMode(user.id, mode)
-      
+
       // 성공 메시지 표시 (토스트 등)
       alert(`${mode === 'light' ? '라이트' : '프로'} 모드로 변경되었습니다!`)
-      
+
       // 설정 페이지로 돌아가기
       router.push('/settings')
     } catch (error) {
@@ -75,11 +79,11 @@ export default function PersonalizationSettingsPage() {
           당신의 목표와 기기 성능에 맞는 모드를 선택하세요
         </p>
       </div>
-      
+
       {/* 모드 카드 */}
       <div className="mode-cards">
         {/* 라이트 모드 */}
-        <div 
+        <div
           className={`mode-card light ${mode === 'light' ? 'selected' : ''}`}
           onClick={() => setMode('light')}
         >
@@ -88,11 +92,11 @@ export default function PersonalizationSettingsPage() {
             <h3>라이트 모드</h3>
             <span className="badge">권장</span>
           </div>
-          
+
           <div className="mode-description">
             <p>가벼운 습관 추적과 기본적인 코칭</p>
           </div>
-          
+
           <div className="pros-cons">
             <div className="pros">
               <h4>👍 장점</h4>
@@ -104,7 +108,7 @@ export default function PersonalizationSettingsPage() {
                 <li>기본 패턴 분석 제공</li>
               </ul>
             </div>
-            
+
             <div className="cons">
               <h4>👎 제한사항</h4>
               <ul>
@@ -115,7 +119,7 @@ export default function PersonalizationSettingsPage() {
               </ul>
             </div>
           </div>
-          
+
           <div className="best-for">
             <strong>추천 대상:</strong>
             <ul>
@@ -126,9 +130,9 @@ export default function PersonalizationSettingsPage() {
             </ul>
           </div>
         </div>
-        
+
         {/* 프로 모드 */}
-        <div 
+        <div
           className={`mode-card pro ${mode === 'pro' ? 'selected' : ''}`}
           onClick={() => setMode('pro')}
         >
@@ -137,11 +141,11 @@ export default function PersonalizationSettingsPage() {
             <h3>프로 모드</h3>
             <span className="badge premium">프리미엄</span>
           </div>
-          
+
           <div className="mode-description">
             <p>심층 분석과 정밀한 개인화 코칭</p>
           </div>
-          
+
           <div className="pros-cons">
             <div className="pros">
               <h4>👍 장점</h4>
@@ -154,7 +158,7 @@ export default function PersonalizationSettingsPage() {
                 <li>이미지 분석 강화</li>
               </ul>
             </div>
-            
+
             <div className="cons">
               <h4>👎 고려사항</h4>
               <ul>
@@ -165,7 +169,7 @@ export default function PersonalizationSettingsPage() {
               </ul>
             </div>
           </div>
-          
+
           <div className="best-for">
             <strong>추천 대상:</strong>
             <ul>
@@ -177,16 +181,16 @@ export default function PersonalizationSettingsPage() {
           </div>
         </div>
       </div>
-      
+
       {/* 상세 비교표 */}
-      <button 
+      <button
         className="comparison-toggle"
         onClick={() => setShowComparison(!showComparison)}
       >
-        {showComparison ? '비교표 닫기' : '상세 비교표 보기'} 
+        {showComparison ? '비교표 닫기' : '상세 비교표 보기'}
         <span className="arrow">{showComparison ? '▲' : '▼'}</span>
       </button>
-      
+
       {showComparison && (
         <div className="detailed-comparison">
           <table>
@@ -252,7 +256,7 @@ export default function PersonalizationSettingsPage() {
           </table>
         </div>
       )}
-      
+
       {/* 현재 사용량 */}
       {storageUsage && (
         <div className="current-usage">
@@ -274,16 +278,16 @@ export default function PersonalizationSettingsPage() {
             </div>
           </div>
           <div className="progress-bar">
-            <div 
+            <div
               className="progress-fill"
-              style={{ 
-                width: `${(storageUsage.totalMB / (mode === 'light' ? 10 : 100)) * 100}%` 
+              style={{
+                width: `${(storageUsage.totalMB / (mode === 'light' ? 10 : 100)) * 100}%`
               }}
             />
           </div>
         </div>
       )}
-      
+
       {/* FAQ 섹션 */}
       <div className="faq-section">
         <h4>자주 묻는 질문</h4>
@@ -304,25 +308,25 @@ export default function PersonalizationSettingsPage() {
           <p>모든 데이터는 여러분의 기기에만 저장됩니다. 외부 서버로 전송되지 않아 완전히 안전합니다.</p>
         </details>
       </div>
-      
+
       {/* 액션 버튼 */}
       <div className="action-buttons">
-        <button 
+        <button
           className="save-button"
           onClick={handleSaveMode}
           disabled={saving}
         >
-          {saving ? '저장 중...' : 
+          {saving ? '저장 중...' :
             mode === 'light' ? '라이트 모드로 설정' : '프로 모드로 설정'}
         </button>
-        
-        <button 
+
+        <button
           className="cancel-button"
           onClick={() => router.push('/settings')}
         >
           취소
         </button>
-        
+
         {mode === 'pro' && (
           <p className="warning-text">
             ⚠️ 프로 모드는 더 많은 저장 공간과 배터리를 사용합니다

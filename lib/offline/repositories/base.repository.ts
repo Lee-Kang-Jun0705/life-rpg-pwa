@@ -25,7 +25,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
         updatedAt: data.updatedAt || now
       } as T
     }
-    
+
     const now = new Date()
     const entityToCreate = {
       ...data,
@@ -39,17 +39,23 @@ export abstract class BaseRepository<T extends BaseEntity> {
   }
 
   async findById(id: string | number): Promise<T | undefined> {
-    if (typeof window === 'undefined' || !this.table) return undefined
+    if (typeof window === 'undefined' || !this.table) {
+      return undefined
+    }
     return await this.table.get(id as unknown)
   }
 
   async findByUserId(userId: string): Promise<T[]> {
-    if (typeof window === 'undefined' || !this.table) return []
+    if (typeof window === 'undefined' || !this.table) {
+      return []
+    }
     return await this.table.where('userId').equals(userId).toArray()
   }
 
   async findAll(): Promise<T[]> {
-    if (typeof window === 'undefined' || !this.table) return []
+    if (typeof window === 'undefined' || !this.table) {
+      return []
+    }
     return await this.table.toArray()
   }
 
@@ -57,7 +63,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
     if (typeof window === 'undefined' || !this.table) {
       return { id, ...updates, updatedAt: new Date() } as T
     }
-    
+
     const entity = await this.findById(id)
     if (!entity) {
       throw new Error(`Entity with id ${id} not found`)
@@ -69,27 +75,33 @@ export abstract class BaseRepository<T extends BaseEntity> {
     }
 
     await this.table.update(id as unknown, updatedFields as unknown)
-    
+
     const updatedEntity = {
       ...entity,
       ...updatedFields
     } as T
-    
+
     return updatedEntity
   }
 
   async delete(id: string | number): Promise<void> {
-    if (typeof window === 'undefined' || !this.table) return
+    if (typeof window === 'undefined' || !this.table) {
+      return
+    }
     await this.table.delete(id as unknown)
   }
 
   async deleteMany(ids: (string | number)[]): Promise<void> {
-    if (typeof window === 'undefined' || !this.table) return
+    if (typeof window === 'undefined' || !this.table) {
+      return
+    }
     await this.table.bulkDelete(ids as unknown)
   }
 
   async deleteByUserId(userId: string): Promise<void> {
-    if (typeof window === 'undefined' || !this.table) return
+    if (typeof window === 'undefined' || !this.table) {
+      return
+    }
     const entities = await this.findByUserId(userId)
     const ids = entities.map(e => e.id!).filter(Boolean)
     if (ids.length > 0) {
@@ -98,12 +110,16 @@ export abstract class BaseRepository<T extends BaseEntity> {
   }
 
   async count(): Promise<number> {
-    if (typeof window === 'undefined' || !this.table) return 0
+    if (typeof window === 'undefined' || !this.table) {
+      return 0
+    }
     return await this.table.count()
   }
 
   async exists(id: string | number): Promise<boolean> {
-    if (typeof window === 'undefined' || !this.table) return false
+    if (typeof window === 'undefined' || !this.table) {
+      return false
+    }
     const entity = await this.findById(id)
     return entity !== undefined
   }

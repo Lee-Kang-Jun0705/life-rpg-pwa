@@ -11,7 +11,9 @@ export interface PerformanceMetrics {
 
 // Web Vitals 측정
 export function measureWebVitals(onReport: (metrics: PerformanceMetrics) => void) {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined') {
+    return
+  }
 
   const metrics: PerformanceMetrics = {}
 
@@ -98,11 +100,11 @@ export function measureFPS(duration = 1000) {
   return new Promise<number>((resolve) => {
     let frames = 0
     const startTime = performance.now()
-    
+
     function countFrames() {
       frames++
       const currentTime = performance.now()
-      
+
       if (currentTime - startTime < duration) {
         requestAnimationFrame(countFrames)
       } else {
@@ -110,7 +112,7 @@ export function measureFPS(duration = 1000) {
         resolve(fps)
       }
     }
-    
+
     requestAnimationFrame(countFrames)
   })
 }
@@ -120,16 +122,16 @@ export function measureImageLoadTime(src: string): Promise<number> {
   return new Promise((resolve, reject) => {
     const startTime = performance.now()
     const img = new Image()
-    
+
     img.onload = () => {
       const loadTime = performance.now() - startTime
       resolve(loadTime)
     }
-    
+
     img.onerror = () => {
       reject(new Error('Image failed to load'))
     }
-    
+
     img.src = src
   })
 }
@@ -139,7 +141,7 @@ export function measureApiCall<T>(
   apiCall: () => Promise<T>
 ): Promise<{ data: T; duration: number }> {
   const startTime = performance.now()
-  
+
   return apiCall().then(data => {
     const duration = performance.now() - startTime
     return { data, duration }
@@ -164,83 +166,108 @@ export function getConnectionSpeed() {
 // 성능 점수 계산
 export function calculatePerformanceScore(metrics: PerformanceMetrics): number {
   let score = 100
-  
+
   // LCP 점수 (0-40점)
   if (metrics.lcp) {
-    if (metrics.lcp > 4000) score -= 40
-    else if (metrics.lcp > 2500) score -= 20
-    else if (metrics.lcp > 1200) score -= 10
+    if (metrics.lcp > 4000) {
+      score -= 40
+    } else if (metrics.lcp > 2500) {
+      score -= 20
+    } else if (metrics.lcp > 1200) {
+      score -= 10
+    }
   }
-  
+
   // FID 점수 (0-30점)
   if (metrics.fid) {
-    if (metrics.fid > 300) score -= 30
-    else if (metrics.fid > 100) score -= 15
-    else if (metrics.fid > 50) score -= 5
+    if (metrics.fid > 300) {
+      score -= 30
+    } else if (metrics.fid > 100) {
+      score -= 15
+    } else if (metrics.fid > 50) {
+      score -= 5
+    }
   }
-  
+
   // CLS 점수 (0-20점)
   if (metrics.cls) {
-    if (metrics.cls > 0.25) score -= 20
-    else if (metrics.cls > 0.1) score -= 10
-    else if (metrics.cls > 0.05) score -= 5
+    if (metrics.cls > 0.25) {
+      score -= 20
+    } else if (metrics.cls > 0.1) {
+      score -= 10
+    } else if (metrics.cls > 0.05) {
+      score -= 5
+    }
   }
-  
+
   // FCP 점수 (0-10점)
   if (metrics.fcp) {
-    if (metrics.fcp > 3000) score -= 10
-    else if (metrics.fcp > 1800) score -= 5
+    if (metrics.fcp > 3000) {
+      score -= 10
+    } else if (metrics.fcp > 1800) {
+      score -= 5
+    }
   }
-  
+
   return Math.max(0, score)
 }
 
 // 성능 등급 계산
 export function getPerformanceGrade(score: number): string {
-  if (score >= 90) return 'A'
-  if (score >= 80) return 'B'
-  if (score >= 70) return 'C'
-  if (score >= 60) return 'D'
+  if (score >= 90) {
+    return 'A'
+  }
+  if (score >= 80) {
+    return 'B'
+  }
+  if (score >= 70) {
+    return 'C'
+  }
+  if (score >= 60) {
+    return 'D'
+  }
   return 'F'
 }
 
 // 성능 개선 제안
 export function getPerformanceSuggestions(metrics: PerformanceMetrics): string[] {
   const suggestions: string[] = []
-  
+
   if (metrics.lcp && metrics.lcp > 2500) {
     suggestions.push('이미지 최적화 및 지연 로딩을 고려하세요')
     suggestions.push('중요한 리소스의 우선순위를 높이세요')
   }
-  
+
   if (metrics.fid && metrics.fid > 100) {
     suggestions.push('JavaScript 번들 크기를 줄이세요')
     suggestions.push('코드 분할을 사용하세요')
   }
-  
+
   if (metrics.cls && metrics.cls > 0.1) {
     suggestions.push('이미지와 광고에 명시적인 크기를 지정하세요')
     suggestions.push('동적 콘텐츠 삽입을 최소화하세요')
   }
-  
+
   if (metrics.fcp && metrics.fcp > 1800) {
     suggestions.push('중요하지 않은 CSS를 지연 로딩하세요')
     suggestions.push('서버 응답 시간을 개선하세요')
   }
-  
+
   return suggestions
 }
 
 // 성능 모니터링 훅
 export function usePerformanceMonitoring() {
-  if (typeof window === 'undefined') return null
+  if (typeof window === 'undefined') {
+    return null
+  }
 
   const metrics: PerformanceMetrics = {}
-  
+
   measureWebVitals((newMetrics) => {
     Object.assign(metrics, newMetrics)
   })
-  
+
   return {
     metrics,
     memoryUsage: getMemoryUsage(),

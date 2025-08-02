@@ -54,10 +54,10 @@ export function TabLayout({
                 data-testid={`ai-coach-tab-${tab.id}`}
                 onClick={() => handleTabChange(tab.id)}
                 className={cn(
-                  "flex-1 min-w-[100px] px-4 py-4 flex flex-col items-center gap-1.5 transition-all relative",
+                  'flex-1 min-w-[100px] px-4 py-4 flex flex-col items-center gap-1.5 transition-all relative',
                   activeTab === tab.id
-                    ? "text-candy-purple"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                    ? 'text-candy-purple'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 )}
               >
                 <span className="text-3xl">{tab.emoji}</span>
@@ -66,7 +66,7 @@ export function TabLayout({
                   <motion.div
                     layoutId="activeTab"
                     className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-candy-blue to-candy-purple"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   />
                 )}
               </button>
@@ -113,10 +113,10 @@ export function TabLayout({
               data-testid={`ai-coach-mobile-tab-${tab.id}`}
               onClick={() => handleTabChange(tab.id)}
               className={cn(
-                "flex-1 py-3 flex flex-col items-center gap-1 transition-all",
+                'flex-1 py-3 flex flex-col items-center gap-1 transition-all',
                 activeTab === tab.id
-                  ? "text-candy-purple"
-                  : "text-gray-600 dark:text-gray-400"
+                  ? 'text-candy-purple'
+                  : 'text-gray-600 dark:text-gray-400'
               )}
             >
               <span className="text-2xl">{tab.emoji}</span>

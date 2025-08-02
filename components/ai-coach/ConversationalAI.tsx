@@ -27,21 +27,21 @@ interface ConversationalAIProps {
 export function ConversationalAI({ emotion: propEmotion, onActionSuggestion }: ConversationalAIProps) {
   const { currentEmotion, emotionIntensity, conversationHistory, addToHistory } = useEmotion()
   const activeEmotion = propEmotion || currentEmotion
-  
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       type: 'ai',
-      content: activeEmotion 
-        ? `${activeEmotion === 'happy' ? '행복해 보이시네요! 😊' : 
-           activeEmotion === 'tired' ? '피곤하신가요? 😴' :
-           activeEmotion === 'stressed' ? '스트레스를 받고 계시는군요. 😰' :
-           activeEmotion === 'sad' ? '우울하신가요? 😢' :
-           activeEmotion === 'anxious' ? '불안하신가요? 😟' :
-           activeEmotion === 'excited' ? '신나시는군요! 🤗' :
-           activeEmotion === 'calm' ? '평온해 보이시네요. 😌' :
-           activeEmotion === 'angry' ? '화가 나셨나요? 😤' :
-           '안녕하세요!'} 무엇을 도와드릴까요?`
+      content: activeEmotion
+        ? `${activeEmotion === 'happy' ? '행복해 보이시네요! 😊' :
+          activeEmotion === 'tired' ? '피곤하신가요? 😴' :
+            activeEmotion === 'stressed' ? '스트레스를 받고 계시는군요. 😰' :
+              activeEmotion === 'sad' ? '우울하신가요? 😢' :
+                activeEmotion === 'anxious' ? '불안하신가요? 😟' :
+                  activeEmotion === 'excited' ? '신나시는군요! 🤗' :
+                    activeEmotion === 'calm' ? '평온해 보이시네요. 😌' :
+                      activeEmotion === 'angry' ? '화가 나셨나요? 😤' :
+                        '안녕하세요!'} 무엇을 도와드릴까요?`
         : '안녕하세요! 오늘 하루는 어떠셨나요?',
       timestamp: new Date()
     }
@@ -76,7 +76,7 @@ export function ConversationalAI({ emotion: propEmotion, onActionSuggestion }: C
     const recentContext = conversationHistory.slice(-5).map(h => h.content).join(' ')
     const lowerMessage = userMessage.toLowerCase()
     const tone = activeEmotion ? emotionTones[activeEmotion as keyof typeof emotionTones] : null
-    
+
     if (lowerMessage.includes('피곤') || lowerMessage.includes('힘들')) {
       return '충분한 휴식이 필요하신 것 같아요. 잠시 눈을 감고 심호흡을 해보시는 건 어떨까요? 🌿'
     } else if (lowerMessage.includes('운동') || lowerMessage.includes('건강')) {
@@ -88,20 +88,22 @@ export function ConversationalAI({ emotion: propEmotion, onActionSuggestion }: C
     } else if (lowerMessage.includes('목표') || lowerMessage.includes('성취')) {
       return '목표를 향해 나아가고 계시는군요! 오늘 할 수 있는 작은 한 걸음은 무엇일까요? 🎯'
     }
-    
+
     // 감정 상태에 따른 기본 응답
     if (activeEmotion && emotionIntensity > 7) {
       return tone ? `${tone.prefix}그런 감정이 강하게 느껴지시는군요. 함께 이야기하면서 조금씩 나아질 거예요${tone.suffix}` :
         '더 자세히 말씀해주시면 더 나은 조언을 드릴 수 있어요.'
     }
-    
-    return tone ? 
+
+    return tone ?
       `${tone.prefix}더 자세히 말씀해주시면 더 나은 조언을 드릴 수 있어요${tone.suffix}` :
       '더 자세히 말씀해주시면 더 나은 조언을 드릴 수 있어요. 어떤 부분이 가장 고민이신가요?'
   }, [activeEmotion, emotionIntensity, conversationHistory, emotionTones])
 
   const handleSend = useCallback(() => {
-    if (!input.trim()) return
+    if (!input.trim()) {
+      return
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -135,7 +137,7 @@ export function ConversationalAI({ emotion: propEmotion, onActionSuggestion }: C
       }
       setMessages(prev => [...prev, aiResponse])
       setIsTyping(false)
-      
+
       // AI 응답도 히스토리에 추가
       addToHistory({
         id: aiResponse.id,
@@ -182,7 +184,7 @@ export function ConversationalAI({ emotion: propEmotion, onActionSuggestion }: C
               </motion.div>
             ))}
           </AnimatePresence>
-          
+
           {isTyping && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -213,7 +215,7 @@ export function ConversationalAI({ emotion: propEmotion, onActionSuggestion }: C
         </div>
         <div ref={messagesEndRef} />
       </CardContent>
-      
+
       <div className="border-t p-4">
         <div className="flex gap-2">
           <input
@@ -222,7 +224,7 @@ export function ConversationalAI({ emotion: propEmotion, onActionSuggestion }: C
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
             placeholder="메시지를 입력하세요..."
-            className="flex-1 px-4 py-2 border rounded-full bg-gray-50 dark:bg-gray-900 
+            className="flex-1 px-4 py-2 border rounded-full bg-gray-50 dark:bg-gray-900
               focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <Button

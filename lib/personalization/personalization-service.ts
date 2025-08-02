@@ -1,7 +1,7 @@
 import { db } from '../database'
-import { 
-  PersonalizationMode, 
-  PersonalizationSettings, 
+import {
+  PersonalizationMode,
+  PersonalizationSettings,
   UserPreferences,
   StoragePolicy,
   MODE_CONFIGS,
@@ -58,7 +58,7 @@ export class PersonalizationService {
    */
   async changeMode(userId: string, newMode: PersonalizationMode): Promise<void> {
     const currentSettings = await this.getSettings(userId)
-    
+
     if (currentSettings.mode === newMode) {
       return // 같은 모드로는 변경하지 않음
     }
@@ -85,11 +85,11 @@ export class PersonalizationService {
    * 사용자 선호도 업데이트
    */
   async updatePreferences(
-    userId: string, 
+    userId: string,
     preferences: Partial<UserPreferences>
   ): Promise<void> {
     const currentSettings = await this.getSettings(userId)
-    
+
     const updatedSettings: PersonalizationSettings = {
       ...currentSettings,
       preferences: {
@@ -112,7 +112,7 @@ export class PersonalizationService {
         .where('userId')
         .equals(userId)
         .count()
-      
+
       const activityDataMB = (activities * 200) / (1024 * 1024) // 약 200 bytes per activity
 
       // AI 상호작용 데이터
@@ -120,7 +120,7 @@ export class PersonalizationService {
         .where('key')
         .startsWith(`ai_interaction_${userId}`)
         .count()
-      
+
       const interactionDataMB = (interactions * 1000) / (1024 * 1024) // 약 1KB per interaction
 
       // 패턴 데이터
@@ -165,10 +165,10 @@ export class PersonalizationService {
    */
   private async upgradeToProMode(userId: string): Promise<void> {
     console.log('Upgrading to Pro mode for user:', userId)
-    
+
     // 기존 라이트 데이터는 유지
     // 이제부터 더 상세한 데이터 수집 시작
-    
+
     // 설정 마이그레이션
     await db.metadata.put({
       id: Date.now(),
@@ -186,17 +186,17 @@ export class PersonalizationService {
    */
   private async downgradeToLightMode(userId: string): Promise<void> {
     console.log('Downgrading to Light mode for user:', userId)
-    
+
     // 데이터 요약 생성
     const summary = await this.generateDataSummary(userId)
-    
+
     // 요약 저장
     await db.metadata.put({
       id: Date.now(),
       key: `data_summary_${userId}`,
       data: JSON.stringify(summary)
     })
-    
+
     // 오래된 상세 데이터 정리 (사용자 확인 필요)
     // 실제 구현시에는 UI에서 확인 받아야 함
   }
@@ -218,7 +218,7 @@ export class PersonalizationService {
       .where('userId')
       .equals(userId)
       .toArray()
-    
+
     return {
       totalActivities: activities.length,
       dateRange: {
@@ -235,11 +235,11 @@ export class PersonalizationService {
    * 설정 저장
    */
   private async saveSettings(
-    userId: string, 
+    userId: string,
     settings: PersonalizationSettings
   ): Promise<void> {
     this.currentSettings = settings
-    
+
     await db.metadata.put({
       id: Date.now(),
       key: `personalization_${userId}`,
@@ -274,13 +274,13 @@ export class PersonalizationService {
   }
 
   // 헬퍼 메서드들
-  private getTopActivities(activities: Activity[], limit: number = 5): string[] {
+  private getTopActivities(activities: Activity[], limit = 5): string[] {
     const counts: Record<string, number> = {}
-    
+
     activities.forEach(activity => {
       counts[activity.activityName] = (counts[activity.activityName] || 0) + 1
     })
-    
+
     return Object.entries(counts)
       .sort(([,a], [,b]) => b - a)
       .slice(0, limit)
@@ -288,24 +288,28 @@ export class PersonalizationService {
   }
 
   private calculateAverageQuality(activities: Activity[]): number {
-    if (activities.length === 0) return 0
-    
+    if (activities.length === 0) {
+      return 0
+    }
+
     const qualityValues = {
       'S': 5, 'A': 4, 'B': 3, 'C': 2, 'D': 1
     }
-    
+
     const total = activities.reduce((sum, activity) => {
       return sum + (qualityValues[activity.quality] || 0)
     }, 0)
-    
+
     return total / activities.length
   }
 
   private calculateCompletionRate(activities: Activity[]): number {
-    if (activities.length === 0) return 0
-    
+    if (activities.length === 0) {
+      return 0
+    }
+
     // 설명이 있거나 품질이 B 이상인 활동을 완료된 것으로 간주
-    const completed = activities.filter(a => 
+    const completed = activities.filter(a =>
       a.description || ['A', 'B', 'S'].includes(a.quality)
     ).length
     return (completed / activities.length) * 100

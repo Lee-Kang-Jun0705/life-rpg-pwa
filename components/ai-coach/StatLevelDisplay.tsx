@@ -70,7 +70,7 @@ export function StatLevelDisplay({ userStats }: StatLevelDisplayProps) {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200 }}
+            transition={{ type: 'spring', stiffness: 200 }}
             className="inline-block"
           >
             <div className="text-6xl mb-2">⚔️</div>
@@ -132,7 +132,7 @@ export function StatLevelDisplay({ userStats }: StatLevelDisplayProps) {
                         strokeLinecap="round"
                         initial={{ strokeDashoffset: 2 * Math.PI * 50 }}
                         animate={{ strokeDashoffset: 2 * Math.PI * 50 - (level / maxLevel) * 2 * Math.PI * 50 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
+                        transition={{ duration: 1, ease: 'easeOut' }}
                       />
                     </svg>
                     {/* 중앙 컨텐츠 - SVG 밖에 배치 */}
@@ -145,7 +145,7 @@ export function StatLevelDisplay({ userStats }: StatLevelDisplayProps) {
                   {/* 스탯 이름 */}
                   <div className="text-center text-white">
                     <h4 className="text-lg font-bold mb-1">{info.name}</h4>
-                    
+
                     {/* 경험치 바 */}
                     <div className="bg-white/30 rounded-full h-2 overflow-hidden">
                       <motion.div

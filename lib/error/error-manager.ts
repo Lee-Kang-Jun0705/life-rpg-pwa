@@ -38,7 +38,7 @@ class ErrorManager {
    */
   logError(error: Error | AppError, context?: Record<string, string | number | boolean | null>): void {
     const appError = this.normalizeError(error, context)
-    
+
     // 에러 로그에 추가
     this.errorLog.unshift(appError)
     if (this.errorLog.length > this.maxLogSize) {
@@ -121,9 +121,9 @@ class ErrorManager {
    */
   private isAppError(error: unknown): error is AppError {
     const err = error as Record<string, unknown>
-    return err !== null && 
+    return err !== null &&
            typeof err === 'object' &&
-           typeof err.code === 'string' && 
+           typeof err.code === 'string' &&
            typeof err.severity === 'string' &&
            typeof err.category === 'string' &&
            typeof err.recoverable === 'boolean' &&
@@ -139,22 +139,22 @@ class ErrorManager {
     if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT') {
       return 'medium'
     }
-    
+
     // 인증 에러
     if (err.code === 'UNAUTHORIZED' || err.code === 'FORBIDDEN') {
       return 'high'
     }
-    
+
     // 검증 에러
     if (err.name === 'ValidationError') {
       return 'low'
     }
-    
+
     // 데이터베이스 에러
     if (err.name === 'DatabaseError' || err.code?.startsWith('DB_')) {
       return 'high'
     }
-    
+
     return 'medium'
   }
 
@@ -166,23 +166,23 @@ class ErrorManager {
     if (err.code?.startsWith('DB_') || err.name === 'DatabaseError') {
       return 'database'
     }
-    
+
     if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT' || err.name === 'NetworkError') {
       return 'network'
     }
-    
+
     if (err.name === 'ValidationError' || err.code?.startsWith('VALIDATION_')) {
       return 'validation'
     }
-    
+
     if (err.code === 'UNAUTHORIZED' || err.code === 'FORBIDDEN') {
       return 'auth'
     }
-    
+
     if (err.code?.startsWith('BUSINESS_')) {
       return 'business'
     }
-    
+
     return 'system'
   }
 
@@ -250,7 +250,7 @@ class ErrorManager {
       high: 3,
       critical: 4
     }
-    
+
     const minLevel = severityOrder[minSeverity]
     return this.errorLog.filter(error => severityOrder[error.severity] >= minLevel)
   }
@@ -282,7 +282,7 @@ export function createAppError(
 
 // 일반적인 에러 생성 함수들
 export const CommonErrors = {
-  networkError: (message = '네트워크 연결에 실패했습니다') => 
+  networkError: (message = '네트워크 연결에 실패했습니다') =>
     createAppError('NETWORK_ERROR', message, {
       category: 'network',
       severity: 'medium',

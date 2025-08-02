@@ -25,11 +25,11 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
     // Reduced Motion 감지
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     setIsReducedMotion(mediaQuery.matches)
-    
+
     const handleChange = (e: MediaQueryListEvent) => {
       setIsReducedMotion(e.matches)
     }
-    
+
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
@@ -38,11 +38,11 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-contrast: high)')
     setIsHighContrast(mediaQuery.matches)
-    
+
     const handleChange = (e: MediaQueryListEvent) => {
       setIsHighContrast(e.matches)
     }
-    
+
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
@@ -63,7 +63,7 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
 
     document.addEventListener('keydown', handleKeyDown)
     document.addEventListener('mousedown', handleMouseDown)
-    
+
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('mousedown', handleMouseDown)
@@ -74,7 +74,7 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     const savedHighContrast = localStorage.getItem('highContrast') === 'true'
     const savedFontSize = localStorage.getItem('fontSize') as unknown || 'medium'
-    
+
     setIsHighContrast(savedHighContrast)
     setFontSize(savedFontSize)
   }, [])
@@ -83,7 +83,7 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   const handleSetHighContrast = (enabled: boolean) => {
     setIsHighContrast(enabled)
     localStorage.setItem('highContrast', enabled.toString())
-    
+
     if (enabled) {
       document.documentElement.classList.add('high-contrast')
     } else {
@@ -95,7 +95,7 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   const handleSetFontSize = (size: 'small' | 'medium' | 'large' | 'extra-large') => {
     setFontSize(size)
     localStorage.setItem('fontSize', size)
-    
+
     // 기존 폰트 크기 클래스 제거
     document.documentElement.classList.remove('font-small', 'font-medium', 'font-large', 'font-extra-large')
     // 새 폰트 크기 클래스 추가
@@ -109,9 +109,9 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
     announcement.setAttribute('aria-atomic', 'true')
     announcement.className = 'sr-only'
     announcement.textContent = message
-    
+
     document.body.appendChild(announcement)
-    
+
     // 1초 후 제거
     setTimeout(() => {
       document.body.removeChild(announcement)
@@ -143,18 +143,18 @@ export function useAccessibility() {
 
 // 접근성 설정 컴포넌트
 export function AccessibilitySettings() {
-  const { 
-    isHighContrast, 
-    fontSize, 
-    setHighContrast, 
+  const {
+    isHighContrast,
+    fontSize,
+    setHighContrast,
     setFontSize,
-    announceMessage 
+    announceMessage
   } = useAccessibility()
 
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">접근성 설정</h3>
-      
+
       {/* 고대비 모드 */}
       <div className="flex items-center justify-between">
         <div>
@@ -198,9 +198,9 @@ export function AccessibilitySettings() {
               className={`
                 p-2 text-sm rounded border transition-colors
                 ${fontSize === value
-                  ? 'bg-purple-500 text-white border-purple-500'
-                  : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:border-purple-300'
-                }
+              ? 'bg-purple-500 text-white border-purple-500'
+              : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:border-purple-300'
+            }
               `}
             >
               {label}
@@ -226,13 +226,15 @@ export function AccessibilitySettings() {
 // 포커스 트랩 훅
 export function useFocusTrap(isActive: boolean, containerRef: React.RefObject<HTMLElement>) {
   useEffect(() => {
-    if (!isActive || !containerRef.current) return
+    if (!isActive || !containerRef.current) {
+      return
+    }
 
     const container = containerRef.current
     const focusableElements = container.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     )
-    
+
     const firstElement = focusableElements[0] as HTMLElement
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
 

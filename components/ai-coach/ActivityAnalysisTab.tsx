@@ -6,12 +6,12 @@ import { dbHelpers } from '@/lib/database/client'
 import { STAT_TYPES, GAME_CONFIG } from '@/lib/types/dashboard'
 import type { Stat } from '@/lib/types/dashboard'
 import { motion } from 'framer-motion'
-import { 
-  format, 
-  startOfWeek, 
-  endOfWeek, 
-  startOfMonth, 
-  endOfMonth, 
+import {
+  format,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
   eachDayOfInterval,
   isSameDay
 } from 'date-fns'
@@ -31,7 +31,7 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   useEffect(() => {
-    const loadActivities = async () => {
+    const loadActivities = async() => {
       try {
         setLoading(true)
         const allActivities = await dbHelpers.getActivities(GAME_CONFIG.DEFAULT_USER_ID)
@@ -49,7 +49,7 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
   // 기간별 활동 데이터 계산
   const periodData = useMemo(() => {
     const now = new Date()
-    const start = viewPeriod === 'week' 
+    const start = viewPeriod === 'week'
       ? startOfWeek(now, { locale: ko })
       : startOfMonth(now)
     const end = viewPeriod === 'week'
@@ -57,17 +57,17 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
       : endOfMonth(now)
 
     const days = eachDayOfInterval({ start, end })
-    
+
     return days.map(day => {
-      const dayActivities = activities.filter(a => 
+      const dayActivities = activities.filter(a =>
         isSameDay(new Date(a.timestamp), day)
       )
-      
+
       const statCounts: Record<string, number> = {}
       STAT_TYPES.forEach(stat => {
         statCounts[stat.type] = dayActivities.filter(a => a.statType === stat.type).length
       })
-      
+
       return {
         date: day,
         total: dayActivities.length,
@@ -86,12 +86,12 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
       const hour = new Date(a.timestamp).getHours()
       hourCounts[hour]++
     })
-    
+
     const mostActiveHour = hourCounts.indexOf(Math.max(...hourCounts))
-    const mostActiveTime = 
+    const mostActiveTime =
       mostActiveHour < 6 ? '새벽' :
-      mostActiveHour < 12 ? '오전' :
-      mostActiveHour < 18 ? '오후' : '저녁'
+        mostActiveHour < 12 ? '오전' :
+          mostActiveHour < 18 ? '오후' : '저녁'
 
     // 스탯별 분포
     const statDistribution = STAT_TYPES.map(stat => ({
@@ -99,7 +99,7 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
       name: stat.name,
       emoji: stat.emoji,
       count: activities.filter(a => a.statType === stat.type).length,
-      percentage: activities.length > 0 
+      percentage: activities.length > 0
         ? Math.round((activities.filter(a => a.statType === stat.type).length / activities.length) * 100)
         : 0
     }))
@@ -123,7 +123,9 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
 
   // 선택된 날짜의 활동
   const selectedDateActivities = useMemo(() => {
-    if (!selectedDate) return []
+    if (!selectedDate) {
+      return []
+    }
     return activities.filter(a => isSameDay(new Date(a.timestamp), selectedDate))
   }, [activities, selectedDate])
 
@@ -131,7 +133,7 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-candy-blue border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-8 h-8 border-4 border-candy-blue border-t-transparent rounded-full mx-auto mb-4" />
           <p className="text-gray-600 dark:text-gray-400">활동 데이터 분석 중...</p>
         </div>
       </div>
@@ -170,13 +172,13 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
           <span className="text-2xl">📅</span>
           활동 캘린더
         </h3>
-        
+
         <div className={`grid ${viewPeriod === 'week' ? 'grid-cols-7' : 'grid-cols-7'} gap-2`}>
           {periodData.map(({ date, total, exp }) => {
             const isToday = isSameDay(date, new Date())
             const isSelected = selectedDate && isSameDay(date, selectedDate)
             const intensity = Math.min(100, (total / 10) * 100)
-            
+
             return (
               <motion.button
                 key={date.toISOString()}
@@ -184,8 +186,8 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedDate(date)}
                 className={`relative p-3 rounded-xl transition-all ${
-                  isSelected 
-                    ? 'ring-2 ring-primary' 
+                  isSelected
+                    ? 'ring-2 ring-primary'
                     : ''
                 } ${
                   isToday
@@ -193,7 +195,7 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
                     : ''
                 }`}
                 style={{
-                  backgroundColor: total > 0 
+                  backgroundColor: total > 0
                     ? `rgba(59, 130, 246, ${intensity / 100})`
                     : 'rgba(156, 163, 175, 0.1)'
                 }}
@@ -249,7 +251,7 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
           <span className="text-2xl">🔍</span>
           활동 패턴 분석
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* 가장 활발한 시간 */}
           <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl p-4">
@@ -293,7 +295,7 @@ export function ActivityAnalysisTab({ userStats }: ActivityAnalysisTabProps) {
           <span className="text-2xl">🏆</span>
           자주 하는 활동 TOP 5
         </h3>
-        
+
         <div className="space-y-3">
           {patterns.topActivities.map(([activity, count], index) => (
             <motion.div

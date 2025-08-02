@@ -14,17 +14,17 @@ export function SystemProviders({ children }: SystemProvidersProps) {
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator && window.workbox !== undefined) {
       const wb = window.workbox
-      
+
       const promptNewVersionAvailable = (_event: WorkboxEvent) => {
         if (confirm('새로운 버전이 있습니다. 업데이트하시겠습니까?')) {
           wb.addEventListener('controlling', () => {
             window.location.reload()
           })
-          
+
           wb.messageSkipWaiting()
         }
       }
-      
+
       wb.addEventListener('waiting', promptNewVersionAvailable)
       wb.register()
     }

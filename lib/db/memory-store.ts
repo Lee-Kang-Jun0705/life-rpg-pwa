@@ -19,7 +19,7 @@ class MemoryStore {
   // Activities
   addActivity(activity: Activity): void {
     this.activities.push(activity)
-    
+
     // 스탯 업데이트
     const stat = this.stats.get(activity.statType) || {
       id: Math.floor(Math.random() * 1000000),
@@ -30,7 +30,7 @@ class MemoryStore {
       totalActivities: 0,
       updatedAt: new Date()
     }
-    
+
     stat.experience += activity.experience
     stat.totalActivities++
     this.stats.set(activity.statType, stat)
@@ -52,7 +52,7 @@ class MemoryStore {
   // Initialize with default stats
   initializeDefaults(userId: string): void {
     const defaultStats: Array<Stat['type']> = ['health', 'learning', 'relationship', 'achievement']
-    
+
     defaultStats.forEach(type => {
       if (!this.stats.has(type)) {
         this.stats.set(type, {

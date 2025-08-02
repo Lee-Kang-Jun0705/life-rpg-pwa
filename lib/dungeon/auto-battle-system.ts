@@ -66,16 +66,16 @@ export function convertStatsToBattleStats(stats: Stat[]): AutoBattleCharacter['s
     hp: 100 + health.level * 20,
     maxHp: 100 + health.level * 20,
     physicalAttack: 10 + health.level * 5,
-    
+
     // 학습 스탯 → MP와 마법공격력
     mp: 50 + learning.level * 10,
     maxMp: 50 + learning.level * 10,
     magicalAttack: 10 + learning.level * 5,
-    
+
     // 관계 스탯 → 버프 효과와 방어력
     buffPower: 1 + relationship.level * 0.1,
     defense: 5 + relationship.level * 3,
-    
+
     // 성취 스탯 → 크리티컬과 회피율
     critRate: 0.05 + achievement.level * 0.02,
     dodgeRate: 0.05 + achievement.level * 0.02,
@@ -186,14 +186,14 @@ export class AutoBattleSystem {
   private player: AutoBattleCharacter
   private enemy: AutoBattleCharacter
   private actions: BattleAction[] = []
-  private turn: number = 0
-  private isRunning: boolean = false
-  private battleSpeed: number = 1000 // ms per action
+  private turn = 0
+  private isRunning = false
+  private battleSpeed = 1000 // ms per action
 
   constructor(playerStats: Stat[], enemy: Omit<AutoBattleCharacter, 'position'>) {
     const battleStats = convertStatsToBattleStats(playerStats)
     const skills = getAvailableSkills(playerStats)
-    
+
     this.player = {
       name: '플레이어',
       emoji: '🦸',
@@ -225,14 +225,16 @@ export class AutoBattleSystem {
   }
 
   get winner() {
-    if (!this.isOver) return null
+    if (!this.isOver) {
+      return null
+    }
     return this.player.stats.hp > 0 ? 'player' : 'enemy'
   }
 
   // 자동 전투 시작
   async startAutoBattle(onActionCallback?: (action: BattleAction) => void): Promise<BattleResult> {
     this.isRunning = true
-    
+
     while (!this.isOver && this.isRunning) {
       // 속도에 따른 행동 순서 결정
       const playerFirst = this.player.stats.speed >= this.enemy.stats.speed
@@ -276,7 +278,9 @@ export class AutoBattleSystem {
       skill => skill.currentCooldown === 0 && attacker.stats.mp >= skill.mpCost
     )
 
-    if (availableSkills.length === 0) return
+    if (availableSkills.length === 0) {
+      return
+    }
 
     // 스킬 선택 로직
     let selectedSkill: BattleSkill
@@ -322,7 +326,9 @@ export class AutoBattleSystem {
 
     // 버프가 있으면 사용
     const buffSkill = skills.find(s => s.type === 'buff')
-    if (buffSkill) return buffSkill
+    if (buffSkill) {
+      return buffSkill
+    }
 
     // 기본 공격
     return skills[0]
@@ -418,7 +424,7 @@ export class AutoBattleSystem {
     // 적 레벨과 난이도에 따른 보상 계산
     const baseExp = 50
     const baseCoins = 20
-    
+
     return {
       exp: baseExp + Math.floor(Math.random() * 20),
       coins: baseCoins + Math.floor(Math.random() * 10),

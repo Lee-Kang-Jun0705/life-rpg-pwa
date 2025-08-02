@@ -30,7 +30,7 @@ export function WelcomeCard({
           <span className="text-3xl animate-bounce">{theme.emoji}</span>
           <h2 className="text-xl font-bold text-gray-800">{theme.message}</h2>
         </div>
-        
+
         {/* 전체 진행률 */}
         <div className="mt-4 space-y-3">
           <div className="flex justify-between items-center">
@@ -42,8 +42,8 @@ export function WelcomeCard({
             </span>
           </div>
           <div className="relative">
-            <Progress 
-              value={animateProgress ? progressPercentage : 0} 
+            <Progress
+              value={animateProgress ? progressPercentage : 0}
               className="h-3 bg-white/50"
               indicatorClassName="bg-gradient-to-r from-candy-blue to-candy-purple transition-all duration-1000"
             />

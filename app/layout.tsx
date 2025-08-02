@@ -9,15 +9,15 @@ import { ToastProvider } from '@/components/ui/Toast'
 import './globals.css'
 import '@/styles/animations.css'
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-inter'
 })
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
   weight: ['400', '500', '700', '900'],
-  variable: '--font-noto-sans-kr',
+  variable: '--font-noto-sans-kr'
 })
 
 export const metadata: Metadata = {
@@ -26,18 +26,18 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   icons: {
     icon: '/favicon.ico',
-    apple: '/icons/icon-192x192.png',
-  },
+    apple: '/icons/icon-192x192.png'
+  }
 }
 
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#000000',
+  themeColor: '#000000'
 }
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {

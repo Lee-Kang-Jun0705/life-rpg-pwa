@@ -16,7 +16,7 @@ export interface Achievement {
   prerequisites?: string[] // 선행 업적 ID들
 }
 
-export type AchievementCategory = 
+export type AchievementCategory =
   | 'general' // 일반
   | 'combat' // 전투
   | 'exploration' // 탐험
@@ -25,7 +25,7 @@ export type AchievementCategory =
   | 'social' // 소셜
   | 'special' // 특별
 
-export type AchievementDifficulty = 
+export type AchievementDifficulty =
   | 'easy' // 쉬움 (브론즈)
   | 'normal' // 보통 (실버)
   | 'hard' // 어려움 (골드)
@@ -47,7 +47,7 @@ export type AchievementConditionType =
   | 'level_reach' // 레벨 도달
   | 'total_exp' // 총 경험치
   | 'total_gold' // 총 골드
-  
+
   // 전투 관련
   | 'monster_kill' // 몬스터 처치
   | 'boss_kill' // 보스 처치
@@ -55,23 +55,23 @@ export type AchievementConditionType =
   | 'battle_streak' // 연승
   | 'damage_dealt' // 피해량
   | 'critical_hits' // 치명타
-  
+
   // 던전 관련
   | 'dungeon_clear' // 던전 클리어
   | 'stage_clear' // 스테이지 클리어
   | 'perfect_clear' // 완벽 클리어
   | 'speed_clear' // 빠른 클리어
-  
+
   // 수집 관련
   | 'item_collect' // 아이템 수집
   | 'equipment_enhance' // 장비 강화
   | 'collection_complete' // 도감 완성
-  
+
   // 활동 관련
   | 'daily_login' // 연속 로그인
   | 'daily_mission' // 일일 미션
   | 'activity_complete' // 활동 완료
-  
+
   // 특별
   | 'time_based' // 시간 기반
   | 'event_based' // 이벤트 기반
@@ -141,7 +141,7 @@ export interface AchievementFilter {
   searchQuery?: string
 }
 
-export type AchievementSortOption = 
+export type AchievementSortOption =
   | 'name'
   | 'category'
   | 'difficulty'

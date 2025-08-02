@@ -15,39 +15,39 @@ interface StageSelectProps {
   onClose: () => void
 }
 
-export function StageSelect({ 
-  dungeonId, 
+export function StageSelect({
+  dungeonId,
   dungeonName,
   onSelectStage,
-  onClose 
+  onClose
 }: StageSelectProps) {
   const [stages, setStages] = useState<Stage[]>([])
   const [stageProgress, setStageProgress] = useState<StageProgress[]>([])
   const [loading, setLoading] = useState(true)
   const [totalStars, setTotalStars] = useState(0)
-  
+
   const stageService = StageService.getInstance()
 
   useEffect(() => {
-    const loadStages = async () => {
+    const loadStages = async() => {
       try {
         setLoading(true)
-        
+
         // 스테이지 목록 가져오기
         const stageList = getStagesForDungeon(dungeonId)
         setStages(stageList)
-        
+
         // 진행 상황 가져오기
         const progress = await stageService.getDungeonStageProgress(
           GAME_CONFIG.DEFAULT_USER_ID,
           dungeonId
         )
         setStageProgress(progress)
-        
+
         // 총 별 개수 계산
         const stars = progress.reduce((sum, p) => sum + p.stars, 0)
         setTotalStars(stars)
-        
+
         setLoading(false)
       } catch (error) {
         console.error('Failed to load stages:', error)
@@ -106,7 +106,9 @@ export function StageSelect({
         <div className="flex-1 overflow-y-auto space-y-4">
           {stages.map((stage, index) => {
             const progress = stageProgress.find(p => p.stageId === stage.id)
-            if (!progress) return null
+            if (!progress) {
+              return null
+            }
 
             const isLocked = progress.status === 'locked'
             const isCompleted = progress.status === 'completed'
@@ -119,11 +121,11 @@ export function StageSelect({
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: index * 0.1 }}
                 className={`relative p-4 rounded-xl border-2 transition-all ${
-                  isLocked 
-                    ? 'bg-gray-800/50 border-gray-700 opacity-60' 
+                  isLocked
+                    ? 'bg-gray-800/50 border-gray-700 opacity-60'
                     : isCompleted
-                    ? 'bg-green-900/20 border-green-600'
-                    : 'bg-blue-900/20 border-blue-600 hover:bg-blue-900/30'
+                      ? 'bg-green-900/20 border-green-600'
+                      : 'bg-blue-900/20 border-blue-600 hover:bg-blue-900/30'
                 } ${!isLocked && 'cursor-pointer'}`}
                 onClick={() => !isLocked && onSelectStage(stage.id)}
               >
@@ -192,7 +194,7 @@ export function StageSelect({
                         />
                       ))}
                     </div>
-                    
+
                     {progress.bestTime && (
                       <div className="flex items-center gap-1 text-xs text-gray-400">
                         <Clock className="w-3 h-3" />
@@ -202,7 +204,7 @@ export function StageSelect({
                         </span>
                       </div>
                     )}
-                    
+
                     {progress.attempts > 0 && (
                       <span className="text-xs text-gray-400">
                         시도: {progress.attempts}회
@@ -216,11 +218,11 @@ export function StageSelect({
                   <div className="mt-3 pt-3 border-t border-gray-700">
                     <p className="text-xs text-red-400">
                       🔒 잠금 해제 조건: {
-                        stage.unlockCondition.type === 'clear_previous' 
+                        stage.unlockCondition.type === 'clear_previous'
                           ? '이전 스테이지 클리어'
                           : stage.unlockCondition.type === 'player_level'
-                          ? `레벨 ${stage.unlockCondition.value} 필요`
-                          : `총 별 ${stage.unlockCondition.value}개 필요`
+                            ? `레벨 ${stage.unlockCondition.value} 필요`
+                            : `총 별 ${stage.unlockCondition.value}개 필요`
                       }
                     </p>
                   </div>
@@ -230,7 +232,7 @@ export function StageSelect({
                 {!isCompleted && stage.rewards.firstClearBonus && (
                   <div className="mt-3 pt-3 border-t border-gray-700">
                     <p className="text-xs text-purple-400">
-                      ✨ 첫 클리어 보너스: +{stage.rewards.firstClearBonus.exp} EXP, 
+                      ✨ 첫 클리어 보너스: +{stage.rewards.firstClearBonus.exp} EXP,
                       +{stage.rewards.firstClearBonus.gold} 골드
                     </p>
                   </div>

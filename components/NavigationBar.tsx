@@ -18,7 +18,7 @@ export function NavigationBar({ defaultVisible = false }: NavigationBarProps) {
   const router = useRouter()
   const [isVisible, setIsVisible] = useState(defaultVisible)
   const isInBattle = useBattleStore((state) => state.isInBattle)
-  
+
   // ESC 키로 닫기
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -37,7 +37,7 @@ export function NavigationBar({ defaultVisible = false }: NavigationBarProps) {
       e.preventDefault()
       return
     }
-    
+
     // Next.js Link의 기본 동작을 유지하면서 프리페치만 수행
     // e.preventDefault()를 제거하여 Link의 기본 네비게이션을 허용
     router.prefetch(href)
@@ -86,7 +86,7 @@ export function NavigationBar({ defaultVisible = false }: NavigationBarProps) {
       {/* 네비게이션 바 */}
       <AnimatePresence>
         {isVisible && (
-          <motion.nav 
+          <motion.nav
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
@@ -106,59 +106,59 @@ export function NavigationBar({ defaultVisible = false }: NavigationBarProps) {
               >
                 <X className="w-4 h-4 text-gray-300" />
               </motion.button>
-        <ul className="flex items-center justify-around w-full list-none m-0 p-0" role="list">
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href
-            
-            return (
-              <li key={item.id} className="flex-1 flex justify-center">
-                <Link
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  onMouseEnter={() => router.prefetch(item.href)}
-                  onTouchStart={handleTouchStart}
-                  className={cn(
-                    'relative flex flex-row items-center justify-center gap-2',
-                    'py-2 px-3 min-w-[80px]',
-                    'rounded-2xl transition-all duration-200',
-                    'touch-manipulation select-none',
-                    'hover:scale-105 active:scale-95',
-                    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-                    'transform-gpu' // GPU 가속 활성화
-                  )}
-                  aria-current={isActive ? 'page' : undefined}
-                  aria-label={`${item.label} 페이지로 이동`}
-                >
-                  {/* 활성 상태 배경 */}
-                  {isActive && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl" />
-                  )}
-                  
-                  {/* 아이콘과 라벨 */}
-                  <span 
-                    className={cn(
-                      'text-2xl transition-all duration-200',
-                      isActive ? 'scale-110' : ''
-                    )} 
-                    role="img" 
-                    aria-label={item.label}
-                  >
-                    {item.emoji}
-                  </span>
-                  
-                  <span className={cn(
-                    'text-sm font-semibold transition-all duration-200',
-                    isActive ? 'text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-400'
-                  )}>
-                    {item.label}
-                  </span>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
+              <ul className="flex items-center justify-around w-full list-none m-0 p-0" role="list">
+                {NAV_ITEMS.map((item) => {
+                  const isActive = pathname === item.href
+
+                  return (
+                    <li key={item.id} className="flex-1 flex justify-center">
+                      <Link
+                        href={item.href}
+                        onClick={(e) => handleNavClick(e, item.href)}
+                        onMouseEnter={() => router.prefetch(item.href)}
+                        onTouchStart={handleTouchStart}
+                        className={cn(
+                          'relative flex flex-row items-center justify-center gap-2',
+                          'py-2 px-3 min-w-[80px]',
+                          'rounded-2xl transition-all duration-200',
+                          'touch-manipulation select-none',
+                          'hover:scale-105 active:scale-95',
+                          'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+                          'transform-gpu' // GPU 가속 활성화
+                        )}
+                        aria-current={isActive ? 'page' : undefined}
+                        aria-label={`${item.label} 페이지로 이동`}
+                      >
+                        {/* 활성 상태 배경 */}
+                        {isActive && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl" />
+                        )}
+
+                        {/* 아이콘과 라벨 */}
+                        <span
+                          className={cn(
+                            'text-2xl transition-all duration-200',
+                            isActive ? 'scale-110' : ''
+                          )}
+                          role="img"
+                          aria-label={item.label}
+                        >
+                          {item.emoji}
+                        </span>
+
+                        <span className={cn(
+                          'text-sm font-semibold transition-all duration-200',
+                          isActive ? 'text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-400'
+                        )}>
+                          {item.label}
+                        </span>
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
             </div>
-            
+
             {/* 애니메이션 스타일 */}
             <style jsx>{`
               @media (prefers-reduced-motion: reduce) {

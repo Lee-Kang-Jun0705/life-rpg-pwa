@@ -62,12 +62,12 @@ const EMOTION_ACTIONS: Record<string, Array<{
 export function MagicButton({ emotion, intensity, onAction }: MagicButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedAction, setSelectedAction] = useState<string | null>(null)
-  
+
   const actions = EMOTION_ACTIONS[emotion] || EMOTION_ACTIONS.happy
 
   // 강도에 따라 추천 액션 조정
-  const recommendedActions = intensity > 7 
-    ? actions 
+  const recommendedActions = intensity > 7
+    ? actions
     : actions.slice(0, 2)
 
   const handleActionSelect = (actionId: string) => {
@@ -82,12 +82,12 @@ export function MagicButton({ emotion, intensity, onAction }: MagicButtonProps) 
         whileHover={{ _scale: 1.05 }}
         whileTap={{ _scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="relative w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 
+        className="relative w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500
           rounded-full shadow-lg hover:shadow-xl transition-all duration-300
           flex items-center justify-center text-white overflow-hidden group"
       >
         <Sparkles className="w-8 h-8 relative z-10" />
-        
+
         {/* 애니메이션 효과 */}
         <motion.div
           className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20"
@@ -98,10 +98,10 @@ export function MagicButton({ emotion, intensity, onAction }: MagicButtonProps) 
           transition={{
             duration: 2,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut'
           }}
         />
-        
+
         {/* 반짝임 효과 */}
         <motion.div
           className="absolute top-1 right-1 w-2 h-2 bg-white rounded-full"
@@ -123,8 +123,8 @@ export function MagicButton({ emotion, intensity, onAction }: MagicButtonProps) 
             initial={{ opacity: 0, _scale: 0.8, _y: 10 }}
             animate={{ opacity: 1, _scale: 1, _y: 0 }}
             exit={{ opacity: 0, _scale: 0.8, _y: 10 }}
-            className="absolute bottom-20 left-1/2 transform -translate-x-1/2 
-              bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 
+            className="absolute bottom-20 left-1/2 transform -translate-x-1/2
+              bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4
               min-w-[280px] z-50"
           >
             <h4 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 text-center">

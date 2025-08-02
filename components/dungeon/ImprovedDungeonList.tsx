@@ -84,24 +84,24 @@ export function ImprovedDungeonList({ dungeons, onSelectDungeon, playerLevel }: 
                 ${canEnter ? 'cursor-pointer' : 'cursor-not-allowed'}
               `}
             >
-              <div 
+              <div
                 className={`
                   relative overflow-hidden rounded-2xl border transition-all duration-300
-                  ${canEnter 
-                    ? 'border-purple-500/30 hover:border-purple-500/60' 
-                    : 'border-gray-700/50 opacity-60'
-                  }
+                  ${canEnter
+              ? 'border-purple-500/30 hover:border-purple-500/60'
+              : 'border-gray-700/50 opacity-60'
+            }
                 `}
               >
                 {/* 배경 이미지 또는 그라데이션 */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${difficulty} opacity-20`} />
-                
+
                 {/* 던전 이미지 영역 - 더욱 컴팩트하게 */}
                 <div className="relative h-20 md:h-24 bg-gray-800/50 backdrop-blur-sm">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-3xl md:text-4xl opacity-50">{getDungeonTypeIcon(dungeon.type)}</span>
                   </div>
-                  
+
                   {/* 타입 배지 */}
                   <div className="absolute top-2 left-2">
                     <span className={`
@@ -116,10 +116,10 @@ export function ImprovedDungeonList({ dungeons, onSelectDungeon, playerLevel }: 
                   <div className="absolute top-2 right-2">
                     <div className={`
                       px-2 py-0.5 rounded-md text-[10px] md:text-xs font-medium
-                      ${canEnter 
-                        ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                      }
+                      ${canEnter
+              ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+              : 'bg-red-500/20 text-red-400 border border-red-500/30'
+            }
                     `}>
                       Lv.{dungeon.requirements.level}+
                     </div>
@@ -143,11 +143,11 @@ export function ImprovedDungeonList({ dungeons, onSelectDungeon, playerLevel }: 
                     <div className="flex items-center gap-0.5">
                       <div className="flex">
                         {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
+                          <Star
+                            key={i}
                             className={`w-2.5 h-2.5 ${
-                              i < stars 
-                                ? 'text-yellow-500 fill-yellow-500' 
+                              i < stars
+                                ? 'text-yellow-500 fill-yellow-500'
                                 : 'text-gray-600'
                             }`}
                           />
@@ -176,8 +176,8 @@ export function ImprovedDungeonList({ dungeons, onSelectDungeon, playerLevel }: 
 
                     {canEnter && (
                       <motion.div
-                        animate={{ 
-                          x: hoveredDungeon === dungeon.id ? 3 : 0 
+                        animate={{
+                          x: hoveredDungeon === dungeon.id ? 3 : 0
                         }}
                       >
                         <ChevronRight className="w-4 h-4 text-purple-400" />

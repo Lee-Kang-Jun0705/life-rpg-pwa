@@ -11,7 +11,7 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 1,
     successRateBonus: 10,
     protectDestruction: false,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
   {
     id: 'refined-stone',
@@ -20,9 +20,9 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 1,
     successRateBonus: 20,
     protectDestruction: false,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
-  
+
   // 티어 2 강화석 (4-6강)
   {
     id: 'rare-stone',
@@ -31,7 +31,7 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 2,
     successRateBonus: 15,
     protectDestruction: false,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
   {
     id: 'blessed-stone',
@@ -40,9 +40,9 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 2,
     successRateBonus: 25,
     protectDestruction: true,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
-  
+
   // 티어 3 강화석 (7-9강)
   {
     id: 'epic-stone',
@@ -51,7 +51,7 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 3,
     successRateBonus: 20,
     protectDestruction: false,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
   {
     id: 'protection-stone',
@@ -60,9 +60,9 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 3,
     successRateBonus: 15,
     protectDestruction: true,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
-  
+
   // 티어 4 강화석 (10-12강)
   {
     id: 'legendary-stone',
@@ -71,7 +71,7 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 4,
     successRateBonus: 30,
     protectDestruction: false,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
   {
     id: 'divine-stone',
@@ -80,9 +80,9 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 4,
     successRateBonus: 40,
     protectDestruction: true,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
-  
+
   // 티어 5 강화석 (13-15강)
   {
     id: 'mythic-stone',
@@ -91,7 +91,7 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 5,
     successRateBonus: 50,
     protectDestruction: true,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
   {
     id: 'guaranteed-stone',
@@ -100,8 +100,8 @@ export const ENHANCEMENT_STONES: EnhancementMaterial[] = [
     tier: 5,
     successRateBonus: 0,
     protectDestruction: true,
-    guaranteedSuccess: true,
-  },
+    guaranteedSuccess: true
+  }
 ]
 
 // 특수 강화 재료
@@ -113,7 +113,7 @@ export const SPECIAL_ENHANCEMENT_ITEMS: EnhancementMaterial[] = [
     tier: 1,
     successRateBonus: 0,
     protectDestruction: true,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
   {
     id: 'luck-charm',
@@ -122,7 +122,7 @@ export const SPECIAL_ENHANCEMENT_ITEMS: EnhancementMaterial[] = [
     tier: 1,
     successRateBonus: 35,
     protectDestruction: false,
-    guaranteedSuccess: false,
+    guaranteedSuccess: false
   },
   {
     id: 'restoration-crystal',
@@ -131,8 +131,8 @@ export const SPECIAL_ENHANCEMENT_ITEMS: EnhancementMaterial[] = [
     tier: 1,
     successRateBonus: 0,
     protectDestruction: true,
-    guaranteedSuccess: false,
-  },
+    guaranteedSuccess: false
+  }
 ]
 
 // 강화 비용 테이블
@@ -151,7 +151,7 @@ export const ENHANCEMENT_COSTS = [
   { _level: 11, gold: 100000, materials: [{ id: 'legendary-stone', amount: 2 }] },
   { _level: 12, gold: 150000, materials: [{ id: 'divine-stone', amount: 1 }] },
   { _level: 13, gold: 250000, materials: [{ id: 'mythic-stone', amount: 1 }] },
-  { _level: 14, gold: 500000, materials: [{ id: 'mythic-stone', amount: 2 }] },
+  { _level: 14, gold: 500000, materials: [{ id: 'mythic-stone', amount: 2 }] }
 ]
 
 // 강화 보너스 계산

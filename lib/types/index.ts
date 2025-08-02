@@ -30,11 +30,11 @@ export {
 } from './equipment'
 export type { EquipmentStats as EquipmentStatsFromEquipment } from './equipment'
 export * from './dungeon'
-export type { 
-  CharacterStats, 
-  BattleAction, 
-  BattleSkill, 
-  StatusEffect, 
+export type {
+  CharacterStats,
+  BattleAction,
+  BattleSkill,
+  StatusEffect,
   BattleResult,
   StatusEffectType,
   ActionType,
@@ -46,7 +46,7 @@ export {
 } from './battle'
 export * from './ranking'
 export * from './daily-content'
-export type { 
+export type {
   Stage,
   StageReward,
   StageObjective,
@@ -64,7 +64,7 @@ export {
   isStageAvailable,
   calculateStars
 } from './stage'
-export type { 
+export type {
   Activity,
   ActivityQuality,
   ExpCalculationResult,

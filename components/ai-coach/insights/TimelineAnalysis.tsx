@@ -28,22 +28,22 @@ export function TimelineAnalysis({ userStats, growthAnalyses, activityPattern }:
   const calculatePastMetrics = () => {
     const totalLevel = userStats.reduce((sum, stat) => sum + (stat.level || 0), 0)
     const totalExp = userStats.reduce((sum, stat) => sum + (stat.experience || 0), 0)
-    const avgGrowthRate = growthAnalyses.length > 0 
-      ? growthAnalyses.reduce((sum, g) => sum + g.growthRate, 0) / growthAnalyses.length 
+    const avgGrowthRate = growthAnalyses.length > 0
+      ? growthAnalyses.reduce((sum, g) => sum + g.growthRate, 0) / growthAnalyses.length
       : 0
 
     // 예상 시작 레벨 (30일 전 기준)
     const estimatedStartLevel = Math.max(4, totalLevel - Math.floor(avgGrowthRate * 30 / 100))
-    
+
     return {
       startLevel: estimatedStartLevel,
       currentLevel: totalLevel,
       totalExp,
       growthRate: avgGrowthRate,
-      strongestStat: userStats.reduce((max, stat) => 
+      strongestStat: userStats.reduce((max, stat) =>
         (stat.level || 0) > (max.level || 0) ? stat : max
       ),
-      weakestStat: userStats.reduce((min, stat) => 
+      weakestStat: userStats.reduce((min, stat) =>
         (stat.level || 0) < (min.level || 0) ? stat : min
       )
     }
@@ -68,12 +68,12 @@ export function TimelineAnalysis({ userStats, growthAnalyses, activityPattern }:
   const predictFuture = () => {
     const metrics = calculatePastMetrics()
     const current = analyzeCurrentState()
-    
+
     // 현재 성장률 기반 예측
     const daysTo100 = Math.ceil((100 - metrics.currentLevel) / (metrics.growthRate / 100))
     const nextMilestone = Math.ceil(metrics.currentLevel / 10) * 10
     const daysToMilestone = Math.ceil((nextMilestone - metrics.currentLevel) / (metrics.growthRate / 100))
-    
+
     // 개선 가능성
     const potentialGrowthRate = metrics.growthRate * (current.balance === '균형잡힌' ? 1.2 : 1.5)
     const acceleratedDaysTo100 = Math.ceil((100 - metrics.currentLevel) / (potentialGrowthRate / 100))
@@ -119,13 +119,13 @@ export function TimelineAnalysis({ userStats, growthAnalyses, activityPattern }:
           <span className="text-2xl">📈</span>
           나의 성장 타임라인
         </h3>
-        
+
         {/* 타임라인 비주얼 */}
         <Card className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20">
           <div className="relative">
             {/* 타임라인 라인 */}
             <div className="absolute left-8 top-12 bottom-12 w-0.5 bg-gradient-to-b from-indigo-300 via-purple-300 to-pink-300" />
-            
+
             {/* 타임라인 포인트들 */}
             <div className="space-y-8">
               {timelineData.map((point, index) => (
@@ -142,7 +142,7 @@ export function TimelineAnalysis({ userStats, growthAnalyses, activityPattern }:
                       <span className="text-2xl">{point.icon}</span>
                     </div>
                   </div>
-                  
+
                   {/* 내용 */}
                   <div className="flex-1 pt-2">
                     <h4 className="font-bold text-gray-800 dark:text-gray-200">{point.label}</h4>

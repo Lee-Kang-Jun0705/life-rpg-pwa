@@ -77,8 +77,8 @@ const LEADERBOARD_CATEGORIES: Omit<LeaderboardCategory, 'records'>[] = [
 class LeaderboardService {
   private static instance: LeaderboardService
   private records: Map<string, PersonalRecord[]> = new Map()
-  private userId: string = 'current-user'
-  private initialized: boolean = false
+  private userId = 'current-user'
+  private initialized = false
 
   static getInstance(): LeaderboardService {
     if (!this.instance) {
@@ -90,8 +90,10 @@ class LeaderboardService {
   /**
    * 서비스 초기화
    */
-  async initialize(userId: string = 'current-user'): Promise<void> {
-    if (this.initialized && this.userId === userId) return
+  async initialize(userId = 'current-user'): Promise<void> {
+    if (this.initialized && this.userId === userId) {
+      return
+    }
 
     this.userId = userId
     await this.loadFromDB()
@@ -227,9 +229,9 @@ class LeaderboardService {
   /**
    * 최근 기록 조회
    */
-  getRecentRecords(limit: number = 10): PersonalRecord[] {
+  getRecentRecords(limit = 10): PersonalRecord[] {
     const allRecords: PersonalRecord[] = []
-    
+
     for (const records of this.records.values()) {
       allRecords.push(...records)
     }
@@ -281,7 +283,9 @@ class LeaderboardService {
    * 연속 활동 일수 계산
    */
   private calculateActivityStreak(activities: Activity[]): number {
-    if (activities.length === 0) return 0
+    if (activities.length === 0) {
+      return 0
+    }
 
     const sortedDates = Array.from(new Set(
       activities.map(a => {
@@ -291,7 +295,7 @@ class LeaderboardService {
     )).sort().reverse()
 
     let streak = 0
-    let currentDate = new Date()
+    const currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
 
     for (const dateStr of sortedDates) {
@@ -299,7 +303,7 @@ class LeaderboardService {
       const activityDate = new Date(year, month - 1, day)
 
       const diffDays = Math.floor((currentDate.getTime() - activityDate.getTime()) / (1000 * 60 * 60 * 24))
-      
+
       if (diffDays === streak) {
         streak++
       } else {

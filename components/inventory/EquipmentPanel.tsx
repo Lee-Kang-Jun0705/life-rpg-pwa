@@ -4,9 +4,9 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import type { Equipment } from '@/lib/services/inventory.service'
 import type { GeneratedItem } from '@/lib/types/item-system'
-import { 
-  Sword, 
-  Shield, 
+import {
+  Sword,
+  Shield,
   HardHat,
   Shirt,
   Footprints,
@@ -87,7 +87,7 @@ export function EquipmentPanel({
       {/* 캐릭터 장비 슬롯 */}
       <div className="bg-gray-800 rounded-xl p-8">
         <h2 className="text-xl font-bold mb-6 text-center">장착 장비</h2>
-        
+
         <div className="relative w-full max-w-md mx-auto aspect-[3/4]">
           {/* 캐릭터 실루엣 */}
           <div className="absolute inset-0 flex items-center justify-center opacity-20">
@@ -98,7 +98,7 @@ export function EquipmentPanel({
           {equipmentSlots.map(slot => {
             const item = equipment[slot.key as keyof Equipment]
             const Icon = slot.icon
-            
+
             return (
               <div
                 key={slot.key}
@@ -121,8 +121,8 @@ export function EquipmentPanel({
                       <span className="text-3xl">
                         {item.icon || (
                           slot.key === 'weapon' ? '⚔️' :
-                          slot.key.includes('accessory') ? '💎' :
-                          '🛡️'
+                            slot.key.includes('accessory') ? '💎' :
+                              '🛡️'
                         )}
                       </span>
 
@@ -133,8 +133,8 @@ export function EquipmentPanel({
                           onUnequipItem(slot.key)
                         }}
                         className="
-                          absolute -top-2 -right-2 
-                          w-6 h-6 bg-red-600 hover:bg-red-700 
+                          absolute -top-2 -right-2
+                          w-6 h-6 bg-red-600 hover:bg-red-700
                           rounded-full flex items-center justify-center
                           opacity-0 group-hover:opacity-100 transition-opacity
                         "
@@ -180,7 +180,7 @@ export function EquipmentPanel({
       {/* 총 스탯 */}
       <div className="bg-gray-800 rounded-xl p-8">
         <h2 className="text-xl font-bold mb-6">총 능력치</h2>
-        
+
         <div className="space-y-4">
           {/* 주요 스탯 */}
           <div className="grid grid-cols-2 gap-4">
@@ -241,16 +241,16 @@ export function EquipmentPanel({
 }
 
 // 스탯 표시 컴포넌트
-function StatDisplay({ 
-  icon, 
-  name, 
-  value, 
-  color 
-}: { 
+function StatDisplay({
+  icon,
+  name,
+  value,
+  color
+}: {
   icon: string
   name: string
   value: number
-  color: string 
+  color: string
 }) {
   return (
     <div className="bg-gray-700 rounded-lg p-4">

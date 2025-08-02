@@ -3,9 +3,9 @@
  * 실시간 전투, 스킬 사용, 아이템 드롭 등
  */
 
-import type { 
-  CombatState, 
-  CombatParticipant, 
+import type {
+  CombatState,
+  CombatParticipant,
   CombatAction,
   CombatResult,
   CombatStartOptions,
@@ -16,8 +16,8 @@ import type { Dungeon, DungeonStage, DungeonMonster } from '@/lib/types/dungeon'
 import type { Character } from '@/lib/types/game-core'
 import type { GeneratedItem } from '@/lib/types/item-system'
 import type { SkillContext } from '@/lib/types/skill-system'
-import { 
-  COMBAT_CONFIG, 
+import {
+  COMBAT_CONFIG,
   COMBAT_PHASE_CONFIG,
   AI_BEHAVIOR_PATTERNS,
   COMBAT_REWARD_CONFIG,
@@ -60,13 +60,13 @@ export class DungeonCombatService {
     options: CombatStartOptions
   ): Promise<string> {
     const combatId = this.generateCombatId()
-    
+
     // 플레이어 파티 생성
     const playerParticipant = await this.createPlayerParticipant(player)
-    
+
     // 몬스터 생성
     const monsters = this.createMonsterParticipants(stage.monsters, options.difficulty)
-    
+
     // 전투 상태 초기화
     const combatState: CombatState = {
       id: combatId,
@@ -100,7 +100,9 @@ export class DungeonCombatService {
    */
   private startBattlePhase(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state || state.phase !== 'preparation') return
+    if (!state || state.phase !== 'preparation') {
+      return
+    }
 
     // 새로운 상태 객체 생성
     const newState: CombatState = {
@@ -109,12 +111,12 @@ export class DungeonCombatService {
       currentTurn: state.turnOrder[0]
     }
     this.combatStates.set(combatId, newState)
-    
+
     // 턴 진행 시작
     const interval = setInterval(() => {
       this.processTurn(combatId)
     }, COMBAT_CONFIG.turnDuration)
-    
+
     this.combatIntervals.set(combatId, interval)
   }
 
@@ -123,7 +125,9 @@ export class DungeonCombatService {
    */
   private processTurn(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state || state.phase !== 'battle') return
+    if (!state || state.phase !== 'battle') {
+      return
+    }
 
     const currentParticipant = state.participants.find(p => p.id === state.currentTurn)
     if (!currentParticipant || currentParticipant.currentHp <= 0) {
@@ -137,7 +141,7 @@ export class DungeonCombatService {
       const action = this.decideAIAction(currentParticipant, state)
       console.log('AI 행동:', action)
       this.executeAction(combatId, action)
-      
+
       // AI 행동 후 다음 턴으로
       setTimeout(() => {
         const updatedState = this.combatStates.get(combatId)
@@ -168,7 +172,7 @@ export class DungeonCombatService {
     }
 
     this.executeAction(combatId, action)
-    
+
     // 플레이어 행동 후 다음 턴으로
     setTimeout(() => {
       const updatedState = this.combatStates.get(combatId)
@@ -178,7 +182,7 @@ export class DungeonCombatService {
         this.nextTurn(combatId)
       }
     }, 1000) // 1초 후 다음 턴
-    
+
     return { success: true }
   }
 
@@ -187,14 +191,18 @@ export class DungeonCombatService {
    */
   private executeAction(combatId: string, action: CombatAction): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     const actor = state.participants.find(p => p.id === action.actorId)
-    const targets = action.targetIds.map(id => 
+    const targets = action.targetIds.map(id =>
       state.participants.find(p => p.id === id)
     ).filter(Boolean) as CombatParticipant[]
 
-    if (!actor || targets.length === 0) return
+    if (!actor || targets.length === 0) {
+      return
+    }
 
     const results = []
 
@@ -205,22 +213,22 @@ export class DungeonCombatService {
       case 'attack':
         for (const target of targets) {
           const damage = this.calculateDamage(actor, target)
-          
+
           console.log('공격 실행:', {
             attacker: actor.name,
             target: target.name,
             damage: damage,
             targetHpBefore: target.currentHp
           })
-          
+
           // target을 업데이트된 버전으로 교체
           const actualDamage = damage.isDodged ? 0 : damage.amount
-          updatedParticipants = updatedParticipants.map(p => 
-            p.id === target.id 
+          updatedParticipants = updatedParticipants.map(p =>
+            p.id === target.id
               ? { ...p, currentHp: Math.max(0, p.currentHp - actualDamage) }
               : p
           )
-          
+
           const updatedTarget = updatedParticipants.find(p => p.id === target.id)
           console.log('타겟 HP 업데이트 후:', {
             targetId: target.id,
@@ -230,7 +238,7 @@ export class DungeonCombatService {
             hpAfter: updatedTarget?.currentHp,
             isDead: updatedTarget?.currentHp === 0
           })
-          
+
           results.push({
             targetId: target.id,
             damage
@@ -246,10 +254,10 @@ export class DungeonCombatService {
             if (!skill) {
               throw new Error(`Skill not found: ${action.skillId}`)
             }
-            
+
             // MP 비용 계산
             const mpCost = typeof skill.mpCost === 'number' ? skill.mpCost : skill.mpCost.base
-            
+
             const skillResult = skillExecutionService.executeSkill(
               action.skillId,
               actor.id,
@@ -257,23 +265,23 @@ export class DungeonCombatService {
               this.createSkillContext(state),
               1 // TODO: 스킬 레벨
             )
-            
+
             // MP 차감 (스킬 실행이 성공한 경우에만)
-            updatedParticipants = updatedParticipants.map(p => 
+            updatedParticipants = updatedParticipants.map(p =>
               p.id === actor.id
                 ? { ...p, currentMp: Math.max(0, p.currentMp - mpCost) }
                 : p
             )
-            
+
             // 스킬 결과 적용
             for (const effect of skillResult.effects) {
               if (effect.effect.type === 'damage') {
-                updatedParticipants = updatedParticipants.map(p => 
+                updatedParticipants = updatedParticipants.map(p =>
                   p.id === effect.targetId
                     ? { ...p, currentHp: Math.max(0, p.currentHp - effect.actualValue) }
                     : p
                 )
-                
+
                 // 결과 추가
                 results.push({
                   targetId: effect.targetId,
@@ -295,26 +303,26 @@ export class DungeonCombatService {
 
       case 'defend':
         // 방어 버프 적용
-        updatedParticipants = updatedParticipants.map(p => 
+        updatedParticipants = updatedParticipants.map(p =>
           p.id === actor.id
             ? {
-                ...p,
-                statusEffects: [
-                  ...p.statusEffects,
-                  {
-                    id: 'defend',
-                    type: 'defenseUp',
-                    source: actor.id,
-                    remainingDuration: 1,
-                    stacks: 1,
-                    value: 50, // 50% 방어력 증가
-                    appliedAt: Date.now()
-                  }
-                ]
-              }
+              ...p,
+              statusEffects: [
+                ...p.statusEffects,
+                {
+                  id: 'defend',
+                  type: 'defenseUp',
+                  source: actor.id,
+                  remainingDuration: 1,
+                  stacks: 1,
+                  value: 50, // 50% 방어력 증가
+                  appliedAt: Date.now()
+                }
+              ]
+            }
             : p
         )
-        
+
         // 방어 결과 추가
         results.push({
           targetId: actor.id,
@@ -344,7 +352,7 @@ export class DungeonCombatService {
       ]
     }
     this.combatStates.set(combatId, newState)
-    
+
     console.log('[executeAction Complete]', {
       combatId,
       actionType: action.type,
@@ -364,7 +372,7 @@ export class DungeonCombatService {
     participant: CombatParticipant,
     state: CombatState
   ): CombatAction {
-    const ai = participant.ai || { 
+    const ai = participant.ai || {
       type: 'aggressive',
       aggressiveness: 70,
       skillPreference: 'random',
@@ -377,7 +385,7 @@ export class DungeonCombatService {
     // 행동 타입 결정
     let actionType: CombatAction['type'] = 'attack'
     let cumulative = 0
-    
+
     if (roll < (cumulative += pattern.attackWeight)) {
       actionType = 'attack'
     } else if (roll < (cumulative += pattern.skillWeight) && participant.skills.length > 0) {
@@ -403,10 +411,10 @@ export class DungeonCombatService {
 
     // 스킬 선택
     if (actionType === 'skill' && participant.skills.length > 0) {
-      const availableSkills = participant.skills.filter(skillId => 
+      const availableSkills = participant.skills.filter(skillId =>
         !skillExecutionService.isOnCooldown(participant.id, skillId)
       )
-      
+
       if (availableSkills.length > 0) {
         return {
           ...action,
@@ -431,23 +439,25 @@ export class DungeonCombatService {
     state: CombatState,
     priority: string
   ): CombatParticipant[] {
-    const enemies = state.participants.filter(p => 
+    const enemies = state.participants.filter(p =>
       p.team !== actor.team && p.currentHp > 0
     )
 
-    if (enemies.length === 0) return []
+    if (enemies.length === 0) {
+      return []
+    }
 
     switch (priority) {
       case 'lowest_hp':
         return [enemies.reduce((a, b) => a.currentHp < b.currentHp ? a : b)]
-      
+
       case 'highest_hp':
         return [enemies.reduce((a, b) => a.currentHp > b.currentHp ? a : b)]
-      
+
       case 'highest_damage':
         // TODO: 가장 많은 피해를 준 적
         return [enemies[0]]
-      
+
       case 'random':
       default:
         return [enemies[Math.floor(Math.random() * enemies.length)]]
@@ -460,18 +470,18 @@ export class DungeonCombatService {
   private calculateDamage(
     attacker: CombatParticipant,
     defender: CombatParticipant,
-    isSkill: boolean = false,
-    skillMultiplier: number = 1.0
+    isSkill = false,
+    skillMultiplier = 1.0
   ): DamageResult {
     const attackPower = attacker.stats.attack
     const defense = defender.stats.defense
-    
+
     // 기본 데미지
     let damage = Math.max(
       COMBAT_CONFIG.minDamage,
       attackPower - defense * COMBAT_CONFIG.defenseEffectiveness
     )
-    
+
     console.log('[calculateDamage]', {
       attacker: attacker.name,
       defender: defender.name,
@@ -495,7 +505,7 @@ export class DungeonCombatService {
     const hitChance = Math.min(0.95, attacker.stats.accuracy - defender.stats.dodge)
     const isHit = Math.random() < hitChance
     const isDodged = !isHit // isDodged 변수 추가
-    
+
     if (isDodged) {
       return {
         damage: 0,
@@ -524,7 +534,7 @@ export class DungeonCombatService {
 
     // 최종 데미지 반올림
     damage = Math.round(damage)
-    
+
     console.log('[calculateDamage Final]', {
       finalDamage: damage,
       isCritical,
@@ -550,11 +560,13 @@ export class DungeonCombatService {
    */
   private nextTurn(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     const currentIndex = state.turnOrder.indexOf(state.currentTurn)
     const nextIndex = (currentIndex + 1) % state.turnOrder.length
-    
+
     // 새로운 상태 객체 생성
     const newState: CombatState = {
       ...state,
@@ -571,7 +583,9 @@ export class DungeonCombatService {
    */
   private updateStatusEffects(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     // 새로운 participants 배열 생성
     const updatedParticipants = state.participants.map(participant => ({
@@ -596,10 +610,10 @@ export class DungeonCombatService {
    * 전투 종료 체크
    */
   private checkBattleEnd(state: CombatState): boolean {
-    const alivePlayerTeam = state.participants.filter(p => 
+    const alivePlayerTeam = state.participants.filter(p =>
       p.team === 'player' && p.currentHp > 0
     )
-    const aliveEnemyTeam = state.participants.filter(p => 
+    const aliveEnemyTeam = state.participants.filter(p =>
       p.team === 'enemy' && p.currentHp > 0
     )
 
@@ -611,7 +625,9 @@ export class DungeonCombatService {
    */
   private endBattle(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     // 전투 인터벌 정리
     const interval = this.combatIntervals.get(combatId)
@@ -621,7 +637,7 @@ export class DungeonCombatService {
     }
 
     // 승자 결정
-    const alivePlayerTeam = state.participants.filter(p => 
+    const alivePlayerTeam = state.participants.filter(p =>
       p.team === 'player' && p.currentHp > 0
     )
     const winner = alivePlayerTeam.length > 0 ? 'player' : 'enemy'
@@ -637,7 +653,7 @@ export class DungeonCombatService {
     // 보상 계산
     if (winner === 'player') {
       this.calculateRewards(combatId)
-      
+
       // 리더보드 기록 업데이트
       const statistics = this.calculateStatistics(combatId)
       leaderboardService.updateCombatRecords({
@@ -654,12 +670,14 @@ export class DungeonCombatService {
    */
   private calculateRewards(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
-    const defeatedMonsters = state.participants.filter(p => 
+    const defeatedMonsters = state.participants.filter(p =>
       p.team === 'enemy' && p.currentHp <= 0
     )
-    
+
     // 난이도별 보상 배율
     const difficultyMultipliers = {
       'easy': 0.8,
@@ -685,7 +703,7 @@ export class DungeonCombatService {
       // 아이템 드롭 - 난이도별 드롭률 증가
       const baseDropChance = 0.3 // 30% 기본 드롭률
       const dropChance = Math.min(1, baseDropChance * difficultyMultiplier)
-      
+
       if (Math.random() < dropChance) {
         const dropItem = itemGenerationService.generateDropItem(
           monster.level,
@@ -695,7 +713,7 @@ export class DungeonCombatService {
           items.push(dropItem)
         }
       }
-      
+
       // 추가 드롭 찬스 (보스/엘리트 몬스터)
       if (monster.type === 'boss' || monster.type === 'elite') {
         // 보스는 난이도에 따라 여러 개 드롭 가능
@@ -754,21 +772,25 @@ export class DungeonCombatService {
    */
   private calculateBonuses(combatId: string): CombatBonuses {
     const state = this.combatStates.get(combatId)
-    if (!state) return {
-      perfectVictory: false,
-      speedBonus: false,
-      overkill: false,
-      combo: 0,
-      skillMaster: false
+    if (!state) {
+      return {
+        perfectVictory: false,
+        speedBonus: false,
+        overkill: false,
+        combo: 0,
+        skillMaster: false
+      }
     }
 
     const player = state.participants.find(p => p.team === 'player')
-    if (!player) return {
-      perfectVictory: false,
-      speedBonus: false,
-      overkill: false,
-      combo: 0,
-      skillMaster: false
+    if (!player) {
+      return {
+        perfectVictory: false,
+        speedBonus: false,
+        overkill: false,
+        combo: 0,
+        skillMaster: false
+      }
     }
 
     // 콤보 계산
@@ -835,23 +857,25 @@ export class DungeonCombatService {
    */
   private calculateStatistics(combatId: string): CombatStatistics {
     const state = this.combatStates.get(combatId)
-    if (!state) return {
-      totalDamageDealt: 0,
-      totalDamageTaken: 0,
-      totalHealingDone: 0,
-      skillsUsed: 0,
-      itemsUsed: 0,
-      criticalHits: 0,
-      dodges: 0,
-      blocks: 0,
-      maxCombo: 0,
-      turnsSurvived: 0,
-      enemiesDefeated: 0
+    if (!state) {
+      return {
+        totalDamageDealt: 0,
+        totalDamageTaken: 0,
+        totalHealingDone: 0,
+        skillsUsed: 0,
+        itemsUsed: 0,
+        criticalHits: 0,
+        dodges: 0,
+        blocks: 0,
+        maxCombo: 0,
+        turnsSurvived: 0,
+        enemiesDefeated: 0
+      }
     }
 
     const playerParticipants = state.participants.filter(p => p.team === 'player')
     const playerIds = new Set(playerParticipants.map(p => p.id))
-    
+
     let totalDamageDealt = 0
     let totalDamageTaken = 0
     let totalHealingDone = 0
@@ -866,20 +890,26 @@ export class DungeonCombatService {
     // 히스토리 분석
     for (const action of state.history) {
       const isPlayerAction = playerIds.has(action.actorId)
-      
+
       // 스킬/아이템 사용 카운트
       if (isPlayerAction) {
-        if (action.type === 'skill') skillsUsed++
-        if (action.type === 'item') itemsUsed++
+        if (action.type === 'skill') {
+          skillsUsed++
+        }
+        if (action.type === 'item') {
+          itemsUsed++
+        }
       }
-      
+
       // 결과 분석
       for (const result of action.results) {
         if (result.damage) {
           if (isPlayerAction) {
             // 플레이어가 준 데미지
             totalDamageDealt += result.damage.amount
-            if (result.damage.isCritical) criticalHits++
+            if (result.damage.isCritical) {
+              criticalHits++
+            }
             if (result.damage.amount > 0) {
               currentCombo++
               maxCombo = Math.max(maxCombo, currentCombo)
@@ -887,12 +917,18 @@ export class DungeonCombatService {
           } else if (playerIds.has(result.targetId)) {
             // 플레이어가 받은 데미지
             totalDamageTaken += result.damage.amount
-            if (result.damage.isDodged) dodges++
-            if (result.damage.isBlocked) blocks++
-            if (result.damage.amount > 0) currentCombo = 0
+            if (result.damage.isDodged) {
+              dodges++
+            }
+            if (result.damage.isBlocked) {
+              blocks++
+            }
+            if (result.damage.amount > 0) {
+              currentCombo = 0
+            }
           }
         }
-        
+
         if (result.healing && isPlayerAction) {
           totalHealingDone += result.healing
         }
@@ -910,7 +946,7 @@ export class DungeonCombatService {
       blocks,
       maxCombo,
       turnsSurvived: state.turnCount,
-      enemiesDefeated: state.participants.filter(p => 
+      enemiesDefeated: state.participants.filter(p =>
         p.team === 'enemy' && p.currentHp <= 0
       ).length
     }
@@ -922,7 +958,7 @@ export class DungeonCombatService {
   private async createPlayerParticipant(player: Character): Promise<CombatParticipant> {
     // 플레이어의 학습한 스킬 가져오기
     const playerSkills = await this.getPlayerLearnedSkills(player.id)
-    
+
     return {
       id: player.id,
       name: player.name,
@@ -969,7 +1005,7 @@ export class DungeonCombatService {
         skills: m.skills
       }))
     })
-    
+
     return monsters.map((monster, index) => ({
       id: `enemy_${monster.id}_${index}`,
       name: monster.name,
@@ -997,7 +1033,7 @@ export class DungeonCombatService {
         type: 'aggressive',
         aggressiveness: 70,
         skillPreference: 'random',
-        targetingPriority: 'lowest_hp',
+        targetingPriority: 'lowest_hp'
       }
     }))
   }
@@ -1008,7 +1044,7 @@ export class DungeonCombatService {
   private getMonsterCritRate(level: number, type: string): number {
     const baseRate = 0.05 // 5% 기본 치명타율
     const levelBonus = level * 0.001 // 레벨당 0.1%
-    
+
     const typeBonus: Record<string, number> = {
       'assassin': 0.15,
       'warrior': 0.08,
@@ -1017,7 +1053,7 @@ export class DungeonCombatService {
       'tank': 0.03,
       'support': 0.04
     }
-    
+
     return Math.min(0.5, baseRate + levelBonus + (typeBonus[type] || 0))
   }
 
@@ -1027,7 +1063,7 @@ export class DungeonCombatService {
   private getMonsterCritDamage(level: number, type: string): number {
     const baseDamage = 1.5 // 150% 기본 치명타 데미지
     const levelBonus = level * 0.005 // 레벨당 0.5%
-    
+
     const typeBonus: Record<string, number> = {
       'assassin': 0.4,
       'warrior': 0.2,
@@ -1036,7 +1072,7 @@ export class DungeonCombatService {
       'tank': 0.1,
       'support': 0.15
     }
-    
+
     return baseDamage + levelBonus + (typeBonus[type] || 0)
   }
 
@@ -1046,7 +1082,7 @@ export class DungeonCombatService {
   private getMonsterDodge(level: number, type: string): number {
     const baseDodge = 0.05 // 5% 기본 회피율
     const levelBonus = level * 0.002 // 레벨당 0.2%
-    
+
     const typeBonus: Record<string, number> = {
       'assassin': 0.15,
       'ranger': 0.12,
@@ -1055,7 +1091,7 @@ export class DungeonCombatService {
       'warrior': 0.03,
       'mage': 0.08
     }
-    
+
     return Math.min(0.5, Math.max(0, baseDodge + levelBonus + (typeBonus[type] || 0)))
   }
 
@@ -1065,7 +1101,7 @@ export class DungeonCombatService {
   private getMonsterAccuracy(level: number, type: string): number {
     const baseAccuracy = 0.8 // 80% 기본 명중률
     const levelBonus = level * 0.003 // 레벨당 0.3%
-    
+
     const typeBonus: Record<string, number> = {
       'ranger': 0.1,
       'assassin': 0.08,
@@ -1074,7 +1110,7 @@ export class DungeonCombatService {
       'tank': 0.02,
       'berserker': -0.05
     }
-    
+
     return Math.min(0.99, baseAccuracy + levelBonus + (typeBonus[type] || 0))
   }
 
@@ -1084,7 +1120,7 @@ export class DungeonCombatService {
   private getMonsterResistance(level: number, type: string): number {
     const baseResistance = 0 // 0% 기본 저항력
     const levelBonus = level * 0.5 // 레벨당 0.5%
-    
+
     const typeBonus: Record<string, number> = {
       'tank': 20,
       'warrior': 10,
@@ -1093,7 +1129,7 @@ export class DungeonCombatService {
       'assassin': 0,
       'elemental': 25
     }
-    
+
     return Math.min(50, baseResistance + levelBonus + (typeBonus[type] || 0))
   }
 
@@ -1158,7 +1194,7 @@ export class DungeonCombatService {
   private getMaxSingleDamage(state: CombatState): number {
     let maxDamage = 0
     const playerIds = new Set(state.participants.filter(p => p.team === 'player').map(p => p.id))
-    
+
     for (const action of state.history) {
       if (playerIds.has(action.actorId)) {
         for (const result of action.results) {
@@ -1168,7 +1204,7 @@ export class DungeonCombatService {
         }
       }
     }
-    
+
     return maxDamage
   }
 
@@ -1179,23 +1215,23 @@ export class DungeonCombatService {
     try {
       // 스킬 관리 서비스 초기화
       await skillManagementService.initialize(playerId)
-      
+
       // 학습한 스킬 가져오기
       const learnedSkills = skillManagementService.getLearnedSkills()
-      
+
       if (learnedSkills.length > 0) {
         // 전투에서 사용 가능한 스킬만 필터링
         const combatSkills = learnedSkills
           .filter(skill => skill.level > 0) // 레벨 1 이상인 스킬만
           .map(skill => skill.skillId)
           .slice(0, 4) // 최대 4개 스킬만 사용
-        
+
         return combatSkills.length > 0 ? combatSkills : ['power_strike'] // 최소 1개 보장
       }
     } catch (error) {
       console.warn('Failed to get learned skills:', error)
     }
-    
+
     // 기본 스킬 반환
     return ['power_strike', 'healing_light']
   }

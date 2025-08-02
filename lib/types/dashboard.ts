@@ -58,17 +58,17 @@ export const STAT_TYPES: StatType[] = [
   { id: 'stat-health-001', type: 'health', name: '건강', emoji: '💪', variant: 'stat-health' },
   { id: 'stat-learning-002', type: 'learning', name: '학습', emoji: '📚', variant: 'stat-learning' },
   { id: 'stat-relationship-003', type: 'relationship', name: '관계', emoji: '👥', variant: 'stat-relationship' },
-  { id: 'stat-achievement-004', type: 'achievement', name: '성취', emoji: '🏆', variant: 'stat-achievement' },
+  { id: 'stat-achievement-004', type: 'achievement', name: '성취', emoji: '🏆', variant: 'stat-achievement' }
 ] as const
 
 // stat-calculator.ts의 함수를 재export하여 기존 코드 호환성 유지
-import { 
+import {
   calculateLevelFromExperience,
   calculateRequiredExperience,
   calculateTotalExperience
 } from '@/lib/utils/stat-calculator'
 
-export { 
+export {
   calculateLevelFromExperience as calculateLevel,
   calculateRequiredExperience as getExpForNextLevel,
   calculateTotalExperience as getExpForLevel
@@ -92,7 +92,7 @@ export const calculateLevelDetails = (totalExperience: number): {
   const { level, currentExp } = calculateLevelFromExperience(totalExperience)
   const nextLevelExp = calculateRequiredExperience(level)
   const totalExpForCurrentLevel = calculateTotalExperience(level)
-  
+
   return {
     level,
     currentLevelExp: currentExp,

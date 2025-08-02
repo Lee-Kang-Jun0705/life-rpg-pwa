@@ -1,9 +1,9 @@
 'use client'
 
-import type { 
-  Dungeon, 
-  DungeonFilter, 
-  DungeonProgress, 
+import type {
+  Dungeon,
+  DungeonFilter,
+  DungeonProgress,
   DungeonClearRecord,
   DungeonStats,
   DungeonStage
@@ -74,12 +74,14 @@ export class DungeonService {
   }
 
   // 던전 입장 가능 여부 확인
-  async isDungeonAvailable(dungeon: Dungeon, userId: string = 'current-user'): Promise<boolean> {
+  async isDungeonAvailable(dungeon: Dungeon, userId = 'current-user'): Promise<boolean> {
     const now = new Date()
     const today = now.getDay() // 0: 일요일, 1: 월요일, ...
 
     // 상태 확인
-    if (dungeon.status === 'locked') return false
+    if (dungeon.status === 'locked') {
+      return false
+    }
 
     // 요일 제한 확인
     if (dungeon.availableDays && !dungeon.availableDays.includes(today)) {
@@ -98,12 +100,16 @@ export class DungeonService {
     // 일일/주간 제한 확인
     if (dungeon.dailyLimit) {
       const todayClears = await this.getTodayClears(dungeon.id, 'current-user')
-      if (todayClears >= dungeon.dailyLimit) return false
+      if (todayClears >= dungeon.dailyLimit) {
+        return false
+      }
     }
 
     if (dungeon.weeklyLimit) {
       const weeklyClears = await this.getWeeklyClears(dungeon.id, 'current-user')
-      if (weeklyClears >= dungeon.weeklyLimit) return false
+      if (weeklyClears >= dungeon.weeklyLimit) {
+        return false
+      }
     }
 
     return true
@@ -188,8 +194,10 @@ export class DungeonService {
   async updateProgress(userId: string, dungeonId: string, updates: Partial<DungeonProgress>): Promise<DungeonProgress | null> {
     const progressKey = `${userId}-${dungeonId}`
     const progress = this.userProgress.get(progressKey)
-    
-    if (!progress) return null
+
+    if (!progress) {
+      return null
+    }
 
     const updatedProgress = { ...progress, ...updates }
     this.userProgress.set(progressKey, updatedProgress)
@@ -209,13 +217,13 @@ export class DungeonService {
 
     const now = new Date()
     const completionTime = now.getTime() - progress.startTime.getTime()
-    
+
     // 별점 계산
     const stars = this.calculateStars(progress, dungeon, completionTime)
-    
+
     // 보상 계산
     const rewards = this.calculateRewards(dungeon, stars, progress)
-    
+
     // 클리어 기록 생성
     const record: DungeonClearRecord = {
       dungeonId,
@@ -247,7 +255,7 @@ export class DungeonService {
     updatedDungeon.status = 'completed'
     updatedDungeon.clearedCount += 1
     updatedDungeon.lastClearedAt = now
-    
+
     if (!updatedDungeon.bestTime || completionTime < updatedDungeon.bestTime) {
       updatedDungeon.bestTime = completionTime
     }
@@ -267,7 +275,7 @@ export class DungeonService {
   // 던전 가용성 업데이트
   private updateDungeonAvailability(userId: string): void {
     const dungeons = Array.from(this.dungeons.values())
-    
+
     dungeons.forEach(dungeon => {
       if (dungeon.status === 'locked' && dungeon.requirements.previousDungeon) {
         const prevDungeon = this.dungeons.get(dungeon.requirements.previousDungeon)
@@ -284,10 +292,14 @@ export class DungeonService {
 
     // 시간 조건 (추정 시간의 150% 이내)
     const timeLimit = dungeon.estimatedTime * 60 * 1000 * 1.5
-    if (completionTime <= timeLimit) stars++
+    if (completionTime <= timeLimit) {
+      stars++
+    }
 
     // 완벽 조건 (HP 유지 + 소비품 미사용)
-    if (progress.survivedWithFullHP && progress.usedNoConsumables) stars++
+    if (progress.survivedWithFullHP && progress.usedNoConsumables) {
+      stars++
+    }
 
     return Math.min(stars, 3)
   }
@@ -296,7 +308,7 @@ export class DungeonService {
   private calculateRewards(dungeon: Dungeon, stars: number, progress: DungeonProgress) {
     const baseRewards = { ...dungeon.rewards }
     const starMultiplier = 0.5 + (stars * 0.25) // 1성: 0.75x, 2성: 1x, 3성: 1.25x
-    
+
     // 난이도별 보상 배율 적용
     const difficultyMultiplier = this.getDifficultyMultiplier(dungeon.difficulty)
     const totalMultiplier = starMultiplier * difficultyMultiplier
@@ -307,7 +319,7 @@ export class DungeonService {
       items: [...baseRewards.items, ...progress.earnedItems]
     }
   }
-  
+
   // 난이도별 보상 배율 가져오기
   private getDifficultyMultiplier(difficulty: string): number {
     import {  DIFFICULTY_INFO  } from '@/lib/dungeon/dungeon-data'
@@ -348,13 +360,15 @@ export class DungeonService {
   private async getUserCombatPower(userId: string): Promise<number> {
     try {
       const character = await this.getCharacterFromDB(userId)
-      if (!character) return 0
-      
+      if (!character) {
+        return 0
+      }
+
       // 전투력 계산: 공격력 + 방어력 + HP/10
       const attack = character.attack || 10
       const defense = character.defense || 5
       const hp = character.maxHp || 100
-      
+
       return Math.floor(attack * 10 + defense * 5 + hp)
     } catch (error) {
       console.error('Failed to get user combat power:', error)
@@ -376,8 +390,10 @@ export class DungeonService {
   private async getCharacterFromDB(userId: string): Promise<unknown> {
     const { getClientDatabase } = await import('../database/client')
     const db = getClientDatabase()
-    if (!db) return null
-    
+    if (!db) {
+      return null
+    }
+
     return await db.characters
       .where('userId')
       .equals(userId)
@@ -388,13 +404,17 @@ export class DungeonService {
   private async deductUserEnergy(userId: string, amount: number): Promise<void> {
     const { getClientDatabase } = await import('../database/client')
     const db = getClientDatabase()
-    if (!db) throw new Error('Database not available')
-    
+    if (!db) {
+      throw new Error('Database not available')
+    }
+
     const character = await this.getCharacterFromDB(userId)
-    if (!character) throw new Error('Character not found')
-    
+    if (!character) {
+      throw new Error('Character not found')
+    }
+
     const newEnergy = Math.max(0, (character.energy || 0) - amount)
-    await db.characters.update(character.id!, { 
+    await db.characters.update(character.id!, {
       energy: newEnergy,
       updatedAt: new Date()
     })
@@ -403,13 +423,17 @@ export class DungeonService {
   private async deductUserTickets(userId: string, amount: number): Promise<void> {
     const { getClientDatabase } = await import('../database/client')
     const db = getClientDatabase()
-    if (!db) throw new Error('Database not available')
-    
+    if (!db) {
+      throw new Error('Database not available')
+    }
+
     const character = await this.getCharacterFromDB(userId)
-    if (!character) throw new Error('Character not found')
-    
+    if (!character) {
+      throw new Error('Character not found')
+    }
+
     const newTickets = Math.max(0, (character.battleTickets || 0) - amount)
-    await db.characters.update(character.id!, { 
+    await db.characters.update(character.id!, {
       battleTickets: newTickets,
       updatedAt: new Date()
     })
@@ -419,26 +443,30 @@ export class DungeonService {
   private async giveRewards(userId: string, rewards: unknown): Promise<void> {
     const { getClientDatabase } = await import('../database/client')
     const db = getClientDatabase()
-    if (!db) throw new Error('Database not available')
-    
+    if (!db) {
+      throw new Error('Database not available')
+    }
+
     const character = await this.getCharacterFromDB(userId)
-    if (!character) throw new Error('Character not found')
-    
+    if (!character) {
+      throw new Error('Character not found')
+    }
+
     // 경험치 및 골드 지급
     const updates: Record<string, unknown> = {
       experience: (character.experience || 0) + (rewards.exp || 0),
       gold: (character.gold || 0) + (rewards.gold || 0),
       updatedAt: new Date()
     }
-    
+
     // 레벨업 체크
     const newLevel = Math.floor(updates.experience / 100) + 1
     if (newLevel > (character.level || 1)) {
       updates.level = newLevel
     }
-    
+
     await db.characters.update(character.id!, updates)
-    
+
     // 아이템 지급
     if (rewards.items && rewards.items.length > 0) {
       for (const itemId of rewards.items) {
@@ -457,9 +485,9 @@ export class DungeonService {
     const records = this.clearRecords.get(userId) || []
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    
-    return records.filter(record => 
-      record.dungeonId === dungeonId && 
+
+    return records.filter(record =>
+      record.dungeonId === dungeonId &&
       record.clearedAt >= today
     ).length
   }
@@ -471,9 +499,9 @@ export class DungeonService {
     const weekStart = new Date(now)
     weekStart.setDate(now.getDate() - now.getDay())
     weekStart.setHours(0, 0, 0, 0)
-    
-    return records.filter(record => 
-      record.dungeonId === dungeonId && 
+
+    return records.filter(record =>
+      record.dungeonId === dungeonId &&
       record.clearedAt >= weekStart
     ).length
   }
@@ -481,7 +509,7 @@ export class DungeonService {
   // 사용자 통계 조회
   async getUserStats(userId: string): Promise<DungeonStats> {
     const records = this.clearRecords.get(userId) || []
-    
+
     const stats: DungeonStats = {
       totalDungeonsCleared: records.length,
       totalStagesCleared: records.reduce((sum, r) => sum + r.statistics.perfectStages, 0),
@@ -517,7 +545,7 @@ export class DungeonService {
         // 타입별
         stats.byType[dungeon.type].cleared++
         stats.byType[dungeon.type].totalTime += Math.floor(record.completionTime / 60)
-        
+
         // 난이도별
         stats.byDifficulty[record.difficulty].cleared++
         stats.byDifficulty[record.difficulty].totalTime += Math.floor(record.completionTime / 60)

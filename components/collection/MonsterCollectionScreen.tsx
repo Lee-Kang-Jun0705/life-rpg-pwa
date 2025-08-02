@@ -18,7 +18,7 @@ export function MonsterCollectionScreen() {
   const [selectedMonster, setSelectedMonster] = useState<MonsterData | null>(null)
   const [sortBy, setSortBy] = useState<CollectionSortOption>('name')
   const [ascending, setAscending] = useState(true)
-  
+
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<ReturnType<typeof collectionService.getCollectionStats> | null>(null)
   const [categories, setCategories] = useState<CollectionCategory[]>([])
@@ -33,10 +33,10 @@ export function MonsterCollectionScreen() {
     updateFilteredMonsters()
   }, [selectedCategory, searchQuery, showOnlyDiscovered, sortBy, ascending])
 
-  const loadCollectionData = async () => {
+  const loadCollectionData = async() => {
     try {
       await collectionService.initialize()
-      
+
       setStats(collectionService.getCollectionStats())
       setCategories(collectionService.getCategories())
       setAchievements(collectionService.getAchievements())
@@ -54,15 +54,15 @@ export function MonsterCollectionScreen() {
       discovered: showOnlyDiscovered ? true : undefined,
       searchQuery
     }
-    
+
     if (selectedCategory !== 'all') {
       filter.category = [selectedCategory]
     }
-    
+
     setMonsters(collectionService.getFilteredMonsters(filter, sortBy, ascending))
   }
 
-  const handleRewardClaim = async (categoryId: string, rewardId: string) => {
+  const handleRewardClaim = async(categoryId: string, rewardId: string) => {
     const success = await collectionService.claimReward(categoryId, rewardId)
     if (success) {
       loadCollectionData()
@@ -100,14 +100,14 @@ export function MonsterCollectionScreen() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full"></div>
+        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full" />
       </div>
     )
   }
 
   return (
     <div className="min-h-screen p-2">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-7xl mx-auto"
@@ -121,7 +121,7 @@ export function MonsterCollectionScreen() {
             <h1 className="text-lg font-bold text-white">몬스터 도감</h1>
             <p className="text-xs text-gray-900 font-semibold">조우한 몬스터들을 확인하고 보상을 획득하세요</p>
           </div>
-          
+
           {/* 전체 진행도 */}
           {stats && (
             <div className="text-right">
@@ -284,8 +284,8 @@ export function MonsterCollectionScreen() {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedMonster(monster)}
                 className={`relative bg-gray-800/50 rounded-xl p-4 transition-all ${
-                  entry?.isDiscovered 
-                    ? 'hover:bg-gray-700/50' 
+                  entry?.isDiscovered
+                    ? 'hover:bg-gray-700/50'
                     : 'opacity-50 grayscale'
                 }`}
               >
@@ -326,15 +326,15 @@ export function MonsterCollectionScreen() {
                 whileHover={{ x: 4 }}
                 onClick={() => setSelectedMonster(monster)}
                 className={`flex items-center gap-4 bg-gray-800/50 rounded-lg p-4 cursor-pointer transition-all ${
-                  entry?.isDiscovered 
-                    ? 'hover:bg-gray-700/50' 
+                  entry?.isDiscovered
+                    ? 'hover:bg-gray-700/50'
                     : 'opacity-50 grayscale'
                 }`}
               >
                 <div className="text-3xl">
                   {entry?.isDiscovered ? monster.icon : '❓'}
                 </div>
-                
+
                 <div className="flex-1">
                   <h3 className="font-medium text-white">
                     {entry?.isDiscovered ? monster.name : '???'}
@@ -449,7 +449,7 @@ export function MonsterCollectionScreen() {
               ?.rewards.map(reward => {
                 const progress = collectionService.getCategoryProgress(selectedCategory)
                 const canClaim = !reward.isClaimed && progress.defeated >= reward.requiredCount
-                
+
                 return (
                   <motion.div
                     key={reward.id}
@@ -474,7 +474,7 @@ export function MonsterCollectionScreen() {
                           )}
                         </div>
                       </div>
-                      
+
                       {reward.isClaimed ? (
                         <div className="text-green-400">수령 완료</div>
                       ) : canClaim ? (

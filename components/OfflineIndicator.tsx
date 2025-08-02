@@ -26,7 +26,9 @@ export function OfflineIndicator() {
     }
   }, [isOffline, isSlowConnection])
 
-  if (!showBanner) return null
+  if (!showBanner) {
+    return null
+  }
 
   return (
     <div
@@ -34,8 +36,8 @@ export function OfflineIndicator() {
         isOffline
           ? 'bg-red-500 text-white'
           : isSlowConnection
-          ? 'bg-yellow-500 text-white'
-          : 'bg-green-500 text-white'
+            ? 'bg-yellow-500 text-white'
+            : 'bg-green-500 text-white'
       }`}
     >
       <div className="flex items-center justify-center gap-2">

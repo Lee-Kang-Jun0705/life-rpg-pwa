@@ -16,7 +16,7 @@ export function useVerification(): UseVerificationReturn {
   const [isVerifying, setIsVerifying] = useState(false)
   const [lastVerificationResult, setLastVerificationResult] = useState<VerificationResult | null>(null)
 
-  const verifyActivity = useCallback(async (
+  const verifyActivity = useCallback(async(
     activityType: string,
     activityData: Record<string, unknown>
   ): Promise<VerificationResult> => {

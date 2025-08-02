@@ -19,9 +19,9 @@ describe('FocusTrap 컴포넌트', () => {
     expect(document.activeElement).toBe(firstButton)
   })
 
-  it('Tab 키로 순환 네비게이션이 되어야 함', async () => {
+  it('Tab 키로 순환 네비게이션이 되어야 함', async() => {
     const user = userEvent.setup()
-    
+
     render(
       <FocusTrap>
         <div>
@@ -51,9 +51,9 @@ describe('FocusTrap 컴포넌트', () => {
     expect(document.activeElement).toBe(button1)
   })
 
-  it('Shift+Tab으로 역방향 네비게이션이 되어야 함', async () => {
+  it('Shift+Tab으로 역방향 네비게이션이 되어야 함', async() => {
     const user = userEvent.setup()
-    
+
     render(
       <FocusTrap>
         <div>
@@ -74,7 +74,7 @@ describe('FocusTrap 컴포넌트', () => {
 
   it('Escape 키 핸들러가 작동해야 함', () => {
     const onEscape = jest.fn()
-    
+
     render(
       <FocusTrap onEscape={onEscape}>
         <div>
@@ -102,9 +102,9 @@ describe('FocusTrap 컴포넌트', () => {
     expect(document.activeElement).not.toBe(button1)
   })
 
-  it('disabled 요소는 포커스 대상에서 제외되어야 함', async () => {
+  it('disabled 요소는 포커스 대상에서 제외되어야 함', async() => {
     const user = userEvent.setup()
-    
+
     render(
       <FocusTrap>
         <div>

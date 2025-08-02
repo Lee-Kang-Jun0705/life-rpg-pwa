@@ -16,15 +16,15 @@ export function EnergyDisplay({ userId, compact = false, onEnergyChange }: Energ
   const [regenTimer, setRegenTimer] = useState<EnergyRegenTimer | null>(null)
   const [loading, setLoading] = useState(true)
   const [canClaimBonus, setCanClaimBonus] = useState(false)
-  
+
   const energyService = EnergyService.getInstance()
 
   // 에너지 상태 로드
-  const loadEnergyState = async () => {
+  const loadEnergyState = async() => {
     try {
       const state = await energyService.getPlayerEnergyState(userId)
       setEnergyState(state)
-      
+
       // 일일 보너스 수령 가능 여부 체크
       if (state.lastDailyBonus) {
         const lastClaim = new Date(state.lastDailyBonus)
@@ -34,11 +34,11 @@ export function EnergyDisplay({ userId, compact = false, onEnergyChange }: Energ
       } else {
         setCanClaimBonus(true)
       }
-      
+
       // 회복 타이머 정보
       const timer = await energyService.getEnergyRegenTimer(userId)
       setRegenTimer(timer)
-      
+
       if (onEnergyChange) {
         onEnergyChange(state.energy.current)
       }
@@ -50,7 +50,7 @@ export function EnergyDisplay({ userId, compact = false, onEnergyChange }: Energ
   }
 
   // 일일 보너스 수령
-  const claimDailyBonus = async () => {
+  const claimDailyBonus = async() => {
     try {
       const result = await energyService.claimDailyBonus(userId)
       if (result.energy) {
@@ -67,21 +67,23 @@ export function EnergyDisplay({ userId, compact = false, onEnergyChange }: Energ
   // 초기 로드 및 주기적 업데이트
   useEffect(() => {
     loadEnergyState()
-    
+
     // 1분마다 에너지 업데이트
     const interval = setInterval(loadEnergyState, 60000)
-    
+
     return () => clearInterval(interval)
   }, [userId])
 
   // 시간 포맷팅
   const formatTime = (seconds: number): string => {
-    if (seconds <= 0) return '0:00'
-    
+    if (seconds <= 0) {
+      return '0:00'
+    }
+
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
     const secs = Math.floor(seconds % 60)
-    
+
     if (hours > 0) {
       return `${hours}h ${minutes}m`
     } else if (minutes > 0) {
@@ -92,7 +94,7 @@ export function EnergyDisplay({ userId, compact = false, onEnergyChange }: Energ
   }
 
   if (loading || !energyState) {
-    return <div className="animate-pulse bg-gray-200 rounded h-8 w-32"></div>
+    return <div className="animate-pulse bg-gray-200 rounded h-8 w-32" />
   }
 
   if (compact) {
@@ -119,9 +121,9 @@ export function EnergyDisplay({ userId, compact = false, onEnergyChange }: Energ
             {energyState.energy.current}/{energyState.energy.max}
           </span>
         </div>
-        
+
         <div className="w-full bg-gray-200 rounded-full h-2.5">
-          <div 
+          <div
             className="bg-yellow-500 h-2.5 rounded-full transition-all duration-300"
             style={{ width: `${(energyState.energy.current / energyState.energy.max) * 100}%` }}
           />
@@ -133,7 +135,7 @@ export function EnergyDisplay({ userId, compact = false, onEnergyChange }: Energ
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Clock className="w-4 h-4" />
           <span>
-            다음 회복: {formatTime(regenTimer.timeUntilNext)} | 
+            다음 회복: {formatTime(regenTimer.timeUntilNext)} |
             최대까지: {formatTime(regenTimer.timeUntilFull)}
           </span>
         </div>

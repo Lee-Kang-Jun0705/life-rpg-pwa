@@ -31,7 +31,9 @@ export function LevelUpCelebration({ show, level, statType, onComplete }: LevelU
     }
   }, [show, onComplete])
 
-  if (!mounted || !isAnimating) return null
+  if (!mounted || !isAnimating) {
+    return null
+  }
 
   const getStatName = (type?: string) => {
     const names: { [key: string]: string } = {
@@ -57,7 +59,7 @@ export function LevelUpCelebration({ show, level, statType, onComplete }: LevelU
     <div className="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center">
       {/* 배경 효과 */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-candy-yellow/20 to-transparent animate-pulse" />
-      
+
       {/* 불꽃놀이 파티클 */}
       <div className="absolute inset-0">
         {[...Array(20)].map((_, i) => (
@@ -92,7 +94,7 @@ export function LevelUpCelebration({ show, level, statType, onComplete }: LevelU
           <h1 className="text-4xl font-black text-center mb-2 bg-gradient-to-r from-candy-yellow via-candy-orange to-candy-pink bg-clip-text text-transparent">
             LEVEL UP!
           </h1>
-          
+
           <div className="text-center space-y-2">
             <p className="text-xl font-bold text-gray-800 dark:text-gray-200">
               {statType && `${getStatName(statType)} `}

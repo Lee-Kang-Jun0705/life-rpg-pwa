@@ -17,13 +17,15 @@ export function VoiceInputError({
   onReset,
   onShowFallback
 }: VoiceInputErrorProps) {
-  if (!error || showFallback) return null
+  if (!error || showFallback) {
+    return null
+  }
 
-  const positionClass = position === 'bottom-center' 
-    ? 'bottom-28 left-1/2 -translate-x-1/2' 
-    : position === 'bottom-right' 
-    ? 'bottom-28 right-6' 
-    : 'bottom-28 left-6'
+  const positionClass = position === 'bottom-center'
+    ? 'bottom-28 left-1/2 -translate-x-1/2'
+    : position === 'bottom-right'
+      ? 'bottom-28 right-6'
+      : 'bottom-28 left-6'
 
   return (
     <div className={cn(
@@ -41,7 +43,7 @@ export function VoiceInputError({
           <div className="text-sm text-red-600 dark:text-red-300 mt-1">
             {error.message}
           </div>
-          
+
           <div className="flex gap-2 mt-3">
             <button
               onClick={onReset}
@@ -52,7 +54,7 @@ export function VoiceInputError({
             >
               다시 시도
             </button>
-            
+
             <button
               onClick={onShowFallback}
               className="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-700

@@ -1,7 +1,7 @@
-import { 
-  Dungeon, 
-  DungeonProgress, 
-  Challenge, 
+import {
+  Dungeon,
+  DungeonProgress,
+  Challenge,
   DifficultyLevel,
   DungeonType,
   DungeonStats,
@@ -25,11 +25,11 @@ interface DungeonProgressData extends Omit<DungeonProgress, 'id'> {
 export class DungeonService {
   private static instance: DungeonService
   private energyService: EnergyService
-  
+
   constructor() {
     this.energyService = EnergyService.getInstance()
   }
-  
+
   static getInstance(): DungeonService {
     if (!DungeonService.instance) {
       DungeonService.instance = new DungeonService()
@@ -38,7 +38,7 @@ export class DungeonService {
   }
 
   // 사용 가능한 던전 목록 가져오기
-  async getAvailableDungeons(_userId: string, _userLevel: number = 1): Promise<Dungeon[]> {
+  async getAvailableDungeons(userId: string, userLevel = 1): Promise<Dungeon[]> {
     try {
       const db = getClientDatabase()
       if (!db) {
@@ -54,23 +54,23 @@ export class DungeonService {
 
       // 플레이어 에너지 상태 가져오기
       const energyState = await this.energyService.getPlayerEnergyState(userId)
-      
+
       // 스테이지 서비스 인스턴스
       const stageService = StageService.getInstance()
 
       const now = new Date()
-      
+
       return await Promise.all(DUNGEON_TEMPLATES_ARRAY.map(async template => {
         const progress = progressRecords.find(p => p.dungeonId === template.id)
-        const isCompleted = !!(progress?.status === 'completed' && 
-          progress.completedAt && 
+        const isCompleted = !!(progress?.status === 'completed' &&
+          progress.completedAt &&
           progress.completedAt > template.resetTime)
 
         const attempts = progress?.attempts || 0
         const energyRequired = DUNGEON_ENERGY_COST[template.difficulty as keyof typeof DUNGEON_ENERGY_COST] || 20
         const hasEnoughEnergy = energyState.energy.current >= energyRequired
 
-        const isAvailable = this.checkRequirements(template, userLevel) && 
+        const isAvailable = this.checkRequirements(template, userLevel) &&
           (!template.maxAttempts || attempts < template.maxAttempts) &&
           !isCompleted &&
           hasEnoughEnergy
@@ -86,7 +86,7 @@ export class DungeonService {
         if (DUNGEON_STAGES_MAP[template.id]) {
           const dungeonStages = DUNGEON_STAGES_MAP[template.id]
           const stageProgress = await stageService.getDungeonStageProgress(userId, template.id)
-          
+
           stageInfo = {
             hasStages: true,
             totalStages: dungeonStages.totalStages,
@@ -116,7 +116,9 @@ export class DungeonService {
   async enterDungeon(_dungeonId: string, _userId: string): Promise<DungeonProgress | null> {
     try {
       const dungeon = DUNGEON_TEMPLATES_ARRAY.find(d => d.id === dungeonId)
-      if (!dungeon) return null
+      if (!dungeon) {
+        return null
+      }
 
       // 에너지 체크
       const energyCheck = await this.energyService.checkEnergy(userId, dungeon.difficulty)
@@ -185,14 +187,18 @@ export class DungeonService {
   ): Promise<boolean> {
     try {
       const dungeon = DUNGEON_TEMPLATES_ARRAY.find(d => d.id === dungeonId)
-      if (!dungeon) return false
+      if (!dungeon) {
+        return false
+      }
 
       const challenge = dungeon.challenges.find(c => c.id === challengeId)
-      if (!challenge) return false
+      if (!challenge) {
+        return false
+      }
 
       // 도전 과제 진행 상황 업데이트
       challenge.currentValue = Math.min(progressValue, challenge.targetValue)
-      
+
       // 목표 달성 시 자동 완료
       if (challenge.currentValue >= challenge.targetValue) {
         const result = await this.completeChallenge(dungeonId, challengeId, userId)
@@ -208,8 +214,8 @@ export class DungeonService {
 
   // 도전 과제 완료
   async completeChallenge(
-    _dungeonId: string, 
-    _challengeId: string, 
+    _dungeonId: string,
+    _challengeId: string,
     _userId: string
   ): Promise<{ success: boolean; completed?: boolean; rewards?: DungeonReward }> {
     try {
@@ -223,13 +229,19 @@ export class DungeonService {
         .equals([dungeonId, userId])
         .first()
 
-      if (!progress || progress.status !== 'in_progress') return { success: false }
+      if (!progress || progress.status !== 'in_progress') {
+        return { success: false }
+      }
 
       const dungeon = DUNGEON_TEMPLATES_ARRAY.find(d => d.id === dungeonId)
-      if (!dungeon) return { success: false }
+      if (!dungeon) {
+        return { success: false }
+      }
 
       // 이미 완료한 도전인지 확인
-      if (progress.completedChallenges.includes(challengeId)) return { success: false }
+      if (progress.completedChallenges.includes(challengeId)) {
+        return { success: false }
+      }
 
       // 도전 과제를 완료 상태로 변경
       const challenge = dungeon.challenges.find(c => c.id === challengeId)
@@ -246,12 +258,12 @@ export class DungeonService {
       if (progress.completedChallenges.length === dungeon.challenges.length) {
         progress.status = 'completed'
         progress.completedAt = new Date()
-        
+
         // 던전 완료 상태를 DB에 저장 (중요!)
         if (progress.id) {
           await db.dungeonProgress.put(progress)
         }
-        
+
         // 보상 정보 반환
         return { success: true, completed: true, rewards: dungeon.rewards }
       }
@@ -268,7 +280,7 @@ export class DungeonService {
   }
 
   // 던전 통계
-  async getDungeonStats(_userId: string): Promise<DungeonStats> {
+  async getDungeonStats(userId: string): Promise<DungeonStats> {
     try {
       const db = getClientDatabase()
       if (!db) {
@@ -325,20 +337,39 @@ export class DungeonService {
   }
 
   // 요구사항 확인
-  private checkRequirements(dungeon: typeof DUNGEON_TEMPLATES_ARRAY[0], _userLevel: number): boolean {
+  private async checkRequirements(dungeon: typeof DUNGEON_TEMPLATES_ARRAY[0], userLevel: number): Promise<boolean> {
+    // 레벨 요구사항 확인
     if (dungeon.requirements.minLevel && userLevel < dungeon.requirements.minLevel) {
       return false
     }
 
-    // TODO: 스탯 요구사항 확인 (character-service와 연동 필요)
-    
+    // 스탯 요구사항 확인
+    if (dungeon.requirements.stats) {
+      try {
+        const userStats = await dbHelpers.getStats(GAME_CONFIG.DEFAULT_USER_ID)
+
+        for (const [statType, requiredValue] of Object.entries(dungeon.requirements.stats)) {
+          const userStat = userStats.find(s => s.type === statType)
+          const userStatLevel = userStat ? userStat.level : 0
+
+          if (userStatLevel < requiredValue) {
+            console.log(`스탯 요구사항 미달: ${statType} ${userStatLevel}/${requiredValue}`)
+            return false
+          }
+        }
+      } catch (error) {
+        console.error('사용자 스탯 확인 실패:', error)
+        return false
+      }
+    }
+
     return true
   }
 
   // 던전 리셋 (일일/주간)
   async resetDungeons(): Promise<void> {
     const now = new Date()
-    
+
     for (const template of DUNGEON_TEMPLATES_ARRAY) {
       if (now > template.resetTime) {
         // 리셋 시간 업데이트

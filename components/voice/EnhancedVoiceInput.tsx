@@ -51,7 +51,7 @@ export const EnhancedVoiceInput = React.memo(function EnhancedVoiceInput({
   // 녹음 시간 타이머
   useEffect(() => {
     let interval: NodeJS.Timeout
-    
+
     if (isListening) {
       interval = setInterval(() => {
         setRecordingTime(prev => {
@@ -85,16 +85,18 @@ export const EnhancedVoiceInput = React.memo(function EnhancedVoiceInput({
   }, [isSupported, isListening, stop])
 
   // 스탯 선택 후 녹음 시작
-  const handleStatSelect = useCallback(async (statType: StatType) => {
+  const handleStatSelect = useCallback(async(statType: StatType) => {
     setSelectedStat(statType)
     setShowStatSelection(false)
-    
+
     try {
       await start()
       setPulseAnimation(true)
     } catch (err) {
       console.error('음성 인식 시작 실패:', err)
-      if (onError) onError(err instanceof Error ? err : new Error(String(err)))
+      if (onError) {
+        onError(err instanceof Error ? err : new Error(String(err)))
+      }
     }
   }, [start, onError])
 
@@ -108,12 +110,12 @@ export const EnhancedVoiceInput = React.memo(function EnhancedVoiceInput({
       })
       onTranscript(transcript, selectedStat.type)
       setSelectedStat(null)
-      
+
       // 3초 후 초기화
       const timer = setTimeout(() => {
         reset()
       }, 3000)
-      
+
       return () => clearTimeout(timer)
     }
   }, [isListening, transcript, selectedStat, onTranscript, reset])
@@ -147,7 +149,7 @@ export const EnhancedVoiceInput = React.memo(function EnhancedVoiceInput({
       {/* 메인 버튼 */}
       <button
         onClick={handleVoiceButtonClick}
-        disabled={!isSupported && !showFallback}
+        disabled={false}
         className={cn(
           'fixed z-40 p-4 bg-indigo-600 dark:bg-indigo-500',
           'text-white rounded-full shadow-lg',

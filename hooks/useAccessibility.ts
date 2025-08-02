@@ -36,7 +36,9 @@ export function useAccessibility() {
     const lastFocusableElement = focusableElements[focusableElements.length - 1] as HTMLElement
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return
+      if (e.key !== 'Tab') {
+        return
+      }
 
       if (e.shiftKey) {
         if (document.activeElement === firstFocusableElement) {
@@ -61,6 +63,6 @@ export function useAccessibility() {
 
   return {
     srOnly,
-    trapFocus,
+    trapFocus
   }
 }

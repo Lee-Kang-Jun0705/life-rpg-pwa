@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Dungeon, DungeonStage } from '@/lib/types/dungeon'
 import type { Character } from '@/lib/types/game-core'
-import { 
-  X, 
-  Sword, 
-  Shield, 
-  Zap, 
+import {
+  X,
+  Sword,
+  Shield,
+  Zap,
   Heart,
   Star,
   AlertCircle,
@@ -28,16 +28,16 @@ interface DungeonEntranceModalProps {
   onEnter: (difficulty: string) => void
 }
 
-export function DungeonEntranceModal({ 
-  dungeon, 
+export function DungeonEntranceModal({
+  dungeon,
   character,
-  isOpen, 
-  onClose, 
-  onEnter 
+  isOpen,
+  onClose,
+  onEnter
 }: DungeonEntranceModalProps) {
   const [selectedDifficulty, setSelectedDifficulty] = useState(dungeon.difficulty)
   const [estimatedTime, setEstimatedTime] = useState(0)
-  
+
   useEffect(() => {
     // 예상 소요 시간 계산 (스테이지당 2-3분)
     const baseTime = dungeon.stages * 2.5
@@ -50,7 +50,7 @@ export function DungeonEntranceModal({
       expert: 1.8
     }
     const multiplier = difficultyMultiplier[selectedDifficulty] || 1
-    
+
     setEstimatedTime(Math.round(baseTime * multiplier))
   }, [dungeon.stages, selectedDifficulty])
 
@@ -100,7 +100,7 @@ export function DungeonEntranceModal({
               >
                 <X className="w-5 h-5" />
               </button>
-              
+
               <h2 className="text-2xl font-bold mb-2">{dungeon.name}</h2>
               <p className="text-gray-400">{dungeon.description}</p>
             </div>
@@ -116,7 +116,7 @@ export function DungeonEntranceModal({
                   </div>
                   <div className="font-bold">{dungeon.stages}</div>
                 </div>
-                
+
                 <div className="bg-gray-700 rounded-lg p-3">
                   <div className="flex items-center gap-2 text-sm text-gray-400 mb-1">
                     <Zap className="w-4 h-4 text-yellow-500" />
@@ -126,7 +126,7 @@ export function DungeonEntranceModal({
                     {dungeon.requirements.energy} 에너지
                   </div>
                 </div>
-                
+
                 <div className="bg-gray-700 rounded-lg p-3">
                   <div className="flex items-center gap-2 text-sm text-gray-400 mb-1">
                     <Star className="w-4 h-4" />
@@ -134,7 +134,7 @@ export function DungeonEntranceModal({
                   </div>
                   <div className="font-bold">Lv.{dungeon.requirements.level}</div>
                 </div>
-                
+
                 <div className="bg-gray-700 rounded-lg p-3">
                   <div className="flex items-center gap-2 text-sm text-gray-400 mb-1">
                     <Clock className="w-4 h-4" />
@@ -187,7 +187,7 @@ export function DungeonEntranceModal({
                       </span>
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-gray-300">골드</span>
                     <span className="font-semibold text-yellow-400">
@@ -204,7 +204,7 @@ export function DungeonEntranceModal({
                       <div className="text-sm text-gray-400 mb-2">드롭 가능 아이템</div>
                       <div className="flex flex-wrap gap-2">
                         {dungeon.rewards.items.map((item, index) => (
-                          <div 
+                          <div
                             key={index}
                             className="px-2 py-1 bg-gray-600 rounded text-xs"
                           >
@@ -243,7 +243,7 @@ export function DungeonEntranceModal({
                     <span>레벨이 부족합니다. (현재: Lv.{character.level})</span>
                   </div>
                 )}
-                
+
                 {/* 에너지 체크 */}
                 {character.energy < dungeon.requirements.energy && (
                   <div className="flex items-center gap-2 p-3 bg-yellow-900 bg-opacity-20 rounded-lg text-yellow-400">
@@ -261,7 +261,7 @@ export function DungeonEntranceModal({
                     </span>
                   </div>
                   <div className="w-full bg-gray-600 rounded-full h-2">
-                    <div 
+                    <div
                       className="bg-yellow-500 h-2 rounded-full transition-all"
                       style={{ width: `${(character.energy / character.maxEnergy) * 100}%` }}
                     />

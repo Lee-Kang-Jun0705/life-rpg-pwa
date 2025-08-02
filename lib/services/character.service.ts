@@ -27,7 +27,7 @@ class CharacterService {
   // 기본 캐릭터 생성
   private createDefaultCharacter(): void {
     const defaultLevel = 0
-    
+
     this.character = {
       id: 'player-1',
       name: '모험가',
@@ -61,7 +61,9 @@ class CharacterService {
 
   // 경험치 추가
   addExperience(_amount: number): { leveledUp: boolean; newLevel: number } {
-    if (!this.character) return { leveledUp: false, newLevel: 0 }
+    if (!this.character) {
+      return { leveledUp: false, newLevel: 0 }
+    }
 
     const oldLevel = this.character.level
     let newExperience = this.character.experience + amount
@@ -98,21 +100,27 @@ class CharacterService {
 
   // 레벨업 보상 적용
   private applyLevelUpRewards(): void {
-    if (!this.character) return
+    if (!this.character) {
+      return
+    }
 
     // 전체 스탯 재계산 (레벨 기반)
     this.recalculateStats()
-    
+
     // HP/MP 완전 회복
     this.heal(9999, 9999)
   }
 
   // 골드 추가/제거
   modifyGold(_amount: number): boolean {
-    if (!this.character) return false
-    
-    if (this.character.gold + amount < 0) return false
-    
+    if (!this.character) {
+      return false
+    }
+
+    if (this.character.gold + amount < 0) {
+      return false
+    }
+
     this.character = {
       ...this.character,
       gold: this.character.gold + amount,
@@ -123,7 +131,9 @@ class CharacterService {
 
   // HP/MP 회복
   heal(hpAmount: number, mpAmount: number): void {
-    if (!this.character) return
+    if (!this.character) {
+      return
+    }
 
     // 최대 HP/MP 계산 (레벨 기반)
     const maxHp = this.calculateMaxHp(this.character.level)
@@ -149,7 +159,9 @@ class CharacterService {
 
   // 데미지 받기
   takeDamage(damage: number): boolean {
-    if (!this.character) return false
+    if (!this.character) {
+      return false
+    }
 
     // 새로운 객체 생성
     this.character = {
@@ -160,17 +172,21 @@ class CharacterService {
       },
       lastActiveAt: Date.now()
     }
-    
+
     // 사망 체크
     return this.character.combatStats[CombatStats.HP] <= 0
   }
 
   // MP 사용
   useMp(_amount: number): boolean {
-    if (!this.character) return false
-    
-    if (this.character.combatStats[CombatStats.MP] < amount) return false
-    
+    if (!this.character) {
+      return false
+    }
+
+    if (this.character.combatStats[CombatStats.MP] < amount) {
+      return false
+    }
+
     // 새로운 객체 생성
     this.character = {
       ...this.character,
@@ -185,7 +201,9 @@ class CharacterService {
 
   // 스탯 버프/디버프
   modifyStat(stat: CombatStat, _amount: number, duration?: number): void {
-    if (!this.character) return
+    if (!this.character) {
+      return
+    }
 
     // 임시 구현 - 추후 버프 시스템 구현 시 개선
     const currentValue = this.character.combatStats[stat]
@@ -223,10 +241,12 @@ class CharacterService {
 
   // 전체 스탯 재계산
   recalculateStats(): void {
-    if (!this.character) return
+    if (!this.character) {
+      return
+    }
 
     const level = this.character.level
-    
+
     // 새로운 객체 생성
     this.character = {
       ...this.character,

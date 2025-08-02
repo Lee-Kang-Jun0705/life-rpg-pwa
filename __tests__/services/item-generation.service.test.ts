@@ -4,8 +4,8 @@
  */
 
 import { itemGenerationService } from '@/lib/services/item-generation.service'
-import type { 
-  ItemGenerationOptions, 
+import type {
+  ItemGenerationOptions,
   ItemGenerationResult,
   GeneratedItem,
   ItemRarity
@@ -32,7 +32,7 @@ describe('ItemGenerationService', () => {
 
       expect(result.success).toBe(true)
       expect(result.item).toBeDefined()
-      
+
       const item = result.item!
       expect(item.uniqueId).toMatch(/^gen_item_\d+_[\da-z]+$/)
       expect(item.rarity).toBe('rare')
@@ -47,12 +47,12 @@ describe('ItemGenerationService', () => {
         rarity: 'epic'
       }
 
-      const results = Array.from({ length: 10 }, () => 
+      const results = Array.from({ length: 10 }, () =>
         itemGenerationService.generateItem(options)
       )
 
       const stats = results.map(r => r.item!.baseStats)
-      
+
       // 모든 스탯이 설정된 범위 내에 있는지 확인
       stats.forEach(stat => {
         const rarityConfig = ITEM_RARITY_CONFIG.epic
@@ -93,8 +93,8 @@ describe('ItemGenerationService', () => {
     it('should apply rarity bonuses correctly', () => {
       const rarities: ItemRarity[] = ['common', 'uncommon', 'rare', 'epic', 'legendary']
       const level = 25
-      
-      const items = rarities.map(rarity => 
+
+      const items = rarities.map(rarity =>
         itemGenerationService.generateItem({ baseItemId: 'sword_basic', level, rarity })
       )
 
@@ -154,10 +154,10 @@ describe('ItemGenerationService', () => {
         level: 10,
         rarity: 'common'
       }
-      
+
       const result: ItemGenerationResult = itemGenerationService.generateItem(options)
       const item: GeneratedItem | undefined = result.item
-      
+
       // 모든 타입이 명시적으로 정의되어 있음
       expect(typeof result.success).toBe('boolean')
       if (item) {
@@ -170,12 +170,12 @@ describe('ItemGenerationService', () => {
   describe('generateDropItem', () => {
     it('should generate items based on monster level', () => {
       const monsterLevel = 15
-      const items = Array.from({ length: 20 }, () => 
+      const items = Array.from({ length: 20 }, () =>
         itemGenerationService.generateDropItem(monsterLevel, 'boss')
       ).filter(item => item !== null)
 
       expect(items.length).toBeGreaterThan(0)
-      
+
       items.forEach(item => {
         expect(item!.level).toBeGreaterThanOrEqual(monsterLevel - 5)
         expect(item!.level).toBeLessThanOrEqual(monsterLevel + 5)
@@ -183,11 +183,11 @@ describe('ItemGenerationService', () => {
     })
 
     it('should have higher drop rates for bosses', () => {
-      const normalDrops = Array.from({ length: 100 }, () => 
+      const normalDrops = Array.from({ length: 100 }, () =>
         itemGenerationService.generateDropItem(20, 'normal')
       ).filter(Boolean).length
 
-      const bossDrops = Array.from({ length: 100 }, () => 
+      const bossDrops = Array.from({ length: 100 }, () =>
         itemGenerationService.generateDropItem(20, 'boss')
       ).filter(Boolean).length
 
@@ -196,7 +196,7 @@ describe('ItemGenerationService', () => {
     })
 
     it('should generate rarer items from elite monsters', () => {
-      const eliteItems = Array.from({ length: 50 }, () => 
+      const eliteItems = Array.from({ length: 50 }, () =>
         itemGenerationService.generateDropItem(25, 'elite')
       ).filter(Boolean) as GeneratedItem[]
 
@@ -223,7 +223,7 @@ describe('ItemGenerationService', () => {
       // 모든 설정값이 상수로 정의되어 있는지 확인
       expect(ITEM_RARITY_CONFIG).toBeDefined()
       expect(ITEM_TYPE_CONFIG).toBeDefined()
-      
+
       // 하드코딩된 문자열이 없는지 확인
       Object.values(ITEM_RARITY_CONFIG).forEach(config => {
         expect(typeof config.statMultiplier.min).toBe('number')
@@ -256,7 +256,7 @@ describe('ItemGenerationService', () => {
       }
 
       const result = itemGenerationService.generateItem(invalidOptions)
-      
+
       expect(result.success).toBe(false)
       expect(result.error?.code).toBe('INVALID_BASE_ITEM')
     })

@@ -24,7 +24,7 @@ export default function RankingPage() {
   const [searchResults, setSearchResults] = useState<RankingEntry[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const [activeTab, setActiveTab] = useState<'ranking' | 'mystats'>('mystats')
-  
+
   const [filter, setFilter] = useState<RankingFilter>({
     category: 'total_level',
     period: 'weekly'
@@ -35,22 +35,22 @@ export default function RankingPage() {
     loadData()
   }, [loadData])
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async() => {
     try {
       setLoading(true)
-      
+
       // 랭킹 데이터 로드
       const rankingData = await rankingService.getRanking(filter)
       setRankings(rankingData)
-      
+
       // 사용자 통계 로드
       const stats = await rankingService.getUserRankingStats(GAME_CONFIG.DEFAULT_USER_ID)
       setUserStats(stats)
-      
+
       // 사용자 순위 조회
       const userRank = await rankingService.getUserRank(GAME_CONFIG.DEFAULT_USER_ID, filter.category, filter.period)
       setCurrentUserRank(userRank?.rank || null)
-      
+
     } catch (error) {
       console.error('Failed to load ranking data:', error)
     } finally {
@@ -66,7 +66,7 @@ export default function RankingPage() {
   }
 
   // 검색
-  const handleSearch = async (query: string) => {
+  const handleSearch = async(query: string) => {
     if (!query.trim()) {
       setIsSearching(false)
       setSearchResults([])
@@ -83,7 +83,7 @@ export default function RankingPage() {
   }
 
   // 새로고침
-  const handleRefresh = async () => {
+  const handleRefresh = async() => {
     setRefreshing(true)
     await loadData()
     setRefreshing(false)
@@ -96,7 +96,7 @@ export default function RankingPage() {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4" />
           <p className="text-gray-600 dark:text-gray-400">랭킹 데이터를 불러오는 중...</p>
         </div>
       </div>
@@ -122,7 +122,7 @@ export default function RankingPage() {
                 <p className="text-gray-600 dark:text-gray-400">나의 성장 기록을 확인해보세요</p>
               </div>
             </div>
-            
+
             <button
               onClick={handleRefresh}
               disabled={refreshing}
@@ -138,9 +138,9 @@ export default function RankingPage() {
         {/* 개인 기록 표시 */}
         <div className="max-w-4xl mx-auto">
           {userStats && (
-            <UserRankingStatsComponent 
-              stats={userStats} 
-              userRank={currentUserRank || undefined} 
+            <UserRankingStatsComponent
+              stats={userStats}
+              userRank={currentUserRank || undefined}
             />
           )}
         </div>

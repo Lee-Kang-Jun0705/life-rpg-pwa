@@ -18,7 +18,7 @@ export function PersonalLeaderboard() {
     loadLeaderboardData()
   }, [])
 
-  const loadLeaderboardData = async () => {
+  const loadLeaderboardData = async() => {
     try {
       await leaderboardService.initialize()
       setCategories(leaderboardService.getCategories())
@@ -31,8 +31,10 @@ export function PersonalLeaderboard() {
   }
 
   const getRecordIcon = (record: PersonalRecord) => {
-    if (record.icon) return record.icon
-    
+    if (record.icon) {
+      return record.icon
+    }
+
     const iconMap: Record<string, string> = {
       'highest_level': '📈',
       'max_daily_exp': '⭐',
@@ -43,7 +45,7 @@ export function PersonalLeaderboard() {
       'total_monsters': '👾',
       'total_items': '🎁'
     }
-    
+
     return iconMap[record.id] || '🏆'
   }
 
@@ -71,7 +73,7 @@ export function PersonalLeaderboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full"></div>
+        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full" />
       </div>
     )
   }
@@ -82,7 +84,7 @@ export function PersonalLeaderboard() {
 
   return (
     <div className="min-h-screen p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-7xl mx-auto"

@@ -55,7 +55,7 @@ export function UserRankingStats({ stats, userRank }: UserRankingStatsProps) {
           <Calendar className="w-5 h-5 text-blue-500" />
           주간 성장
         </h3>
-        
+
         <div className="grid grid-cols-2 gap-4">
           {growthCategories.map((category, index) => {
             const currentValue = stats.currentWeek[category.key as keyof typeof stats.currentWeek] as number
@@ -76,12 +76,12 @@ export function UserRankingStats({ stats, userRank }: UserRankingStatsProps) {
                   <span className="text-lg">{category.icon}</span>
                   <span className="text-sm font-medium">{category.label}</span>
                 </div>
-                
+
                 <div className="space-y-1">
                   <div className="text-2xl font-bold">
                     {(currentValue || 0).toLocaleString()}
                   </div>
-                  
+
                   <div className={`flex items-center gap-1 text-sm ${
                     isPositive ? 'text-green-600 dark:text-green-400' : 'text-gray-500'
                   }`}>
@@ -113,7 +113,7 @@ export function UserRankingStats({ stats, userRank }: UserRankingStatsProps) {
           <Target className="w-5 h-5 text-green-500" />
           카테고리별 통계
         </h3>
-        
+
         <div className="space-y-4">
           {Object.entries(RANKING_CATEGORIES).slice(0, 6).map(([key, categoryInfo], index) => {
             const currentValue = stats.currentWeek[key as keyof typeof stats.currentWeek] as number
@@ -137,7 +137,7 @@ export function UserRankingStats({ stats, userRank }: UserRankingStatsProps) {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="text-right">
                   <div className="font-bold text-lg">
                     {(allTimeValue || 0).toLocaleString()}
@@ -163,7 +163,7 @@ export function UserRankingStats({ stats, userRank }: UserRankingStatsProps) {
           <Award className="w-5 h-5 text-yellow-500" />
           주요 성과
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
@@ -173,7 +173,7 @@ export function UserRankingStats({ stats, userRank }: UserRankingStatsProps) {
               달성한 업적 수
             </div>
           </div>
-          
+
           <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
               {stats.currentWeek.collectionRate}%
@@ -182,7 +182,7 @@ export function UserRankingStats({ stats, userRank }: UserRankingStatsProps) {
               도감 완성률
             </div>
           </div>
-          
+
           <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
             <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
               +{stats.currentWeek.equipmentEnhance}

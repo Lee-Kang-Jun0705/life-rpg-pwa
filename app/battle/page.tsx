@@ -21,7 +21,7 @@ export default function BattlePage() {
   const [showRewardModal, setShowRewardModal] = useState(false)
   const [earnedRewards, setEarnedRewards] = useState<{ exp: number; coins: number; items?: string[] } | null>(null)
   const [ticketCount, setTicketCount] = useState(0)
-  
+
   const ticketService = BattleTicketService.getInstance()
 
   // 몬스터 티어별 그룹
@@ -32,26 +32,26 @@ export default function BattlePage() {
     legendary: getMonstersByTier('legendary')
   }
 
-  const handleStartBattle = async (monsterId: string) => {
+  const handleStartBattle = async(monsterId: string) => {
     // 티켓 체크는 AutoBattleScreen에서 수행
     setSelectedMonsterId(monsterId)
     setIsBattling(true)
   }
 
-  const handleBattleEnd = async (result: BattleResult) => {
+  const handleBattleEnd = async(result: BattleResult) => {
     setIsBattling(false)
     setSelectedMonsterId(null)
-    
+
     if (result.winner === 'player' && result.rewards) {
       // 보상 처리
       await addCoins(result.rewards.gold || 0)
-      
+
       // 경험치 분배
       const totalExp = result.experience || 0
       const expPerStat = Math.floor(totalExp / 4)
-      const statTypes: ('health' | 'learning' | 'relationship' | 'achievement')[] = 
+      const statTypes: ('health' | 'learning' | 'relationship' | 'achievement')[] =
         ['health', 'learning', 'relationship', 'achievement']
-      
+
       for (const statType of statTypes) {
         await dbHelpers.addActivity({
           userId: GAME_CONFIG.DEFAULT_USER_ID,
@@ -62,7 +62,7 @@ export default function BattlePage() {
           timestamp: new Date()
         })
       }
-      
+
       // 아이템 보상
       if (result.rewards.items && result.rewards.items.length > 0) {
         for (const itemId of result.rewards.items) {
@@ -72,7 +72,7 @@ export default function BattlePage() {
           }
         }
       }
-      
+
       setEarnedRewards({
         exp: totalExp,
         coins: result.rewards.gold || 0,
@@ -82,7 +82,7 @@ export default function BattlePage() {
     }
   }
 
-  const handlePurchaseTickets = async () => {
+  const handlePurchaseTickets = async() => {
     if (coins < 100) {
       alert('골드가 부족합니다')
       return
@@ -91,13 +91,13 @@ export default function BattlePage() {
     try {
       // 골드 차감
       await addCoins(-100)
-      
+
       // 티켓 구매
       const amount = await ticketService.purchaseTickets(
         GAME_CONFIG.DEFAULT_USER_ID,
         100
       )
-      
+
       alert(`티켓 ${amount}장을 구매했습니다`)
     } catch (error) {
       alert(error instanceof Error ? error.message : '티켓 구매 실패')
@@ -131,7 +131,7 @@ export default function BattlePage() {
                 <OptimizedEnergyDisplay userId={GAME_CONFIG.DEFAULT_USER_ID} />
               </div>
               <div className="w-64">
-                <OptimizedBattleTicketDisplay 
+                <OptimizedBattleTicketDisplay
                   userId={GAME_CONFIG.DEFAULT_USER_ID}
                   onTicketChange={setTicketCount}
                   onPurchase={handlePurchaseTickets}
@@ -150,8 +150,8 @@ export default function BattlePage() {
                 자동전투 시스템
               </h3>
               <p className="text-sm text-blue-700 dark:text-blue-300">
-                전투 티켓을 소비하여 자동전투를 진행합니다. 
-                캐릭터가 자동으로 스킬을 사용하여 전투를 수행하며, 
+                전투 티켓을 소비하여 자동전투를 진행합니다.
+                캐릭터가 자동으로 스킬을 사용하여 전투를 수행하며,
                 속도 조절이 가능합니다. 전투에서 승리하면 경험치, 골드, 아이템을 획득할 수 있습니다.
               </p>
             </div>
@@ -243,11 +243,11 @@ export default function BattlePage() {
 }
 
 // 몬스터 카드 컴포넌트
-function MonsterCard({ 
-  monster, 
-  onBattle, 
-  disabled 
-}: { 
+function MonsterCard({
+  monster,
+  onBattle,
+  disabled
+}: {
   monster: MonsterData
   _onBattle: (monsterId: string) => void
   disabled: boolean
@@ -309,14 +309,14 @@ function MonsterCard({
       {/* 원소 속성 */}
       {monster.element && (
         <div className="text-xs text-gray-600 mb-3">
-          원소: {monster.element === 'fire' ? '🔥 화염' : 
-                 monster.element === 'ice' ? '❄️ 빙결' :
-                 monster.element === 'electric' ? '⚡ 전기' :
-                 monster.element === 'wind' ? '🌪️ 바람' :
-                 monster.element === 'earth' ? '🗿 대지' :
-                 monster.element === 'water' ? '💧 물' :
-                 monster.element === 'dark' ? '🌑 어둠' :
-                 monster.element === 'light' ? '✨ 빛' : '무속성'}
+          원소: {monster.element === 'fire' ? '🔥 화염' :
+            monster.element === 'ice' ? '❄️ 빙결' :
+              monster.element === 'electric' ? '⚡ 전기' :
+                monster.element === 'wind' ? '🌪️ 바람' :
+                  monster.element === 'earth' ? '🗿 대지' :
+                    monster.element === 'water' ? '💧 물' :
+                      monster.element === 'dark' ? '🌑 어둠' :
+                        monster.element === 'light' ? '✨ 빛' : '무속성'}
         </div>
       )}
 
@@ -324,8 +324,8 @@ function MonsterCard({
         onClick={() => onBattle(monster.id)}
         disabled={disabled}
         className={`w-full py-2 px-4 rounded font-medium transition-colors ${
-          disabled 
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+          disabled
+            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
             : 'bg-indigo-600 text-white hover:bg-indigo-700'
         }`}
       >

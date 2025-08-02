@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Quest, QuestProgress } from '@/lib/types/quest'
 import { ALL_QUESTS } from '@/lib/data/quests'
+import { RewardService } from '@/lib/rewards/reward-service'
+import { GAME_CONFIG } from '@/lib/config/game-config'
 
 export function useQuests() {
   const [quests, setQuests] = useState<Quest[]>(ALL_QUESTS)
@@ -16,12 +18,28 @@ export function useQuests() {
       const progressData = JSON.parse(savedProgress)
       const progressMap = new Map(Object.entries(progressData))
       setQuestProgress(progressMap)
+      
+      // 저장된 진행 상황에 따라 퀘스트 상태 업데이트
+      const updatedQuests = ALL_QUESTS.map(quest => {
+        const progress = progressMap.get(quest.id)
+        if (progress) {
+          if (progress.claimed) {
+            return { ...quest, status: 'claimed' as const }
+          } else if (progress.completed) {
+            return { ...quest, status: 'completed' as const }
+          } else {
+            return { ...quest, status: 'in_progress' as const }
+          }
+        }
+        return quest
+      })
+      setQuests(updatedQuests)
     }
 
     const savedActive = localStorage.getItem('activeQuests')
     if (savedActive) {
       const activeIds = JSON.parse(savedActive)
-      const activeQuestsList = quests.filter(q => activeIds.includes(q.id))
+      const activeQuestsList = ALL_QUESTS.filter(q => activeIds.includes(q.id))
       setActiveQuests(activeQuestsList)
     }
   }, [])
@@ -41,10 +59,12 @@ export function useQuests() {
   // 퀘스트 수락
   const acceptQuest = useCallback((questId: string) => {
     const quest = quests.find(q => q.id === questId)
-    if (!quest || quest.status !== 'available') return
+    if (!quest || quest.status !== 'available') {
+      return
+    }
 
     // 퀘스트 상태 업데이트
-    const updatedQuests = quests.map(q => 
+    const updatedQuests = quests.map(q =>
       q.id === questId ? { ...q, status: 'in_progress' as const } : q
     )
     setQuests(updatedQuests)
@@ -62,7 +82,7 @@ export function useQuests() {
       completed: false,
       claimed: false
     }
-    
+
     const newProgress = new Map(questProgress)
     newProgress.set(questId, progress)
     setQuestProgress(newProgress)
@@ -77,7 +97,9 @@ export function useQuests() {
   // 퀘스트 진행도 업데이트
   const updateQuestProgress = useCallback((questId: string, objectiveId: string, progress: number) => {
     const questProg = questProgress.get(questId)
-    if (!questProg) return
+    if (!questProg) {
+      return
+    }
 
     const updatedProgress = {
       ...questProg,
@@ -85,7 +107,9 @@ export function useQuests() {
         if (obj.objectiveId === objectiveId) {
           const quest = quests.find(q => q.id === questId)
           const objective = quest?.objectives.find(o => o.id === objectiveId)
-          if (!objective) return obj
+          if (!objective) {
+            return obj
+          }
 
           const newCurrent = Math.min(progress, objective.required)
           const completed = newCurrent >= objective.required
@@ -104,9 +128,9 @@ export function useQuests() {
     const allCompleted = updatedProgress.objectives.every(obj => obj.completed)
     if (allCompleted) {
       updatedProgress.completed = true
-      
+
       // 퀘스트 상태 업데이트
-      const updatedQuests = quests.map(q => 
+      const updatedQuests = quests.map(q =>
         q.id === questId ? { ...q, status: 'completed' as const } : q
       )
       setQuests(updatedQuests)
@@ -119,12 +143,14 @@ export function useQuests() {
   }, [quests, questProgress, saveProgress])
 
   // 퀘스트 완료 및 보상 수령
-  const claimQuestRewards = useCallback((questId: string) => {
+  const claimQuestRewards = useCallback(async (questId: string) => {
     const quest = quests.find(q => q.id === questId)
-    if (!quest || quest.status !== 'completed') return
+    if (!quest || quest.status !== 'completed') {
+      return
+    }
 
     // 퀘스트 상태 업데이트
-    const updatedQuests = quests.map(q => 
+    const updatedQuests = quests.map(q =>
       q.id === questId ? { ...q, status: 'claimed' as const, claimedAt: new Date().toISOString() } : q
     )
     setQuests(updatedQuests)
@@ -144,8 +170,8 @@ export function useQuests() {
     setActiveQuests(newActive)
     saveActiveQuests(newActive)
 
-    // TODO: 실제 보상 지급 로직 구현
-    console.log('보상 지급:', quest.rewards)
+    // 보상 지급 로직 구현
+    await grantQuestRewards(quest)
 
     // 다음 퀘스트 잠금 해제
     unlockNextQuests(questId)
@@ -198,6 +224,38 @@ export function useQuests() {
     setQuestProgress(newProgress)
     saveProgress(newProgress)
   }, [quests, questProgress, saveProgress])
+
+  // 퀵스트 보상 지급
+  const grantQuestRewards = useCallback(async(quest: Quest) => {
+    try {
+      const rewardService = RewardService.getInstance()
+      const userId = GAME_CONFIG.DEFAULT_USER_ID
+
+      // 보상 번들 생성
+      const rewardBundle = {
+        exp: quest.rewards.experience,
+        currency: {
+          gold: quest.rewards.gold
+        },
+        items: quest.rewards.items?.map(item => ({
+          id: item.id,
+          name: item.name,
+          type: item.type as 'consumable' | 'equipment' | 'material' | 'special',
+          rarity: item.rarity as 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary',
+          quantity: item.quantity,
+          description: item.description
+        }))
+      }
+
+      // 보상 지급
+      await rewardService.grantRewards(userId, rewardBundle, `퀵스트: ${quest.title}`)
+
+      console.log(`✅ 퀵스트 '${quest.title}' 보상 지급 완료!`)
+
+    } catch (error) {
+      console.error('퀵스트 보상 지급 실패:', error)
+    }
+  }, [])
 
   return {
     quests,

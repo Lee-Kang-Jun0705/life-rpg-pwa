@@ -55,7 +55,7 @@ const TIME_RESTRICTIONS: ReadonlyArray<TimeRestriction> = [
     message: '깊은 밤 시간대입니다. 건강을 위해 활동이 제한됩니다.',
     statTypes: ['health'] // 건강 활동만 제한
   },
-  
+
   // 새벽 시간대
   {
     start: 5,
@@ -65,7 +65,7 @@ const TIME_RESTRICTIONS: ReadonlyArray<TimeRestriction> = [
     value: 1.3, // 30% 보너스
     message: '상쾌한 아침! 하루를 활기차게 시작하세요.'
   },
-  
+
   // 아침 시간대
   {
     start: 7,
@@ -75,7 +75,7 @@ const TIME_RESTRICTIONS: ReadonlyArray<TimeRestriction> = [
     value: 1.5, // 50% 보너스
     message: '가장 생산적인 시간대입니다! 중요한 활동을 해보세요.'
   },
-  
+
   // 점심 시간대
   {
     start: 12,
@@ -85,7 +85,7 @@ const TIME_RESTRICTIONS: ReadonlyArray<TimeRestriction> = [
     value: 1.1, // 10% 보너스
     message: '점심 시간의 짧은 활동도 좋습니다.'
   },
-  
+
   // 오후 슬럼프
   {
     start: 14,
@@ -95,7 +95,7 @@ const TIME_RESTRICTIONS: ReadonlyArray<TimeRestriction> = [
     value: 0.9, // 10% 페널티
     message: '졸린 시간대입니다. 가벼운 활동이나 휴식을 추천합니다.'
   },
-  
+
   // 저녁 시간대
   {
     start: 18,
@@ -105,7 +105,7 @@ const TIME_RESTRICTIONS: ReadonlyArray<TimeRestriction> = [
     value: 1.2, // 20% 보너스
     message: '하루를 마무리하는 좋은 시간입니다.'
   },
-  
+
   // 늦은 밤
   {
     start: 22,
@@ -145,32 +145,32 @@ export class TimeRestrictionService {
   getCurrentTimeState(statType?: StatType): TimeActivityState {
     const now = new Date()
     const currentHour = now.getHours()
-    
+
     // 해당 시간대의 제한 찾기
     let activeRestriction: TimeRestriction | null = null
     let highestPriority = -1
-    
+
     for (const restriction of TIME_RESTRICTIONS) {
       if (this.isInTimeRange(currentHour, restriction.start, restriction.end)) {
         // 특정 스탯 타입 제한 확인
         if (restriction.statTypes && statType && !restriction.statTypes.includes(statType)) {
           continue
         }
-        
+
         // 우선순위: blocked > penalty > bonus
-        const priority = restriction.type === 'blocked' ? 3 : 
-                        restriction.type === 'penalty' ? 2 : 1
-        
+        const priority = restriction.type === 'blocked' ? 3 :
+          restriction.type === 'penalty' ? 2 : 1
+
         if (priority > highestPriority) {
           activeRestriction = restriction
           highestPriority = priority
         }
       }
     }
-    
+
     const timeZoneName = activeRestriction?.name || '일반 시간대'
     const recommendedActivities = TIME_RECOMMENDATIONS[timeZoneName] || []
-    
+
     return {
       currentHour,
       timeZoneName,
@@ -188,46 +188,46 @@ export class TimeRestrictionService {
   calculateTimeMultiplier(hour?: number, statType?: StatType): number {
     const targetHour = hour ?? new Date().getHours()
     let multiplier = 1.0
-    
+
     for (const restriction of TIME_RESTRICTIONS) {
       if (this.isInTimeRange(targetHour, restriction.start, restriction.end)) {
         // 특정 스탯 타입 제한 확인
         if (restriction.statTypes && statType && !restriction.statTypes.includes(statType)) {
           continue
         }
-        
+
         if (restriction.type === 'blocked') {
           return 0 // 완전 차단
         }
-        
+
         // 가장 제한적인 배율 적용
         if (restriction.value < multiplier) {
           multiplier = restriction.value
         }
       }
     }
-    
+
     return multiplier
   }
 
   // 특정 시간대가 활동하기 좋은지 확인
   isGoodTimeForActivity(hour?: number, statType?: StatType): boolean {
-    const state = hour !== undefined ? 
-      this.getTimeStateForHour(hour, statType) : 
+    const state = hour !== undefined ?
+      this.getTimeStateForHour(hour, statType) :
       this.getCurrentTimeState(statType)
-    
+
     return !state.isRestricted && !state.isPenalty
   }
 
   // 다음 좋은 활동 시간 찾기
   findNextGoodTime(statType?: StatType): { hour: number; name: string; bonus: boolean } | null {
     const currentHour = new Date().getHours()
-    
+
     // 다음 24시간 동안 확인
     for (let i = 1; i <= 24; i++) {
       const checkHour = (currentHour + i) % 24
       const state = this.getTimeStateForHour(checkHour, statType)
-      
+
       if (!state.isRestricted && !state.isPenalty) {
         return {
           hour: checkHour,
@@ -236,7 +236,7 @@ export class TimeRestrictionService {
         }
       }
     }
-    
+
     return null
   }
 
@@ -247,25 +247,25 @@ export class TimeRestrictionService {
   ): Promise<TimeActivityStats> {
     // 시간대별 활동 횟수 집계
     const hourCounts = new Array(24).fill(0)
-    
+
     activities.forEach(activity => {
       const hour = new Date(activity.timestamp).getHours()
       hourCounts[hour]++
     })
-    
+
     // 가장 활발한 시간대
     const sortedHours = hourCounts
       .map((count, hour) => ({ hour, count }))
       .sort((a, b) => b.count - a.count)
-    
+
     const mostActiveHours = sortedHours.slice(0, 3)
     const leastActiveHours = sortedHours.slice(-3).reverse()
-    
+
     // 활동 패턴 점수 계산
     const nightOwlScore = this.calculateNightOwlScore(hourCounts)
     const morningPersonScore = this.calculateMorningPersonScore(hourCounts)
     const healthyPatternScore = this.calculateHealthyPatternScore(hourCounts)
-    
+
     // 추천사항 생성
     const recommendations = this.generateTimeRecommendations(
       nightOwlScore,
@@ -273,7 +273,7 @@ export class TimeRestrictionService {
       healthyPatternScore,
       mostActiveHours
     )
-    
+
     return {
       mostActiveHours,
       leastActiveHours,
@@ -298,8 +298,10 @@ export class TimeRestrictionService {
     const mockDate = new Date()
     mockDate.setHours(hour)
     const originalGetHours = Date.prototype.getHours
-    Date.prototype.getHours = function() { return hour }
-    
+    Date.prototype.getHours = function() {
+      return hour
+    }
+
     try {
       return this.getCurrentTimeState(statType)
     } finally {
@@ -311,7 +313,7 @@ export class TimeRestrictionService {
     const nightHours = [22, 23, 0, 1, 2, 3]
     const nightActivity = nightHours.reduce((sum, hour) => sum + hourCounts[hour], 0)
     const totalActivity = hourCounts.reduce((sum, count) => sum + count, 0) || 1
-    
+
     return Math.min(100, Math.round((nightActivity / totalActivity) * 200))
   }
 
@@ -319,7 +321,7 @@ export class TimeRestrictionService {
     const morningHours = [5, 6, 7, 8, 9]
     const morningActivity = morningHours.reduce((sum, hour) => sum + hourCounts[hour], 0)
     const totalActivity = hourCounts.reduce((sum, count) => sum + count, 0) || 1
-    
+
     return Math.min(100, Math.round((morningActivity / totalActivity) * 200))
   }
 
@@ -327,11 +329,11 @@ export class TimeRestrictionService {
     const healthyHours = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
     const healthyActivity = healthyHours.reduce((sum, hour) => sum + hourCounts[hour], 0)
     const totalActivity = hourCounts.reduce((sum, count) => sum + count, 0) || 1
-    
+
     const healthyRatio = healthyActivity / totalActivity
     const nightActivity = [0, 1, 2, 3, 4].reduce((sum, hour) => sum + hourCounts[hour], 0)
     const nightPenalty = (nightActivity / totalActivity) * 50
-    
+
     return Math.max(0, Math.min(100, Math.round(healthyRatio * 100 - nightPenalty)))
   }
 
@@ -342,27 +344,27 @@ export class TimeRestrictionService {
     mostActiveHours: { hour: number; count: number }[]
   ): string[] {
     const recommendations: string[] = []
-    
+
     if (healthyPatternScore < 50) {
       recommendations.push('건강한 생활 패턴을 위해 심야 활동을 줄이고 규칙적인 수면을 취하세요')
     }
-    
+
     if (nightOwlScore > 70) {
       recommendations.push('야행성 패턴이 강합니다. 점진적으로 수면 시간을 앞당겨보세요')
     }
-    
+
     if (morningPersonScore > 70) {
       recommendations.push('아침형 인간입니다! 아침 황금시간(7-9시)을 최대한 활용하세요')
     }
-    
+
     if (mostActiveHours[0]?.hour >= 22 || mostActiveHours[0]?.hour <= 4) {
       recommendations.push('주요 활동 시간을 낮 시간대로 옮기면 더 많은 경험치를 얻을 수 있습니다')
     }
-    
+
     if (recommendations.length === 0) {
       recommendations.push('훌륭한 활동 패턴을 유지하고 있습니다!')
     }
-    
+
     return recommendations
   }
 }

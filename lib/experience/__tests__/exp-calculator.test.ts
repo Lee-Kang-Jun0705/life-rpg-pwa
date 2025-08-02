@@ -9,7 +9,7 @@ describe('ExpCalculator', () => {
 
   const createMockActivity = (
     quality: typeof ACTIVITY_QUALITY[keyof typeof ACTIVITY_QUALITY],
-    activityName: string = '테스트 활동',
+    activityName = '테스트 활동',
     statType: 'health' | 'learning' | 'relationship' | 'achievement' = 'health'
   ): Activity => ({
     id: 'test-activity-1',
@@ -148,7 +148,7 @@ describe('ExpCalculator', () => {
 
     it('연속 활동 보너스', () => {
       const activity = createMockActivity(ACTIVITY_QUALITY.B)
-      
+
       // 7일 연속
       const context7Days = createMockContext({
         user: { ...createMockContext().user, streakDays: 7 }
@@ -168,36 +168,36 @@ describe('ExpCalculator', () => {
 
     it('다양성 보너스', () => {
       const activity = createMockActivity(ACTIVITY_QUALITY.B, '새로운 활동')
-      
+
       // 오늘 5가지 다른 활동
       const previousActivities: Activity[] = [
         createMockActivity(ACTIVITY_QUALITY.B, '활동1'),
         createMockActivity(ACTIVITY_QUALITY.B, '활동2'),
         createMockActivity(ACTIVITY_QUALITY.B, '활동3'),
         createMockActivity(ACTIVITY_QUALITY.B, '활동4'),
-        createMockActivity(ACTIVITY_QUALITY.B, '활동5'),
+        createMockActivity(ACTIVITY_QUALITY.B, '활동5')
       ]
-      
+
       const context = createMockContext({ previousActivities })
       const result = ExpCalculator.calculateActivityExp(activity, context)
-      
+
       const varietyBonus = result.bonuses.find(b => b.type === 'variety')
       expect(varietyBonus?.value).toBe(0.3)
     })
 
     it('4스탯 균형 보너스', () => {
       const activity = createMockActivity(ACTIVITY_QUALITY.B, '성취 활동', 'achievement')
-      
+
       // 각 스탯별 활동
       const previousActivities: Activity[] = [
         createMockActivity(ACTIVITY_QUALITY.B, '건강 활동', 'health'),
         createMockActivity(ACTIVITY_QUALITY.B, '학습 활동', 'learning'),
-        createMockActivity(ACTIVITY_QUALITY.B, '관계 활동', 'relationship'),
+        createMockActivity(ACTIVITY_QUALITY.B, '관계 활동', 'relationship')
       ]
-      
+
       const context = createMockContext({ previousActivities })
       const result = ExpCalculator.calculateActivityExp(activity, context)
-      
+
       const varietyBonus = result.bonuses.find(b => b.type === 'variety')
       expect(varietyBonus?.value).toBeGreaterThanOrEqual(0.2) // 4스탯 보너스 포함
     })
@@ -206,7 +206,7 @@ describe('ExpCalculator', () => {
       const activity = createMockActivity(ACTIVITY_QUALITY.B, '처음 하는 활동')
       const context = createMockContext()
       const result = ExpCalculator.calculateActivityExp(activity, context)
-      
+
       const firstTimeBonus = result.bonuses.find(b => b.type === 'first_time')
       expect(firstTimeBonus?.value).toBe(0.5)
     })
@@ -215,32 +215,32 @@ describe('ExpCalculator', () => {
   describe('calculateActivityExp - 페널티 시스템', () => {
     it('반복 페널티 - 1시간 내 3회 반복', () => {
       const activity = createMockActivity(ACTIVITY_QUALITY.B, '반복 활동')
-      
+
       const recentTime = new Date(mockDate.getTime() - 30 * 60 * 1000) // 30분 전
       const previousActivities: Activity[] = [
         { ...activity, timestamp: recentTime },
         { ...activity, timestamp: new Date(recentTime.getTime() + 10 * 60 * 1000) },
-        { ...activity, timestamp: new Date(recentTime.getTime() + 20 * 60 * 1000) },
+        { ...activity, timestamp: new Date(recentTime.getTime() + 20 * 60 * 1000) }
       ]
-      
+
       const context = createMockContext({ previousActivities })
       const result = ExpCalculator.calculateActivityExp(activity, context)
-      
+
       const repetitionPenalty = result.penalties.find(p => p.type === 'repetition')
       expect(repetitionPenalty?.value).toBe(0.2)
     })
 
     it('과도한 반복 페널티 - 1시간 내 10회 이상', () => {
       const activity = createMockActivity(ACTIVITY_QUALITY.B, '과도한 반복')
-      
+
       const previousActivities: Activity[] = Array(10).fill(null).map((_, i) => ({
         ...activity,
         timestamp: new Date(mockDate.getTime() - (50 - i * 5) * 60 * 1000)
       }))
-      
+
       const context = createMockContext({ previousActivities })
       const result = ExpCalculator.calculateActivityExp(activity, context)
-      
+
       const repetitionPenalty = result.penalties.find(p => p.type === 'repetition')
       expect(repetitionPenalty?.value).toBe(0.7)
       expect(result.warnings).toContain('동일한 활동을 너무 자주 반복하고 있습니다')
@@ -248,16 +248,16 @@ describe('ExpCalculator', () => {
 
     it('활동 간격 페널티 - 1분 이내', () => {
       const activity = createMockActivity(ACTIVITY_QUALITY.B, '빠른 재활동', 'health')
-      
+
       const previousActivities: Activity[] = [{
         ...activity,
         activityName: '이전 건강 활동',
         timestamp: new Date(mockDate.getTime() - 30 * 1000) // 30초 전
       }]
-      
+
       const context = createMockContext({ previousActivities })
       const result = ExpCalculator.calculateActivityExp(activity, context)
-      
+
       const intervalPenalty = result.penalties.find(p => p.type === 'interval')
       expect(intervalPenalty?.value).toBe(0.9)
       expect(result.warnings).toContain('활동 간격이 너무 짧습니다')
@@ -267,7 +267,7 @@ describe('ExpCalculator', () => {
   describe('calculateActivityExp - 종합 계산', () => {
     it('모든 보너스가 적용된 최대 경험치', () => {
       const activity = createMockActivity(ACTIVITY_QUALITY.S, '완벽한 활동')
-      
+
       const context = createMockContext({
         time: new Date('2024-01-01T07:00:00Z'), // 아침
         user: {
@@ -280,12 +280,12 @@ describe('ExpCalculator', () => {
           createMockActivity(ACTIVITY_QUALITY.B, '활동2', 'learning'),
           createMockActivity(ACTIVITY_QUALITY.B, '활동3', 'relationship'),
           createMockActivity(ACTIVITY_QUALITY.B, '활동4', 'achievement'),
-          createMockActivity(ACTIVITY_QUALITY.B, '활동5', 'health'),
+          createMockActivity(ACTIVITY_QUALITY.B, '활동5', 'health')
         ]
       })
-      
+
       const result = ExpCalculator.calculateActivityExp(activity, context)
-      
+
       // S등급(100) × 3.0(품질) × (1 + 0.2(아침) + 1.0(100일) + 0.5(다양성) + 0.5(첫활동))
       // = 100 × 3.0 × 3.2 = 960
       expect(result.finalExp).toBeGreaterThanOrEqual(900)
@@ -294,20 +294,20 @@ describe('ExpCalculator', () => {
 
     it('페널티가 적용된 최소 경험치', () => {
       const activity = createMockActivity(ACTIVITY_QUALITY.D, '반복 활동')
-      
+
       // 매우 짧은 간격으로 많이 반복
       const previousActivities: Activity[] = Array(15).fill(null).map((_, i) => ({
         ...activity,
         timestamp: new Date(mockDate.getTime() - (30 - i * 2) * 60 * 1000)
       }))
-      
-      const context = createMockContext({ 
+
+      const context = createMockContext({
         time: mockNightDate, // 심야
-        previousActivities 
+        previousActivities
       })
-      
+
       const result = ExpCalculator.calculateActivityExp(activity, context)
-      
+
       // 최소 1 경험치는 보장
       expect(result.finalExp).toBeGreaterThanOrEqual(1)
       expect(result.penalties.length).toBeGreaterThanOrEqual(1)
@@ -318,11 +318,11 @@ describe('ExpCalculator', () => {
   describe('getExpPreview', () => {
     it('향후 레벨 미리보기 제공', () => {
       const preview = ExpCalculator.getExpPreview(10, 5)
-      
+
       expect(preview).toHaveLength(5)
       expect(preview[0].level).toBe(11)
       expect(preview[4].level).toBe(15)
-      
+
       // 마일스톤 확인
       const level30Preview = ExpCalculator.getExpPreview(29, 2)
       expect(level30Preview[0].milestone).toBe('레벨 30 달성')

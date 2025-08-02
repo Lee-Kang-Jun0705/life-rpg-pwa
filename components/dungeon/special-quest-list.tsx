@@ -23,7 +23,7 @@ export function SpecialQuestList({ userId, onQuestSelect }: SpecialQuestListProp
     loadQuests()
   }, [userId])
 
-  const loadQuests = async () => {
+  const loadQuests = async() => {
     try {
       setLoading(true)
       const allQuests = await specialQuestService.getSpecialQuests(userId)
@@ -36,9 +36,15 @@ export function SpecialQuestList({ userId, onQuestSelect }: SpecialQuestListProp
   }
 
   const filteredQuests = quests.filter(quest => {
-    if (filter === 'all') return true
-    if (filter === 'available') return quest.status === 'available'
-    if (filter === 'completed') return quest.status === 'completed'
+    if (filter === 'all') {
+      return true
+    }
+    if (filter === 'available') {
+      return quest.status === 'available'
+    }
+    if (filter === 'completed') {
+      return quest.status === 'completed'
+    }
     return true
   })
 
@@ -80,7 +86,7 @@ export function SpecialQuestList({ userId, onQuestSelect }: SpecialQuestListProp
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     )
   }
@@ -121,7 +127,7 @@ export function SpecialQuestList({ userId, onQuestSelect }: SpecialQuestListProp
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <Card 
+            <Card
               className={`relative overflow-hidden cursor-pointer transition-all hover:shadow-lg ${
                 quest.status === 'locked' ? 'opacity-60' : ''
               }`}

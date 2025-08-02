@@ -48,16 +48,16 @@ export const useStore = create<AppStore>()(
         loading: true,
         error: null,
         isProcessing: new Set(),
-        
-        loadUserData: async () => {
+
+        loadUserData: async() => {
           set((state) => {
             state.loading = true
             state.error = null
           })
-          
+
           try {
             const profile = await dbHelpers.getProfile(GAME_CONFIG.DEFAULT_USER_ID)
-            
+
             if (!profile) {
               await dbHelpers.initializeUserData(
                 GAME_CONFIG.DEFAULT_USER_ID,
@@ -65,9 +65,9 @@ export const useStore = create<AppStore>()(
                 GAME_CONFIG.DEFAULT_USER_NAME
               )
             }
-            
+
             const userStats = await dbHelpers.getStats(GAME_CONFIG.DEFAULT_USER_ID)
-            
+
             set((state) => {
               state.stats = userStats || []
               state.loading = false
@@ -79,21 +79,21 @@ export const useStore = create<AppStore>()(
             })
           }
         },
-        
+
         updateStatOptimistically: (statType: string, experience: number) => {
           let hasLevelUp = false
-          
+
           set((state) => {
             const statIndex = state.stats.findIndex(s => s.type === statType)
             if (statIndex !== -1) {
               const stat = state.stats[statIndex]
               const newExperience = (stat.experience || 0) + experience
               const { level: newLevel } = calculateLevel(newExperience)
-              
+
               if (newLevel > (stat.level || 1)) {
                 hasLevelUp = true
               }
-              
+
               state.stats[statIndex] = {
                 ...stat,
                 experience: newExperience,
@@ -103,21 +103,23 @@ export const useStore = create<AppStore>()(
               }
             }
           })
-          
+
           return hasLevelUp
         },
-        
-        handleStatClick: async (statType: string) => {
-          if (get().isProcessing.has(statType)) return
-          
+
+        handleStatClick: async(statType: string) => {
+          if (get().isProcessing.has(statType)) {
+            return
+          }
+
           set((state) => {
             state.isProcessing.add(statType)
           })
-          
+
           try {
             const experience = generateRandomExperience()
             get().updateStatOptimistically(statType, experience)
-            
+
             await dbHelpers.addActivity({
               userId: GAME_CONFIG.DEFAULT_USER_ID,
               statType: statType as Stat['type'],
@@ -134,22 +136,22 @@ export const useStore = create<AppStore>()(
             })
           }
         },
-        
-        handleVoiceInput: async (transcript: string, activityType?: string | null) => {
+
+        handleVoiceInput: async(transcript: string, activityType?: string | null) => {
           const statType = activityType || 'achievement'
           await get().handleStatClick(statType)
         },
-        
+
         // Profile Slice
         profile: null,
         isLoading: false,
-        
-        loadProfile: async () => {
+
+        loadProfile: async() => {
           set((state) => {
             state.isLoading = true
             state.error = null
           })
-          
+
           try {
             const profile = await dbHelpers.getProfile(GAME_CONFIG.DEFAULT_USER_ID)
             set((state) => {
@@ -163,8 +165,8 @@ export const useStore = create<AppStore>()(
             })
           }
         },
-        
-        updateProfile: async (updates: Partial<UserProfile>) => {
+
+        updateProfile: async(updates: Partial<UserProfile>) => {
           try {
             await dbHelpers.updateProfile(GAME_CONFIG.DEFAULT_USER_ID, updates)
             await get().loadProfile()
@@ -174,36 +176,36 @@ export const useStore = create<AppStore>()(
             })
           }
         },
-        
+
         // UI Slice
         theme: 'system',
         isOffline: false,
         notifications: [],
-        
+
         setTheme: (theme) => {
           set((state) => {
             state.theme = theme
           })
         },
-        
+
         setOfflineStatus: (status) => {
           set((state) => {
             state.isOffline = status
           })
         },
-        
+
         addNotification: (notification) => {
           const id = Date.now().toString()
           set((state) => {
             state.notifications.push({ ...notification, id })
           })
-          
+
           // 5초 후 자동 제거
           setTimeout(() => {
             get().removeNotification(id)
           }, 5000)
         },
-        
+
         removeNotification: (id) => {
           set((state) => {
             state.notifications = state.notifications.filter(n => n.id !== id)

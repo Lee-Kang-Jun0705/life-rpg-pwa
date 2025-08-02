@@ -39,7 +39,9 @@ export function OptimizedImage({
 
   // Intersection Observer를 사용한 지연 로딩
   useEffect(() => {
-    if (priority || !imgRef.current) return
+    if (priority || !imgRef.current) {
+      return
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -76,12 +78,16 @@ export function OptimizedImage({
     if (url.startsWith('http') || url.startsWith('data:')) {
       return url
     }
-    
+
     // Next.js Image Optimization API 사용
     const params = new URLSearchParams()
-    if (width) params.set('w', width.toString())
-    if (quality) params.set('q', quality.toString())
-    
+    if (width) {
+      params.set('w', width.toString())
+    }
+    if (quality) {
+      params.set('q', quality.toString())
+    }
+
     return `/_next/image?url=${encodeURIComponent(url)}&${params.toString()}`
   }
 
@@ -89,14 +95,14 @@ export function OptimizedImage({
   const optimizedUrl = getOptimizedUrl(imageUrl)
 
   return (
-    <div 
+    <div
       ref={imgRef}
       className={`relative overflow-hidden ${className}`}
       style={{ width, height }}
     >
       {/* 플레이스홀더 */}
       {!loaded && placeholder && (
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center filter blur-sm scale-110"
           style={{ backgroundImage: `url(${placeholder})` }}
         />
@@ -167,7 +173,7 @@ export function useWebPSupport() {
 
 // 이미지 포맷 최적화 헬퍼
 export function getOptimalImageFormat(originalUrl: string): string {
-  const supportsWebP = typeof window !== 'undefined' && 
+  const supportsWebP = typeof window !== 'undefined' &&
     document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0
 
   if (supportsWebP && !originalUrl.includes('.webp')) {

@@ -15,7 +15,7 @@ interface UseDungeonStateReturn {
   selectedDungeon: Dungeon | null
   isLoading: boolean
   error: string | null
-  
+
   // Actions
   loadDungeons: () => Promise<void>
   selectDungeon: (dungeonId: string) => void
@@ -33,7 +33,7 @@ export function useDungeonState(userId: string): UseDungeonStateReturn {
   const [error, setError] = useState<string | null>(null)
 
   // 던전 목록 로드
-  const loadDungeons = useCallback(async () => {
+  const loadDungeons = useCallback(async() => {
     try {
       setIsLoading(true)
       setError(null)
@@ -61,7 +61,7 @@ export function useDungeonState(userId: string): UseDungeonStateReturn {
   }, [dungeons])
 
   // 던전 입장
-  const enterDungeon = useCallback(async (dungeonId: string): Promise<boolean> => {
+  const enterDungeon = useCallback(async(dungeonId: string): Promise<boolean> => {
     try {
       setIsLoading(true)
       setError(null)
@@ -71,7 +71,7 @@ export function useDungeonState(userId: string): UseDungeonStateReturn {
       if (success) {
         await loadDungeons() // 상태 새로고침
       }
-      
+
       return success
     } catch (err) {
       console.error('[useDungeonState] enterDungeon error:', err)
@@ -83,14 +83,14 @@ export function useDungeonState(userId: string): UseDungeonStateReturn {
   }, [userId, loadDungeons])
 
   // 던전 퇴장
-  const exitDungeon = useCallback(async (dungeonId: string) => {
+  const exitDungeon = useCallback(async(dungeonId: string) => {
     try {
       setIsLoading(true)
-      
+
       await DungeonRepository.updateProgress(dungeonId, userId, {
         status: 'abandoned' as DungeonStatus
       })
-      
+
       await loadDungeons()
     } catch (err) {
       console.error('[useDungeonState] exitDungeon error:', err)
@@ -101,18 +101,18 @@ export function useDungeonState(userId: string): UseDungeonStateReturn {
   }, [userId, loadDungeons])
 
   // 진행 상황 업데이트
-  const updateProgress = useCallback(async (
-    dungeonId: string, 
+  const updateProgress = useCallback(async(
+    dungeonId: string,
     updates: Partial<DungeonProgress>
   ) => {
     try {
       await DungeonRepository.updateProgress(dungeonId, userId, updates)
-      
+
       // 로컬 상태 업데이트
-      setActiveProgress(prev => 
-        prev.map(p => 
-          p.dungeonId === dungeonId 
-            ? { ...p, ...updates } 
+      setActiveProgress(prev =>
+        prev.map(p =>
+          p.dungeonId === dungeonId
+            ? { ...p, ...updates }
             : p
         )
       )
@@ -122,14 +122,14 @@ export function useDungeonState(userId: string): UseDungeonStateReturn {
   }, [userId])
 
   // 던전 완료
-  const completeDungeon = useCallback(async (dungeonId: string, rewards: DungeonRewards) => {
+  const completeDungeon = useCallback(async(dungeonId: string, rewards: DungeonRewards) => {
     try {
       setIsLoading(true)
-      
+
       const dungeonService = DungeonService.getInstance()
       await dungeonService.completeDungeon(dungeonId, userId, rewards)
       await loadDungeons()
-      
+
       setSelectedDungeon(null)
     } catch (err) {
       console.error('[useDungeonState] completeDungeon error:', err)

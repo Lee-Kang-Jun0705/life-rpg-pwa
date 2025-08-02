@@ -19,7 +19,7 @@ const typeIcons = {
   armor: Shirt,
   gloves: Hand,
   boots: Footprints,
-  accessory: Gem,
+  accessory: Gem
 }
 
 const rarityColors = {
@@ -28,7 +28,7 @@ const rarityColors = {
   rare: 'border-blue-400 bg-blue-50 dark:bg-blue-900/20',
   epic: 'border-purple-400 bg-purple-50 dark:bg-purple-900/20',
   legendary: 'border-orange-400 bg-orange-50 dark:bg-orange-900/20',
-  mythic: 'border-red-400 bg-red-50 dark:bg-red-900/20',
+  mythic: 'border-red-400 bg-red-50 dark:bg-red-900/20'
 }
 
 const rarityGradients = {
@@ -37,7 +37,7 @@ const rarityGradients = {
   rare: 'from-blue-400 to-blue-600',
   epic: 'from-purple-400 to-purple-600',
   legendary: 'from-orange-400 to-orange-600',
-  mythic: 'from-red-400 to-red-600',
+  mythic: 'from-red-400 to-red-600'
 }
 
 export function EquipmentCard({ equipment, onClick, isEquipped }: EquipmentCardProps) {

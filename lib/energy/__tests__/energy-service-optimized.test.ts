@@ -6,7 +6,7 @@ jest.mock('@/lib/database/client', () => ({
   dbHelpers: {
     loadPlayerEnergyState: jest.fn(),
     savePlayerEnergyState: jest.fn(),
-    addActivity: jest.fn(),
+    addActivity: jest.fn()
   }
 }))
 
@@ -30,7 +30,7 @@ describe('OptimizedEnergyService', () => {
   })
 
   describe('calculateOfflineRecovery', () => {
-    it('should calculate correct offline recovery within 24 hours', async () => {
+    it('should calculate correct offline recovery within 24 hours', async() => {
       const lastUpdate = new Date('2024-01-01T10:00:00Z') // 2 hours ago
       const mockState = {
         userId: mockUserId,
@@ -57,7 +57,7 @@ describe('OptimizedEnergyService', () => {
       expect(result.lastEnergyUpdate).toEqual(mockDate)
     })
 
-    it('should cap offline recovery at 24 hours', async () => {
+    it('should cap offline recovery at 24 hours', async() => {
       const lastUpdate = new Date('2023-12-29T12:00:00Z') // 3 days ago
       const mockState = {
         userId: mockUserId,
@@ -83,7 +83,7 @@ describe('OptimizedEnergyService', () => {
       expect(result.energy.current).toBe(ENERGY_CONFIG.MAX_ENERGY)
     })
 
-    it('should not exceed max energy', async () => {
+    it('should not exceed max energy', async() => {
       const lastUpdate = new Date('2024-01-01T11:50:00Z') // 10 minutes ago
       const mockState = {
         userId: mockUserId,
@@ -110,7 +110,7 @@ describe('OptimizedEnergyService', () => {
   })
 
   describe('consumeEnergy', () => {
-    it('should consume energy when sufficient', async () => {
+    it('should consume energy when sufficient', async() => {
       const mockState = {
         userId: mockUserId,
         energy: {
@@ -136,7 +136,7 @@ describe('OptimizedEnergyService', () => {
       expect(dbHelpers.savePlayerEnergyState).toHaveBeenCalled()
     })
 
-    it('should fail when insufficient energy', async () => {
+    it('should fail when insufficient energy', async() => {
       const mockState = {
         userId: mockUserId,
         energy: {
@@ -163,7 +163,7 @@ describe('OptimizedEnergyService', () => {
   })
 
   describe('claimDailyBonus', () => {
-    it('should grant daily bonus when eligible', async () => {
+    it('should grant daily bonus when eligible', async() => {
       const lastBonus = new Date('2023-12-31T12:00:00Z') // Yesterday
       const mockState = {
         userId: mockUserId,
@@ -190,7 +190,7 @@ describe('OptimizedEnergyService', () => {
       expect(result.lastDailyBonus).toEqual(mockDate)
     })
 
-    it('should fail when already claimed today', async () => {
+    it('should fail when already claimed today', async() => {
       const mockState = {
         userId: mockUserId,
         energy: {
@@ -261,7 +261,7 @@ describe('OptimizedEnergyService', () => {
   })
 
   describe('caching', () => {
-    it('should use cached data within cache duration', async () => {
+    it('should use cached data within cache duration', async() => {
       const mockState = {
         userId: mockUserId,
         energy: {
@@ -288,7 +288,7 @@ describe('OptimizedEnergyService', () => {
       expect(dbHelpers.loadPlayerEnergyState).toHaveBeenCalledTimes(1)
     })
 
-    it('should invalidate cache after duration', async () => {
+    it('should invalidate cache after duration', async() => {
       const mockState = {
         userId: mockUserId,
         energy: {

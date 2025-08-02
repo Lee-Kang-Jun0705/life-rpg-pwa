@@ -11,7 +11,7 @@ describe('Button Component', () => {
   it('클릭 이벤트가 작동해야 함', () => {
     const handleClick = jest.fn()
     render(<Button onClick={handleClick}>클릭</Button>)
-    
+
     fireEvent.click(screen.getByText('클릭'))
     expect(handleClick).toHaveBeenCalledTimes(1)
   })
@@ -19,10 +19,10 @@ describe('Button Component', () => {
   it('비활성화 상태에서는 클릭되지 않아야 함', () => {
     const handleClick = jest.fn()
     render(<Button onClick={handleClick} disabled>비활성화</Button>)
-    
+
     const button = screen.getByText('비활성화')
     fireEvent.click(button)
-    
+
     expect(handleClick).not.toHaveBeenCalled()
     expect(button).toBeDisabled()
   })
@@ -33,14 +33,14 @@ describe('Button Component', () => {
     const { rerender } = render(<Button>Default</Button>)
     const button = screen.getByText('Default')
     expect(button).toBeInTheDocument()
-    
+
     // 각 variant에 대한 props 전달 확인
     rerender(<Button variant="secondary">Secondary</Button>)
     expect(screen.getByText('Secondary')).toBeInTheDocument()
-    
+
     rerender(<Button variant="outline">Outline</Button>)
     expect(screen.getByText('Outline')).toBeInTheDocument()
-    
+
     rerender(<Button variant="ghost">Ghost</Button>)
     expect(screen.getByText('Ghost')).toBeInTheDocument()
   })
@@ -48,10 +48,10 @@ describe('Button Component', () => {
   it('다양한 크기가 적용되어야 함', () => {
     const { rerender } = render(<Button size="sm">Small</Button>)
     expect(screen.getByText('Small')).toHaveClass('text-sm')
-    
+
     rerender(<Button size="md">Medium</Button>)
     expect(screen.getByText('Medium')).toHaveClass('text-base')
-    
+
     rerender(<Button size="lg">Large</Button>)
     expect(screen.getByText('Large')).toHaveClass('text-lg')
   })
@@ -74,7 +74,7 @@ describe('Button Component', () => {
   it('로딩 상태를 표시할 수 있어야 함', () => {
     const { rerender } = render(<Button>버튼</Button>)
     expect(screen.getByText('버튼')).not.toHaveClass('opacity-50')
-    
+
     // 로딩 상태를 시뮬레이션하기 위해 disabled와 함께 사용
     rerender(<Button disabled className="opacity-50">로딩중...</Button>)
     expect(screen.getByText('로딩중...')).toHaveClass('opacity-50')
@@ -87,7 +87,7 @@ describe('Button Component', () => {
         게임 시작
       </Button>
     )
-    
+
     expect(screen.getByText('🎮')).toBeInTheDocument()
     expect(screen.getByText('게임 시작')).toBeInTheDocument()
   })

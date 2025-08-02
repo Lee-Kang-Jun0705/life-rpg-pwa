@@ -53,9 +53,9 @@ export class ATBCombatService extends EventEmitter {
 
     // 플레이어 전투원 생성
     const playerCombatant = this.createPlayerCombatant(player)
-    
+
     // 몬스터 전투원 생성
-    const enemyCombatants = monsters.map((monster, index) => 
+    const enemyCombatants = monsters.map((monster, index) =>
       this.createMonsterCombatant(monster, index)
     )
 
@@ -175,7 +175,7 @@ export class ATBCombatService extends EventEmitter {
     const baseSpeed = ATB_CONSTANTS.BASE_CHARGE_RATE
     const speedBonus = speed * ATB_CONSTANTS.SPEED_TO_CHARGE_RATIO
     const totalSpeed = baseSpeed + speedBonus
-    
+
     return Math.max(
       ATB_CONSTANTS.MIN_CHARGE_RATE,
       Math.min(ATB_CONSTANTS.MAX_CHARGE_RATE, totalSpeed)
@@ -187,17 +187,19 @@ export class ATBCombatService extends EventEmitter {
    */
   private startBattle(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     state.status = 'active'
-    
+
     // ATB 게이지 업데이트 시작
     const updateInterval = setInterval(() => {
       this.updateATBGauges(combatId)
     }, ATB_CONSTANTS.UPDATE_INTERVAL)
-    
+
     this.updateIntervals.set(combatId, updateInterval)
-    
+
     this.emit('battle_start', { combatId })
   }
 
@@ -206,16 +208,22 @@ export class ATBCombatService extends EventEmitter {
    */
   private updateATBGauges(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state || state.status !== 'active') return
+    if (!state || state.status !== 'active') {
+      return
+    }
 
     const speedMultiplier = state.settings.battleSpeed
 
     for (const combatant of state.combatants) {
       // 사망하거나 행동 불가 상태면 스킵
-      if (combatant.stats.currentHp <= 0 || combatant.atb.paused) continue
-      
+      if (combatant.stats.currentHp <= 0 || combatant.atb.paused) {
+        continue
+      }
+
       // 상태이상 체크
-      if (this.isIncapacitated(combatant)) continue
+      if (this.isIncapacitated(combatant)) {
+        continue
+      }
 
       // ATB 게이지 충전
       const chargeAmount = combatant.atb.speed * combatant.atb.boost * speedMultiplier
@@ -236,17 +244,23 @@ export class ATBCombatService extends EventEmitter {
    */
   private async executeAction(combatId: string, combatantId: string): Promise<void> {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     const combatant = state.combatants.find(c => c.id === combatantId)
-    if (!combatant || combatant.stats.currentHp <= 0) return
+    if (!combatant || combatant.stats.currentHp <= 0) {
+      return
+    }
 
     // ATB 게이지 리셋
     combatant.atb.current = 0
 
     // 행동 결정
     const action = this.decideAction(state, combatant)
-    if (!action) return
+    if (!action) {
+      return
+    }
 
     // 행동 실행
     await this.performAction(state, combatant, action)
@@ -271,7 +285,7 @@ export class ATBCombatService extends EventEmitter {
     if (combatant.team === 'player') {
       return this.decidePlayerAction(state, combatant)
     }
-    
+
     // 몬스터 행동 결정
     return this.decideMonsterAction(state, combatant)
   }
@@ -283,7 +297,7 @@ export class ATBCombatService extends EventEmitter {
     // HP가 낮으면 포션 사용
     const hpPercent = combatant.stats.currentHp / combatant.stats.maxHp
     if (hpPercent < ATB_CONSTANTS.AUTO_BATTLE.itemUseHpThreshold && state.settings.autoUseItems) {
-      const potion = combatant.availableItems?.find(item => 
+      const potion = combatant.availableItems?.find(item =>
         item.effect.type === 'heal' && item.quantity > 0
       )
       if (potion) {
@@ -317,7 +331,7 @@ export class ATBCombatService extends EventEmitter {
    */
   private decideMonsterAction(state: ATBCombatState, combatant: ATBCombatant): CombatAction | null {
     const ai = combatant.ai!
-    
+
     // 스킬 사용 결정
     if (Math.random() < ai.skillUsageRate && combatant.skills.length > 0) {
       const skill = combatant.skills[Math.floor(Math.random() * combatant.skills.length)]
@@ -348,12 +362,14 @@ export class ATBCombatService extends EventEmitter {
     // 결과 적용
     for (const result of action.results) {
       const target = state.combatants.find(c => c.id === result.targetId)
-      if (!target) continue
+      if (!target) {
+        continue
+      }
 
       // 데미지 적용
       if (result.damage) {
         target.stats.currentHp = Math.max(0, target.stats.currentHp - result.damage)
-        
+
         if (actor.team === 'player') {
           state.statistics.totalDamageDealt += result.damage
         } else {
@@ -414,29 +430,37 @@ export class ATBCombatService extends EventEmitter {
     targetTeam: string
   ): string[] {
     const validTargets = state.combatants.filter(c => {
-      if (c.stats.currentHp <= 0) return false
-      
+      if (c.stats.currentHp <= 0) {
+        return false
+      }
+
       const sameTeam = c.team === actor.team
-      if (targetTeam === 'enemy' && sameTeam) return false
-      if (targetTeam === 'ally' && !sameTeam) return false
-      
+      if (targetTeam === 'enemy' && sameTeam) {
+        return false
+      }
+      if (targetTeam === 'ally' && !sameTeam) {
+        return false
+      }
+
       return true
     })
 
-    if (validTargets.length === 0) return []
+    if (validTargets.length === 0) {
+      return []
+    }
 
     // 타겟 타입별 처리
     switch (targetType) {
       case 'all':
         return validTargets.map(t => t.id)
-      
+
       case 'self':
         return [actor.id]
-      
+
       case 'random':
         const randomTarget = validTargets[Math.floor(Math.random() * validTargets.length)]
         return [randomTarget.id]
-      
+
       case 'single':
       default:
         // 우선순위에 따른 타겟 선택
@@ -449,25 +473,27 @@ export class ATBCombatService extends EventEmitter {
    * 우선순위 타겟 선택
    */
   private selectPriorityTarget(targets: ATBCombatant[], priority: string): ATBCombatant | null {
-    if (targets.length === 0) return null
+    if (targets.length === 0) {
+      return null
+    }
 
     switch (priority) {
       case 'lowest_hp':
-        return targets.reduce((lowest, current) => 
+        return targets.reduce((lowest, current) =>
           current.stats.currentHp < lowest.stats.currentHp ? current : lowest
         )
-      
+
       case 'nearest_death':
         return targets.reduce((nearest, current) => {
           const currentPercent = current.stats.currentHp / current.stats.maxHp
           const nearestPercent = nearest.stats.currentHp / nearest.stats.maxHp
           return currentPercent < nearestPercent ? current : nearest
         })
-      
+
       case 'highest_threat':
       default:
         // 공격력이 가장 높은 적
-        return targets.reduce((highest, current) => 
+        return targets.reduce((highest, current) =>
           current.stats.attack > highest.stats.attack ? current : highest
         )
     }
@@ -481,7 +507,9 @@ export class ATBCombatService extends EventEmitter {
 
     for (const targetId of targets) {
       const target = this.getCombatant(actor.id.split('_')[1], targetId)
-      if (!target) continue
+      if (!target) {
+        continue
+      }
 
       const result = this.calculateDamage(actor, target)
       results.push(result)
@@ -512,7 +540,9 @@ export class ATBCombatService extends EventEmitter {
 
     for (const targetId of targets) {
       const target = this.getCombatant(actor.id.split('_')[1], targetId)
-      if (!target) continue
+      if (!target) {
+        continue
+      }
 
       const result: ActionResult = { targetId }
 
@@ -528,12 +558,12 @@ export class ATBCombatService extends EventEmitter {
             soundService.playEffect('ice_cast')
           }
           break
-        
+
         case 'heal':
           result.healing = Math.floor(actor.stats.attack * (skill.power || 1))
           soundService.playEffect('heal_cast') // 회복 효과음
           break
-        
+
         case 'buff':
         case 'debuff':
           result.buffsApplied = skill.effects?.map(e => e.buff!).filter(Boolean) || []
@@ -589,11 +619,11 @@ export class ATBCombatService extends EventEmitter {
         result.healing = item.effect.value || 0
         soundService.playEffect('heal_cast') // 회복 아이템 효과음
         break
-      
+
       case 'cure':
         result.statusRemoved = item.effect.status || []
         break
-      
+
       case 'buff':
         if (item.effect.buff) {
           result.buffsApplied = [item.effect.buff]
@@ -661,10 +691,10 @@ export class ATBCombatService extends EventEmitter {
    */
   private calculateSkillDamage(attacker: ATBCombatant, defender: ATBCombatant, skill: CombatSkill): ActionResult {
     const baseResult = this.calculateDamage(attacker, defender)
-    
+
     if (baseResult.damage) {
       baseResult.damage = Math.floor(baseResult.damage * (skill.power || 1))
-      
+
       if (skill.critBonus && baseResult.critical) {
         baseResult.damage = Math.floor(baseResult.damage * (1 + skill.critBonus))
       }
@@ -730,15 +760,19 @@ export class ATBCombatService extends EventEmitter {
    */
   private processStatusEffects(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     for (const combatant of state.combatants) {
-      if (combatant.stats.currentHp <= 0) continue
+      if (combatant.stats.currentHp <= 0) {
+        continue
+      }
 
       // 상태이상 틱
       for (let i = combatant.statusEffects.length - 1; i >= 0; i--) {
         const effect = combatant.statusEffects[i]
-        
+
         // 데미지 상태이상
         if (effect.damage && (effect.type === 'poison' || effect.type === 'burn')) {
           const action: CombatAction = {
@@ -751,17 +785,17 @@ export class ATBCombatService extends EventEmitter {
               damage: effect.damage
             }]
           }
-          
+
           combatant.stats.currentHp = Math.max(0, combatant.stats.currentHp - effect.damage)
           state.actionHistory.push(action)
-          
+
           if (combatant.team === 'enemy') {
             state.statistics.totalDamageDealt += effect.damage
           } else {
             state.statistics.totalDamageTaken += effect.damage
           }
         }
-        
+
         // 지속시간 감소
         if (effect.duration > 0) {
           effect.duration--
@@ -787,7 +821,9 @@ export class ATBCombatService extends EventEmitter {
    */
   private checkBattleEnd(combatId: string): void {
     const state = this.combatStates.get(combatId)
-    if (!state || state.status !== 'active') return
+    if (!state || state.status !== 'active') {
+      return
+    }
 
     const aliveAllies = state.combatants.filter(c => c.team === 'player' && c.stats.currentHp > 0)
     const aliveEnemies = state.combatants.filter(c => c.team === 'enemy' && c.stats.currentHp > 0)
@@ -804,7 +840,9 @@ export class ATBCombatService extends EventEmitter {
    */
   private endBattle(combatId: string, result: 'victory' | 'defeat'): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     state.status = result
     state.endTime = Date.now()
@@ -832,7 +870,7 @@ export class ATBCombatService extends EventEmitter {
     const items: GeneratedItem[] = []
 
     // 처치한 몬스터별 보상
-    const defeatedEnemies = state.combatants.filter(c => 
+    const defeatedEnemies = state.combatants.filter(c =>
       c.team === 'enemy' && c.stats.currentHp <= 0
     )
 
@@ -870,8 +908,12 @@ export class ATBCombatService extends EventEmitter {
   }
 
   private isIncapacitated(combatant: ATBCombatant): boolean {
-    if (this.hasStatusEffect(combatant, 'freeze')) return true
-    if (this.hasStatusEffect(combatant, 'sleep')) return true
+    if (this.hasStatusEffect(combatant, 'freeze')) {
+      return true
+    }
+    if (this.hasStatusEffect(combatant, 'sleep')) {
+      return true
+    }
     if (this.hasStatusEffect(combatant, 'paralyze')) {
       return Math.random() < ATB_CONSTANTS.STATUS_CHANCE.paralyze
     }
@@ -901,19 +943,21 @@ export class ATBCombatService extends EventEmitter {
     const hpPercent = combatant.stats.currentHp / combatant.stats.maxHp
     if (hpPercent < 0.5) {
       const healSkill = combatant.skills.find(s => s.type === 'heal')
-      if (healSkill) return healSkill
+      if (healSkill) {
+        return healSkill
+      }
     }
 
     // 공격 스킬 중 가장 강력한 것
     const attackSkills = combatant.skills.filter(s => s.type === 'attack')
-    return attackSkills.reduce((best, current) => 
+    return attackSkills.reduce((best, current) =>
       (current.power || 1) > (best?.power || 1) ? current : best
     , attackSkills[0])
   }
 
   private applyBuffsToValue(baseValue: number, combatant: ATBCombatant, statType: string): number {
     let value = baseValue
-    
+
     for (const buff of combatant.buffs) {
       if (buff.type.startsWith(statType)) {
         if (buff.type.endsWith('_up')) {
@@ -1056,7 +1100,9 @@ export class ATBCombatService extends EventEmitter {
    */
   changeBattleSpeed(combatId: string, speed: keyof typeof BATTLE_SPEED_CONFIGS): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     const speedConfig = BATTLE_SPEED_CONFIGS[speed]
     state.settings.battleSpeed = speedConfig.speed
@@ -1067,7 +1113,9 @@ export class ATBCombatService extends EventEmitter {
    */
   updateAutoSettings(combatId: string, settings: Partial<ATBCombatState['settings']>): void {
     const state = this.combatStates.get(combatId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     Object.assign(state.settings, settings)
   }

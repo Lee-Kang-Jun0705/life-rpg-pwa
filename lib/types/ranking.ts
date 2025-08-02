@@ -1,7 +1,7 @@
 'use client'
 
 // 랭킹 카테고리
-export type RankingCategory = 
+export type RankingCategory =
   | 'total_level'        // 총 레벨
   | 'combat_power'       // 전투력
   | 'monster_kills'      // 몬스터 처치 수

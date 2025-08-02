@@ -278,7 +278,7 @@ export const SPECIAL_QUEST_MONSTER_SKILLS = {
     description: '달의 위상을 바꿔 능력치 변화',
     effects: ['stat_change']
   },
-  
+
   // 드래곤 스킬
   fire_breath: {
     name: '화염 브레스',
@@ -339,7 +339,7 @@ export const SPECIAL_QUEST_MONSTER_SKILLS = {
     aoe: true,
     hits: 3
   },
-  
+
   // 도전 퀘스트 스킬
   one_shot_strike: {
     name: '일격필살',
@@ -369,7 +369,7 @@ export const SPECIAL_QUEST_MONSTER_SKILLS = {
     description: '극한의 속도로 움직인다',
     extra_actions: 2 // 추가 행동
   },
-  
+
   // 수호자 스킬
   stone_barrier: {
     name: '석화 방벽',
@@ -402,9 +402,9 @@ export const SPECIAL_QUEST_MONSTER_SKILLS = {
 
 // 특별 퀘스트별 몬스터 가져오기
 export function getSpecialQuestMonsters(questId: string): Monster[] {
-  return EVENT_QUEST_MONSTERS[questId] || 
-         HIDDEN_QUEST_MONSTERS[questId] || 
-         CHALLENGE_QUEST_MONSTERS[questId] || 
-         COLLECTION_QUEST_MONSTERS[questId] || 
+  return EVENT_QUEST_MONSTERS[questId] ||
+         HIDDEN_QUEST_MONSTERS[questId] ||
+         CHALLENGE_QUEST_MONSTERS[questId] ||
+         COLLECTION_QUEST_MONSTERS[questId] ||
          []
 }

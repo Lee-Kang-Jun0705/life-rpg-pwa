@@ -8,7 +8,7 @@ describe('오프라인 데이터베이스 테스트', () => {
   const testEmail = 'test@example.com'
   const testName = '테스트 사용자'
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     // 테스트 전 데이터베이스 초기화
     await db.profiles.clear()
     await db.stats.clear()
@@ -17,14 +17,14 @@ describe('오프라인 데이터베이스 테스트', () => {
     await db.missions.clear()
   })
 
-  afterEach(async () => {
+  afterEach(async() => {
     // 테스트 후 정리
     await db.delete()
     await db.open()
   })
 
   describe('사용자 초기화', () => {
-    it('새로운 사용자의 초기 데이터를 생성해야 함', async () => {
+    it('새로운 사용자의 초기 데이터를 생성해야 함', async() => {
       // Act
       await dbHelpers.initializeUserData(testUserId, testEmail, testName)
 
@@ -54,11 +54,11 @@ describe('오프라인 데이터베이스 테스트', () => {
   })
 
   describe('활동 기록 (오프라인)', () => {
-    beforeEach(async () => {
+    beforeEach(async() => {
       await dbHelpers.initializeUserData(testUserId, testEmail, testName)
     })
 
-    it('오프라인 상태에서 활동을 기록하고 저장해야 함', async () => {
+    it('오프라인 상태에서 활동을 기록하고 저장해야 함', async() => {
       // Arrange
       const activity: Omit<Activity, 'id'> = {
         userId: testUserId,
@@ -75,7 +75,7 @@ describe('오프라인 데이터베이스 테스트', () => {
 
       // Assert
       expect(activityId).toBeDefined()
-      
+
       const savedActivity = await db.activities.get(activityId)
       expect(savedActivity).toBeDefined()
       expect(savedActivity?.synced).toBe(false)
@@ -91,7 +91,7 @@ describe('오프라인 데이터베이스 테스트', () => {
       expect(healthStat?.totalActivities).toBe(1)
     })
 
-    it('여러 활동을 기록하고 경험치가 누적되어야 함', async () => {
+    it('여러 활동을 기록하고 경험치가 누적되어야 함', async() => {
       // Arrange
       const activities = [
         { statType: 'health' as const, experience: 20, description: '운동' },
@@ -126,7 +126,7 @@ describe('오프라인 데이터베이스 테스트', () => {
       expect(learningStat?.totalActivities).toBe(1)
     })
 
-    it('레벨업이 정확하게 계산되어야 함', async () => {
+    it('레벨업이 정확하게 계산되어야 함', async() => {
       // Arrange & Act
       // 100 경험치마다 레벨업
       for (let i = 0; i < 5; i++) {
@@ -152,11 +152,11 @@ describe('오프라인 데이터베이스 테스트', () => {
   })
 
   describe('오프라인 데이터 동기화 대기열', () => {
-    beforeEach(async () => {
+    beforeEach(async() => {
       await dbHelpers.initializeUserData(testUserId, testEmail, testName)
     })
 
-    it('동기화되지 않은 활동들을 조회할 수 있어야 함', async () => {
+    it('동기화되지 않은 활동들을 조회할 수 있어야 함', async() => {
       // Arrange
       const activities = [
         { description: '활동1', synced: false },
@@ -186,11 +186,11 @@ describe('오프라인 데이터베이스 테스트', () => {
   })
 
   describe('캐릭터 커스터마이징 (오프라인)', () => {
-    beforeEach(async () => {
+    beforeEach(async() => {
       await dbHelpers.initializeUserData(testUserId, testEmail, testName)
     })
 
-    it('오프라인에서 캐릭터 외모를 변경하고 저장해야 함', async () => {
+    it('오프라인에서 캐릭터 외모를 변경하고 저장해야 함', async() => {
       // Arrange
       const newAppearance = {
         hair: 'long_brown',
@@ -211,7 +211,7 @@ describe('오프라인 데이터베이스 테스트', () => {
   })
 
   describe('데이터 영속성', () => {
-    it('데이터베이스를 닫고 다시 열어도 데이터가 유지되어야 함', async () => {
+    it('데이터베이스를 닫고 다시 열어도 데이터가 유지되어야 함', async() => {
       // Arrange
       await dbHelpers.initializeUserData(testUserId, testEmail, testName)
       await dbHelpers.addActivity({
@@ -239,11 +239,11 @@ describe('오프라인 데이터베이스 테스트', () => {
   })
 
   describe('오프라인 미션 시스템', () => {
-    beforeEach(async () => {
+    beforeEach(async() => {
       await dbHelpers.initializeUserData(testUserId, testEmail, testName)
     })
 
-    it('오프라인에서 미션 진행도를 업데이트해야 함', async () => {
+    it('오프라인에서 미션 진행도를 업데이트해야 함', async() => {
       // Arrange
       const missionId = await db.missions.add({
         userId: testUserId,

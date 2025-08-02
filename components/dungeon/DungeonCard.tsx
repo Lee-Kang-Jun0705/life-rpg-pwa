@@ -7,13 +7,13 @@ import { DungeonDetailModal } from './DungeonDetailModal'
 import { DungeonStatusBadge } from './common/DungeonStatusBadge'
 import { DungeonDifficultyBadge } from './common/DungeonDifficultyBadge'
 import { motion } from 'framer-motion'
-import { 
-  Clock, 
-  Zap, 
-  Star, 
-  Lock, 
-  Users, 
-  Sword, 
+import {
+  Clock,
+  Zap,
+  Star,
+  Lock,
+  Users,
+  Sword,
   Calendar,
   Ticket,
   Trophy,
@@ -65,13 +65,13 @@ const getCardStyle = (status: Dungeon['status']) => {
 
 export function DungeonCard({ dungeon, isAvailable, onEnter }: DungeonCardProps) {
   const [showDetail, setShowDetail] = useState(false)
-  
+
   const typeInfo = DUNGEON_TYPE_INFO[dungeon.type] || {
     label: dungeon.type,
     icon: Target,
     color: 'bg-gray-500'
   }
-  
+
   const isLocked = dungeon.status === 'locked'
   const isActive = dungeon.status === 'in_progress'
   const isCompleted = dungeon.status === 'completed' || dungeon.status === 'cleared'
@@ -150,10 +150,10 @@ export function DungeonCard({ dungeon, isAvailable, onEnter }: DungeonCardProps)
           <div className="flex justify-center mb-4 mt-8">
             <div className={`
               text-5xl p-4 rounded-full 
-              ${isLocked 
-                ? 'bg-gray-300 dark:bg-gray-600 grayscale' 
-                : `bg-gradient-to-br ${difficultyColors[dungeon.difficulty]} text-white shadow-lg`
-              }
+              ${isLocked
+      ? 'bg-gray-300 dark:bg-gray-600 grayscale'
+      : `bg-gradient-to-br ${difficultyColors[dungeon.difficulty]} text-white shadow-lg`
+    }
             `}>
               {dungeon.icon || typeInfo.icon}
             </div>
@@ -170,10 +170,10 @@ export function DungeonCard({ dungeon, isAvailable, onEnter }: DungeonCardProps)
           {/* 설명 */}
           <p className={`
             text-sm text-center mb-4 line-clamp-2 min-h-[2.5rem]
-            ${isLocked 
-              ? 'text-gray-400' 
-              : 'text-gray-600 dark:text-gray-400'
-            }
+            ${isLocked
+      ? 'text-gray-400'
+      : 'text-gray-600 dark:text-gray-400'
+    }
           `}>
             {isLocked ? '조건을 만족하면 입장할 수 있습니다' : dungeon.description}
           </p>
@@ -188,7 +188,7 @@ export function DungeonCard({ dungeon, isAvailable, onEnter }: DungeonCardProps)
                 </div>
                 <span className="font-medium">{dungeon.stages}개</span>
               </div>
-              
+
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-1">
                   <Clock className="w-4 h-4 text-green-500" />
@@ -196,7 +196,7 @@ export function DungeonCard({ dungeon, isAvailable, onEnter }: DungeonCardProps)
                 </div>
                 <span className="font-medium">{dungeon.estimatedTime}분</span>
               </div>
-              
+
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-1">
                   <Sword className="w-4 h-4 text-red-500" />
@@ -292,9 +292,9 @@ export function DungeonCard({ dungeon, isAvailable, onEnter }: DungeonCardProps)
               className={`
                 w-full py-3 rounded-lg font-medium transition-all text-sm
                 ${isAvailable
-                  ? 'bg-purple-500 text-white hover:bg-purple-600 shadow-lg hover:shadow-xl'
-                  : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                }
+              ? 'bg-purple-500 text-white hover:bg-purple-600 shadow-lg hover:shadow-xl'
+              : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+            }
               `}
             >
               {isAvailable ? '입장하기' : '입장 불가'}

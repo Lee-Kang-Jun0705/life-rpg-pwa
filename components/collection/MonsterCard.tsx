@@ -41,7 +41,7 @@ const tierStarCount: Record<string, number> = {
 
 export function MonsterCard({ monster, entry, lore }: MonsterCardProps) {
   const [showDetail, setShowDetail] = useState(false)
-  
+
   const isDiscovered = entry.isDiscovered
   const isDefeated = entry.isDefeated
   const killCount = entry.killCount
@@ -56,10 +56,10 @@ export function MonsterCard({ monster, entry, lore }: MonsterCardProps) {
           relative p-4 rounded-xl border-2 transition-all
           ${isDiscovered ? 'cursor-pointer hover:shadow-lg' : 'opacity-50 cursor-not-allowed'}
           ${rarityColors[monster.tier || 'common']}
-          ${isDiscovered 
-            ? 'bg-white dark:bg-gray-800' 
-            : 'bg-gray-100 dark:bg-gray-900'
-          }
+          ${isDiscovered
+      ? 'bg-white dark:bg-gray-800'
+      : 'bg-gray-100 dark:bg-gray-900'
+    }
         `}
       >
         {/* 잠금 상태 */}
@@ -86,10 +86,10 @@ export function MonsterCard({ monster, entry, lore }: MonsterCardProps) {
         {/* 몬스터 이미지 (대체: 이모지) */}
         <div className={`
           w-full aspect-square rounded-lg mb-3 flex items-center justify-center text-4xl
-          ${isDiscovered 
-            ? `bg-gradient-to-br ${elementColors['neutral']}`
-            : 'bg-gray-300 dark:bg-gray-700'
-          }
+          ${isDiscovered
+      ? `bg-gradient-to-br ${elementColors['neutral']}`
+      : 'bg-gray-300 dark:bg-gray-700'
+    }
         `}>
           {isDiscovered ? (
             monster.emoji || '👾'
@@ -103,7 +103,7 @@ export function MonsterCard({ monster, entry, lore }: MonsterCardProps) {
           <h3 className="font-semibold text-center">
             {isDiscovered ? monster.name : '???'}
           </h3>
-          
+
           {isDiscovered && (
             <>
               <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400">
@@ -132,7 +132,7 @@ export function MonsterCard({ monster, entry, lore }: MonsterCardProps) {
                   <Eye className="w-3 h-3" />
                   <span>발견</span>
                 </div>
-                
+
                 <div className={`flex items-center gap-1 text-xs ${
                   isDefeated ? 'text-red-600' : 'text-gray-400'
                 }`}>

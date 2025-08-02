@@ -74,7 +74,7 @@ export function SettingsSkeleton() {
   return (
     <div className="container mx-auto p-4">
       <div className="h-8 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-6" />
-      
+
       {[1, 2, 3].map((i) => (
         <Card key={i} className="mb-4 animate-pulse">
           <CardHeader>

@@ -1,9 +1,9 @@
 'use client'
 
-import type { 
-  RankingCategory, 
-  RankingPeriod, 
-  RankingEntry, 
+import type {
+  RankingCategory,
+  RankingPeriod,
+  RankingEntry,
   UserRankingStats,
   RankingFilter,
   RankingSeason
@@ -52,7 +52,7 @@ export class RankingService {
 
     // 레벨 필터링
     if (filter.level) {
-      ranking = ranking.filter(entry => 
+      ranking = ranking.filter(entry =>
         entry.level >= filter.level!.min && entry.level <= filter.level!.max
       )
     }
@@ -73,9 +73,11 @@ export class RankingService {
   }
 
   // 사용자 주변 랭킹 조회
-  async getNearbyRanking(userId: string, category: RankingCategory, range: number = 5): Promise<RankingEntry[]> {
+  async getNearbyRanking(userId: string, category: RankingCategory, range = 5): Promise<RankingEntry[]> {
     const userRank = await this.getUserRank(userId, category)
-    if (!userRank) return []
+    if (!userRank) {
+      return []
+    }
 
     const allRanking = await this.getRanking({ category, period: 'weekly' })
     const startIndex = Math.max(0, userRank.rank - range - 1)
@@ -158,17 +160,17 @@ export class RankingService {
     if (userIndex >= 0) {
       const previousRank = categoryRanking[userIndex].rank
       categoryRanking[userIndex].score = newScore
-      
+
       // 점수 기준으로 재정렬
       categoryRanking.sort((a, b) => b.score - a.score)
-      
+
       // 순위 재계산
       categoryRanking.forEach((entry, index) => {
         const newRank = index + 1
         if (entry.userId === userId) {
           entry.previousRank = previousRank
-          entry.change = newRank < previousRank ? 'up' : 
-                       newRank > previousRank ? 'down' : 'same'
+          entry.change = newRank < previousRank ? 'up' :
+            newRank > previousRank ? 'down' : 'same'
         }
         entry.rank = newRank
       })
@@ -189,13 +191,13 @@ export class RankingService {
   }
 
   // 상위 길드 조회
-  async getTopGuilds(limit: number = 10): Promise<Array<{guild: string, members: number, totalScore: number}>> {
+  async getTopGuilds(limit = 10): Promise<Array<{guild: string, members: number, totalScore: number}>> {
     const allRanking = await this.getRanking({ category: 'total_level', period: 'weekly' })
     const guildStats = new Map<string, {members: number, totalScore: number}>()
 
     allRanking.forEach(entry => {
       if (entry.guild) {
-        const current = guildStats.get(entry.guild) || {members: 0, totalScore: 0}
+        const current = guildStats.get(entry.guild) || { members: 0, totalScore: 0 }
         current.members += 1
         current.totalScore += entry.score
         guildStats.set(entry.guild, current)
@@ -203,7 +205,7 @@ export class RankingService {
     })
 
     return Array.from(guildStats.entries())
-      .map(([guild, stats]) => ({guild, ...stats}))
+      .map(([guild, stats]) => ({ guild, ...stats }))
       .sort((a, b) => b.totalScore - a.totalScore)
       .slice(0, limit)
   }
@@ -215,14 +217,14 @@ export class RankingService {
 
     for (const category of allCategories) {
       const ranking = await this.getRanking({ category, period: 'weekly' })
-      const found = ranking.filter(entry => 
+      const found = ranking.filter(entry =>
         entry.username.toLowerCase().includes(username.toLowerCase())
       )
       results.push(...found)
     }
 
     // 중복 제거
-    const uniqueResults = results.filter((entry, index, self) => 
+    const uniqueResults = results.filter((entry, index, self) =>
       index === self.findIndex(e => e.userId === entry.userId)
     )
 

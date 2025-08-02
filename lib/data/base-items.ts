@@ -25,9 +25,9 @@ const legacyItems: Record<string, Item> = {
     baseStats: { attack: 5 },
     randomStats: [],
     value: 50,
-    stackable: false,
+    stackable: false
   },
-  
+
   wooden_staff: {
     id: 'wooden_staff',
     name: '나무 지팡이',
@@ -38,7 +38,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { attack: 3, mp: 10 },
     randomStats: [],
     value: 60,
-    stackable: false,
+    stackable: false
   },
 
   iron_sword: {
@@ -51,7 +51,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { attack: 10 },
     randomStats: [],
     value: 150,
-    stackable: false,
+    stackable: false
   },
 
   // 중급 무기 (10-25 레벨)
@@ -65,7 +65,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { attack: 20, speed: 5 },
     randomStats: [],
     value: 500,
-    stackable: false,
+    stackable: false
   },
 
   mystic_staff: {
@@ -78,7 +78,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { attack: 15, mp: 30 },
     randomStats: [],
     value: 600,
-    stackable: false,
+    stackable: false
   },
 
   // 고급 무기 (25-50 레벨)
@@ -92,7 +92,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { attack: 35 },
     randomStats: [],
     value: 1500,
-    stackable: false,
+    stackable: false
   },
 
   // 최고급 무기 (50+ 레벨)
@@ -113,7 +113,7 @@ const legacyItems: Record<string, Item> = {
       effect: { type: 'damage', value: 1.5 }
     }],
     value: 10000,
-    stackable: false,
+    stackable: false
   },
 
   // === 방어구 ===
@@ -128,7 +128,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { defense: 3, hp: 20 },
     randomStats: [],
     value: 40,
-    stackable: false,
+    stackable: false
   },
 
   leather_armor: {
@@ -141,7 +141,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { defense: 8, hp: 50 },
     randomStats: [],
     value: 120,
-    stackable: false,
+    stackable: false
   },
 
   // 중급 방어구
@@ -155,7 +155,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { defense: 20, hp: 100, speed: -5 },
     randomStats: [],
     value: 450,
-    stackable: false,
+    stackable: false
   },
 
   // 고급 방어구
@@ -169,7 +169,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { defense: 40, hp: 200, speed: 10 },
     randomStats: [],
     value: 1200,
-    stackable: false,
+    stackable: false
   },
 
   // === 액세서리 ===
@@ -184,7 +184,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { mp: 10 },
     randomStats: [],
     value: 30,
-    stackable: false,
+    stackable: false
   },
 
   copper_necklace: {
@@ -197,7 +197,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { hp: 30, mp: 20 },
     randomStats: [],
     value: 80,
-    stackable: false,
+    stackable: false
   },
 
   // 중급 액세서리
@@ -211,7 +211,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { mp: 40, speed: 5 },
     randomStats: [],
     value: 300,
-    stackable: false,
+    stackable: false
   },
 
   // 고급 액세서리
@@ -225,7 +225,7 @@ const legacyItems: Record<string, Item> = {
     baseStats: { attack: 10 },
     randomStats: [],
     value: 1000,
-    stackable: false,
+    stackable: false
   },
 
   // === 소비 아이템 ===
@@ -240,7 +240,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     value: 20,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   health_potion_medium: {
@@ -254,7 +254,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     value: 50,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   mana_potion_small: {
@@ -268,7 +268,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     value: 25,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   energy_drink: {
@@ -282,7 +282,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     value: 100,
     stackable: true,
-    maxStack: 50,
+    maxStack: 50
   },
 
   // === 재료 아이템 ===
@@ -297,7 +297,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     value: 10,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
 
   silver_ore: {
@@ -311,7 +311,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     value: 50,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
 
   mithril_ore: {
@@ -325,7 +325,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     value: 200,
     stackable: true,
-    maxStack: 999,
+    maxStack: 999
   },
 
   dragon_scale: {
@@ -339,7 +339,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     value: 1000,
     stackable: true,
-    maxStack: 99,
+    maxStack: 99
   },
 
   // === 세트 아이템 ===
@@ -354,7 +354,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     setId: 'warrior_set',
     value: 1000,
-    stackable: false,
+    stackable: false
   },
 
   warrior_set_armor: {
@@ -368,7 +368,7 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     setId: 'warrior_set',
     value: 1000,
-    stackable: false,
+    stackable: false
   },
 
   warrior_set_ring: {
@@ -382,6 +382,6 @@ const legacyItems: Record<string, Item> = {
     randomStats: [],
     setId: 'warrior_set',
     value: 800,
-    stackable: false,
-  },
+    stackable: false
+  }
 }

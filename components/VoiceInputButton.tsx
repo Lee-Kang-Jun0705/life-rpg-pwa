@@ -47,7 +47,7 @@ const VoiceInputButton = React.memo(function VoiceInputButton({
   }
 
   // 음성 인식 시작/중지
-  const handleVoiceInput = useCallback(async () => {
+  const handleVoiceInput = useCallback(async() => {
     if (!isSupported) {
       setShowFallback(true)
       return
@@ -62,14 +62,16 @@ const VoiceInputButton = React.memo(function VoiceInputButton({
         setPulseAnimation(true)
       } catch (err) {
         console.error('음성 인식 시작 실패:', err)
-        if (onError) onError(err instanceof Error ? err : new Error(String(err)))
+        if (onError) {
+          onError(err instanceof Error ? err : new Error(String(err)))
+        }
       }
     }
   }, [isSupported, isListening, start, stop, resetActivity, onError])
 
   // 활동이 인식되면 콜백 호출
   const [lastProcessedActivity, setLastProcessedActivity] = useState<string>('')
-  
+
   useEffect(() => {
     if (activity.description && onTranscript && activity.description !== lastProcessedActivity) {
       console.log('🎤 Processing voice activity:', activity.description)

@@ -31,14 +31,14 @@ export function useOffline() {
       if (connection) {
         // 2G 이하의 느린 연결 감지
         setIsSlowConnection(
-          connection.effectiveType === 'slow-2g' || 
+          connection.effectiveType === 'slow-2g' ||
           connection.effectiveType === '2g'
         )
 
         // 연결 상태 변경 감지
         const handleConnectionChange = () => {
           setIsSlowConnection(
-            connection.effectiveType === 'slow-2g' || 
+            connection.effectiveType === 'slow-2g' ||
             connection.effectiveType === '2g'
           )
         }
@@ -55,7 +55,7 @@ export function useOffline() {
     const handleOnline = () => {
       setIsOffline(false)
       console.log('📶 온라인 상태로 전환되었습니다')
-      
+
       // 백그라운드 동기화 요청
       if ('serviceWorker' in navigator && 'SyncManager' in window) {
         navigator.serviceWorker.ready.then(registration => {

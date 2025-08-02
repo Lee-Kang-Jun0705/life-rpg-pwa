@@ -23,33 +23,33 @@ export function GrowthTab({ growthData, growthAnalyses }: GrowthTabProps) {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey="health" 
-                  stroke="#96CEB4" 
-                  name="건강" 
-                  strokeWidth={3} 
+                <Line
+                  type="monotone"
+                  dataKey="health"
+                  stroke="#96CEB4"
+                  name="건강"
+                  strokeWidth={3}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="learning" 
-                  stroke="#87CEEB" 
-                  name="학습" 
-                  strokeWidth={3} 
+                <Line
+                  type="monotone"
+                  dataKey="learning"
+                  stroke="#87CEEB"
+                  name="학습"
+                  strokeWidth={3}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="relationship" 
-                  stroke="#FFB6C1" 
-                  name="관계" 
-                  strokeWidth={3} 
+                <Line
+                  type="monotone"
+                  dataKey="relationship"
+                  stroke="#FFB6C1"
+                  name="관계"
+                  strokeWidth={3}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="achievement" 
-                  stroke="#FECA57" 
-                  name="성취" 
-                  strokeWidth={3} 
+                <Line
+                  type="monotone"
+                  dataKey="achievement"
+                  stroke="#FECA57"
+                  name="성취"
+                  strokeWidth={3}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -68,8 +68,8 @@ export function GrowthTab({ growthData, growthAnalyses }: GrowthTabProps) {
             <CardHeader>
               <CardTitle className="text-lg">
                 {analysis.statType === 'health' ? '🏃 건강' :
-                 analysis.statType === 'learning' ? '📚 학습' :
-                 analysis.statType === 'relationship' ? '🤝 관계' : '🎯 성취'}
+                  analysis.statType === 'learning' ? '📚 학습' :
+                    analysis.statType === 'relationship' ? '🤝 관계' : '🎯 성취'}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -82,12 +82,12 @@ export function GrowthTab({ growthData, growthAnalyses }: GrowthTabProps) {
                   <span className="text-gray-600 dark:text-gray-400">추세</span>
                   <span className={`font-semibold flex items-center gap-1 ${
                     analysis.trend === 'improving' ? 'text-green-500' :
-                    analysis.trend === 'declining' ? 'text-red-500' : 'text-yellow-500'
+                      analysis.trend === 'declining' ? 'text-red-500' : 'text-yellow-500'
                   }`}>
                     {analysis.trend === 'improving' ? '↗' :
-                     analysis.trend === 'declining' ? '↘' : '→'}
+                      analysis.trend === 'declining' ? '↘' : '→'}
                     {analysis.trend === 'improving' ? '상승' :
-                     analysis.trend === 'declining' ? '하락' : '정체'}
+                      analysis.trend === 'declining' ? '하락' : '정체'}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">

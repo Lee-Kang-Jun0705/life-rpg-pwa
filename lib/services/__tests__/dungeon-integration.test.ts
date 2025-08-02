@@ -83,7 +83,7 @@ describe('DungeonIntegrationService', () => {
   })
 
   describe('던전 입장', () => {
-    it('정상적으로 던전에 입장할 수 있어야 한다', async () => {
+    it('정상적으로 던전에 입장할 수 있어야 한다', async() => {
       const result = await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
 
       expect(result.success).toBe(true)
@@ -91,7 +91,7 @@ describe('DungeonIntegrationService', () => {
       expect(result.error).toBeUndefined()
     })
 
-    it('캐릭터를 찾을 수 없으면 실패해야 한다', async () => {
+    it('캐릭터를 찾을 수 없으면 실패해야 한다', async() => {
       const mockCharacterService = characterIntegrationService as jest.Mocked<typeof characterIntegrationService>
       mockCharacterService.getCharacter.mockResolvedValue(null)
 
@@ -101,7 +101,7 @@ describe('DungeonIntegrationService', () => {
       expect(result.error).toBe('캐릭터를 찾을 수 없습니다.')
     })
 
-    it('던전을 찾을 수 없으면 실패해야 한다', async () => {
+    it('던전을 찾을 수 없으면 실패해야 한다', async() => {
       const mockDungeonServiceInstance = dungeonService as jest.Mocked<typeof dungeonService>
       mockDungeonServiceInstance.getDungeon.mockResolvedValue(null)
 
@@ -111,7 +111,7 @@ describe('DungeonIntegrationService', () => {
       expect(result.error).toBe('던전을 찾을 수 없습니다.')
     })
 
-    it('레벨이 부족하면 입장할 수 없어야 한다', async () => {
+    it('레벨이 부족하면 입장할 수 없어야 한다', async() => {
       mockDungeon.requirements.level = 10 // 플레이어 레벨(5)보다 높게 설정
 
       const result = await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
@@ -120,7 +120,7 @@ describe('DungeonIntegrationService', () => {
       expect(result.error).toContain('레벨')
     })
 
-    it('에너지가 부족하면 입장할 수 없어야 한다', async () => {
+    it('에너지가 부족하면 입장할 수 없어야 한다', async() => {
       mockCharacter.energy = 0 // 에너지를 0으로 설정
 
       const result = await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
@@ -129,9 +129,9 @@ describe('DungeonIntegrationService', () => {
       expect(result.error).toBe('에너지가 부족합니다.')
     })
 
-    it('입장 성공 시 에너지가 차감되어야 한다', async () => {
+    it('입장 성공 시 에너지가 차감되어야 한다', async() => {
       const mockCharacterService = characterIntegrationService as jest.Mocked<typeof characterIntegrationService>
-      
+
       await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
 
       expect(mockCharacterService.useEnergy).toHaveBeenCalledWith('test-user', mockDungeon.requirements.energy)
@@ -139,18 +139,18 @@ describe('DungeonIntegrationService', () => {
   })
 
   describe('세션 관리', () => {
-    it('입장 시 세션이 생성되어야 한다', async () => {
+    it('입장 시 세션이 생성되어야 한다', async() => {
       const result = await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
-      
+
       expect(result.sessionId).toBeTruthy()
-      
+
       const session = dungeonIntegrationService.getSession(result.sessionId!)
       expect(session).toBeTruthy()
       expect(session?.userId).toBe('test-user')
       expect(session?.dungeonId).toBe('test-dungeon')
     })
 
-    it('세션에 진행 상황이 포함되어야 한다', async () => {
+    it('세션에 진행 상황이 포함되어야 한다', async() => {
       const result = await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
       const session = dungeonIntegrationService.getSession(result.sessionId!)
 
@@ -160,7 +160,7 @@ describe('DungeonIntegrationService', () => {
       expect(session?.progress.totalStages).toBe(mockDungeon.stages)
     })
 
-    it('세션에 보상 정보가 초기화되어야 한다', async () => {
+    it('세션에 보상 정보가 초기화되어야 한다', async() => {
       const result = await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
       const session = dungeonIntegrationService.getSession(result.sessionId!)
 
@@ -175,12 +175,12 @@ describe('DungeonIntegrationService', () => {
   describe('스테이지 진행', () => {
     let sessionId: string
 
-    beforeEach(async () => {
+    beforeEach(async() => {
       const result = await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
       sessionId = result.sessionId!
     })
 
-    it('다음 스테이지로 진행할 수 있어야 한다', async () => {
+    it('다음 스테이지로 진행할 수 있어야 한다', async() => {
       const result = await dungeonIntegrationService.proceedToNextStage(sessionId)
 
       expect(result.success).toBe(true)
@@ -190,7 +190,7 @@ describe('DungeonIntegrationService', () => {
       expect(session?.progress.currentStage).toBe(2)
     })
 
-    it('마지막 스테이지 이후에는 진행할 수 없어야 한다', async () => {
+    it('마지막 스테이지 이후에는 진행할 수 없어야 한다', async() => {
       const session = dungeonIntegrationService.getSession(sessionId)
       if (session) {
         session.progress.currentStage = mockDungeon.stages
@@ -202,7 +202,7 @@ describe('DungeonIntegrationService', () => {
       expect(result.error).toContain('모든 스테이지를 완료')
     })
 
-    it('존재하지 않는 세션은 진행할 수 없어야 한다', async () => {
+    it('존재하지 않는 세션은 진행할 수 없어야 한다', async() => {
       const result = await dungeonIntegrationService.proceedToNextStage('invalid-session')
 
       expect(result.success).toBe(false)
@@ -213,12 +213,12 @@ describe('DungeonIntegrationService', () => {
   describe('던전 포기', () => {
     let sessionId: string
 
-    beforeEach(async () => {
+    beforeEach(async() => {
       const result = await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
       sessionId = result.sessionId!
     })
 
-    it('던전을 포기할 수 있어야 한다', async () => {
+    it('던전을 포기할 수 있어야 한다', async() => {
       await dungeonIntegrationService.abandonDungeon(sessionId)
 
       const session = dungeonIntegrationService.getSession(sessionId)
@@ -230,14 +230,14 @@ describe('DungeonIntegrationService', () => {
     let sessionId: string
     let combatId: string
 
-    beforeEach(async () => {
+    beforeEach(async() => {
       const result = await dungeonIntegrationService.enterDungeon('test-user', 'test-dungeon')
       sessionId = result.sessionId!
       const session = dungeonIntegrationService.getSession(sessionId)
       combatId = session?.currentCombatId || ''
     })
 
-    it('전투 행동을 실행할 수 있어야 한다', async () => {
+    it('전투 행동을 실행할 수 있어야 한다', async() => {
       const action = {
         type: 'attack' as const,
         targetId: 'enemy_0'
@@ -248,7 +248,7 @@ describe('DungeonIntegrationService', () => {
       expect(result.success).toBe(true)
     })
 
-    it('세션이 없으면 행동을 실행할 수 없어야 한다', async () => {
+    it('세션이 없으면 행동을 실행할 수 없어야 한다', async() => {
       const action = {
         type: 'attack' as const,
         targetId: 'enemy_0'

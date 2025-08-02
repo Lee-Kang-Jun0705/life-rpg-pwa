@@ -27,12 +27,12 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // 에러 로깅 서비스에 에러 전송
     console.error('Error caught by boundary:', error, errorInfo)
-    
+
     // 개발 환경에서만 상세 정보 표시
     if (process.env.NODE_ENV === 'development') {
       this.setState({ errorInfo })
     }
-    
+
     // 프로덕션 환경에서는 에러 추적 서비스로 전송
     if (process.env.NODE_ENV === 'production') {
       // 예: Sentry, LogRocket 등으로 에러 전송
@@ -63,7 +63,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 예기치 않은 오류가 발생했습니다. 불편을 드려 죄송합니다.
               </p>
-              
+
               {process.env.NODE_ENV === 'development' && (
                 <details className="text-left mb-6">
                   <summary className="cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
@@ -89,7 +89,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   </pre>
                 </details>
               )}
-              
+
               <div className="flex gap-3 justify-center">
                 <Button
                   onClick={this.resetError}
@@ -115,11 +115,11 @@ export class ErrorBoundary extends Component<Props, State> {
 }
 
 // 특정 영역용 에러 바운더리 컴포넌트
-export function SectionErrorBoundary({ 
-  children, 
+export function SectionErrorBoundary({
+  children,
   sectionName = '이 섹션',
   onError
-}: { 
+}: {
   children: ReactNode
   sectionName?: string
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void
@@ -140,9 +140,9 @@ export function SectionErrorBoundary({
                 </p>
               )}
             </div>
-            <Button 
-              onClick={resetError} 
-              size="sm" 
+            <Button
+              onClick={resetError}
+              size="sm"
               variant="outline"
               className="border-red-300 text-red-600 hover:bg-red-100 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/30"
             >

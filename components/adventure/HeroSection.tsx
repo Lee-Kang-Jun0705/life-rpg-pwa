@@ -29,7 +29,7 @@ interface Character {
     critical: number
   }
 }
-import { 
+import {
   Sword, Shield, Heart, Zap, Star, TrendingUp,
   Calendar, Scroll, ShoppingBag, Sparkles,
   BookOpen, Trophy, Crown
@@ -50,21 +50,21 @@ export function HeroSection({ activeTab = 'quest', onTabChange }: HeroSectionPro
     loadCharacterData()
   }, [])
 
-  const loadCharacterData = async () => {
-    
+  const loadCharacterData = async() => {
+
     try {
       // 실제 프로필 데이터와 스탯 로드
       const [profile, stats] = await Promise.all([
         dbHelpers.getProfile(userId),
         dbHelpers.getStats(userId)
       ])
-      
+
       if (profile) {
         // 중앙화된 레벨 계산 함수 사용
-        const characterLevel = stats && stats.length > 0 
-          ? calculateCharacterLevel(stats) 
+        const characterLevel = stats && stats.length > 0
+          ? calculateCharacterLevel(stats)
           : 0
-        
+
         const character: Character = {
           id: 1,
           userId,
@@ -118,10 +118,10 @@ export function HeroSection({ activeTab = 'quest', onTabChange }: HeroSectionPro
     return (
       <div className="bg-gray-800/50 rounded-xl p-4 mb-4">
         <div className="animate-pulse">
-          <div className="h-16 bg-gray-700/50 rounded-lg mb-3"></div>
+          <div className="h-16 bg-gray-700/50 rounded-lg mb-3" />
           <div className="grid grid-cols-2 gap-4">
-            <div className="h-32 bg-gray-700/50 rounded-lg"></div>
-            <div className="h-32 bg-gray-700/50 rounded-lg"></div>
+            <div className="h-32 bg-gray-700/50 rounded-lg" />
+            <div className="h-32 bg-gray-700/50 rounded-lg" />
           </div>
         </div>
       </div>
@@ -135,14 +135,14 @@ export function HeroSection({ activeTab = 'quest', onTabChange }: HeroSectionPro
   const expPercentage = (character.experience / character.experienceToNext) * 100
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       className="bg-gray-800/30 rounded-xl p-3 md:p-4 mb-4"
     >
       {/* 캐릭터 정보 헤더 */}
       <div className="flex items-center gap-3 mb-4">
-        <motion.div 
+        <motion.div
           whileHover={{ scale: 1.05 }}
           className="relative w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 p-0.5"
         >
@@ -160,11 +160,11 @@ export function HeroSection({ activeTab = 'quest', onTabChange }: HeroSectionPro
             <span className="text-sm text-gray-400">{character.class || '초보자'}</span>
             <div className="flex-1 max-w-xs">
               <div className="relative h-2 bg-gray-700 rounded-full overflow-hidden">
-                <motion.div 
+                <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500"
                   initial={{ width: 0 }}
                   animate={{ width: `${expPercentage}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
+                  transition={{ duration: 1, ease: 'easeOut' }}
                 />
               </div>
             </div>
@@ -182,21 +182,21 @@ export function HeroSection({ activeTab = 'quest', onTabChange }: HeroSectionPro
           <div className="grid grid-cols-2 gap-x-4 md:gap-x-5">
             {/* 왼쪽 열 */}
             <div className="space-y-2 md:space-y-2.5">
-              <StatRow 
+              <StatRow
                 icon={<Sword className="w-5 h-5 md:w-6 md:h-6" />}
                 label="공격력"
                 value={character.stats?.attack || 10}
                 color="text-red-400"
                 compact
               />
-              <StatRow 
+              <StatRow
                 icon={<Shield className="w-5 h-5 md:w-6 md:h-6" />}
                 label="방어력"
                 value={character.stats?.defense || 10}
                 color="text-blue-400"
                 compact
               />
-              <StatRow 
+              <StatRow
                 icon={<Heart className="w-5 h-5 md:w-6 md:h-6" />}
                 label="체력"
                 value={character.stats?.hp || 100}
@@ -205,10 +205,10 @@ export function HeroSection({ activeTab = 'quest', onTabChange }: HeroSectionPro
                 compact
               />
             </div>
-            
+
             {/* 오른쪽 열 */}
             <div className="space-y-2 md:space-y-2.5">
-              <StatRow 
+              <StatRow
                 icon={<Zap className="w-5 h-5 md:w-6 md:h-6" />}
                 label="마나"
                 value={character.stats?.mp || 50}
@@ -216,7 +216,7 @@ export function HeroSection({ activeTab = 'quest', onTabChange }: HeroSectionPro
                 color="text-purple-400"
                 compact
               />
-              <StatRow 
+              <StatRow
                 icon={<Star className="w-5 h-5 md:w-6 md:h-6" />}
                 label="에너지"
                 value={character.energy || 100}
@@ -224,7 +224,7 @@ export function HeroSection({ activeTab = 'quest', onTabChange }: HeroSectionPro
                 color="text-yellow-400"
                 compact
               />
-              <StatRow 
+              <StatRow
                 icon={<TrendingUp className="w-5 h-5 md:w-6 md:h-6" />}
                 label="전투력"
                 value={calculatePower(character)}
@@ -239,7 +239,7 @@ export function HeroSection({ activeTab = 'quest', onTabChange }: HeroSectionPro
         <div className="grid grid-cols-2 gap-1.5 md:gap-2 content-start">
           {tabs.map((tab) => {
             const Icon = tab.icon
-            
+
             return (
               <motion.button
                 key={tab.id}
@@ -291,8 +291,10 @@ function StatRow({ icon, label, value, maxValue, color, compact }: StatRowProps)
 
 function calculatePower(character: Character): number {
   const stats = character.stats
-  if (!stats) return 0
-  
+  if (!stats) {
+    return 0
+  }
+
   return Math.floor(
     (stats.attack || 0) * 2 +
     (stats.defense || 0) * 1.5 +

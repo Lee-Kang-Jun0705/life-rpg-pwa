@@ -34,7 +34,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const toast = useCallback((toast: Omit<Toast, 'id'>) => {
     const id = IdGenerators.toast()
     const newToast = { ...toast, id }
-    
+
     setToasts(prev => [...prev, newToast])
 
     // 자동 제거
@@ -125,13 +125,13 @@ function ToastItem({ toast, onDismiss }: { toast: Toast, onDismiss: () => void }
     >
       <div className="flex items-start gap-3">
         <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${iconColorClasses[toast.type]}`} />
-        
+
         <div className="flex-1 min-w-0">
           <h4 className="font-medium text-sm mb-1">{toast.title}</h4>
           {toast.description && (
             <p className="text-sm opacity-90">{toast.description}</p>
           )}
-          
+
           {toast.action && (
             <button
               onClick={toast.action.onClick}
@@ -161,21 +161,21 @@ export const toastHelpers = {
     description,
     ...options
   }),
-  
+
   error: (title: string, description?: string, options?: Partial<Toast>) => ({
     type: 'error' as const,
     title,
     description,
     ...options
   }),
-  
+
   warning: (title: string, description?: string, options?: Partial<Toast>) => ({
     type: 'warning' as const,
     title,
     description,
     ...options
   }),
-  
+
   info: (title: string, description?: string, options?: Partial<Toast>) => ({
     type: 'info' as const,
     title,

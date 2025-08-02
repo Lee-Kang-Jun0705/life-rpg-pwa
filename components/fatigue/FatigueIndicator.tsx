@@ -12,16 +12,16 @@ interface FatigueIndicatorProps {
   showDetails?: boolean
 }
 
-export function FatigueIndicator({ 
-  userId, 
+export function FatigueIndicator({
+  userId,
   className,
-  showDetails = true 
+  showDetails = true
 }: FatigueIndicatorProps) {
   const { fatigueState, isLoading, error } = useFatigue(userId)
 
   if (isLoading) {
     return (
-      <div className={cn("flex items-center gap-2 animate-pulse", className)}>
+      <div className={cn('flex items-center gap-2 animate-pulse', className)}>
         <div className="w-4 h-4 bg-gray-300 rounded" />
         <div className="w-24 h-2 bg-gray-300 rounded" />
       </div>
@@ -33,28 +33,44 @@ export function FatigueIndicator({
   }
 
   const getFatigueColor = (fatigue: number) => {
-    if (fatigue < 30) return 'text-green-500'
-    if (fatigue < 50) return 'text-yellow-500'
-    if (fatigue < 70) return 'text-orange-500'
-    if (fatigue < 90) return 'text-red-500'
+    if (fatigue < 30) {
+      return 'text-green-500'
+    }
+    if (fatigue < 50) {
+      return 'text-yellow-500'
+    }
+    if (fatigue < 70) {
+      return 'text-orange-500'
+    }
+    if (fatigue < 90) {
+      return 'text-red-500'
+    }
     return 'text-red-700'
   }
 
   const getProgressColor = (fatigue: number) => {
-    if (fatigue < 30) return 'bg-green-500'
-    if (fatigue < 50) return 'bg-yellow-500'
-    if (fatigue < 70) return 'bg-orange-500'
-    if (fatigue < 90) return 'bg-red-500'
+    if (fatigue < 30) {
+      return 'bg-green-500'
+    }
+    if (fatigue < 50) {
+      return 'bg-yellow-500'
+    }
+    if (fatigue < 70) {
+      return 'bg-orange-500'
+    }
+    if (fatigue < 90) {
+      return 'bg-red-500'
+    }
     return 'bg-red-700'
   }
 
   const FatigueIcon = fatigueState.currentFatigue >= 70 ? BatteryLow : Battery
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn('space-y-2', className)}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <FatigueIcon className={cn("w-4 h-4", getFatigueColor(fatigueState.currentFatigue))} />
+          <FatigueIcon className={cn('w-4 h-4', getFatigueColor(fatigueState.currentFatigue))} />
           <span className="text-sm font-medium">
             피로도: {Math.round(fatigueState.currentFatigue)}%
           </span>
@@ -67,8 +83,8 @@ export function FatigueIndicator({
         )}
       </div>
 
-      <Progress 
-        value={fatigueState.currentFatigue} 
+      <Progress
+        value={fatigueState.currentFatigue}
         className="h-2"
         indicatorClassName={getProgressColor(fatigueState.currentFatigue)}
       />

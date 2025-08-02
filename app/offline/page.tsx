@@ -32,13 +32,13 @@ export default function OfflinePage() {
         <div className="text-6xl mb-6">
           {isOnline ? '🌐' : '📵'}
         </div>
-        
+
         <h1 className="text-3xl font-bold mb-4">
           {isOnline ? '다시 연결되었습니다!' : '오프라인 상태입니다'}
         </h1>
-        
+
         <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-          {isOnline 
+          {isOnline
             ? '인터넷에 다시 연결되었습니다. 계속 진행하세요.'
             : '인터넷 연결이 필요한 페이지입니다. 연결 상태를 확인해주세요.'}
         </p>
@@ -68,7 +68,7 @@ export default function OfflinePage() {
                 대시보드로 이동
               </Button>
             </Link>
-            
+
             <Link href="/character">
               <Button variant="outline" className="w-full">
                 캐릭터 페이지로 이동

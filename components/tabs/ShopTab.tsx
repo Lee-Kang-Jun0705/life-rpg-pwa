@@ -20,7 +20,7 @@ export function ShopTab() {
     }
   }, [isLoading, state.selectedCategory, getFilteredItems])
 
-  const handlePurchase = async (item: ShopItem) => {
+  const handlePurchase = async(item: ShopItem) => {
     const success = await purchaseItem(item, 1)
     if (success) {
       toast(toastHelpers.success(
@@ -46,7 +46,7 @@ export function ShopTab() {
   }
 
   return (
-    <ImprovedShopScreen 
+    <ImprovedShopScreen
       shopItems={shopItems}
       onPurchase={handlePurchase}
     />

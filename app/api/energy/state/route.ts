@@ -12,7 +12,7 @@ const energyStates = new Map<string, {
 export async function GET(request: NextRequest) {
   try {
     const userId = GAME_CONFIG.DEFAULT_USER_ID
-    
+
     // 저장된 상태가 없으면 기본값 생성
     if (!energyStates.has(userId)) {
       energyStates.set(userId, {
@@ -21,14 +21,14 @@ export async function GET(request: NextRequest) {
         lastUpdate: new Date()
       })
     }
-    
+
     const state = energyStates.get(userId)!
-    
+
     // 시간 경과에 따른 에너지 회복 계산
     const now = new Date()
     const timePassed = now.getTime() - state.lastUpdate.getTime()
     const regenCycles = Math.floor(timePassed / (ENERGY_CONFIG.REGEN_INTERVAL * 1000))
-    
+
     if (regenCycles > 0) {
       state.current = Math.min(
         state.current + (regenCycles * ENERGY_CONFIG.REGEN_RATE),
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       )
       state.lastUpdate = now
     }
-    
+
     return NextResponse.json({
       energy: {
         current: state.current,
@@ -58,13 +58,13 @@ export async function POST(request: NextRequest) {
   try {
     const { amount, action } = await request.json()
     const userId = GAME_CONFIG.DEFAULT_USER_ID
-    
+
     const state = energyStates.get(userId) || {
       current: ENERGY_CONFIG.MAX_ENERGY,
       max: ENERGY_CONFIG.MAX_ENERGY,
       lastUpdate: new Date()
     }
-    
+
     if (action === 'consume') {
       if (state.current < amount) {
         return NextResponse.json(
@@ -76,10 +76,10 @@ export async function POST(request: NextRequest) {
     } else if (action === 'restore') {
       state.current = Math.min(state.current + amount, state.max)
     }
-    
+
     state.lastUpdate = new Date()
     energyStates.set(userId, state)
-    
+
     return NextResponse.json({
       energy: {
         current: state.current,

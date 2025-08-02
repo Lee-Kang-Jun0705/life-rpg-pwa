@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { persistenceService } from '@/lib/services/persistence.service'
-import { 
-  Save, 
-  Download, 
+import { UI_CONFIG } from '@/lib/config/game-config'
+import {
+  Save,
+  Download,
   Upload,
   Trash2,
   Clock,
@@ -32,7 +33,7 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
     hasSkillsSave: false,
     lastSaveTime: null
   })
-  
+
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info', text: string } | null>(null)
 
@@ -40,7 +41,7 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
     loadSaveStatus()
   }, [characterId])
 
-  const loadSaveStatus = async () => {
+  const loadSaveStatus = async() => {
     try {
       const status = await persistenceService.getSaveStatus(characterId)
       setSaveStatus(status)
@@ -49,16 +50,16 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
     }
   }
 
-  const handleManualSave = async () => {
+  const handleManualSave = async() => {
     try {
       setIsLoading(true)
       setMessage(null)
-      
+
       await persistenceService.saveAll(characterId)
       await loadSaveStatus()
-      
+
       setMessage({ type: 'success', text: '게임이 성공적으로 저장되었습니다!' })
-      
+
       // 전역 저장 이벤트 발생
       window.dispatchEvent(new Event('game-save'))
     } catch (error) {
@@ -69,17 +70,17 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
     }
   }
 
-  const handleLoad = async () => {
+  const handleLoad = async() => {
     try {
       setIsLoading(true)
       setMessage(null)
-      
+
       const success = await persistenceService.loadAll(characterId)
-      
+
       if (success) {
         setMessage({ type: 'success', text: '게임 데이터를 성공적으로 불러왔습니다!' })
         // 페이지 새로고침하여 로드된 데이터 반영
-        setTimeout(() => window.location.reload(), 1000)
+        setTimeout(() => window.location.reload(), UI_CONFIG.PAGE_RELOAD_DELAY)
       } else {
         setMessage({ type: 'info', text: '불러올 저장 데이터가 없습니다.' })
       }
@@ -91,7 +92,7 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
     }
   }
 
-  const handleDeleteSave = async () => {
+  const handleDeleteSave = async() => {
     if (!confirm('정말로 저장된 데이터를 모두 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
       return
     }
@@ -99,10 +100,10 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
     try {
       setIsLoading(true)
       setMessage(null)
-      
+
       await persistenceService.deleteCharacterData(characterId)
       await loadSaveStatus()
-      
+
       setMessage({ type: 'success', text: '저장 데이터가 삭제되었습니다.' })
     } catch (error) {
       console.error('Delete failed:', error)
@@ -113,7 +114,9 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
   }
 
   const formatDateTime = (date: Date | null): string => {
-    if (!date) return '저장된 데이터 없음'
+    if (!date) {
+      return '저장된 데이터 없음'
+    }
     return new Intl.DateTimeFormat('ko-KR', {
       dateStyle: 'medium',
       timeStyle: 'medium'
@@ -133,7 +136,7 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
           <Clock className="w-5 h-5" />
           저장 상태
         </h3>
-        
+
         <div className="space-y-3">
           <div className="flex items-center justify-between py-2">
             <span className="text-gray-400">마지막 저장 시간</span>
@@ -141,7 +144,7 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
               {formatDateTime(saveStatus.lastSaveTime)}
             </span>
           </div>
-          
+
           <div className="flex items-center justify-between py-2">
             <span className="text-gray-400">캐릭터 데이터</span>
             <span className="flex items-center gap-2">
@@ -158,7 +161,7 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
               )}
             </span>
           </div>
-          
+
           <div className="flex items-center justify-between py-2">
             <span className="text-gray-400">인벤토리 데이터</span>
             <span className="flex items-center gap-2">
@@ -175,7 +178,7 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
               )}
             </span>
           </div>
-          
+
           <div className="flex items-center justify-between py-2">
             <span className="text-gray-400">스킬 데이터</span>
             <span className="flex items-center gap-2">
@@ -250,8 +253,8 @@ export function SaveManagement({ characterId = 'player-1' }: SaveManagementProps
           animate={{ opacity: 1, y: 0 }}
           className={`p-4 rounded-lg flex items-center gap-3 ${
             message.type === 'success' ? 'bg-green-600' :
-            message.type === 'error' ? 'bg-red-600' :
-            'bg-blue-600'
+              message.type === 'error' ? 'bg-red-600' :
+                'bg-blue-600'
           }`}
         >
           {message.type === 'success' && <CheckCircle className="w-5 h-5" />}

@@ -14,7 +14,7 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
   { id: 'nav-dashboard', label: '대시보드', emoji: '🏠', href: '/dashboard' },
   { id: 'nav-adventure', label: '모험', emoji: '⚔️', href: '/adventure' },
   { id: 'nav-ai-coach', label: 'AI코치', emoji: '🤖', href: '/ai-coach' },
-  { id: 'nav-profile', label: '프로필', emoji: '👤', href: '/profile' },
+  { id: 'nav-profile', label: '프로필', emoji: '👤', href: '/profile' }
 ] as const
 
 // 전체 네비게이션 항목
@@ -22,11 +22,11 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'nav-dashboard', label: '대시보드', emoji: '🏠', href: '/dashboard' },
   { id: 'nav-adventure', label: '모험', emoji: '⚔️', href: '/adventure' },
   { id: 'nav-ai-coach', label: 'AI코치', emoji: '🤖', href: '/ai-coach' },
-  { id: 'nav-profile', label: '프로필', emoji: '👤', href: '/profile' },
+  { id: 'nav-profile', label: '프로필', emoji: '👤', href: '/profile' }
 ] as const
 
 // 네비게이션 설정
 export const NAV_CONFIG = {
   HAPTIC_DURATION: 10, // ms
-  ANIMATION_DELAY_MULTIPLIER: 0.1, // 각 아이템 애니메이션 지연
+  ANIMATION_DELAY_MULTIPLIER: 0.1 // 각 아이템 애니메이션 지연
 } as const

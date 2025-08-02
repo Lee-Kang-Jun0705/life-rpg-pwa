@@ -27,7 +27,7 @@ export class AdaptiveDataCollector {
     additionalData?: Record<string, unknown>
   ): Promise<LightModeData | ProModeData> {
     const settings = await this.personalizationService.getSettings(userId)
-    
+
     if (settings.mode === 'light') {
       return this.collectLightModeData(activity)
     } else {
@@ -40,7 +40,7 @@ export class AdaptiveDataCollector {
    */
   private collectLightModeData(activity: Activity): LightModeData {
     const timestamp = new Date(activity.timestamp)
-    
+
     return {
       timestamp,
       type: activity.statType,
@@ -61,7 +61,7 @@ export class AdaptiveDataCollector {
     additionalData?: Record<string, unknown>
   ): ProModeData {
     const lightData = this.collectLightModeData(activity)
-    
+
     // 상세 컨텍스트 수집
     const detailedContext = {
       weather: this.getCurrentWeather(),
@@ -71,7 +71,7 @@ export class AdaptiveDataCollector {
       socialContext: additionalData?.socialContext || 'alone',
       deviceInfo: this.getDeviceInfo()
     }
-    
+
     // 프로 모드 데이터
     const proData: ProModeData = {
       ...lightData,
@@ -83,7 +83,7 @@ export class AdaptiveDataCollector {
       media: additionalData?.media,
       metrics: additionalData?.metrics
     }
-    
+
     return proData
   }
 
@@ -100,11 +100,11 @@ export class AdaptiveDataCollector {
     }
   ): Promise<void> {
     const settings = await this.personalizationService.getSettings(userId)
-    
-    const data = settings.mode === 'light' 
+
+    const data = settings.mode === 'light'
       ? this.collectLightInteraction(interaction)
       : this.collectProInteraction(interaction)
-    
+
     // DB에 저장
     await this.saveInteractionData(userId, data)
   }
@@ -159,10 +159,18 @@ export class AdaptiveDataCollector {
   private estimateEnergyLevel(): number {
     // 시간대와 최근 활동을 기반으로 에너지 레벨 추정
     const hour = new Date().getHours()
-    if (hour >= 6 && hour <= 10) return 8
-    if (hour >= 11 && hour <= 14) return 6
-    if (hour >= 15 && hour <= 18) return 7
-    if (hour >= 19 && hour <= 22) return 5
+    if (hour >= 6 && hour <= 10) {
+      return 8
+    }
+    if (hour >= 11 && hour <= 14) {
+      return 6
+    }
+    if (hour >= 15 && hour <= 18) {
+      return 7
+    }
+    if (hour >= 19 && hour <= 22) {
+      return 5
+    }
     return 3
   }
 
@@ -172,7 +180,7 @@ export class AdaptiveDataCollector {
 
   private categorizeInteraction(input: string): string {
     const lowerInput = input.toLowerCase()
-    
+
     if (lowerInput.includes('운동') || lowerInput.includes('exercise')) {
       return 'fitness'
     }
@@ -182,7 +190,7 @@ export class AdaptiveDataCollector {
     if (lowerInput.includes('식단') || lowerInput.includes('diet')) {
       return 'nutrition'
     }
-    
+
     return 'general'
   }
 
@@ -190,17 +198,25 @@ export class AdaptiveDataCollector {
     // 간단한 감정 분석 (실제로는 더 정교한 분석 필요)
     const positiveWords = ['좋', '잘', '성공', '행복', '기쁨']
     const negativeWords = ['힘들', '실패', '어려', '피곤', '스트레스']
-    
+
     let score = 0
     positiveWords.forEach(word => {
-      if (text.includes(word)) score++
+      if (text.includes(word)) {
+        score++
+      }
     })
     negativeWords.forEach(word => {
-      if (text.includes(word)) score--
+      if (text.includes(word)) {
+        score--
+      }
     })
-    
-    if (score > 0) return 'positive'
-    if (score < 0) return 'negative'
+
+    if (score > 0) {
+      return 'positive'
+    }
+    if (score < 0) {
+      return 'negative'
+    }
     return 'neutral'
   }
 
@@ -213,20 +229,20 @@ export class AdaptiveDataCollector {
       relationship: ['관계', '친구', '가족', 'friend', 'family'],
       achievement: ['성취', '목표', '달성', 'goal', 'achieve']
     }
-    
+
     for (const [topic, keywords] of Object.entries(topicKeywords)) {
       if (keywords.some(keyword => text.includes(keyword))) {
         topics.push(topic)
       }
     }
-    
+
     return topics
   }
 
   private async saveInteractionData(userId: string, _data: Record<string, unknown>): Promise<void> {
     // DB에 상호작용 데이터 저장
     const key = `ai_interaction_${userId}_${Date.now()}`
-    
+
     try {
       await db.metadata.put({
         id: Date.now(),

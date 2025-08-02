@@ -14,7 +14,7 @@ interface AchievementCardProps {
 
 const difficultyColors = {
   easy: 'from-orange-400 to-orange-600',
-  normal: 'from-gray-400 to-gray-600', 
+  normal: 'from-gray-400 to-gray-600',
   hard: 'from-yellow-400 to-yellow-600',
   expert: 'from-cyan-400 to-cyan-600',
   legendary: 'from-purple-400 to-purple-600'
@@ -32,12 +32,12 @@ const categoryColors = {
 
 export function AchievementCard({ achievement, progress }: AchievementCardProps) {
   const [showDetail, setShowDetail] = useState(false)
-  
+
   const isUnlocked = achievement.isUnlocked
   const isHidden = achievement.isHidden && !isUnlocked
   const categoryInfo = ACHIEVEMENT_CATEGORIES[achievement.category]
   const difficultyInfo = ACHIEVEMENT_DIFFICULTIES[achievement.difficulty]
-  
+
   // デフォルトのprogressを設定
   const actualProgress = progress || {
     current: 0,
@@ -54,12 +54,12 @@ export function AchievementCard({ achievement, progress }: AchievementCardProps)
         className={`
           relative p-4 rounded-xl border-2 transition-all cursor-pointer
           ${categoryColors[achievement.category]}
-          ${isUnlocked 
-            ? 'bg-white dark:bg-gray-800 shadow-lg' 
-            : isHidden 
-              ? 'bg-gray-100 dark:bg-gray-900 opacity-60'
-              : 'bg-gray-50 dark:bg-gray-800'
-          }
+          ${isUnlocked
+      ? 'bg-white dark:bg-gray-800 shadow-lg'
+      : isHidden
+        ? 'bg-gray-100 dark:bg-gray-900 opacity-60'
+        : 'bg-gray-50 dark:bg-gray-800'
+    }
           hover:shadow-lg
         `}
       >
@@ -92,12 +92,12 @@ export function AchievementCard({ achievement, progress }: AchievementCardProps)
         <div className="flex justify-center mb-4 mt-6">
           <div className={`
             text-4xl p-4 rounded-full 
-            ${isUnlocked 
-              ? `bg-gradient-to-br ${difficultyColors[achievement.difficulty]} text-white`
-              : isHidden
-                ? 'bg-gray-300 dark:bg-gray-600 grayscale'
-                : 'bg-gray-200 dark:bg-gray-700'
-            }
+            ${isUnlocked
+      ? `bg-gradient-to-br ${difficultyColors[achievement.difficulty]} text-white`
+      : isHidden
+        ? 'bg-gray-300 dark:bg-gray-600 grayscale'
+        : 'bg-gray-200 dark:bg-gray-700'
+    }
           `}>
             {isHidden ? '❓' : achievement.icon}
           </div>
@@ -114,10 +114,10 @@ export function AchievementCard({ achievement, progress }: AchievementCardProps)
         {/* 설명 */}
         <p className={`
           text-sm text-center mb-4 line-clamp-2
-          ${isHidden 
-            ? 'text-gray-400' 
-            : 'text-gray-600 dark:text-gray-400'
-          }
+          ${isHidden
+      ? 'text-gray-400'
+      : 'text-gray-600 dark:text-gray-400'
+    }
         `}>
           {isHidden ? '조건을 만족하면 공개됩니다' : achievement.description}
         </p>
@@ -137,7 +137,7 @@ export function AchievementCard({ achievement, progress }: AchievementCardProps)
                 {isUnlocked ? '완료!' : `${actualProgress.current}/${actualProgress.target}`}
               </span>
             </div>
-            
+
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
               <motion.div
                 className={`h-full rounded-full bg-gradient-to-r ${difficultyColors[achievement.difficulty]}`}
@@ -146,7 +146,7 @@ export function AchievementCard({ achievement, progress }: AchievementCardProps)
                 transition={{ duration: 0.5 }}
               />
             </div>
-            
+
             <div className="text-center mt-1 text-xs text-gray-500">
               {Math.floor(actualProgress.percentage)}%
             </div>
@@ -162,21 +162,21 @@ export function AchievementCard({ achievement, progress }: AchievementCardProps)
                 {achievement.rewards.exp}
               </div>
             )}
-            
+
             {achievement.rewards.gold && (
               <div className="flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 text-xs rounded">
                 <Coins className="w-3 h-3" />
                 {achievement.rewards.gold}
               </div>
             )}
-            
+
             {achievement.rewards.title && (
               <div className="flex items-center gap-1 px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-xs rounded">
                 <Crown className="w-3 h-3" />
                 칭호
               </div>
             )}
-            
+
             {achievement.rewards.items && achievement.rewards.items.length > 0 && (
               <div className="flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-xs rounded">
                 <Gift className="w-3 h-3" />

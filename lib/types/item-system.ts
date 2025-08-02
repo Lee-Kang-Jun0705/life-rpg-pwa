@@ -6,10 +6,10 @@
 // 아이템 희귀도
 export const ItemRarity = {
   COMMON: 'common',
-  UNCOMMON: 'uncommon', 
+  UNCOMMON: 'uncommon',
   RARE: 'rare',
   EPIC: 'epic',
-  LEGENDARY: 'legendary',
+  LEGENDARY: 'legendary'
 } as const
 
 export type ItemRarity = typeof ItemRarity[keyof typeof ItemRarity]
@@ -20,7 +20,7 @@ export const ItemType = {
   ARMOR: 'armor',
   ACCESSORY: 'accessory',
   CONSUMABLE: 'consumable',
-  MATERIAL: 'material',
+  MATERIAL: 'material'
 } as const
 
 export type ItemType = typeof ItemType[keyof typeof ItemType]
@@ -38,7 +38,7 @@ export const StatType = {
   LIFE_STEAL: 'lifeSteal',
   MP_REGEN: 'mpRegen',
   EXP_BONUS: 'expBonus',
-  GOLD_BONUS: 'goldBonus',
+  GOLD_BONUS: 'goldBonus'
 } as const
 
 export type StatType = typeof StatType[keyof typeof StatType]
@@ -155,7 +155,7 @@ export interface ItemGenerationOptions {
 }
 
 // 아이템 생성 결과
-export type ItemGenerationResult = 
+export type ItemGenerationResult =
   | { success: true; item: GeneratedItem }
   | { success: false; error: ItemGenerationError }
 
@@ -204,10 +204,12 @@ export interface InventoryItem {
 
 // 타입 가드 함수들
 export function isValidItem(value: unknown): value is Item {
-  if (typeof value !== 'object' || value === null) return false
-  
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+
   const item = value as Record<string, unknown>
-  
+
   return (
     typeof item.id === 'string' &&
     typeof item.name === 'string' &&
@@ -223,10 +225,12 @@ export function isValidItem(value: unknown): value is Item {
 }
 
 export function isGeneratedItem(value: unknown): value is GeneratedItem {
-  if (!isValidItem(value)) return false
-  
+  if (!isValidItem(value)) {
+    return false
+  }
+
   const item = value as unknown as Record<string, unknown>
-  
+
   return (
     typeof item.uniqueId === 'string' &&
     typeof item.generatedAt === 'number' &&
@@ -244,9 +248,9 @@ export type ItemFilter = {
   readonly hasSpecialEffect?: boolean
 }
 
-export type ItemSortOption = 
+export type ItemSortOption =
   | 'name'
-  | 'level' 
+  | 'level'
   | 'rarity'
   | 'type'
   | 'value'

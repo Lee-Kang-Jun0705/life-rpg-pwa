@@ -4,13 +4,13 @@
  */
 
 import { skillExecutionService } from '@/lib/services/skill-execution.service'
-import type { 
+import type {
   Skill,
   SkillContext,
   SkillExecutionResult,
   SkillEffect
 } from '@/lib/types/skill-system'
-import { 
+import {
   SKILL_LEVEL_CONFIG,
   ELEMENT_EFFECTIVENESS,
   SKILL_EFFECT_CONFIG,
@@ -87,7 +87,7 @@ describe('SkillExecutionService', () => {
     it('should apply skill level bonuses correctly', () => {
       // 첫 번째 실행을 위해 쿨다운 초기화
       skillExecutionService.clearAllCooldowns('player1')
-      
+
       const level1Result = skillExecutionService.executeSkill(
         'power_strike',
         'player1',
@@ -98,7 +98,7 @@ describe('SkillExecutionService', () => {
 
       // 두 번째 실행을 위해 쿨다운 초기화
       skillExecutionService.clearAllCooldowns('player1')
-      
+
       const level5Result = skillExecutionService.executeSkill(
         'power_strike',
         'player1',
@@ -224,11 +224,11 @@ describe('SkillExecutionService', () => {
 
     it('should not use any types', () => {
       // TypeScript 컴파일러가 any 타입 사용을 방지함
-      const skillId: string = 'power_strike'
-      const casterId: string = 'player1'
+      const skillId = 'power_strike'
+      const casterId = 'player1'
       const targets: string[] = ['enemy_1']
       const context: SkillContext = mockContext
-      const level: number = 1
+      const level = 1
 
       const result: SkillExecutionResult = skillExecutionService.executeSkill(
         skillId,
@@ -246,7 +246,7 @@ describe('SkillExecutionService', () => {
   })
 
   describe('combo system', () => {
-    it('should detect skill combos', async () => {
+    it('should detect skill combos', async() => {
       // 연속으로 스킬 사용
       skillExecutionService.clearAllCooldowns('player1')
       skillExecutionService.executeSkill(
@@ -288,7 +288,7 @@ describe('SkillExecutionService', () => {
       }
     })
 
-    it('should clear old skill records after timeout', async () => {
+    it('should clear old skill records after timeout', async() => {
       skillExecutionService.clearAllCooldowns('player1')
       skillExecutionService.executeSkill(
         'power_strike',
@@ -378,9 +378,9 @@ describe('SkillExecutionService', () => {
         mockContext,
         1
       )
-      
+
       skillExecutionService.clearSkillCooldown('player1', 'power_strike')
-      
+
       skillExecutionService.executeSkill(
         'iron_wall',
         'player1',
@@ -415,7 +415,7 @@ describe('SkillExecutionService', () => {
 
       // 비용이 지수적으로 증가해야 함
       const expectedCost = Math.floor(
-        SKILL_LEVEL_CONFIG.expRequiredBase * 
+        SKILL_LEVEL_CONFIG.expRequiredBase *
         Math.pow(SKILL_LEVEL_CONFIG.expMultiplier, 5)
       )
       expect(result2.cost).toBe(expectedCost)

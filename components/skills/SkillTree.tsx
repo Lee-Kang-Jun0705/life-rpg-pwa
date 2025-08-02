@@ -33,10 +33,14 @@ export function SkillTree({
   // 스킬 학습 가능 여부 확인
   const canLearnSkill = (skill: Skill): boolean => {
     // 이미 학습한 경우
-    if (learnedSkills.find(ls => ls.skillId === skill.id)) return false
-    
+    if (learnedSkills.find(ls => ls.skillId === skill.id)) {
+      return false
+    }
+
     // 스킬 포인트 부족
-    if (skillPoints < 1) return false
+    if (skillPoints < 1) {
+      return false
+    }
 
     // 요구사항 확인
     if (skill.requirements) {
@@ -44,14 +48,18 @@ export function SkillTree({
       if (skill.requirements.level) {
         // TODO: 실제 플레이어 레벨 확인
         const playerLevel = 10
-        if (playerLevel < skill.requirements.level) return false
+        if (playerLevel < skill.requirements.level) {
+          return false
+        }
       }
 
       // 선행 스킬 요구사항
       if (skill.requirements.skills) {
         for (const req of skill.requirements.skills) {
           const learned = learnedSkills.find(ls => ls.skillId === req.id)
-          if (!learned || learned.level < req.level) return false
+          if (!learned || learned.level < req.level) {
+            return false
+          }
         }
       }
     }
@@ -100,12 +108,12 @@ export function SkillTree({
                   whileHover={{ scale: isLocked ? 1 : 1.02 }}
                   className={`
                     relative rounded-lg p-4 cursor-pointer transition-all
-                    ${learned 
-                      ? `bg-gradient-to-br ${getCategoryColor(category)} bg-opacity-20` 
-                      : isLocked
-                        ? 'bg-gray-700 opacity-50'
-                        : 'bg-gray-700 hover:bg-gray-600'
-                    }
+                    ${learned
+                  ? `bg-gradient-to-br ${getCategoryColor(category)} bg-opacity-20`
+                  : isLocked
+                    ? 'bg-gray-700 opacity-50'
+                    : 'bg-gray-700 hover:bg-gray-600'
+                }
                     ${learned ? 'border-2 border-purple-500' : 'border-2 border-gray-600'}
                   `}
                   onClick={() => !isLocked && onSelectSkill(skill)}

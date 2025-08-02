@@ -21,7 +21,7 @@ const typeIcons = {
   armor: Shirt,
   gloves: Hand,
   boots: Footprints,
-  accessory: Gem,
+  accessory: Gem
 }
 
 const rarityColors = {
@@ -30,7 +30,7 @@ const rarityColors = {
   rare: 'from-blue-400 to-blue-600',
   epic: 'from-purple-400 to-purple-600',
   legendary: 'from-orange-400 to-orange-600',
-  mythic: 'from-red-400 to-red-600',
+  mythic: 'from-red-400 to-red-600'
 }
 
 const rarityNames = {
@@ -39,7 +39,7 @@ const rarityNames = {
   rare: '희귀',
   epic: '영웅',
   legendary: '전설',
-  mythic: '신화',
+  mythic: '신화'
 }
 
 export function EquipmentDetail({ equipment, isEquipped, onEquip, onUnequip, onClose }: EquipmentDetailProps) {

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { DailyContentService } from '@/lib/daily/daily-content-service'
 import { EnergyService } from '@/lib/energy/energy-service'
+import { BattleTicketService } from '@/lib/battle/ticket-service'
 import { useShop } from '@/lib/shop/shop-context'
 import { dbHelpers } from '@/lib/database/client'
 import { GAME_CONFIG } from '@/lib/types/dashboard'
@@ -21,8 +22,9 @@ export default function DailyContentPage() {
   const { addCoins, addItemToInventory } = useShop()
   const dailyService = DailyContentService.getInstance()
   const energyService = EnergyService.getInstance()
+  const ticketService = BattleTicketService.getInstance()
 
-  const loadDailyContent = useCallback(async () => {
+  const loadDailyContent = useCallback(async() => {
     try {
       setIsLoading(true)
       const content = await dailyService.initializeDailyContent(GAME_CONFIG.DEFAULT_USER_ID)
@@ -41,8 +43,10 @@ export default function DailyContentPage() {
   }, [loadDailyContent])
 
   // 미션 진행도 업데이트
-  const handleMissionProgress = async (missionId: string, progress: number) => {
-    if (!dailyContent) return
+  const handleMissionProgress = async(missionId: string, progress: number) => {
+    if (!dailyContent) {
+      return
+    }
 
     try {
       const result = await dailyService.updateMissionProgress(
@@ -64,11 +68,15 @@ export default function DailyContentPage() {
   }
 
   // 미션 완료 처리
-  const handleMissionComplete = async (missionId: string) => {
-    if (!dailyContent) return
+  const handleMissionComplete = async(missionId: string) => {
+    if (!dailyContent) {
+      return
+    }
 
     const mission = dailyContent.missions.find(m => m.id === missionId)
-    if (!mission || !mission.isCompleted) return
+    if (!mission || !mission.isCompleted) {
+      return
+    }
 
     try {
       // 보상 지급
@@ -78,9 +86,9 @@ export default function DailyContentPage() {
 
       if (mission.rewards.exp) {
         const expPerStat = Math.floor(mission.rewards.exp / 4)
-        const statTypes: ('health' | 'learning' | 'relationship' | 'achievement')[] = 
+        const statTypes: ('health' | 'learning' | 'relationship' | 'achievement')[] =
           ['health', 'learning', 'relationship', 'achievement']
-        
+
         for (const statType of statTypes) {
           await dbHelpers.addActivity({
             userId: GAME_CONFIG.DEFAULT_USER_ID,
@@ -125,8 +133,10 @@ export default function DailyContentPage() {
   }
 
   // 출석 보상 수령
-  const handleClaimLoginReward = async (day: number) => {
-    if (!dailyContent) return
+  const handleClaimLoginReward = async(day: number) => {
+    if (!dailyContent) {
+      return
+    }
 
     try {
       const rewards = await dailyService.claimLoginReward(
@@ -142,9 +152,9 @@ export default function DailyContentPage() {
 
         if (rewards.exp) {
           const expPerStat = Math.floor(rewards.exp / 4)
-          const statTypes: ('health' | 'learning' | 'relationship' | 'achievement')[] = 
+          const statTypes: ('health' | 'learning' | 'relationship' | 'achievement')[] =
             ['health', 'learning', 'relationship', 'achievement']
-          
+
           for (const statType of statTypes) {
             await dbHelpers.addActivity({
               userId: GAME_CONFIG.DEFAULT_USER_ID,
@@ -167,7 +177,12 @@ export default function DailyContentPage() {
         }
 
         if (rewards.tickets) {
-          // TODO: 티켓 지급 구현
+          // 전투 티켓 지급
+          await ticketService.addTickets(
+            GAME_CONFIG.DEFAULT_USER_ID,
+            rewards.tickets,
+            `출석 보상: ${day}일차`
+          )
         }
 
         if (rewards.items) {
@@ -188,8 +203,10 @@ export default function DailyContentPage() {
   }
 
   // 주간 도전과제 보상 수령
-  const handleClaimWeeklyReward = async () => {
-    if (!dailyContent || !dailyContent.weeklyChallenge) return
+  const handleClaimWeeklyReward = async() => {
+    if (!dailyContent || !dailyContent.weeklyChallenge) {
+      return
+    }
 
     try {
       const rewards = await dailyService.claimWeeklyChallengeReward(
@@ -199,12 +216,12 @@ export default function DailyContentPage() {
       if (rewards) {
         // 보상 지급 로직
         await addCoins(rewards.gold)
-        
+
         // 경험치 지급
         const expPerStat = Math.floor(rewards.exp / 4)
-        const statTypes: ('health' | 'learning' | 'relationship' | 'achievement')[] = 
+        const statTypes: ('health' | 'learning' | 'relationship' | 'achievement')[] =
           ['health', 'learning', 'relationship', 'achievement']
-        
+
         for (const statType of statTypes) {
           await dbHelpers.addActivity({
             userId: GAME_CONFIG.DEFAULT_USER_ID,
@@ -282,7 +299,7 @@ export default function DailyContentPage() {
               완료: {dailyContent.missions.filter(m => m.isCompleted).length} / {dailyContent.missions.length}
             </div>
           </div>
-          
+
           <div className="space-y-4">
             {dailyContent.missions.map((mission, index) => (
               <motion.div
@@ -308,7 +325,7 @@ export default function DailyContentPage() {
               <Sparkles className="w-6 h-6 text-yellow-500" />
               오늘의 특별 던전
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {dailyContent.dailyDungeons.map(dungeon => (
                 <motion.div
@@ -321,7 +338,7 @@ export default function DailyContentPage() {
                   <p className="text-gray-600 dark:text-gray-400 mb-4">
                     {dungeon.description}
                   </p>
-                  
+
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center justify-between text-sm">
                       <span>경험치 배율</span>
@@ -344,7 +361,7 @@ export default function DailyContentPage() {
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">
                       {dungeon.attempts} / {dungeon.maxAttempts} 시도
@@ -370,7 +387,7 @@ export default function DailyContentPage() {
               <Trophy className="w-6 h-6 text-orange-500" />
               주간 도전과제
             </h2>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -385,7 +402,7 @@ export default function DailyContentPage() {
                     {dailyContent.weeklyChallenge.description}
                   </p>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="text-3xl font-bold text-orange-500">
                     {Math.floor(dailyContent.weeklyChallenge.progress)}%
@@ -393,7 +410,7 @@ export default function DailyContentPage() {
                   <div className="text-xs text-gray-500">진행도</div>
                 </div>
               </div>
-              
+
               {/* 미션 목록 */}
               <div className="space-y-3 mb-4">
                 {dailyContent.weeklyChallenge.missions.map(mission => (
@@ -421,7 +438,7 @@ export default function DailyContentPage() {
                   </div>
                 ))}
               </div>
-              
+
               {/* 보상 */}
               <div className="border-t border-orange-200 dark:border-orange-800 pt-4">
                 <h4 className="font-semibold mb-2">완료 보상</h4>
@@ -435,7 +452,7 @@ export default function DailyContentPage() {
                     <span>🏅 칭호: {dailyContent.weeklyChallenge.rewards.title}</span>
                   )}
                 </div>
-                
+
                 {dailyContent.weeklyChallenge.isCompleted && (
                   <button
                     onClick={handleClaimWeeklyReward}
@@ -446,7 +463,7 @@ export default function DailyContentPage() {
                   </button>
                 )}
               </div>
-              
+
               {/* 남은 시간 */}
               <div className="flex items-center justify-end mt-4 text-sm text-gray-500">
                 <Clock className="w-4 h-4 mr-1" />

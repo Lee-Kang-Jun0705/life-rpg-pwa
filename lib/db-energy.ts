@@ -1,6 +1,6 @@
 // 에너지 시스템 전용 데이터베이스
 import Dexie, { Table } from 'dexie'
-import type { 
+import type {
   EnergyTransaction
 } from './types/energy'
 

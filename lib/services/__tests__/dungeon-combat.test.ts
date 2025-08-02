@@ -82,7 +82,7 @@ describe('DungeonCombatService', () => {
   })
 
   describe('전투 시작', () => {
-    it('정상적으로 전투를 시작할 수 있어야 한다', async () => {
+    it('정상적으로 전투를 시작할 수 있어야 한다', async() => {
       const combatId = await dungeonCombatService.startCombat(
         'test-dungeon',
         'test-stage-1',
@@ -101,7 +101,7 @@ describe('DungeonCombatService', () => {
       expect(combatState?.enemies.length).toBe(1)
     })
 
-    it('플레이어 HP가 최대값으로 시작해야 한다', async () => {
+    it('플레이어 HP가 최대값으로 시작해야 한다', async() => {
       const combatId = await dungeonCombatService.startCombat(
         'test-dungeon',
         'test-stage-1',
@@ -114,7 +114,7 @@ describe('DungeonCombatService', () => {
       expect(combatState?.player.currentHP).toBe(testCharacter.combatStats.maxHp)
     })
 
-    it('몬스터 HP가 최대값으로 시작해야 한다', async () => {
+    it('몬스터 HP가 최대값으로 시작해야 한다', async() => {
       const combatId = await dungeonCombatService.startCombat(
         'test-dungeon',
         'test-stage-1',
@@ -132,7 +132,7 @@ describe('DungeonCombatService', () => {
   describe('전투 행동', () => {
     let combatId: string
 
-    beforeEach(async () => {
+    beforeEach(async() => {
       combatId = await dungeonCombatService.startCombat(
         'test-dungeon',
         'test-stage-1',
@@ -192,7 +192,7 @@ describe('DungeonCombatService', () => {
   describe('전투 종료', () => {
     let combatId: string
 
-    beforeEach(async () => {
+    beforeEach(async() => {
       combatId = await dungeonCombatService.startCombat(
         'test-dungeon',
         'test-stage-1',
@@ -204,11 +204,13 @@ describe('DungeonCombatService', () => {
 
     it('모든 적을 처치하면 승리해야 한다', () => {
       const state = dungeonCombatService.getCombatState(combatId)
-      if (!state) return
+      if (!state) {
+        return
+      }
 
       // 적의 HP를 0으로 설정
       state.enemies[0].currentHP = 0
-      
+
       // 전투 상태 업데이트
       dungeonCombatService.updateCombatState(combatId)
 
@@ -218,11 +220,13 @@ describe('DungeonCombatService', () => {
 
     it('플레이어 HP가 0이 되면 패배해야 한다', () => {
       const state = dungeonCombatService.getCombatState(combatId)
-      if (!state) return
+      if (!state) {
+        return
+      }
 
       // 플레이어 HP를 0으로 설정
       state.player.currentHP = 0
-      
+
       // 전투 상태 업데이트
       dungeonCombatService.updateCombatState(combatId)
 
@@ -232,7 +236,9 @@ describe('DungeonCombatService', () => {
 
     it('승리 시 보상을 받아야 한다', () => {
       const state = dungeonCombatService.getCombatState(combatId)
-      if (!state) return
+      if (!state) {
+        return
+      }
 
       // 적을 처치
       state.enemies[0].currentHP = 0
@@ -292,7 +298,7 @@ describe('DungeonCombatService', () => {
   describe('자동 전투', () => {
     let combatId: string
 
-    beforeEach(async () => {
+    beforeEach(async() => {
       combatId = await dungeonCombatService.startCombat(
         'test-dungeon',
         'test-stage-1',
@@ -304,14 +310,14 @@ describe('DungeonCombatService', () => {
 
     it('자동 전투를 활성화할 수 있어야 한다', () => {
       dungeonCombatService.setAutoBattle(combatId, true)
-      
+
       const state = dungeonCombatService.getCombatState(combatId)
       expect(state?.isAutoBattleEnabled).toBe(true)
     })
 
     it('자동 전투 중 적절한 행동을 선택해야 한다', () => {
       dungeonCombatService.setAutoBattle(combatId, true)
-      
+
       const action = dungeonCombatService.getAutoBattleAction(combatId)
       expect(action).toBeTruthy()
       expect(['attack', 'skill', 'defend', 'item'].includes(action?.type || '')).toBe(true)

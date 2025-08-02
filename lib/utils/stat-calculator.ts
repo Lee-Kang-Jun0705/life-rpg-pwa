@@ -26,31 +26,31 @@ export interface StatFormulas {
 export const statFormulas: StatFormulas = {
   // HP: 기본 100 + 레벨당 50
   hp: (level: number) => BATTLE_CONSTANTS.BASE_HP + (level * 50),
-  
+
   // MP: 기본 50 + 레벨당 10
   mp: (level: number) => BATTLE_CONSTANTS.BASE_MP + (level * 10),
-  
+
   // 공격력: 기본 10 + 레벨당 3
   attack: (level: number) => BATTLE_CONSTANTS.BASE_ATTACK + (level * 3),
-  
+
   // 방어력: 기본 5 + 레벨당 2
   defense: (level: number) => BATTLE_CONSTANTS.BASE_DEFENSE + (level * 2),
-  
+
   // 속도: 기본 10 + 레벨당 1
   speed: (level: number) => BATTLE_CONSTANTS.BASE_SPEED + level,
-  
+
   // 치명타율: 기본 5% + 2레벨당 1%
   critRate: (level: number) => BATTLE_CONSTANTS.BASE_CRITICAL + Math.floor(level / 2) * 0.01,
-  
+
   // 치명타 데미지: 기본 150% + 레벨당 2%
   critDamage: (level: number) => BATTLE_CONSTANTS.BASE_CRITICAL_DAMAGE + (level * 0.02),
-  
+
   // 회피율: 기본 5% + 3레벨당 1%
   dodge: (level: number) => BATTLE_CONSTANTS.BASE_EVASION + Math.floor(level / 3) * 0.01,
-  
+
   // 명중률: 기본 95% + 5레벨당 1%
   accuracy: (level: number) => BATTLE_CONSTANTS.BASE_ACCURACY + Math.floor(level / 5) * 0.01,
-  
+
   // 저항력: 2레벨당 1%
   resistance: (level: number) => Math.floor(level / 2) * 0.01
 }
@@ -82,8 +82,10 @@ export function calculateCombatStats(level: number): Record<CombatStat, number> 
  * 레벨 3→4: 80 EXP
  */
 export function calculateRequiredExperience(level: number): number {
-  if (level < 0) return 0
-  
+  if (level < 0) {
+    return 0
+  }
+
   // 10 × 2^(현재레벨)
   return 10 * Math.pow(2, level)
 }
@@ -91,20 +93,20 @@ export function calculateRequiredExperience(level: number): number {
 /**
  * 총 경험치로부터 레벨 계산
  */
-export function calculateLevelFromExperience(_totalExp: number): { level: number; currentExp: number } {
+export function calculateLevelFromExperience(totalExp: number): { level: number; currentExp: number } {
   let level = 0
   let remainingExp = totalExp
-  
+
   while (remainingExp >= calculateRequiredExperience(level)) {
     remainingExp -= calculateRequiredExperience(level)
     level++
-    
+
     // 최대 레벨 체크
     if (level >= 100) {
       break
     }
   }
-  
+
   return {
     level,
     currentExp: remainingExp
@@ -114,20 +116,20 @@ export function calculateLevelFromExperience(_totalExp: number): { level: number
 /**
  * 현재 레벨까지의 누적 경험치 계산
  */
-export function calculateTotalExperience(level: number, currentExp: number = 0): number {
+export function calculateTotalExperience(level: number, currentExp = 0): number {
   let total = currentExp
-  
+
   for (let i = 0; i < level; i++) {
     total += calculateRequiredExperience(i)
   }
-  
+
   return total
 }
 
 /**
  * 전투력 계산
  */
-export function calculateCombatPower(_stats: Record<CombatStat, number>): number {
+export function calculateCombatPower(stats: Record<CombatStat, number>): number {
   const weights = {
     [CombatStats.HP]: 0.3,
     [CombatStats.MP]: 0.2,
@@ -140,11 +142,11 @@ export function calculateCombatPower(_stats: Record<CombatStat, number>): number
     [CombatStats.ACCURACY]: 10,
     [CombatStats.RESISTANCE]: 20
   }
-  
+
   let power = 0
   for (const [stat, value] of Object.entries(stats)) {
     power += value * (weights[stat as CombatStat] || 1)
   }
-  
+
   return Math.round(power)
 }

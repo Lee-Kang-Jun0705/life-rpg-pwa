@@ -40,12 +40,14 @@ export function EquipmentScreen() {
     }
   }, [userId])
 
-  const loadAllData = async () => {
-    if (!userId) return
+  const loadAllData = async() => {
+    if (!userId) {
+      return
+    }
 
     try {
       console.time('Equipment data loading')
-      
+
       // 캐시 확인
       const cachedData = sessionStorage.getItem(`equipment-${userId}`)
       if (cachedData) {
@@ -54,7 +56,7 @@ export function EquipmentScreen() {
         setInventoryItems(inventory)
         setEquippedItems(equipped)
         setLoading(false)
-        
+
         // 백그라운드에서 최신 데이터 확인
         loadFreshData().catch(console.error)
         return
@@ -68,8 +70,10 @@ export function EquipmentScreen() {
     }
   }
 
-  const loadFreshData = async () => {
-    if (!userId) return
+  const loadFreshData = async() => {
+    if (!userId) {
+      return
+    }
 
     // 병렬로 데이터 로드
     const [profileData, inventoryData, equippedData] = await Promise.all([
@@ -120,9 +124,11 @@ export function EquipmentScreen() {
     setLoading(false)
   }
 
-  const handleEquip = async (itemId: string) => {
+  const handleEquip = async(itemId: string) => {
     const item = inventoryItems.find(i => i.id === itemId)
-    if (!item) return
+    if (!item) {
+      return
+    }
 
     // 낙관적 업데이트
     const newEquipped = { ...equippedItems }
@@ -136,10 +142,10 @@ export function EquipmentScreen() {
       const currentEquipped = await dbHelpers.getPlayerData('equippedItems')
       const equippedData = (currentEquipped?.data || {}) as unknown
       equippedData[item.category] = itemId
-      
+
       // 업데이트된 장착 정보 저장
       await dbHelpers.setPlayerData('equippedItems', equippedData)
-      
+
       // 캐시 무효화
       sessionStorage.removeItem(`equipment-${userId}`)
     } catch (error) {
@@ -149,9 +155,11 @@ export function EquipmentScreen() {
     }
   }
 
-  const handleUnequip = async (itemId: string) => {
+  const handleUnequip = async(itemId: string) => {
     const slot = Object.entries(equippedItems).find(([_, item]) => item?.id === itemId)?.[0]
-    if (!slot) return
+    if (!slot) {
+      return
+    }
 
     // 낙관적 업데이트
     const newEquipped = { ...equippedItems }
@@ -164,10 +172,10 @@ export function EquipmentScreen() {
       const currentEquipped = await dbHelpers.getPlayerData('equippedItems')
       const equippedData = (currentEquipped?.data || {}) as unknown
       delete equippedData[slot]
-      
+
       // 업데이트된 장착 정보 저장
       await dbHelpers.setPlayerData('equippedItems', equippedData)
-      
+
       // 캐시 무효화
       sessionStorage.removeItem(`equipment-${userId}`)
     } catch (error) {
@@ -180,12 +188,12 @@ export function EquipmentScreen() {
   const equipmentSlots = [
     { id: 'weapon', name: '무기', icon: '⚔️', type: 'weapon' },
     { id: 'armor', name: '갑옷', icon: '🛡️', type: 'armor' },
-    { id: 'accessory', name: '액세서리', icon: '💎', type: 'accessory' },
+    { id: 'accessory', name: '액세서리', icon: '💎', type: 'accessory' }
   ]
 
   const getItemsForSlot = (slotType: string) => {
-    return inventoryItems.filter(item => 
-      item.category === slotType && 
+    return inventoryItems.filter(item =>
+      item.category === slotType &&
       item.isEquippable &&
       !Object.values(equippedItems).some(equipped => equipped?.id === item.id)
     )
@@ -218,7 +226,7 @@ export function EquipmentScreen() {
       attack: 10,
       defense: 10,
       hp: 100,
-      mp: 50,
+      mp: 50
     }
 
     Object.values(equippedItems).forEach(item => {
@@ -228,10 +236,18 @@ export function EquipmentScreen() {
           if (match) {
             const stat = match[1]
             const value = parseInt(match[2])
-            if (stat.includes('공격')) stats.attack += value
-            if (stat.includes('방어')) stats.defense += value
-            if (stat.includes('체력')) stats.hp += value
-            if (stat.includes('마나')) stats.mp += value
+            if (stat.includes('공격')) {
+              stats.attack += value
+            }
+            if (stat.includes('방어')) {
+              stats.defense += value
+            }
+            if (stat.includes('체력')) {
+              stats.hp += value
+            }
+            if (stat.includes('마나')) {
+              stats.mp += value
+            }
           }
         })
       }
@@ -243,14 +259,14 @@ export function EquipmentScreen() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full"></div>
+        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full" />
       </div>
     )
   }
 
   return (
     <div className="min-h-screen p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-7xl mx-auto"
@@ -268,67 +284,67 @@ export function EquipmentScreen() {
 
         <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
           {/* 좌측: 캐릭터 프리뷰 */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-gradient-to-br from-gray-800/50 to-gray-700/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-700/50"
           >
             <h2 className="text-xl font-bold text-white mb-4">캐릭터</h2>
-            
+
             {/* 캐릭터 프리뷰 영역 */}
             <div className="relative h-64 md:h-96 bg-gray-900/50 rounded-xl mb-4 md:mb-6 overflow-hidden">
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 flex items-center justify-center"
                 animate={{ rotateY: characterRotation }}
                 transition={{ duration: 0.5 }}
               >
                 {/* 캐릭터 아바타 */}
                 <div className="relative">
-                  <motion.div 
+                  <motion.div
                     className="text-9xl"
-                    animate={{ 
-                      y: [0, -10, 0],
+                    animate={{
+                      y: [0, -10, 0]
                     }}
-                    transition={{ 
+                    transition={{
                       duration: 3,
                       repeat: Infinity,
-                      ease: "easeInOut"
+                      ease: 'easeInOut'
                     }}
                   >
                     {profile?.avatar || '🧙‍♂️'}
                   </motion.div>
-                  
+
                   {/* 장착 아이템 시각화 */}
                   {equippedItems.weapon && (
-                    <motion.div 
+                    <motion.div
                       className="absolute -right-8 top-1/2 -translate-y-1/2 text-5xl"
-                      animate={{ 
-                        rotate: [0, 5, 0, -5, 0],
+                      animate={{
+                        rotate: [0, 5, 0, -5, 0]
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 4,
-                        repeat: Infinity,
+                        repeat: Infinity
                       }}
                     >
                       {equippedItems.weapon.icon}
                     </motion.div>
                   )}
-                  
+
                   {equippedItems.armor && (
                     <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-50">
                       {equippedItems.armor.icon}
                     </div>
                   )}
-                  
+
                   {equippedItems.accessory && (
-                    <motion.div 
+                    <motion.div
                       className="absolute -top-6 left-1/2 -translate-x-1/2 text-3xl"
-                      animate={{ 
-                        scale: [1, 1.2, 1],
+                      animate={{
+                        scale: [1, 1.2, 1]
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 2,
-                        repeat: Infinity,
+                        repeat: Infinity
                       }}
                     >
                       {equippedItems.accessory.icon}
@@ -370,28 +386,28 @@ export function EquipmentScreen() {
           </motion.div>
 
           {/* 우측: 장비 슬롯 */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-gradient-to-br from-gray-800/50 to-gray-700/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-700/50"
           >
             <h2 className="text-xl font-bold text-white mb-4">장비 슬롯</h2>
-            
+
             <div className="space-y-4">
               {equipmentSlots.map((slot) => {
                 const equippedItem = equippedItems[slot.type as keyof typeof equippedItems]
                 const availableItems = getItemsForSlot(slot.type)
-                
+
                 return (
                   <motion.div
                     key={slot.id}
                     whileHover={{ scale: 1.02 }}
                     className="relative"
                   >
-                    <div 
+                    <div
                       className={`relative bg-gray-800/50 rounded-xl p-4 border transition-all cursor-pointer ${
-                        selectedSlot === slot.id 
-                          ? 'border-purple-500 shadow-lg shadow-purple-500/20' 
+                        selectedSlot === slot.id
+                          ? 'border-purple-500 shadow-lg shadow-purple-500/20'
                           : 'border-gray-700/50 hover:border-gray-600'
                       }`}
                       onClick={() => setSelectedSlot(selectedSlot === slot.id ? null : slot.id)}
@@ -417,7 +433,7 @@ export function EquipmentScreen() {
                             )}
                           </div>
                         </div>
-                        
+
                         <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${
                           selectedSlot === slot.id ? 'rotate-90' : ''
                         }`} />
@@ -450,7 +466,7 @@ export function EquipmentScreen() {
                         >
                           <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-700/50">
                             <h4 className="text-sm font-medium text-gray-400 mb-3">보유 {slot.name}</h4>
-                            
+
                             {availableItems.length > 0 ? (
                               <div className="grid grid-cols-1 gap-2">
                                 {availableItems.map((item) => (
@@ -474,7 +490,7 @@ export function EquipmentScreen() {
                                         </div>
                                       </div>
                                     </div>
-                                    
+
                                     {item.effects && (
                                       <div className="mt-2 space-y-1">
                                         {item.effects.map((effect, index) => (

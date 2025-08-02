@@ -18,15 +18,17 @@ export function useFatigue(userId: string): UseFatigueReturn {
 
   const fatigueService = FatigueService.getInstance()
 
-  const refreshFatigue = useCallback(async () => {
-    if (!userId) return
+  const refreshFatigue = useCallback(async() => {
+    if (!userId) {
+      return
+    }
 
     try {
       setIsLoading(true)
       setError(null)
-      
+
       const result = await fatigueService.getFatigueState(userId)
-      
+
       if (result.success) {
         setFatigueState(result.data)
       } else {
@@ -39,12 +41,14 @@ export function useFatigue(userId: string): UseFatigueReturn {
     }
   }, [userId])
 
-  const recordRest = useCallback(async (duration: number): Promise<boolean> => {
-    if (!userId) return false
+  const recordRest = useCallback(async(duration: number): Promise<boolean> => {
+    if (!userId) {
+      return false
+    }
 
     try {
       const result = await fatigueService.recordRest(userId, duration)
-      
+
       if (result.success) {
         setFatigueState(result.data)
         return true
@@ -58,12 +62,14 @@ export function useFatigue(userId: string): UseFatigueReturn {
     }
   }, [userId])
 
-  const getFatigueStats = useCallback(async (days: number = 7): Promise<FatigueStatistics | null> => {
-    if (!userId) return null
+  const getFatigueStats = useCallback(async(days = 7): Promise<FatigueStatistics | null> => {
+    if (!userId) {
+      return null
+    }
 
     try {
       const result = await fatigueService.getFatigueStats(userId, days)
-      
+
       if (result.success) {
         return result.data
       } else {

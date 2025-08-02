@@ -17,7 +17,7 @@ interface AIConfig {
 function getAIConfig(): AIConfig | null {
   const provider = process.env.NEXT_PUBLIC_AI_PROVIDER as AIProvider
   const apiKey = process.env.NEXT_PUBLIC_AI_API_KEY
-  
+
   if (!provider || !apiKey) {
     return null
   }
@@ -60,9 +60,9 @@ export async function POST(request: NextRequest) {
       growthAnalyses: GrowthAnalysis[]
       activityPattern: ActivityPattern
     }
-    
+
     const config = getAIConfig()
-    
+
     // API 설정이 없으면 규칙 기반 응답
     if (!config) {
       return NextResponse.json({
@@ -113,14 +113,14 @@ export async function POST(request: NextRequest) {
         aiResponse = generateRuleBasedResponse(message)
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       response: aiResponse,
       provider: config.provider,
-      model: config.model 
+      model: config.model
     })
   } catch (error) {
     console.error('AI Coach API error:', error)
-    
+
     // 에러 발생시 규칙 기반 폴백
     return NextResponse.json({
       response: generateRuleBasedResponse(''),
@@ -172,7 +172,7 @@ async function callAnthropic(config: AIConfig, messages: AIMessage[]) {
 
 async function callGoogle(config: AIConfig, messages: AIMessage[]) {
   const endpoint = `${config.endpoint}/${config.model}:generateContent?key=${config.apiKey}`
-  
+
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -216,12 +216,12 @@ async function callCustomAPI(config: AIConfig, messages: AIMessage[]) {
 // 규칙 기반 응답 생성
 function generateRuleBasedResponse(message: string): string {
   const lowerMessage = message.toLowerCase()
-  
+
   // 감정 관련
   if (lowerMessage.includes('피곤') || lowerMessage.includes('힘들')) {
     return '피곤하시군요. 😔 충분한 휴식도 중요한 성장의 일부예요!\n\n💡 추천 활동:\n• 10분 명상하기 (🧘 건강 +10 EXP)\n• 좋아하는 음악 듣기 (🎵 건강 +5 EXP)\n• 일찍 잠들기 (😴 건강 +15 EXP)'
   }
-  
+
   if (lowerMessage.includes('행복') || lowerMessage.includes('기뻐')) {
     return '행복하신 모습이 보기 좋네요! 😊\n\n이런 긍정적인 에너지를 활용해보는 건 어떨까요?\n• 감사 일기 쓰기 (📝 학습 +10 EXP)\n• 친구와 기쁨 나누기 (💬 관계 +15 EXP)\n• 새로운 도전하기 (🎯 성취 +20 EXP)'
   }

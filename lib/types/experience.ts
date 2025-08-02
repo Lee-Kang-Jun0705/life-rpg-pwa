@@ -1,7 +1,7 @@
 // 경험치 시스템 타입 정의
 // 레벨업 공식과 일일 제한을 포함한 포괄적인 경험치 관리
 
-import type { StatType } from './game-common';
+import type { StatType } from './game-common'
 
 // 활동 품질 등급
 export const ACTIVITY_QUALITY = {
@@ -10,7 +10,7 @@ export const ACTIVITY_QUALITY = {
   B: 'B', // 구체적 설명 포함
   A: 'A', // 시간/장소 포함
   S: 'S'  // 사진/동영상 인증
-} as const;
+} as const
 
 export type ActivityQuality = typeof ACTIVITY_QUALITY[keyof typeof ACTIVITY_QUALITY];
 
@@ -265,7 +265,7 @@ export interface ExpEvent {
   readonly data: ExpEventData;
 }
 
-export type ExpEventType = 
+export type ExpEventType =
   | 'exp_gained'
   | 'level_up'
   | 'daily_limit_reached'
@@ -330,14 +330,16 @@ export const EXP_CONSTANTS = {
     A: 2.5,
     S: 3.0
   }
-} as const;
+} as const
 
 // 타입 가드
 export function isValidActivity(_activity: unknown): activity is Activity {
-  if (typeof activity !== 'object' || activity === null) return false;
-  
-  const a = activity as Record<string, unknown>;
-  
+  if (typeof activity !== 'object' || activity === null) {
+    return false
+  }
+
+  const a = activity as Record<string, unknown>
+
   return (
     typeof a.userId === 'string' &&
     typeof a.statType === 'string' &&
@@ -345,10 +347,10 @@ export function isValidActivity(_activity: unknown): activity is Activity {
     Object.values(ACTIVITY_QUALITY).includes(a.quality as ActivityQuality) &&
     typeof a.experience === 'number' &&
     a.timestamp instanceof Date
-  );
+  )
 }
 
 // Result 타입
-export type Result<T, E = Error> = 
+export type Result<T, E = Error> =
   | { success: true; data: T }
   | { success: false; error: E };

@@ -29,7 +29,9 @@ class PerformanceMonitor {
    * Performance Observer 초기화
    */
   private initializeObservers() {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') {
+      return
+    }
 
     try {
       // Navigation timing 관찰
@@ -87,7 +89,7 @@ class PerformanceMonitor {
    */
   private recordMetric(metric: PerformanceMetric) {
     this.metrics.push(metric)
-    
+
     // 100개를 초과하면 오래된 메트릭 제거
     if (this.metrics.length > 100) {
       this.metrics = this.metrics.slice(-100)
@@ -158,7 +160,7 @@ class PerformanceMonitor {
         const lastEntry = entries[entries.length - 1]
         vitals.lcp = lastEntry.startTime
         lcpObserver.disconnect()
-        
+
         if (Object.keys(vitals).length === 3) {
           resolve(vitals)
         }
@@ -171,7 +173,7 @@ class PerformanceMonitor {
         const firstEntry = entries[0] as { startTime: number }
         vitals.fid = firstEntry.processingStart - firstEntry.startTime
         fidObserver.disconnect()
-        
+
         if (Object.keys(vitals).length === 3) {
           resolve(vitals)
         }
@@ -194,7 +196,7 @@ class PerformanceMonitor {
       setTimeout(() => {
         clsObserver.disconnect()
         vitals.cls = clsValue
-        
+
         if (Object.keys(vitals).length >= 1) {
           resolve(vitals)
         }
@@ -221,10 +223,14 @@ class PerformanceMonitor {
    * Navigation timing 정보
    */
   private getNavigationTiming() {
-    if (typeof window === 'undefined' || !window.performance) return null
+    if (typeof window === 'undefined' || !window.performance) {
+      return null
+    }
 
     const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
-    if (!nav) return null
+    if (!nav) {
+      return null
+    }
 
     return {
       domContentLoaded: nav.domContentLoadedEventEnd - nav.domContentLoadedEventStart,
@@ -241,7 +247,9 @@ class PerformanceMonitor {
    * Paint timing 정보
    */
   private getPaintTiming() {
-    if (typeof window === 'undefined') return null
+    if (typeof window === 'undefined') {
+      return null
+    }
 
     const paintEntries = performance.getEntriesByType('paint')
     const timing: Record<string, number> = {}
@@ -270,7 +278,7 @@ export const performanceMonitor = new PerformanceMonitor()
 export function usePerformanceMonitor() {
   const startMeasure = (name: string) => performanceMonitor.startMeasure(name)
   const endMeasure = (name: string) => performanceMonitor.endMeasure(name)
-  const recordMetric = (name: string, value: number, unit?: string) => 
+  const recordMetric = (name: string, value: number, unit?: string) =>
     performanceMonitor.recordCustomMetric(name, value, unit)
 
   return {

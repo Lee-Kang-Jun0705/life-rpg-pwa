@@ -77,7 +77,7 @@ const mockGrowthAnalyses: GrowthAnalysis[] = [
 describe('GrowthTab', () => {
   it('성장 데이터가 있을 때 차트를 렌더링해야 함', () => {
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={mockGrowthAnalyses} />)
-    
+
     expect(screen.getByTestId('responsive-container')).toBeInTheDocument()
     expect(screen.getByTestId('line-chart')).toBeInTheDocument()
     expect(screen.getByText('30일 성장 추이')).toBeInTheDocument()
@@ -85,14 +85,14 @@ describe('GrowthTab', () => {
 
   it('성장 데이터가 없을 때 안내 메시지를 보여야 함', () => {
     render(<GrowthTab growthData={[]} growthAnalyses={[]} />)
-    
+
     expect(screen.getByText('성장 데이터를 수집 중입니다...')).toBeInTheDocument()
     expect(screen.queryByTestId('line-chart')).not.toBeInTheDocument()
   })
 
   it('모든 스탯의 차트 라인을 렌더링해야 함', () => {
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={mockGrowthAnalyses} />)
-    
+
     expect(screen.getByText('건강')).toBeInTheDocument()
     expect(screen.getByText('학습')).toBeInTheDocument()
     expect(screen.getByText('관계')).toBeInTheDocument()
@@ -101,7 +101,7 @@ describe('GrowthTab', () => {
 
   it('스탯별 성장 분석 카드를 렌더링해야 함', () => {
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={mockGrowthAnalyses} />)
-    
+
     expect(screen.getByText('🏃 건강')).toBeInTheDocument()
     expect(screen.getByText('📚 학습')).toBeInTheDocument()
     expect(screen.getByText('🤝 관계')).toBeInTheDocument()
@@ -110,7 +110,7 @@ describe('GrowthTab', () => {
 
   it('성장률을 올바르게 표시해야 함', () => {
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={mockGrowthAnalyses} />)
-    
+
     expect(screen.getByText('15.5 EXP')).toBeInTheDocument()
     expect(screen.getByText('8.2 EXP')).toBeInTheDocument()
     expect(screen.getByText('3.1 EXP')).toBeInTheDocument()
@@ -119,21 +119,21 @@ describe('GrowthTab', () => {
 
   it('추세를 올바른 색상과 아이콘으로 표시해야 함', () => {
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={mockGrowthAnalyses} />)
-    
+
     // 상승 추세
     const improvingTrends = screen.getAllByText('상승')
     expect(improvingTrends).toHaveLength(2) // health, achievement
-    
+
     // 정체 추세
     expect(screen.getByText('정체')).toBeInTheDocument()
-    
+
     // 하락 추세
     expect(screen.getByText('하락')).toBeInTheDocument()
   })
 
   it('총 활동 횟수를 표시해야 함', () => {
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={mockGrowthAnalyses} />)
-    
+
     expect(screen.getByText('10회')).toBeInTheDocument()
     expect(screen.getByText('6회')).toBeInTheDocument()
     expect(screen.getByText('3회')).toBeInTheDocument()
@@ -142,7 +142,7 @@ describe('GrowthTab', () => {
 
   it('마지막 활동 날짜를 표시해야 함', () => {
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={mockGrowthAnalyses} />)
-    
+
     expect(screen.getByText('2024. 1. 16.')).toBeInTheDocument()
     expect(screen.getByText('2024. 1. 15.')).toBeInTheDocument()
     expect(screen.getByText('2024. 1. 14.')).toBeInTheDocument()
@@ -150,7 +150,7 @@ describe('GrowthTab', () => {
 
   it('추천사항을 표시해야 함', () => {
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={mockGrowthAnalyses} />)
-    
+
     expect(screen.getByText('매일 운동하기')).toBeInTheDocument()
     expect(screen.getByText('건강한 식단 유지하기')).toBeInTheDocument()
     expect(screen.getByText('독서 시간 늘리기')).toBeInTheDocument()
@@ -170,7 +170,7 @@ describe('GrowthTab', () => {
     ]
 
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={analysisWithManySuggestions} />)
-    
+
     expect(screen.getByText('첫 번째 제안')).toBeInTheDocument()
     expect(screen.getByText('두 번째 제안')).toBeInTheDocument()
     expect(screen.queryByText('세 번째 제안')).not.toBeInTheDocument()
@@ -190,7 +190,7 @@ describe('GrowthTab', () => {
     ]
 
     render(<GrowthTab growthData={mockGrowthData} growthAnalyses={analysisWithoutSuggestions} />)
-    
+
     expect(screen.queryByText('추천사항')).not.toBeInTheDocument()
   })
 })

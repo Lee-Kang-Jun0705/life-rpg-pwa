@@ -19,15 +19,17 @@ export function useBalance(userId: string): UseBalanceReturn {
 
   const balanceService = BalanceService.getInstance()
 
-  const refreshBalance = useCallback(async () => {
-    if (!userId) return
+  const refreshBalance = useCallback(async() => {
+    if (!userId) {
+      return
+    }
 
     try {
       setIsLoading(true)
       setError(null)
-      
+
       const result = await balanceService.getBalanceState(userId)
-      
+
       if (result.success) {
         setBalanceState(result.data)
       } else {
@@ -40,12 +42,14 @@ export function useBalance(userId: string): UseBalanceReturn {
     }
   }, [userId])
 
-  const getBalanceBonus = useCallback(async (statType: StatType): Promise<BalanceBonus | null> => {
-    if (!userId) return null
+  const getBalanceBonus = useCallback(async(statType: StatType): Promise<BalanceBonus | null> => {
+    if (!userId) {
+      return null
+    }
 
     try {
       const result = await balanceService.calculateBalanceBonus(userId, statType)
-      
+
       if (result.success) {
         return result.data
       } else {
@@ -58,12 +62,14 @@ export function useBalance(userId: string): UseBalanceReturn {
     }
   }, [userId])
 
-  const getBalanceStats = useCallback(async (days: number = 30): Promise<BalanceStatistics | null> => {
-    if (!userId) return null
+  const getBalanceStats = useCallback(async(days = 30): Promise<BalanceStatistics | null> => {
+    if (!userId) {
+      return null
+    }
 
     try {
       const result = await balanceService.getBalanceStatistics(userId, days)
-      
+
       if (result.success) {
         return result.data
       } else {

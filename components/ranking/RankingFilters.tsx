@@ -56,9 +56,9 @@ export function RankingFilters({ filter, onFilterChange, onSearch }: RankingFilt
               className={`
                 flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all
                 ${filter.period === period.id
-                  ? 'bg-purple-500 text-white shadow-lg'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                }
+              ? 'bg-purple-500 text-white shadow-lg'
+              : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            }
               `}
             >
               <span>{period.icon}</span>
@@ -86,9 +86,9 @@ export function RankingFilters({ filter, onFilterChange, onSearch }: RankingFilt
               className={`
                 flex flex-col items-center gap-1 p-3 rounded-lg text-sm transition-all border
                 ${filter.category === key
-                  ? 'bg-purple-500 text-white border-purple-500 shadow-lg scale-105'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/20'
-                }
+              ? 'bg-purple-500 text-white border-purple-500 shadow-lg scale-105'
+              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/20'
+            }
               `}
             >
               <span className="text-lg">{categoryInfo.icon}</span>
@@ -146,11 +146,11 @@ export function RankingFilters({ filter, onFilterChange, onSearch }: RankingFilt
             value={filter.level?.min || ''}
             onChange={(e) => {
               const min = parseInt(e.target.value) || undefined
-              onFilterChange({ 
-                level: min ? { 
-                  min, 
-                  max: filter.level?.max || 200 
-                } : undefined 
+              onFilterChange({
+                level: min ? {
+                  min,
+                  max: filter.level?.max || 200
+                } : undefined
               })
             }}
             placeholder="1"
@@ -166,11 +166,11 @@ export function RankingFilters({ filter, onFilterChange, onSearch }: RankingFilt
             value={filter.level?.max || ''}
             onChange={(e) => {
               const max = parseInt(e.target.value) || undefined
-              onFilterChange({ 
-                level: max ? { 
-                  min: filter.level?.min || 1, 
-                  max 
-                } : undefined 
+              onFilterChange({
+                level: max ? {
+                  min: filter.level?.min || 1,
+                  max
+                } : undefined
               })
             }}
             placeholder="200"

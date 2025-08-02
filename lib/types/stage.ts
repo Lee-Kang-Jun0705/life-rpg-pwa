@@ -112,7 +112,7 @@ export const STAGE_DIFFICULTY_SCALING = {
   monsterHpMultiplier: [1, 1.2, 1.5, 1.8, 2.2, 2.6, 3.0, 3.5, 4.0, 5.0],
   monsterDamageMultiplier: [1, 1.1, 1.3, 1.5, 1.7, 2.0, 2.3, 2.6, 3.0, 3.5],
   expMultiplier: [1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.3, 2.6, 3.0, 3.5],
-  goldMultiplier: [1, 1.3, 1.6, 2.0, 2.4, 2.8, 3.2, 3.6, 4.0, 5.0],
+  goldMultiplier: [1, 1.3, 1.6, 2.0, 2.4, 2.8, 3.2, 3.6, 4.0, 5.0]
 } as const
 
 // 별 획득 조건
@@ -120,17 +120,17 @@ export const STAR_CONDITIONS = {
   time: {
     3: 60, // 60초 이내 클리어
     2: 120, // 120초 이내 클리어
-    1: 180, // 180초 이내 클리어
+    1: 180 // 180초 이내 클리어
   },
   health: {
     3: 0.8, // HP 80% 이상 유지
     2: 0.5, // HP 50% 이상 유지
-    1: 0.2, // HP 20% 이상 유지
+    1: 0.2 // HP 20% 이상 유지
   },
   objectives: {
     3: 1.0, // 모든 목표 달성
     2: 0.7, // 70% 목표 달성
-    1: 0.5, // 50% 목표 달성
+    1: 0.5 // 50% 목표 달성
   }
 } as const
 
@@ -151,22 +151,34 @@ export function calculateStars(
   totalObjectives: number
 ): number {
   let stars = 0
-  
+
   // 시간 기준
-  if (clearTime <= STAR_CONDITIONS.time[3]) stars++
-  else if (clearTime <= STAR_CONDITIONS.time[2]) stars += 0.5
-  else if (clearTime <= STAR_CONDITIONS.time[1]) stars += 0.3
-  
+  if (clearTime <= STAR_CONDITIONS.time[3]) {
+    stars++
+  } else if (clearTime <= STAR_CONDITIONS.time[2]) {
+    stars += 0.5
+  } else if (clearTime <= STAR_CONDITIONS.time[1]) {
+    stars += 0.3
+  }
+
   // 체력 기준
-  if (healthPercent >= STAR_CONDITIONS.health[3]) stars++
-  else if (healthPercent >= STAR_CONDITIONS.health[2]) stars += 0.5
-  else if (healthPercent >= STAR_CONDITIONS.health[1]) stars += 0.3
-  
+  if (healthPercent >= STAR_CONDITIONS.health[3]) {
+    stars++
+  } else if (healthPercent >= STAR_CONDITIONS.health[2]) {
+    stars += 0.5
+  } else if (healthPercent >= STAR_CONDITIONS.health[1]) {
+    stars += 0.3
+  }
+
   // 목표 달성 기준
   const objectiveRatio = totalObjectives > 0 ? objectivesCompleted / totalObjectives : 0
-  if (objectiveRatio >= STAR_CONDITIONS.objectives[3]) stars++
-  else if (objectiveRatio >= STAR_CONDITIONS.objectives[2]) stars += 0.5
-  else if (objectiveRatio >= STAR_CONDITIONS.objectives[1]) stars += 0.3
-  
+  if (objectiveRatio >= STAR_CONDITIONS.objectives[3]) {
+    stars++
+  } else if (objectiveRatio >= STAR_CONDITIONS.objectives[2]) {
+    stars += 0.5
+  } else if (objectiveRatio >= STAR_CONDITIONS.objectives[1]) {
+    stars += 0.3
+  }
+
   return Math.min(3, Math.floor(stars))
 }

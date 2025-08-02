@@ -138,26 +138,26 @@ export function MonsterDetailModal({ monster, entry, lore, onClose }: MonsterDet
                     <span>첫 발견</span>
                   </div>
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {entry.firstEncounteredAt ? 
-                      new Date(entry.firstEncounteredAt).toLocaleDateString() : 
+                    {entry.firstEncounteredAt ?
+                      new Date(entry.firstEncounteredAt).toLocaleDateString() :
                       '미발견'
                     }
                   </span>
                 </div>
-                
+
                 <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                   <div className="flex items-center gap-2">
                     <Sword className="w-4 h-4 text-red-500" />
                     <span>첫 처치</span>
                   </div>
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {entry.firstDefeatedAt ? 
-                      new Date(entry.firstDefeatedAt).toLocaleDateString() : 
+                    {entry.firstDefeatedAt ?
+                      new Date(entry.firstDefeatedAt).toLocaleDateString() :
                       '미처치'
                     }
                   </span>
                 </div>
-                
+
                 <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-blue-500" />
@@ -167,7 +167,7 @@ export function MonsterDetailModal({ monster, entry, lore, onClose }: MonsterDet
                     {new Date(entry.lastSeenAt).toLocaleDateString()}
                   </span>
                 </div>
-                
+
                 <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                   <span className="font-medium">총 처치 횟수</span>
                   <span className="text-xl font-bold text-purple-600 dark:text-purple-400">
@@ -186,24 +186,24 @@ export function MonsterDetailModal({ monster, entry, lore, onClose }: MonsterDet
                     <h4 className="font-medium text-sm text-gray-600 dark:text-gray-400 mb-1">설명</h4>
                     <p className="text-sm leading-relaxed">{lore.description}</p>
                   </div>
-                  
+
                   <div>
                     <h4 className="font-medium text-sm text-gray-600 dark:text-gray-400 mb-1">서식지</h4>
                     <p className="text-sm">{lore.habitat}</p>
                   </div>
-                  
+
                   <div>
                     <h4 className="font-medium text-sm text-gray-600 dark:text-gray-400 mb-1">행동 패턴</h4>
                     <p className="text-sm">{lore.behavior}</p>
                   </div>
-                  
+
                   {lore.weakness && (
                     <div>
                       <h4 className="font-medium text-sm text-gray-600 dark:text-gray-400 mb-1">약점</h4>
                       <p className="text-sm text-red-600 dark:text-red-400">{lore.weakness}</p>
                     </div>
                   )}
-                  
+
                   {lore.trivia && lore.trivia.length > 0 && (
                     <div>
                       <h4 className="font-medium text-sm text-gray-600 dark:text-gray-400 mb-2">흥미로운 사실</h4>

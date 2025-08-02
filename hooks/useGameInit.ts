@@ -13,7 +13,7 @@ interface GameInitStatus {
   lastSaveTime: Date | null
 }
 
-export function useGameInit(characterId: string = 'player-1') {
+export function useGameInit(characterId = 'player-1') {
   const [status, setStatus] = useState<GameInitStatus>({
     isLoading: true,
     isLoaded: false,
@@ -23,17 +23,17 @@ export function useGameInit(characterId: string = 'player-1') {
   })
 
   useEffect(() => {
-    const initializeGame = async () => {
+    const initializeGame = async() => {
       try {
         setStatus(prev => ({ ...prev, isLoading: true }))
 
         // 저장된 데이터 불러오기
         const success = await persistenceService.loadAll(characterId)
-        
+
         if (success) {
           // 마지막 저장 시간 가져오기
           const lastSave = await persistenceService.getLastSaveTime(characterId)
-          
+
           setStatus({
             isLoading: false,
             isLoaded: true,
@@ -44,10 +44,10 @@ export function useGameInit(characterId: string = 'player-1') {
         } else {
           // 저장된 데이터가 없으면 기본값으로 시작
           console.log('No saved data found, starting with defaults')
-          
+
           // 기본 아이템 생성 (테스트용)
           const { itemGenerationService } = await import('@/lib/services/item-generation.service')
-          
+
           // 몇 개의 시작 아이템 생성
           const startingItems = ['rusty_sword', 'wooden_staff', 'iron_sword']
           for (const itemId of startingItems) {
@@ -60,13 +60,13 @@ export function useGameInit(characterId: string = 'player-1') {
               inventoryService.addItem(result.item)
             }
           }
-          
+
           // 시작 스킬 포인트
           skillManagementService.addSkillPoints(5)
-          
+
           // 초기 데이터 저장
           await persistenceService.saveAll(characterId)
-          
+
           setStatus({
             isLoading: false,
             isLoaded: true,

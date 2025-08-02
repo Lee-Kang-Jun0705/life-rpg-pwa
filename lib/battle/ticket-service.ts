@@ -28,12 +28,12 @@ const TICKET_CONFIG = {
   MAX_TICKETS: 50,
   RESET_HOUR: 4, // 오전 4시 리셋
   PURCHASE_COST: 100, // 골드 비용
-  PURCHASE_AMOUNT: 5,
+  PURCHASE_AMOUNT: 5
 } as const
 
 export class BattleTicketService {
   private static instance: BattleTicketService
-  
+
   static getInstance(): BattleTicketService {
     if (!BattleTicketService.instance) {
       BattleTicketService.instance = new BattleTicketService()
@@ -79,7 +79,7 @@ export class BattleTicketService {
   }
 
   // 티켓 사용
-  async useTicket(_userId: string, _reason: string = '자동전투 입장'): Promise<boolean> {
+  async useTicket(_userId: string, _reason = '자동전투 입장'): Promise<boolean> {
     try {
       const ticketData = await db.battleTickets
         .where('userId')
@@ -111,8 +111,10 @@ export class BattleTicketService {
 
       return true
     } catch (error) {
-      if (error instanceof GameError) throw error
-      
+      if (error instanceof GameError) {
+        throw error
+      }
+
       throw new GameError(
         'TICKET_ERROR',
         '티켓 사용 중 오류가 발생했습니다',
@@ -163,8 +165,10 @@ export class BattleTicketService {
 
       return actualAmount
     } catch (error) {
-      if (error instanceof GameError) throw error
-      
+      if (error instanceof GameError) {
+        throw error
+      }
+
       throw new GameError(
         'TICKET_ERROR',
         '티켓 구매 중 오류가 발생했습니다',
@@ -207,8 +211,10 @@ export class BattleTicketService {
         afterAmount: newCount
       })
     } catch (error) {
-      if (error instanceof GameError) throw error
-      
+      if (error instanceof GameError) {
+        throw error
+      }
+
       throw new GameError(
         'TICKET_ERROR',
         '티켓 보상 지급 중 오류가 발생했습니다',
@@ -273,11 +279,11 @@ export class BattleTicketService {
   private getNextResetTime(from: Date = new Date()): Date {
     const next = new Date(from)
     next.setHours(TICKET_CONFIG.RESET_HOUR, 0, 0, 0)
-    
+
     if (next <= from) {
       next.setDate(next.getDate() + 1)
     }
-    
+
     return next
   }
 

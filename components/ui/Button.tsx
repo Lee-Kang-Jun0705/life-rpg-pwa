@@ -16,7 +16,7 @@ const buttonVariants = cva(
         'stat-health': 'bg-gradient-to-r from-stat-healthStart to-stat-healthEnd text-white hover:shadow-lg shadow-[0_6px_0_rgba(0,0,0,0.15),0_10px_20px_rgba(0,0,0,0.1)] active:shadow-[0_3px_0_rgba(0,0,0,0.15),0_5px_10px_rgba(0,0,0,0.1)] active:translate-y-[3px] animate-float',
         'stat-learning': 'bg-gradient-to-r from-stat-learningStart to-stat-learningEnd text-white hover:shadow-lg shadow-[0_6px_0_rgba(0,0,0,0.15),0_10px_20px_rgba(0,0,0,0.1)] active:shadow-[0_3px_0_rgba(0,0,0,0.15),0_5px_10px_rgba(0,0,0,0.1)] active:translate-y-[3px] animate-float',
         'stat-relationship': 'bg-gradient-to-r from-stat-relationshipStart to-stat-relationshipEnd text-white hover:shadow-lg shadow-[0_6px_0_rgba(0,0,0,0.15),0_10px_20px_rgba(0,0,0,0.1)] active:shadow-[0_3px_0_rgba(0,0,0,0.15),0_5px_10px_rgba(0,0,0,0.1)] active:translate-y-[3px] animate-float',
-        'stat-achievement': 'bg-gradient-to-r from-stat-achievementStart to-stat-achievementEnd text-white hover:shadow-lg shadow-[0_6px_0_rgba(0,0,0,0.15),0_10px_20px_rgba(0,0,0,0.1)] active:shadow-[0_3px_0_rgba(0,0,0,0.15),0_5px_10px_rgba(0,0,0,0.1)] active:translate-y-[3px] animate-float',
+        'stat-achievement': 'bg-gradient-to-r from-stat-achievementStart to-stat-achievementEnd text-white hover:shadow-lg shadow-[0_6px_0_rgba(0,0,0,0.15),0_10px_20px_rgba(0,0,0,0.1)] active:shadow-[0_3px_0_rgba(0,0,0,0.15),0_5px_10px_rgba(0,0,0,0.1)] active:translate-y-[3px] animate-float'
       },
       size: {
         sm: 'h-12 px-6 text-base',
@@ -24,16 +24,16 @@ const buttonVariants = cva(
         lg: 'h-16 px-10 text-xl',
         xl: 'h-20 px-12 text-2xl',
         icon: 'h-14 w-14',
-        'icon-lg': 'h-16 w-16',
+        'icon-lg': 'h-16 w-16'
       },
       fullWidth: {
-        true: 'w-full',
-      },
+        true: 'w-full'
+      }
     },
     defaultVariants: {
       variant: 'default',
-      size: 'md',
-    },
+      size: 'md'
+    }
   }
 )
 
@@ -55,7 +55,7 @@ const Button = memo(
           onClick(mouseEvent)
         }
       }
-      
+
       return (
         <button
           className={cn(buttonVariants({ variant, size, fullWidth }), 'touch-active', className)}

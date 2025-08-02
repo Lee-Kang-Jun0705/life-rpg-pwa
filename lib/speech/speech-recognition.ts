@@ -21,11 +21,11 @@ export interface CustomSpeechRecognitionResult {
   }>
 }
 
-export type SpeechRecognitionStatus = 
-  | 'idle' 
-  | 'listening' 
-  | 'processing' 
-  | 'error' 
+export type SpeechRecognitionStatus =
+  | 'idle'
+  | 'listening'
+  | 'processing'
+  | 'error'
   | 'unsupported'
 
 export interface SpeechRecognitionError {
@@ -133,7 +133,7 @@ export class SpeechRecognitionService {
       return false
     }
     return !!(
-      window.SpeechRecognition || 
+      window.SpeechRecognition ||
       window.webkitSpeechRecognition
     )
   }
@@ -147,9 +147,9 @@ export class SpeechRecognitionService {
       return
     }
 
-    const SpeechRecognition = 
+    const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition
-    const SpeechGrammarList = 
+    const SpeechGrammarList =
       window.SpeechGrammarList || window.webkitSpeechGrammarList
 
     this.recognition = new SpeechRecognition()
@@ -179,7 +179,9 @@ export class SpeechRecognitionService {
    * 이벤트 핸들러 설정
    */
   private setupEventHandlers(): void {
-    if (!this.recognition) return
+    if (!this.recognition) {
+      return
+    }
 
     // 음성 인식 시작
     this.recognition.onstart = () => {
@@ -462,8 +464,10 @@ export class SpeechRecognitionUtils {
    * 인식률 계산 (신뢰도 기반)
    */
   static calculateAccuracy(results: CustomSpeechRecognitionResult[]): number {
-    if (results.length === 0) return 0
-    
+    if (results.length === 0) {
+      return 0
+    }
+
     const totalConfidence = results.reduce((sum, result) => sum + result.confidence, 0)
     return (totalConfidence / results.length) * 100
   }
@@ -482,16 +486,16 @@ export class SpeechRecognitionUtils {
    * 커스텀 단어 사전 적용
    */
   static applyCustomDictionary(
-    transcript: string, 
+    transcript: string,
     dictionary: Map<string, string>
   ): string {
     let result = transcript
-    
+
     dictionary.forEach((replacement, pattern) => {
       const regex = new RegExp(pattern, 'gi')
       result = result.replace(regex, replacement)
     })
-    
+
     return result
   }
 

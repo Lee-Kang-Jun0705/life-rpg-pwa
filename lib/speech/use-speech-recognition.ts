@@ -26,13 +26,13 @@ export interface UseSpeechRecognitionReturn {
   transcript: string
   confidence: number
   error: SpeechRecognitionError | null
-  
+
   // 제어 함수
   start: () => void
   stop: () => void
   toggle: () => void
   reset: () => void
-  
+
   // 설정 함수
   setLanguage: (lang: string) => void
   setContinuous: (continuous: boolean) => void
@@ -43,7 +43,7 @@ export function useSpeechRecognition(
 ): UseSpeechRecognitionReturn {
   const serviceRef = useRef<SpeechRecognitionService | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  
+
   const [isSupported] = useState(() => SpeechRecognitionService.isSupported())
   const [isListening, setIsListening] = useState(false)
   const [status, setStatus] = useState<SpeechRecognitionStatus>('idle')
@@ -92,7 +92,11 @@ export function useSpeechRecognition(
 
       // 자동 종료 (최종 결과일 때)
       if (options.autoStop && result.isFinal) {
-        stop()
+        serviceRef.current?.stop()
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current)
+          timeoutRef.current = null
+        }
       }
     })
 
@@ -100,7 +104,10 @@ export function useSpeechRecognition(
     service.onError((err) => {
       setError(err)
       setIsListening(false)
-      clearListeningTimeout()
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
       options.onError?.(err)
     })
 
@@ -128,9 +135,21 @@ export function useSpeechRecognition(
     }
   }, [])
 
+  // 음성 인식 중지
+  const stop = useCallback(() => {
+    if (!serviceRef.current) {
+      return
+    }
+
+    serviceRef.current.stop()
+    clearListeningTimeout()
+  }, [clearListeningTimeout])
+
   // 음성 인식 시작
   const start = useCallback(() => {
-    if (!serviceRef.current || isListening || !isSupported) return
+    if (!serviceRef.current || isListening || !isSupported) {
+      return
+    }
 
     setError(null)
     serviceRef.current.start()
@@ -147,14 +166,6 @@ export function useSpeechRecognition(
       }, options.timeout)
     }
   }, [isListening, isSupported, options.timeout, stop])
-
-  // 음성 인식 중지
-  const stop = useCallback(() => {
-    if (!serviceRef.current) return
-
-    serviceRef.current.stop()
-    clearListeningTimeout()
-  }, [clearListeningTimeout])
 
   // 토글
   const toggle = useCallback(() => {
@@ -192,13 +203,13 @@ export function useSpeechRecognition(
     transcript,
     confidence,
     error,
-    
+
     // 제어 함수
     start,
     stop,
     toggle,
     reset,
-    
+
     // 설정 함수
     setLanguage,
     setContinuous
@@ -222,16 +233,16 @@ export function useActivitySpeechRecognition() {
     ['산책', '걷기'],
     ['짐', '헬스'],
     ['웨이트', '헬스'],
-    
+
     // 학습 관련
     ['스터디', '공부'],
     ['리딩', '독서'],
     ['북', '독서'],
-    
+
     // 관계 관련
     ['미팅', '만남'],
     ['친구랑', '친구와'],
-    
+
     // 성취 관련
     ['끝냈', '완료했'],
     ['성공했', '달성했']

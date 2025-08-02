@@ -10,7 +10,7 @@ const ticketStates = new Map<string, {
 export async function GET(request: NextRequest) {
   try {
     const userId = GAME_CONFIG.DEFAULT_USER_ID
-    
+
     // 저장된 상태가 없으면 기본값 생성
     if (!ticketStates.has(userId)) {
       ticketStates.set(userId, {
@@ -18,23 +18,23 @@ export async function GET(request: NextRequest) {
         lastReset: new Date()
       })
     }
-    
+
     const state = ticketStates.get(userId)!
-    
+
     // 매일 오전 5시 리셋 체크
     const now = new Date()
     const today5AM = new Date(now)
     today5AM.setHours(5, 0, 0, 0)
-    
+
     if (now.getHours() < 5) {
       today5AM.setDate(today5AM.getDate() - 1)
     }
-    
+
     if (state.lastReset < today5AM) {
       state.tickets = 10
       state.lastReset = today5AM
     }
-    
+
     return NextResponse.json({
       tickets: state.tickets,
       maxTickets: 10,
@@ -53,12 +53,12 @@ export async function POST(request: NextRequest) {
   try {
     const { amount, action } = await request.json()
     const userId = GAME_CONFIG.DEFAULT_USER_ID
-    
+
     const state = ticketStates.get(userId) || {
       tickets: 10,
       lastReset: new Date()
     }
-    
+
     if (action === 'consume') {
       if (state.tickets < amount) {
         return NextResponse.json(
@@ -70,9 +70,9 @@ export async function POST(request: NextRequest) {
     } else if (action === 'add') {
       state.tickets = Math.min(state.tickets + amount, 10)
     }
-    
+
     ticketStates.set(userId, state)
-    
+
     return NextResponse.json({
       tickets: state.tickets,
       maxTickets: 10

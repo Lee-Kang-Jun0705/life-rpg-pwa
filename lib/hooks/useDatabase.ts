@@ -7,7 +7,7 @@ export function useDatabase() {
   useEffect(() => {
     let isMounted = true
 
-    const init = async () => {
+    const init = async() => {
       const success = await initializeDatabase()
       if (isMounted) {
         setIsReady(success)

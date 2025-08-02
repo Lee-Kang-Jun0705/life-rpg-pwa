@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
-import { 
-  SpeechRecognitionService, 
+import {
+  SpeechRecognitionService,
   SpeechRecognitionUtils,
-  KOREAN_COMMAND_GRAMMARS 
+  KOREAN_COMMAND_GRAMMARS
 } from '../speech-recognition'
 
 // Mock Web Speech API
@@ -54,9 +54,9 @@ describe.skip('SpeechRecognitionService', () => {
     it('should return false when SpeechRecognition is not available', () => {
       const originalSpeechRecognition = window.SpeechRecognition
       window.SpeechRecognition = undefined as unknown
-      
+
       expect(SpeechRecognitionService.isSupported()).toBe(false)
-      
+
       window.SpeechRecognition = originalSpeechRecognition
     })
   })
@@ -71,7 +71,7 @@ describe.skip('SpeechRecognitionService', () => {
       // Simulate listening state
       mockSpeechRecognition.onstart?.()
       jest.clearAllMocks()
-      
+
       service.start()
       expect(mockSpeechRecognition.start).not.toHaveBeenCalled()
     })
@@ -79,13 +79,13 @@ describe.skip('SpeechRecognitionService', () => {
     it('should handle start errors', () => {
       const errorCallback = jest.fn()
       service.onError(errorCallback)
-      
+
       mockSpeechRecognition.start.mockImplementationOnce(() => {
         throw new Error('Start failed')
       })
-      
+
       service.start()
-      
+
       expect(errorCallback).toHaveBeenCalledWith({
         code: 'START_ERROR',
         message: '음성 인식을 시작할 수 없습니다.',
@@ -99,7 +99,7 @@ describe.skip('SpeechRecognitionService', () => {
       // Start listening
       service.start()
       mockSpeechRecognition.onstart?.()
-      
+
       service.stop()
       expect(mockSpeechRecognition.stop).toHaveBeenCalled()
     })
@@ -114,7 +114,7 @@ describe.skip('SpeechRecognitionService', () => {
     it('should handle recognition results', () => {
       const resultCallback = jest.fn()
       service.onResult(resultCallback)
-      
+
       const mockEvent = {
         results: [{
           0: { transcript: '운동했어요', confidence: 0.95 },
@@ -124,9 +124,9 @@ describe.skip('SpeechRecognitionService', () => {
         }],
         resultIndex: 0
       }
-      
+
       mockSpeechRecognition.onresult?.(mockEvent)
-      
+
       expect(resultCallback).toHaveBeenCalledWith({
         transcript: '운동했어요',
         confidence: 0.95,
@@ -141,9 +141,9 @@ describe.skip('SpeechRecognitionService', () => {
     it('should handle no-speech error', () => {
       const errorCallback = jest.fn()
       service.onError(errorCallback)
-      
+
       mockSpeechRecognition.onerror?.({ error: 'no-speech' })
-      
+
       expect(errorCallback).toHaveBeenCalledWith({
         code: 'NO_SPEECH',
         message: '음성이 감지되지 않았습니다. 다시 시도해주세요.'
@@ -153,9 +153,9 @@ describe.skip('SpeechRecognitionService', () => {
     it('should handle network error', () => {
       const errorCallback = jest.fn()
       service.onError(errorCallback)
-      
+
       mockSpeechRecognition.onerror?.({ error: 'network' })
-      
+
       expect(errorCallback).toHaveBeenCalledWith({
         code: 'NETWORK',
         message: '네트워크 오류가 발생했습니다. 오프라인 모드로 전환합니다.'
@@ -165,15 +165,15 @@ describe.skip('SpeechRecognitionService', () => {
     it('should update status on state changes', () => {
       const statusCallback = jest.fn()
       service.onStatusChange(statusCallback)
-      
+
       // Start
       mockSpeechRecognition.onstart?.()
       expect(statusCallback).toHaveBeenCalledWith('listening')
-      
+
       // Speech start
       mockSpeechRecognition.onspeechstart?.()
       expect(statusCallback).toHaveBeenCalledWith('processing')
-      
+
       // End
       mockSpeechRecognition.onend?.()
       expect(statusCallback).toHaveBeenCalledWith('idle')
@@ -200,7 +200,7 @@ describe.skip('SpeechRecognitionService', () => {
   describe('getSupportedLanguages', () => {
     it('should return array of supported languages', () => {
       const languages = SpeechRecognitionService.getSupportedLanguages()
-      
+
       expect(languages).toContain('ko-KR')
       expect(languages).toContain('en-US')
       expect(languages).toContain('ja-JP')
@@ -218,7 +218,7 @@ describe.skip('SpeechRecognitionUtils', () => {
         { transcript: 'test2', confidence: 0.8, isFinal: true },
         { transcript: 'test3', confidence: 0.95, isFinal: true }
       ]
-      
+
       const accuracy = SpeechRecognitionUtils.calculateAccuracy(results)
       expect(accuracy).toBeCloseTo(88.33, 1)
     })
@@ -254,23 +254,23 @@ describe.skip('SpeechRecognitionUtils', () => {
         ['워킹', '걷기'],
         ['스터디', '공부']
       ])
-      
+
       const result = SpeechRecognitionUtils.applyCustomDictionary(
         '오늘 런닝하고 스터디했어요',
         dictionary
       )
-      
+
       expect(result).toBe('오늘 달리기하고 공부했어요')
     })
 
     it('should be case insensitive', () => {
       const dictionary = new Map([['HELLO', '안녕']])
-      
+
       const result = SpeechRecognitionUtils.applyCustomDictionary(
         'Hello world',
         dictionary
       )
-      
+
       expect(result).toBe('안녕 world')
     })
   })

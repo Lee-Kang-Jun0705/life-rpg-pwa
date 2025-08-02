@@ -5,25 +5,25 @@ export interface Quest {
   type: 'main' | 'side' | 'daily' | 'weekly' | 'event'
   category: 'battle' | 'collection' | 'exploration' | 'social' | 'achievement'
   status: 'locked' | 'available' | 'in_progress' | 'completed' | 'claimed'
-  
+
   // 퀘스트 요구사항
   requirements: {
     level?: number
     quests?: string[] // 선행 퀘스트 ID
     items?: { itemId: string; quantity: number }[]
   }
-  
+
   // 퀘스트 목표
   objectives: {
     id: string
     description: string
-    type: 'kill' | 'collect' | 'explore' | 'talk' | 'deliver' | 'craft'
-    target?: string // 몬스터 ID, 아이템 ID, NPC ID 등
+    type: 'kill' | 'collect' | 'explore' | 'talk' | 'deliver' | 'craft' | 'dungeon'
+    target?: string // 몬스터 ID, 아이템 ID, NPC ID, 던전 ID 등
     current: number
     required: number
     completed: boolean
   }[]
-  
+
   // 보상
   rewards: {
     exp: number
@@ -32,7 +32,7 @@ export interface Quest {
     skills?: string[]
     titles?: string[]
   }
-  
+
   // 추가 정보
   npcId?: string // 퀘스트 제공 NPC
   dialogues?: {

@@ -217,11 +217,11 @@ export interface AchievementState {
 }
 
 // 플레이어 데이터 타입들
-export type PlayerDataValue = 
-  | string 
-  | number 
-  | boolean 
-  | Date 
+export type PlayerDataValue =
+  | string
+  | number
+  | boolean
+  | Date
   | { [key: string]: PlayerDataValue }
   | PlayerDataValue[]
 
@@ -436,48 +436,48 @@ export class LifeRPGDatabase extends Dexie {
   feedReactions!: Table<FeedReaction>
   investments!: Table<Investment>
   characters!: Table<Character>
-  
+
   // 장비 및 인벤토리 테이블들
   userEquipments!: Table<UserEquipment>
   userInventory!: Table<UserInventory>
   userResources!: Table<UserResources>
-  
+
   // 업적 시스템 테이블들
   userAchievements!: Table<UserAchievement>
   achievementStates!: Table<AchievementState>
-  
+
   // 키-값 저장소
   playerData!: Table<PlayerData>
   settings!: Table<Setting>
-  
+
   // 확장 테이블들
   stageProgress!: Table<StageProgressRecord>
   collectionStates!: Table<CollectionState>
   leaderboardEntries!: Table<LeaderboardEntry>
   userScores!: Table<UserScore>
-  
+
   // 에너지 시스템 테이블들
   playerEnergy!: Table<PlayerEnergyData>
   battleTickets!: Table<BattleTicketData>
   energyTransactions!: Table<EnergyTransaction>
   dailyExpLimits!: Table<DailyExpLimit>
-  
+
   // 추가 테이블
   playerStats!: Table<PlayerStats>
   dungeonProgress!: Table<DungeonProgress>
-  
+
   // 스킬 시스템 테이블들
   learnedSkills!: Table<LearnedSkillData>
   quickSlots!: Table<QuickSlotData>
   skillPoints!: Table<SkillPointData>
-  
+
   // 메타데이터 테이블
   metadata!: Table<MetadataEntry>
-  
+
   // 피로도 시스템 테이블들
   fatigue!: Table<FatigueData>
   fatigueActivities!: Table<FatigueActivity>
-  
+
   // 활동 검증 시스템 테이블
   verifications!: Table<ActivityVerification>
 
@@ -520,9 +520,9 @@ export class LifeRPGDatabase extends Dexie {
       this.fatigueActivities = null as unknown as Table<FatigueActivity>
       return
     }
-    
+
     super('LifeRPGDatabase')
-    
+
     // 버전 1: 기본 테이블들
     this.version(1).stores({
       profiles: '++id, userId, email',
@@ -544,7 +544,7 @@ export class LifeRPGDatabase extends Dexie {
       investments: '++id, investorId, recipientId, status, createdAt',
       playerData: 'id, updatedAt'
     })
-    
+
     // 버전 3: stats 테이블 개선 (단순한 스키마 정의만)
     this.version(3).stores({
       profiles: '++id, userId, email',
@@ -828,18 +828,18 @@ export class LifeRPGDatabase extends Dexie {
       verifications: '++id, [userId+activityId], userId, timestamp, type, verified'
     }).upgrade(async trans => {
       // 프로필 마이그레이션: totalExperience와 currentExperience 필드 추가
-      const profiles = await trans.profiles.toArray();
-      const stats = await trans.stats.toArray();
-      
+      const profiles = await trans.profiles.toArray()
+      const stats = await trans.stats.toArray()
+
       for (const profile of profiles) {
         // 해당 사용자의 모든 스탯 경험치 합계 계산
-        const userStats = stats.filter(s => s.userId === profile.userId);
-        const totalExp = userStats.reduce((sum, stat) => sum + stat.experience, 0);
-        
+        const userStats = stats.filter(s => s.userId === profile.userId)
+        const totalExp = userStats.reduce((sum, stat) => sum + stat.experience, 0)
+
         // stat-calculator의 함수를 사용하여 현재 경험치 계산
-        const { calculateLevelFromExperience } = await import('@/lib/utils/stat-calculator');
-        const { level, currentExp } = calculateLevelFromExperience(totalExp);
-        
+        const { calculateLevelFromExperience } = await import('@/lib/utils/stat-calculator')
+        const { level, currentExp } = calculateLevelFromExperience(totalExp)
+
         // 프로필 업데이트
         await trans.profiles.update(profile.id!, {
           totalExperience: totalExp,
@@ -847,7 +847,7 @@ export class LifeRPGDatabase extends Dexie {
           level: level, // 레벨도 재계산하여 업데이트
           dataVersion: 2,
           updatedAt: new Date()
-        });
+        })
       }
     })
   }
@@ -866,7 +866,7 @@ class DummyDatabase extends Dexie {
   characters!: Dexie.Table<Character, number>
   playerData!: Dexie.Table<PlayerData, string>
   settings!: Dexie.Table<Setting, number>
-  
+
   constructor() {
     super('DummyDB')
     // SSR에서는 실제로 사용되지 않으므로 버전만 설정
@@ -875,20 +875,24 @@ class DummyDatabase extends Dexie {
 }
 
 // 데이터베이스 인스턴스 생성 (클라이언트에서만)
-export const db: LifeRPGDatabase = typeof window !== 'undefined' 
-  ? new LifeRPGDatabase() 
+export const db: LifeRPGDatabase = typeof window !== 'undefined'
+  ? new LifeRPGDatabase()
   : new DummyDatabase() as unknown as LifeRPGDatabase
 
 // 데이터베이스 헬퍼 함수들
 export const dbHelpers = {
   // 프로필 관련
   async getProfile(userId: string): Promise<UserProfile | null> {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     return await db.profiles.where('userId').equals(userId).first() || null
   },
 
   async updateProfile(userId: string, updates: Partial<UserProfile>) {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     const profile = await this.getProfile(userId)
     if (profile) {
       return await db.profiles.update(profile.id!, { ...updates, updatedAt: new Date() })
@@ -898,9 +902,11 @@ export const dbHelpers = {
 
   // 스탯 관련
   async getStats(userId: string) {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     let stats = await db.stats.where('userId').equals(userId).toArray()
-    
+
     // 스탯이 없으면 기본 스탯 생성
     if (stats.length === 0) {
       const defaultStats: Omit<Stat, 'id'>[] = [
@@ -937,24 +943,26 @@ export const dbHelpers = {
           updatedAt: new Date()
         }
       ]
-      
+
       for (const stat of defaultStats) {
         await db.stats.add(stat)
       }
-      
+
       // 새로 생성된 스탯들 반환
       stats = await db.stats.where('userId').equals(userId).toArray()
     }
-    
+
     return stats
   },
 
   async saveStat(stat: Stat) {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     // userId와 type으로 기존 스탯 찾기
     const userStats = await db.stats.where('userId').equals(stat.userId).toArray()
     const existing = userStats.find((s) => s.type === stat.type)
-    
+
     if (existing) {
       // 기존 스탯 업데이트
       return await db.stats.update(existing.id!, {
@@ -969,12 +977,14 @@ export const dbHelpers = {
   },
 
   async updateStat(userId: string, type: Stat['type'], experience: number) {
-    if (typeof window === 'undefined' || !db) return null
-    
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
+
     // 해당 사용자의 모든 스탯 가져와서 필터링
     const userStats = await db.stats.where('userId').equals(userId).toArray()
     const stat = userStats.find((s) => s.type === type)
-    
+
     if (stat) {
       const newExperience = stat.experience + experience
       const { level: newLevel } = calculateLevel(newExperience)
@@ -1001,41 +1011,49 @@ export const dbHelpers = {
 
   // 활동 관련
   async addActivity(activity: Omit<Activity, 'id'>) {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     const id = await db.activities.add(activity)
     // 스탯 업데이트
     await this.updateStat(activity.userId, activity.statType, activity.experience)
-    
+
     // 오프라인일 때 동기화 대기열에 추가 - 나중에 구현
     // if (!navigator.onLine) {
     //   // TODO: Implement sync queue
     // }
-    
+
     // 전체 활동 객체 반환
     return { ...activity, id }
   },
 
   async getActivities(userId: string, limit?: number) {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     const query = db.activities
       .where('userId')
       .equals(userId)
       .reverse()
-    
+
     if (limit) {
       return await query.limit(limit).toArray()
     }
-    
+
     return await query.toArray()
   },
 
   async deleteActivity(id: number) {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     return await db.activities.delete(id)
   },
 
   async getRecentActivities(userId: string, limit = 10) {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     return await db.activities
       .where('userId')
       .equals(userId)
@@ -1077,12 +1095,16 @@ export const dbHelpers = {
 
   // 플레이어 데이터 (키-값 저장소)
   async getPlayerData(key: string): Promise<PlayerData | null> {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     return await db.playerData.get(key) || null
   },
 
   async setPlayerData(key: string, data: PlayerDataValue) {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     return await db.playerData.put({
       id: key,
       data,
@@ -1093,11 +1115,13 @@ export const dbHelpers = {
 
   // 초기 데이터 설정
   async initializeUserData(userId: string, email: string, name: string) {
-    if (typeof window === 'undefined' || !db) return null
-    return DatabaseLock.acquire(`init-${userId}`, async () => {
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
+    return DatabaseLock.acquire(`init-${userId}`, async() => {
       // 프로필이 이미 존재하는지 확인
       const existingProfile = await db.profiles.where('userId').equals(userId).first()
-      
+
       if (!existingProfile) {
         // 프로필 생성
         await db.profiles.add({
@@ -1112,16 +1136,16 @@ export const dbHelpers = {
       }
 
       // 초기 스탯 생성 (트랜잭션으로 처리)
-      await db.transaction('rw', db.stats, async () => {
+      await db.transaction('rw', db.stats, async() => {
         const statTypes: Stat['type'][] = ['health', 'learning', 'relationship', 'achievement']
-        
+
         for (const type of statTypes) {
           // 이미 존재하는지 확인
           const existing = await db.stats
             .where('[userId+type]')
             .equals([userId, type])
             .first()
-          
+
           if (!existing) {
             console.log(`📝 Creating stat: ${type}`)
             await db.stats.add({
@@ -1142,30 +1166,32 @@ export const dbHelpers = {
 
   // 중복된 스탯 제거
   async removeDuplicateStats(userId: string) {
-    if (typeof window === 'undefined' || !db) return { removed: 0, remaining: 0 }
-    return db.transaction('rw', db.stats, async () => {
+    if (typeof window === 'undefined' || !db) {
+      return { removed: 0, remaining: 0 }
+    }
+    return db.transaction('rw', db.stats, async() => {
       const stats = await db.stats.where('userId').equals(userId).toArray()
       const uniqueStats = new Map<string, Stat>()
-      
+
       console.log(`🔍 Checking ${stats.length} stats for duplicates...`)
-      
+
       // 각 타입별로 가장 높은 레벨과 경험치를 가진 스탯만 유지
       for (const stat of stats) {
         const existing = uniqueStats.get(stat.type)
-        if (!existing || 
-            stat.level > existing.level || 
+        if (!existing ||
+            stat.level > existing.level ||
             (stat.level === existing.level && stat.experience > existing.experience)) {
           uniqueStats.set(stat.type, stat)
         }
       }
-      
+
       // 중복된 스탯이 있는 경우 처리
       if (stats.length > uniqueStats.size) {
         console.log(`🧹 Removing duplicate stats: ${stats.length} → ${uniqueStats.size}`)
-        
+
         // 모든 스탯 삭제
         await db.stats.where('userId').equals(userId).delete()
-        
+
         // 유니크한 스탯만 다시 저장 (ID 없이)
         const newStats = []
         for (const stat of uniqueStats.values()) {
@@ -1180,11 +1206,11 @@ export const dbHelpers = {
           await db.stats.add(newStat)
           newStats.push(newStat)
         }
-        
+
         console.log(`✅ Duplicates removed. New stats:`, newStats.map(s => s.type))
         return { removed: stats.length - uniqueStats.size, remaining: uniqueStats.size }
       }
-      
+
       console.log('✅ No duplicates found')
       return { removed: 0, remaining: stats.length }
     })
@@ -1192,19 +1218,23 @@ export const dbHelpers = {
 
   // 장비 관련 함수들
   async getUserEquipments(userId: string): Promise<UserEquipment[]> {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     return await db.userEquipments.where('userId').equals(userId).toArray()
   },
 
   // 장비 인벤토리 가져오기 (player.service에서 사용)
   async getEquipmentInventory(userId: string): Promise<EquipmentInventory | null> {
-    if (typeof window === 'undefined' || !db) return null
-    
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
+
     const equipments = await db.userEquipments
       .where('userId')
       .equals(userId)
       .toArray()
-    
+
     if (!equipments.length) {
       return {
         id: 0,
@@ -1216,7 +1246,7 @@ export const dbHelpers = {
         updatedAt: new Date()
       }
     }
-    
+
     // userEquipments를 EquipmentInventory 형식으로 변환
     const items = equipments.map(eq => ({
       id: eq.id!,
@@ -1231,7 +1261,7 @@ export const dbHelpers = {
       obtainedAt: eq.acquiredAt,
       locked: false
     }))
-    
+
     return {
       id: 0,
       userId,
@@ -1244,7 +1274,9 @@ export const dbHelpers = {
   },
 
   async getEquippedItems(userId: string): Promise<UserEquipment[]> {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     return await db.userEquipments
       .where('userId')
       .equals(userId)
@@ -1253,44 +1285,54 @@ export const dbHelpers = {
   },
 
   async equipItem(userId: string, equipmentId: string, slot?: string): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const equipment = await db.userEquipments
       .where({ userId, equipmentId })
       .first()
-    
-    if (!equipment) return false
-    
+
+    if (!equipment) {
+      return false
+    }
+
     await db.userEquipments.update(equipment.id!, {
       isEquipped: true,
       slot: slot,
       updatedAt: new Date()
     })
-    
+
     return true
   },
 
   async unequipItem(userId: string, equipmentId: string): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const equipment = await db.userEquipments
       .where({ userId, equipmentId })
       .first()
-    
-    if (!equipment) return false
-    
+
+    if (!equipment) {
+      return false
+    }
+
     await db.userEquipments.update(equipment.id!, {
       isEquipped: false,
       slot: undefined,
       updatedAt: new Date()
     })
-    
+
     return true
   },
 
   async addEquipmentToInventory(userId: string, equipmentId: string, type: string, rarity: string): Promise<number | null> {
-    if (typeof window === 'undefined' || !db) return null
-    
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
+
     const equipment: Omit<UserEquipment, 'id'> = {
       userId,
       equipmentId,
@@ -1301,16 +1343,18 @@ export const dbHelpers = {
       acquiredAt: new Date(),
       updatedAt: new Date()
     }
-    
+
     return await db.userEquipments.add(equipment)
   },
 
   // 리소스 관련 함수들
   async getUserResources(userId: string): Promise<UserResources | null> {
-    if (typeof window === 'undefined' || !db) return null
-    
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
+
     let resources = await db.userResources.where('userId').equals(userId).first()
-    
+
     if (!resources) {
       // 기본 리소스 생성
       const defaultResources: Omit<UserResources, 'id'> = {
@@ -1322,76 +1366,92 @@ export const dbHelpers = {
         premiumCurrency: 0,
         updatedAt: new Date()
       }
-      
+
       await db.userResources.add(defaultResources)
       resources = await db.userResources.where('userId').equals(userId).first()
     }
-    
+
     return resources || null
   },
 
   async updateUserResources(userId: string, updates: Partial<UserResources>): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const resources = await this.getUserResources(userId)
-    if (!resources) return false
-    
+    if (!resources) {
+      return false
+    }
+
     await db.userResources.update(resources.id!, {
       ...updates,
       updatedAt: new Date()
     })
-    
+
     return true
   },
 
   async spendGold(userId: string, amount: number): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const resources = await this.getUserResources(userId)
-    if (!resources || resources.gold < amount) return false
-    
+    if (!resources || resources.gold < amount) {
+      return false
+    }
+
     await this.updateUserResources(userId, {
       gold: resources.gold - amount
     })
-    
+
     return true
   },
 
   async addGold(userId: string, amount: number): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const resources = await this.getUserResources(userId)
-    if (!resources) return false
-    
+    if (!resources) {
+      return false
+    }
+
     await this.updateUserResources(userId, {
       gold: resources.gold + amount
     })
-    
+
     return true
   },
 
   // 인벤토리 관련 함수들
   async getInventoryItems(userId: string, itemType?: string): Promise<UserInventory[]> {
-    if (typeof window === 'undefined' || !db) return []
-    
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
+
     if (itemType) {
       return await db.userInventory
         .where(['userId', 'itemType'])
         .equals([userId, itemType])
         .toArray()
     }
-    
+
     return await db.userInventory.where('userId').equals(userId).toArray()
   },
 
-  async addInventoryItem(userId: string, itemType: string, itemId: string, quantity: number = 1): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+  async addInventoryItem(userId: string, itemType: string, itemId: string, quantity = 1): Promise<boolean> {
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const existingItem = await db.userInventory
       .where(['userId', 'itemId'])
       .equals([userId, itemId])
       .first()
-    
+
     if (existingItem) {
       await db.userInventory.update(existingItem.id!, {
         quantity: existingItem.quantity + quantity,
@@ -1407,20 +1467,24 @@ export const dbHelpers = {
       }
       await db.userInventory.add(newItem)
     }
-    
+
     return true
   },
 
-  async removeInventoryItem(userId: string, itemId: string, quantity: number = 1): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+  async removeInventoryItem(userId: string, itemId: string, quantity = 1): Promise<boolean> {
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const item = await db.userInventory
       .where(['userId', 'itemId'])
       .equals([userId, itemId])
       .first()
-    
-    if (!item || item.quantity < quantity) return false
-    
+
+    if (!item || item.quantity < quantity) {
+      return false
+    }
+
     if (item.quantity === quantity) {
       await db.userInventory.delete(item.id!)
     } else {
@@ -1429,19 +1493,23 @@ export const dbHelpers = {
         updatedAt: new Date()
       })
     }
-    
+
     return true
   },
 
   // 업적 관련 함수들
   async getUserAchievements(userId: string): Promise<UserAchievement[]> {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     return await db.userAchievements.where('userId').equals(userId).toArray()
   },
 
   async updateAchievementProgress(userId: string, achievementId: string, progress: number): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const achievement = await db.userAchievements
       .where(['userId', 'achievementId'])
       .equals([userId, achievementId])
@@ -1462,13 +1530,15 @@ export const dbHelpers = {
       }
       await db.userAchievements.add(newAchievement)
     }
-    
+
     return true
   },
 
   async completeAchievement(userId: string, achievementId: string): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const achievement = await db.userAchievements
       .where(['userId', 'achievementId'])
       .equals([userId, achievementId])
@@ -1491,13 +1561,15 @@ export const dbHelpers = {
       }
       await db.userAchievements.add(newAchievement)
     }
-    
+
     return true
   },
 
   async claimAchievementReward(userId: string, achievementId: string): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const achievement = await db.userAchievements
       .where(['userId', 'achievementId'])
       .equals([userId, achievementId])
@@ -1510,15 +1582,17 @@ export const dbHelpers = {
       })
       return true
     }
-    
+
     return false
   },
 
   async saveAchievementState(userId: string, stateData: AchievementStateData): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const existing = await db.achievementStates.where('userId').equals(userId).first()
-    
+
     if (existing) {
       await db.achievementStates.update(existing.id!, {
         stateData: JSON.stringify(stateData),
@@ -1532,15 +1606,17 @@ export const dbHelpers = {
       }
       await db.achievementStates.add(newState)
     }
-    
+
     return true
   },
 
   async loadAchievementState(userId: string): Promise<AchievementStateData | null> {
-    if (typeof window === 'undefined' || !db) return null
-    
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
+
     const state = await db.achievementStates.where('userId').equals(userId).first()
-    
+
     if (state) {
       try {
         return JSON.parse(state.stateData)
@@ -1549,13 +1625,15 @@ export const dbHelpers = {
         return null
       }
     }
-    
+
     return null
   },
 
   // 스테이지 진행상황 관련 함수들
   async getStageProgress(userId: string, dungeonId: string, stageId: string): Promise<StageProgressRecord | null> {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     return await db.stageProgress
       .where(['userId', 'dungeonId', 'stageId'])
       .equals([userId, dungeonId, stageId])
@@ -1563,10 +1641,12 @@ export const dbHelpers = {
   },
 
   async updateStageProgress(userId: string, dungeonId: string, stageId: string, updates: Partial<StageProgressRecord>): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const existing = await this.getStageProgress(userId, dungeonId, stageId)
-    
+
     if (existing && existing.id) {
       await db.stageProgress.update(existing.id, {
         ...updates,
@@ -1590,33 +1670,37 @@ export const dbHelpers = {
       }
       await db.stageProgress.add(newProgress)
     }
-    
+
     return true
   },
 
   async getAllStageProgress(userId: string, dungeonId?: string): Promise<StageProgressRecord[]> {
-    if (typeof window === 'undefined' || !db) return []
-    
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
+
     if (dungeonId) {
       return await db.stageProgress
         .where(['userId', 'dungeonId'])
         .equals([userId, dungeonId])
         .toArray()
     }
-    
+
     return await db.stageProgress.where('userId').equals(userId).toArray()
   },
 
   // 컬렉션 관련 함수들
   async saveCollectionState(userId: string, state: CollectionStateData): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const type = state.monsters ? 'monster' : 'item'
     const existing = await db.collectionStates
       .where(['userId', 'type'])
       .equals([userId, type])
       .first()
-    
+
     if (existing && existing.id) {
       await db.collectionStates.update(existing.id, {
         stateData: JSON.stringify(state),
@@ -1631,18 +1715,20 @@ export const dbHelpers = {
       }
       await db.collectionStates.add(newState)
     }
-    
+
     return true
   },
 
   async loadCollectionState(userId: string, type: 'monster' | 'item'): Promise<CollectionStateData | null> {
-    if (typeof window === 'undefined' || !db) return null
-    
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
+
     const state = await db.collectionStates
       .where(['userId', 'type'])
       .equals([userId, type])
       .first()
-    
+
     if (state) {
       try {
         return JSON.parse(state.stateData)
@@ -1651,19 +1737,21 @@ export const dbHelpers = {
         return null
       }
     }
-    
+
     return null
   },
 
   // 리더보드 관련 함수들
   async updateUserScore(userId: string, category: string, scoreIncrease: number): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const existing = await db.userScores
       .where(['userId', 'category'])
       .equals([userId, category])
       .first()
-    
+
     if (existing && existing.id) {
       await db.userScores.update(existing.id, {
         totalScore: existing.totalScore + scoreIncrease,
@@ -1678,24 +1766,28 @@ export const dbHelpers = {
       }
       await db.userScores.add(newScore)
     }
-    
+
     return true
   },
 
   async getUserScore(userId: string, category: string): Promise<number> {
-    if (typeof window === 'undefined' || !db) return 0
-    
+    if (typeof window === 'undefined' || !db) {
+      return 0
+    }
+
     const score = await db.userScores
       .where(['userId', 'category'])
       .equals([userId, category])
       .first()
-    
+
     return score?.totalScore || 0
   },
 
-  async getLeaderboard(category: string, limit: number = 100): Promise<LeaderboardEntry[]> {
-    if (typeof window === 'undefined' || !db) return []
-    
+  async getLeaderboard(category: string, limit = 100): Promise<LeaderboardEntry[]> {
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
+
     return await db.leaderboardEntries
       .where('category')
       .equals(category)
@@ -1705,13 +1797,15 @@ export const dbHelpers = {
   },
 
   async updateLeaderboardEntry(userId: string, userName: string, category: string, score: number): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const existing = await db.leaderboardEntries
       .where(['userId', 'category'])
       .equals([userId, category])
       .first()
-    
+
     if (existing && existing.id) {
       await db.leaderboardEntries.update(existing.id, {
         userName,
@@ -1729,21 +1823,23 @@ export const dbHelpers = {
       }
       await db.leaderboardEntries.add(newEntry)
     }
-    
+
     return true
   },
 
   // 리더보드 데이터 가져오기 (leaderboard-service에서 사용)
-  async getLeaderboardData(category: string, timeFrame: string, limit: number = 20): Promise<LeaderboardEntry[]> {
-    if (typeof window === 'undefined' || !db) return []
-    
+  async getLeaderboardData(category: string, timeFrame: string, limit = 20): Promise<LeaderboardEntry[]> {
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
+
     // 간단한 구현 - 실제로는 timeFrame에 따라 필터링 필요
     const entries = await db.leaderboardEntries
       .where('category')
       .equals(category)
       .reverse()
       .sortBy('score')
-    
+
     return entries.slice(0, limit).map((entry, index) => ({
       userId: entry.userId,
       userName: entry.userName,
@@ -1759,12 +1855,14 @@ export const dbHelpers = {
     activities: Activity[]
     totalScore: number
   }> {
-    if (typeof window === 'undefined' || !db) return { stats: [], activities: [], totalScore: 0 }
-    
+    if (typeof window === 'undefined' || !db) {
+      return { stats: [], activities: [], totalScore: 0 }
+    }
+
     const stats = await this.getStats(userId)
     const activities = await this.getRecentActivities(userId)
     const totalScore = stats.reduce((sum, stat) => sum + stat.experience, 0)
-    
+
     return {
       stats: stats.map(stat => ({
         statType: stat.type,
@@ -1778,16 +1876,20 @@ export const dbHelpers = {
 
   // dailyExpLimits 헬퍼 함수
   async checkDailyLimit(userId: string, statType: StatType, requestedExp: number): Promise<number> {
-    if (typeof window === 'undefined' || !db) return requestedExp
-    
+    if (typeof window === 'undefined' || !db) {
+      return requestedExp
+    }
+
     // 간단한 구현 - 실제로는 일일 제한 체크 필요
     return requestedExp
   },
 
   // 던전 스테이지 진행상황 조회 (dungeon-service에서 사용)
   async getDungeonStageProgress(userId: string, dungeonId: string): Promise<StageProgressRecord[]> {
-    if (typeof window === 'undefined' || !db) return []
-    
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
+
     return await db.stageProgress
       .where(['userId', 'dungeonId'])
       .equals([userId, dungeonId])
@@ -1796,12 +1898,16 @@ export const dbHelpers = {
 
   // 스킬 관련 함수들
   async getLearnedSkills(userId: string): Promise<LearnedSkillData[]> {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     return await db.learnedSkills.where('userId').equals(userId).toArray()
   },
 
   async getLearnedSkill(userId: string, skillId: string): Promise<LearnedSkillData | null> {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     return await db.learnedSkills
       .where(['userId', 'skillId'])
       .equals([userId, skillId])
@@ -1809,13 +1915,15 @@ export const dbHelpers = {
   },
 
   async saveLearnedSkill(skill: LearnedSkillData): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const existing = await db.learnedSkills
       .where(['userId', 'skillId'])
       .equals([skill.userId, skill.skillId])
       .first()
-    
+
     if (existing && existing.id) {
       await db.learnedSkills.update(existing.id, {
         ...skill,
@@ -1824,39 +1932,45 @@ export const dbHelpers = {
     } else {
       await db.learnedSkills.add(skill)
     }
-    
+
     return true
   },
 
   async deleteLearnedSkill(userId: string, skillId: string): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const skill = await db.learnedSkills
       .where(['userId', 'skillId'])
       .equals([userId, skillId])
       .first()
-    
+
     if (skill && skill.id) {
       await db.learnedSkills.delete(skill.id)
       return true
     }
-    
+
     return false
   },
 
   async getQuickSlots(userId: string): Promise<QuickSlotData[]> {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     return await db.quickSlots.where('userId').equals(userId).toArray()
   },
 
   async saveQuickSlot(slot: QuickSlotData): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const existing = await db.quickSlots
       .where(['userId', 'slot'])
       .equals([slot.userId, slot.slot])
       .first()
-    
+
     if (existing && existing.id) {
       await db.quickSlots.update(existing.id, {
         ...slot,
@@ -1869,18 +1983,20 @@ export const dbHelpers = {
         updatedAt: new Date()
       })
     }
-    
+
     return true
   },
 
   async clearQuickSlot(userId: string, slotNumber: number): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const slot = await db.quickSlots
       .where(['userId', 'slot'])
       .equals([userId, slotNumber])
       .first()
-    
+
     if (slot && slot.id) {
       await db.quickSlots.update(slot.id, {
         skillId: undefined,
@@ -1888,20 +2004,24 @@ export const dbHelpers = {
       })
       return true
     }
-    
+
     return false
   },
 
   async getSkillPoints(userId: string): Promise<SkillPointData | null> {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     return await db.skillPoints.where('userId').equals(userId).first() || null
   },
 
   async saveSkillPoints(points: SkillPointData): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const existing = await db.skillPoints.where('userId').equals(points.userId).first()
-    
+
     if (existing && existing.id) {
       await db.skillPoints.update(existing.id, {
         ...points,
@@ -1914,15 +2034,17 @@ export const dbHelpers = {
         updatedAt: new Date()
       })
     }
-    
+
     return true
   },
 
   async addSkillPoints(userId: string, amount: number): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const current = await this.getSkillPoints(userId)
-    
+
     if (current) {
       return await this.saveSkillPoints({
         ...current,
@@ -1941,7 +2063,9 @@ export const dbHelpers = {
 
   // 던전 진행상황 관련 함수들
   async getDungeonProgress(userId: string, dungeonId: string): Promise<DungeonProgress | null> {
-    if (typeof window === 'undefined' || !db) return null
+    if (typeof window === 'undefined' || !db) {
+      return null
+    }
     return await db.dungeonProgress
       .where(['userId', 'dungeonId'])
       .equals([userId, dungeonId])
@@ -1949,13 +2073,17 @@ export const dbHelpers = {
   },
 
   async getAllDungeonProgress(userId: string): Promise<DungeonProgress[]> {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     return await db.dungeonProgress.where('userId').equals(userId).toArray()
   },
 
   async createDungeonProgress(progress: DungeonProgress): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     try {
       await db.dungeonProgress.add(progress)
       return true
@@ -1970,13 +2098,15 @@ export const dbHelpers = {
     dungeonId: string,
     updates: Partial<DungeonProgress>
   ): Promise<boolean> {
-    if (typeof window === 'undefined' || !db) return false
-    
+    if (typeof window === 'undefined' || !db) {
+      return false
+    }
+
     const existing = await db.dungeonProgress
       .where(['userId', 'dungeonId'])
       .equals([userId, dungeonId])
       .first()
-    
+
     if (existing && existing.id) {
       await db.dungeonProgress.update(existing.id, {
         ...updates,
@@ -1984,12 +2114,14 @@ export const dbHelpers = {
       })
       return true
     }
-    
+
     return false
   },
 
   async getCompletedDungeons(userId: string): Promise<DungeonProgress[]> {
-    if (typeof window === 'undefined' || !db) return []
+    if (typeof window === 'undefined' || !db) {
+      return []
+    }
     return await db.dungeonProgress
       .where('userId')
       .equals(userId)

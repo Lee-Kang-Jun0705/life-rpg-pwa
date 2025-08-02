@@ -17,7 +17,7 @@ export default function CollectionPage() {
   const [collectionState, setCollectionState] = useState<CollectionState | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'monsters' | 'rewards' | 'achievements'>('monsters')
-  
+
   // 필터 및 정렬
   const [filter, setFilter] = useState<CollectionFilter>({})
   const [sortBy, setSortBy] = useState<CollectionSortOption>('id')
@@ -26,11 +26,11 @@ export default function CollectionPage() {
 
   const collectionService = CollectionService.getInstance()
 
-  const loadCollectionData = useCallback(async () => {
+  const loadCollectionData = useCallback(async() => {
     try {
       setIsLoading(true)
       const state = await collectionService.initializeCollection(GAME_CONFIG.DEFAULT_USER_ID)
-      
+
       // 임시로 일부 몬스터 발견/처치 상태 설정
       if (state.entries['slime']) {
         state.entries['slime'].isDiscovered = true
@@ -44,7 +44,7 @@ export default function CollectionPage() {
       if (state.entries['wolf']) {
         state.entries['wolf'].isDiscovered = true
       }
-      
+
       setCollectionState(state)
     } catch (error) {
       console.error('Failed to load collection data:', error)
@@ -157,7 +157,7 @@ export default function CollectionPage() {
                     <Filter className="w-4 h-4" />
                     필터
                   </button>
-                  
+
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as CollectionSortOption)}
@@ -252,8 +252,10 @@ export default function CollectionPage() {
               {filteredMonsters.map((entry, index) => {
                 const monster = MONSTERS[entry.monsterId]
                 const lore = MONSTER_LORE[entry.monsterId]
-                
-                if (!monster) return null
+
+                if (!monster) {
+                  return null
+                }
 
                 return (
                   <motion.div
@@ -276,7 +278,7 @@ export default function CollectionPage() {
 
         {/* 보상 탭 */}
         {activeTab === 'rewards' && (
-          <CollectionRewards 
+          <CollectionRewards
             categories={collectionState.categories}
             entries={collectionState.entries}
           />

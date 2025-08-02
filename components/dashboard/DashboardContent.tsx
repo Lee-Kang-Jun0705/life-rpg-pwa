@@ -32,7 +32,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
       </SectionErrorBoundary>
 
       {/* 스탯 버튼들 */}
-      <StatsGrid 
+      <StatsGrid
         statTypes={STAT_TYPES}
         stats={stats}
         isProcessing={isProcessing}

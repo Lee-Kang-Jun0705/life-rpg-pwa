@@ -13,11 +13,11 @@ export const ActivityFeed = React.memo(function ActivityFeed({ totalActivities }
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const loadActivities = async () => {
+    const loadActivities = async() => {
       try {
         setIsLoading(true)
         const allActivities = await dbHelpers.getActivities(GAME_CONFIG.DEFAULT_USER_ID, 10)
-        
+
         setActivities(allActivities)
       } catch (error) {
         console.error('Failed to load activities:', error)
@@ -41,9 +41,15 @@ export const ActivityFeed = React.memo(function ActivityFeed({ totalActivities }
     const hours = Math.floor(diff / 3600000)
     const days = Math.floor(diff / 86400000)
 
-    if (minutes < 1) return '방금'
-    if (minutes < 60) return `${minutes}분 전`
-    if (hours < 24) return `${hours}시간 전`
+    if (minutes < 1) {
+      return '방금'
+    }
+    if (minutes < 60) {
+      return `${minutes}분 전`
+    }
+    if (hours < 24) {
+      return `${hours}시간 전`
+    }
     return `${days}일 전`
   }
 
@@ -57,7 +63,7 @@ export const ActivityFeed = React.memo(function ActivityFeed({ totalActivities }
         <span className="text-2xl">📋</span>
         <h3 className="text-base font-bold text-gray-700 dark:text-gray-300">최근 활동</h3>
       </div>
-      
+
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
         <AnimatePresence>
           {activities.map((activity, index) => (

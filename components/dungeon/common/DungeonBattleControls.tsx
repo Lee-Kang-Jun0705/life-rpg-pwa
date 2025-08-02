@@ -1,10 +1,10 @@
 'use client'
 
 import React from 'react'
-import { 
-  Play, 
-  Pause, 
-  FastForward, 
+import {
+  Play,
+  Pause,
+  FastForward,
   RotateCcw,
   SkipForward
 } from 'lucide-react'

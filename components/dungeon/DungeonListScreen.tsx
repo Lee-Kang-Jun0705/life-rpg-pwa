@@ -28,7 +28,7 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
     Promise.all([loadDungeons(), loadPlayerLevel()])
   }, [userId])
 
-  const loadPlayerLevel = async () => {
+  const loadPlayerLevel = async() => {
     const defaultUserId = GAME_CONFIG.DEFAULT_USER_ID
     try {
       const stats = await dbHelpers.getStats(defaultUserId)
@@ -42,12 +42,12 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
     }
   }
 
-  const loadDungeons = async () => {
+  const loadDungeons = async() => {
     try {
       // 로딩을 나중에 설정하여 초기 렌더링 개선
       const allDungeons = await dungeonService.getDungeons()
       setDungeons(allDungeons)
-      
+
       // 진행 상황은 비동기로 나중에 로드
       if (userId) {
         loadDungeonProgress(allDungeons)
@@ -61,11 +61,11 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
     }
   }
 
-  const loadDungeonProgress = async (dungeons: Dungeon[]) => {
+  const loadDungeonProgress = async(dungeons: Dungeon[]) => {
     try {
       const progressData = await dbHelpers.getAllDungeonProgress(userId)
       const progressMap = new Map<string, DungeonProgress>()
-      
+
       progressData.forEach(dp => {
         progressMap.set(dp.dungeonId, {
           dungeonId: dp.dungeonId,
@@ -90,7 +90,7 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
           isCleared: dp.status === 'completed'
         })
       })
-      
+
       setProgress(progressMap)
     } catch (error) {
       console.error('Failed to load dungeon progress:', error)
@@ -99,7 +99,9 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
 
 
   const filteredDungeons = dungeons.filter(dungeon => {
-    if (selectedCategory === 'all') return true
+    if (selectedCategory === 'all') {
+      return true
+    }
     return dungeon.type === selectedCategory
   })
 
@@ -109,7 +111,7 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4" />
           <p className="text-gray-400">던전 목록을 불러오는 중...</p>
         </div>
       </div>
@@ -119,7 +121,7 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
   return (
     <div className="min-h-screen">
       {/* 초컴팩트 헤더와 카테고리 필터 한 줄 통합 */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-7xl mx-auto px-3 py-1.5 md:py-2"
@@ -148,11 +150,11 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
                 }`}
               >
                 {category === 'all' ? '전체' :
-                 category === 'story' ? '스토리' :
-                 category === 'daily' ? '일일' :
-                 category === 'raid' ? '레이드' :
-                 category === 'special' ? '특별' :
-                 category === 'challenge' ? '도전' : category}
+                  category === 'story' ? '스토리' :
+                    category === 'daily' ? '일일' :
+                      category === 'raid' ? '레이드' :
+                        category === 'special' ? '특별' :
+                          category === 'challenge' ? '도전' : category}
               </motion.button>
             ))}
           </div>
@@ -161,7 +163,7 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
 
       {/* 개선된 던전 목록 */}
       <div className="mt-2">
-        <ImprovedDungeonList 
+        <ImprovedDungeonList
           dungeons={filteredDungeons}
           onSelectDungeon={onSelectDungeon}
           playerLevel={playerLevel}
@@ -170,15 +172,15 @@ export function DungeonListScreen({ onSelectDungeon, userId }: DungeonListScreen
 
       {/* 빈 상태 */}
       {filteredDungeons.length === 0 && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="text-center py-10 md:py-20"
         >
           <Shield className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-2 md:mb-4 text-gray-600" />
           <p className="text-sm md:text-base text-gray-400">
-            {selectedCategory === 'all' 
-              ? '던전이 없습니다.' 
+            {selectedCategory === 'all'
+              ? '던전이 없습니다.'
               : '해당 카테고리에 던전이 없습니다.'}
           </p>
         </motion.div>

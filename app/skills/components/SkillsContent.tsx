@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation'
 
 export default function SkillsContent() {
   const router = useRouter()
-  
+
   return (
     <GameLayout>
-      <SkillScreen 
+      <SkillScreen
         onClose={() => router.back()}
       />
     </GameLayout>

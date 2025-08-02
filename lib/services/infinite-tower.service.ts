@@ -3,9 +3,9 @@
  * 끝없이 올라가며 점점 강해지는 적들과 싸우는 엔드게임 컨텐츠
  */
 
-import type { 
-  InfiniteTowerProgress, 
-  TowerBuff, 
+import type {
+  InfiniteTowerProgress,
+  TowerBuff,
   TowerMonsterModifier,
   TowerFloorReward,
   InfiniteTowerRanking,
@@ -19,6 +19,14 @@ import { dbHelpers } from '@/lib/database/client'
 import { EXTENDED_MONSTER_DATABASE } from '@/lib/battle/monster-database-extended'
 import { DUNGEON_ITEMS } from '@/lib/dungeon/dungeon-data'
 
+// 타워 마일스톤 보상 타입
+interface TowerMilestoneReward {
+  id: string
+  name: string
+  type: 'badge' | 'item' | 'gold' | 'exp'
+  value?: number
+}
+
 // 무한의 탑 설정
 const TOWER_CONFIG = {
   CHECKPOINT_INTERVAL: 10, // 10층마다 체크포인트
@@ -26,7 +34,7 @@ const TOWER_CONFIG = {
   REST_FLOOR_INTERVAL: 25, // 25층마다 휴식
   BOSS_FLOOR_INTERVAL: 10, // 10층마다 보스
   SPECIAL_BOSS_INTERVAL: 50, // 50층마다 특별 보스
-  
+
   // 난이도 증가율
   DIFFICULTY_SCALING: {
     HP_PER_FLOOR: 0.1, // 층당 10% HP 증가
@@ -34,16 +42,16 @@ const TOWER_CONFIG = {
     DEFENSE_PER_FLOOR: 0.05, // 층당 5% 방어력 증가
     SPEED_PER_FLOOR: 0.02, // 층당 2% 속도 증가
     EXP_PER_FLOOR: 0.15, // 층당 15% 경험치 증가
-    GOLD_PER_FLOOR: 0.2, // 층당 20% 골드 증가
+    GOLD_PER_FLOOR: 0.2 // 층당 20% 골드 증가
   },
-  
+
   // 특수 능력 해금 층수
   SPECIAL_ABILITIES: {
     20: ['buff_self'], // 20층부터 버프 능력
     40: ['heal_self'], // 40층부터 회복 능력
     60: ['summon_minions'], // 60층부터 소환 능력
     80: ['area_attack'], // 80층부터 광역 공격
-    100: ['instant_death'], // 100층부터 즉사 공격
+    100: ['instant_death'] // 100층부터 즉사 공격
   }
 }
 
@@ -116,7 +124,7 @@ export class InfiniteTowerService {
   /**
    * 무한의 탑 진입
    */
-  async enterTower(userId: string, fromCheckpoint: boolean = false): Promise<{
+  async enterTower(userId: string, fromCheckpoint = false): Promise<{
     success: boolean
     floor: number
     error?: string
@@ -124,7 +132,7 @@ export class InfiniteTowerService {
     try {
       // 진행 상황 가져오기 또는 생성
       let progress = this.towerProgress.get(userId)
-      
+
       if (!progress) {
         progress = await this.loadOrCreateProgress(userId)
       }
@@ -161,17 +169,17 @@ export class InfiniteTowerService {
   generateFloorMonsters(floor: number): MonsterData[] {
     const monsters: MonsterData[] = []
     const modifier = this.calculateModifier(floor)
-    
+
     // 보스 층
     if (floor % TOWER_CONFIG.BOSS_FLOOR_INTERVAL === 0) {
       const bossMonster = this.generateBossMonster(floor, modifier)
       monsters.push(bossMonster)
-      
+
       // 특별 보스 층은 보스만
       if (floor % TOWER_CONFIG.SPECIAL_BOSS_INTERVAL === 0) {
         return monsters
       }
-      
+
       // 일반 보스 층은 부하들도 추가
       const minionCount = Math.min(2 + Math.floor(floor / 20), 5)
       for (let i = 0; i < minionCount; i++) {
@@ -192,21 +200,21 @@ export class InfiniteTowerService {
    * 일반 몬스터 생성
    */
   private generateMonster(
-    floor: number, 
+    floor: number,
     modifier: TowerMonsterModifier,
     type: 'normal' | 'minion' = 'normal'
   ): MonsterData {
     // 층수에 따른 몬스터 풀 결정
     const monsterPool = this.getMonsterPool(floor)
     const baseMonster = monsterPool[Math.floor(Math.random() * monsterPool.length)]
-    
+
     // 복사본 생성
     const monsterCopy = JSON.parse(JSON.stringify(baseMonster))
-    
+
     // 스탯 적용
     const multiplier = type === 'minion' ? 0.7 : 1
     const newHp = Math.floor(monsterCopy.stats.hp * modifier.hpMultiplier * multiplier)
-    
+
     // 새로운 몬스터 객체 생성
     const monster: MonsterData = {
       ...monsterCopy,
@@ -221,11 +229,11 @@ export class InfiniteTowerService {
         speed: Math.floor(monsterCopy.stats.speed * modifier.speedMultiplier)
       }
     }
-    
+
     // 특수 능력 추가
     // TODO: 읽기 전용 객체 수정 문제 해결 필요
     // this.addSpecialAbilities(monster, floor)
-    
+
     return monster
   }
 
@@ -236,13 +244,13 @@ export class InfiniteTowerService {
     // 기본 보스 선택
     const bossPool = this.getBossPool(floor)
     const baseBoss = bossPool[Math.floor(Math.random() * bossPool.length)]
-    
+
     const bossCopy = JSON.parse(JSON.stringify(baseBoss))
-    
+
     // 보스 스탯 보정
     const bossMultiplier = floor % TOWER_CONFIG.SPECIAL_BOSS_INTERVAL === 0 ? 3 : 2
     const newHp = Math.floor(bossCopy.stats.hp * modifier.hpMultiplier * bossMultiplier)
-    
+
     const boss: MonsterData = {
       ...bossCopy,
       id: `${bossCopy.id}_floor${floor}_boss`,
@@ -257,12 +265,12 @@ export class InfiniteTowerService {
         speed: Math.floor(bossCopy.stats.speed * modifier.speedMultiplier)
       }
     }
-    
+
     // 보스 특수 능력
     // TODO: 읽기 전용 객체 수정 문제 해결 필요
     // this.addSpecialAbilities(boss, floor)
     // this.addBossAbilities(boss, floor)
-    
+
     return boss
   }
 
@@ -271,7 +279,7 @@ export class InfiniteTowerService {
    */
   private getMonsterPool(floor: number): MonsterData[] {
     const allMonsters = Object.values(EXTENDED_MONSTER_DATABASE)
-    
+
     if (floor <= 10) {
       return allMonsters.filter(m => m.stats.level <= 10)
     } else if (floor <= 30) {
@@ -291,7 +299,7 @@ export class InfiniteTowerService {
   private getBossPool(floor: number): MonsterData[] {
     const allMonsters = Object.values(EXTENDED_MONSTER_DATABASE)
     const bosses = allMonsters.filter(m => m.tier === 'boss' || m.tier === 'elite')
-    
+
     if (floor <= 20) {
       return bosses.filter(m => m.stats.level <= 20)
     } else if (floor <= 50) {
@@ -358,7 +366,7 @@ export class InfiniteTowerService {
     //     element: 'neutral'
     //   })
     // }
-    
+
     // if (floor >= 100) {
     //   boss.skills.push({
     //     id: 'boss_instant_death',
@@ -384,7 +392,7 @@ export class InfiniteTowerService {
    */
   private calculateModifier(floor: number): TowerMonsterModifier {
     const scaling = TOWER_CONFIG.DIFFICULTY_SCALING
-    
+
     return {
       floor,
       hpMultiplier: 1 + (floor * scaling.HP_PER_FLOOR),
@@ -401,7 +409,7 @@ export class InfiniteTowerService {
    * 층 클리어 처리
    */
   async clearFloor(
-    userId: string, 
+    userId: string,
     floor: number,
     clearData: {
       clearTime: number
@@ -425,7 +433,7 @@ export class InfiniteTowerService {
     progress.totalMonstersDefeated += clearData.monstersDefeated
     progress.totalTimeSpent += clearData.clearTime
     progress.stats.totalFloorsCleared++
-    
+
     // 최고 기록 갱신
     if (floor > progress.highestFloor) {
       progress.highestFloor = floor
@@ -462,7 +470,7 @@ export class InfiniteTowerService {
    */
   private calculateReward(floor: number, progress: InfiniteTowerProgress): TowerFloorReward {
     const modifier = this.calculateModifier(floor)
-    
+
     const reward: TowerFloorReward = {
       floor,
       gold: Math.floor(100 * modifier.goldMultiplier),
@@ -525,8 +533,8 @@ export class InfiniteTowerService {
 
     const itemRarity = rarity || (
       floor >= 50 ? 'legendary' :
-      floor >= 25 ? 'epic' :
-      floor >= 10 ? 'rare' : 'common'
+        floor >= 25 ? 'epic' :
+          floor >= 10 ? 'rare' : 'common'
     )
 
     return rarityMap[itemRarity as keyof typeof rarityMap] || DUNGEON_ITEMS['health-potion']
@@ -535,9 +543,9 @@ export class InfiniteTowerService {
   /**
    * 마일스톤 보상 생성
    */
-  private generateMilestoneReward(floor: number): unknown {
+  private generateMilestoneReward(floor: number): TowerMilestoneReward | null {
     // 층별 특별 보상
-    const milestoneRewards: Record<number, any> = {
+    const milestoneRewards: Record<number, TowerMilestoneReward> = {
       10: { id: 'tower-badge-bronze', name: '청동 탑 배지', type: 'badge' },
       25: { id: 'tower-badge-silver', name: '은 탑 배지', type: 'badge' },
       50: { id: 'tower-badge-gold', name: '금 탑 배지', type: 'badge' },
@@ -566,14 +574,18 @@ export class InfiniteTowerService {
    */
   async purchaseBuff(userId: string, buffId: string): Promise<boolean> {
     const progress = this.towerProgress.get(userId)
-    if (!progress) return false
+    if (!progress) {
+      return false
+    }
 
     const buff = TOWER_BUFFS.find(b => b.id === buffId)
-    if (!buff) return false
+    if (!buff) {
+      return false
+    }
 
     // 타워 화폐 확인 및 차감 (임시로 100 고정)
     // TODO: 실제 화폐 시스템 연동
-    
+
     // 버프 추가
     progress.activeBuffs.push({
       ...buff,
@@ -589,7 +601,9 @@ export class InfiniteTowerService {
    */
   async restOnFloor(userId: string): Promise<void> {
     const progress = this.towerProgress.get(userId)
-    if (!progress) return
+    if (!progress) {
+      return
+    }
 
     // HP/MP 완전 회복 처리는 전투 시스템에서
     // 여기서는 진행 상황만 저장
@@ -602,7 +616,7 @@ export class InfiniteTowerService {
   private async updateRanking(userId: string, floor: number): Promise<void> {
     // TODO: 실제 유저 정보 가져오기
     const userName = `Player_${userId}`
-    
+
     const existingRank = this.rankings.findIndex(r => r.userId === userId)
     const rankData: InfiniteTowerRanking = {
       userId,
@@ -620,7 +634,7 @@ export class InfiniteTowerService {
 
     // 최고 층수 기준 정렬
     this.rankings.sort((a, b) => b.highestFloor - a.highestFloor)
-    
+
     // 순위 업데이트
     this.rankings.forEach((rank, index) => {
       rank.rank = index + 1
@@ -632,7 +646,7 @@ export class InfiniteTowerService {
   /**
    * 랭킹 가져오기
    */
-  getRankings(type: 'daily' | 'weekly' | 'all' = 'all', limit: number = 100): InfiniteTowerRanking[] {
+  getRankings(type: 'daily' | 'weekly' | 'all' = 'all', limit = 100): InfiniteTowerRanking[] {
     // TODO: 실제로는 기간별 필터링 필요
     return this.rankings.slice(0, limit)
   }
@@ -648,7 +662,7 @@ export class InfiniteTowerService {
   private async loadOrCreateProgress(userId: string): Promise<InfiniteTowerProgress> {
     // TODO: 실제 DB 로드
     const saved = localStorage.getItem(`tower_progress_${userId}`)
-    
+
     if (saved) {
       const progress = JSON.parse(saved)
       // Map 복원

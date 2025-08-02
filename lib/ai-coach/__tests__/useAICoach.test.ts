@@ -64,9 +64,9 @@ describe('useAICoach', () => {
       analyzeActivityPatterns: jest.fn(),
       generatePersonalizedAdvice: jest.fn()
     }
-    
+
     MockAICoachService.mockImplementation(() => mockServiceInstance)
-    
+
     mockDbHelpers.getStats.mockResolvedValue(mockStats)
     mockServiceInstance.getGrowthChartData.mockResolvedValue(mockGrowthData)
     mockServiceInstance.analyzeGrowth.mockResolvedValue(mockGrowthAnalyses)
@@ -80,7 +80,7 @@ describe('useAICoach', () => {
 
   it('초기 상태에서는 로딩 상태여야 함', () => {
     const { result } = renderHook(() => useAICoach())
-    
+
     expect(result.current.isLoading).toBe(true)
     expect(result.current.error).toBeNull()
     expect(result.current.userStats).toEqual([])
@@ -89,13 +89,13 @@ describe('useAICoach', () => {
     expect(result.current.personalizedAdvice).toEqual([])
   })
 
-  it('데이터 로딩이 성공적으로 완료되어야 함', async () => {
+  it('데이터 로딩이 성공적으로 완료되어야 함', async() => {
     const { result } = renderHook(() => useAICoach())
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
     })
-    
+
     expect(result.current.error).toBeNull()
     expect(result.current.userStats).toEqual(mockStats)
     expect(result.current.growthData).toEqual(mockGrowthData)
@@ -104,13 +104,13 @@ describe('useAICoach', () => {
     expect(result.current.personalizedAdvice).toEqual(mockPersonalizedAdvice)
   })
 
-  it('모든 AI Coach 서비스 메서드가 올바른 인자로 호출되어야 함', async () => {
+  it('모든 AI Coach 서비스 메서드가 올바른 인자로 호출되어야 함', async() => {
     const { result } = renderHook(() => useAICoach())
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
     })
-    
+
     expect(mockDbHelpers.getStats).toHaveBeenCalledWith('local-user')
     expect(mockServiceInstance.getGrowthChartData).toHaveBeenCalledWith('local-user', 30)
     expect(mockServiceInstance.analyzeGrowth).toHaveBeenCalledWith('local-user', mockStats)
@@ -123,95 +123,95 @@ describe('useAICoach', () => {
     )
   })
 
-  it('통계 데이터 로딩 실패 시 에러를 처리해야 함', async () => {
+  it('통계 데이터 로딩 실패 시 에러를 처리해야 함', async() => {
     mockDbHelpers.getStats.mockRejectedValue(new Error('DB 연결 실패'))
-    
+
     const { result } = renderHook(() => useAICoach())
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
     })
-    
+
     expect(result.current.error).toBe('DB 연결 실패')
     expect(result.current.userStats).toEqual([])
   })
 
-  it('성장 차트 데이터 로딩 실패 시 에러를 처리해야 함', async () => {
+  it('성장 차트 데이터 로딩 실패 시 에러를 처리해야 함', async() => {
     mockServiceInstance.getGrowthChartData.mockRejectedValue(new Error('차트 데이터 로딩 실패'))
-    
+
     const { result } = renderHook(() => useAICoach())
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
     })
-    
+
     expect(result.current.error).toBe('차트 데이터 로딩 실패')
     expect(result.current.growthData).toEqual([])
   })
 
-  it('성장 분석 실패 시 에러를 처리해야 함', async () => {
+  it('성장 분석 실패 시 에러를 처리해야 함', async() => {
     mockServiceInstance.analyzeGrowth.mockRejectedValue(new Error('분석 실패'))
-    
+
     const { result } = renderHook(() => useAICoach())
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
     })
-    
+
     expect(result.current.error).toBe('분석 실패')
     expect(result.current.growthAnalyses).toEqual([])
   })
 
-  it('활동 패턴 분석 실패 시 에러를 처리해야 함', async () => {
+  it('활동 패턴 분석 실패 시 에러를 처리해야 함', async() => {
     mockServiceInstance.analyzeActivityPatterns.mockRejectedValue(new Error('패턴 분석 실패'))
-    
+
     const { result } = renderHook(() => useAICoach())
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
     })
-    
+
     expect(result.current.error).toBe('패턴 분석 실패')
     expect(result.current.activityPattern).toBeNull()
   })
 
-  it('맞춤형 조언 생성 실패 시 에러를 처리해야 함', async () => {
+  it('맞춤형 조언 생성 실패 시 에러를 처리해야 함', async() => {
     mockServiceInstance.generatePersonalizedAdvice.mockRejectedValue(new Error('조언 생성 실패'))
-    
+
     const { result } = renderHook(() => useAICoach())
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
     })
-    
+
     expect(result.current.error).toBe('조언 생성 실패')
     expect(result.current.personalizedAdvice).toEqual([])
   })
 
-  it('사용자 통계가 비어있을 때 적절히 처리해야 함', async () => {
+  it('사용자 통계가 비어있을 때 적절히 처리해야 함', async() => {
     mockDbHelpers.getStats.mockResolvedValue([])
-    
+
     const { result } = renderHook(() => useAICoach())
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
     })
-    
+
     expect(result.current.error).toBeNull()
     expect(result.current.userStats).toEqual([])
     // 빈 통계로도 서비스 메서드들이 호출되어야 함
     expect(mockServiceInstance.analyzeGrowth).toHaveBeenCalledWith('local-user', [])
   })
 
-  it('컴포넌트 언마운트 시 정리 작업이 수행되어야 함', async () => {
+  it('컴포넌트 언마운트 시 정리 작업이 수행되어야 함', async() => {
     const { result, unmount } = renderHook(() => useAICoach())
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
     })
-    
+
     unmount()
-    
+
     // 언마운트 후에는 상태 업데이트가 발생하지 않아야 함
     expect(() => unmount()).not.toThrow()
   })

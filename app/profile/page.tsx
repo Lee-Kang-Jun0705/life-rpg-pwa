@@ -13,7 +13,8 @@ import { dbHelpers } from '@/lib/database/client'
 import { GAME_CONFIG } from '@/lib/types/dashboard'
 import { Stat } from '@/lib/types/dashboard'
 import type { Activity } from '@/lib/database/types'
-import { Calendar, TrendingUp, Award, Target, Clock, Flame, Star, Trophy, BookOpen } from 'lucide-react'
+import { Calendar, TrendingUp, Award, Target, Clock, Flame, Star, Trophy, BookOpen, Swords } from 'lucide-react'
+import { dungeonProgressService } from '@/lib/services/dungeon-progress-service'
 
 export default function ProfilePage() {
   const { settings, updateSettings, isLoading } = useSettings()
@@ -28,10 +29,15 @@ export default function ProfilePage() {
   const [statsLoading, setStatsLoading] = useState(false)
   const [activities, setActivities] = useState<Activity[]>([])
   const [joinDate] = useState(new Date('2024-01-01')) // 가입일 (실제로는 DB에서 가져와야 함)
+  const [dungeonStats, setDungeonStats] = useState<{ totalClears: number; totalGold: number; unlockedTitles: string[] }>({
+    totalClears: 0,
+    totalGold: 0,
+    unlockedTitles: []
+  })
 
   // 데이터 로드
   useEffect(() => {
-    const loadData = async () => {
+    const loadData = async() => {
       try {
         const [stats, recentActivities] = await Promise.all([
           dbHelpers.getStats(GAME_CONFIG.DEFAULT_USER_ID),
@@ -39,6 +45,23 @@ export default function ProfilePage() {
         ])
         setUserStats(stats)
         setActivities(recentActivities)
+
+        // 던전 통계 로드
+        const allDungeonProgress = dungeonProgressService.getAllDungeonProgress(GAME_CONFIG.DEFAULT_USER_ID)
+        const dungeonStatistics = dungeonProgressService.getStatistics(GAME_CONFIG.DEFAULT_USER_ID)
+
+        let totalClears = 0
+        let totalGold = 0
+        Object.values(allDungeonProgress).forEach(progress => {
+          totalClears += progress.totalClears
+          totalGold += progress.totalGoldEarned
+        })
+
+        setDungeonStats({
+          totalClears,
+          totalGold,
+          unlockedTitles: dungeonStatistics.unlockedTitles || []
+        })
       } catch (error) {
         console.error('Failed to load data:', error)
       } finally {
@@ -54,37 +77,39 @@ export default function ProfilePage() {
   const totalExp = userStats.reduce((sum, stat) => sum + (stat.experience || 0), 0)
   const totalActivities = userStats.reduce((sum, stat) => sum + (stat.totalActivities || 0), 0)
   const avgDailyActivities = totalActivities / Math.max(totalDays, 1)
-  
+
   // 연속 활동 일수 계산 (간단한 버전)
   const streakDays = calculateStreakDays(activities)
-  
+
   // 주요 마일스톤들
   const milestones = generateMilestones(userStats, activities, joinDate)
 
   function calculateStreakDays(activities: Activity[]): number {
-    if (activities.length === 0) return 0
-    
+    if (activities.length === 0) {
+      return 0
+    }
+
     const today = new Date()
     let streak = 0
-    
+
     // 최근 활동부터 역순으로 확인
     for (let i = 0; i < Math.min(30, activities.length); i++) {
       const activityDate = new Date(activities[i].timestamp)
       const daysDiff = Math.floor((today.getTime() - activityDate.getTime()) / (1000 * 60 * 60 * 24))
-      
+
       if (daysDiff === streak) {
         streak++
       } else {
         break
       }
     }
-    
+
     return streak
   }
 
   function generateMilestones(stats: Stat[], activities: Activity[], joinDate: Date) {
     const milestones = []
-    
+
     // 가입일
     milestones.push({
       date: joinDate,
@@ -93,7 +118,7 @@ export default function ProfilePage() {
       type: 'start',
       icon: '🚀'
     })
-    
+
     // 첫 활동
     if (activities.length > 0) {
       const firstActivity = activities[activities.length - 1]
@@ -105,7 +130,7 @@ export default function ProfilePage() {
         icon: '⭐'
       })
     }
-    
+
     // 레벨 업 마일스톤들
     stats.forEach(stat => {
       if (stat.level >= 5) {
@@ -118,7 +143,7 @@ export default function ProfilePage() {
         })
       }
     })
-    
+
     // 활동 수 마일스톤들
     const activityMilestones = [10, 50, 100, 250, 500, 1000]
     activityMilestones.forEach(milestone => {
@@ -132,11 +157,11 @@ export default function ProfilePage() {
         })
       }
     })
-    
+
     return milestones.sort((a, b) => a.date.getTime() - b.date.getTime())
   }
 
-  const handleSaveProfile = async () => {
+  const handleSaveProfile = async() => {
     await updateSettings({
       profile: {
         ...settings.profile,
@@ -198,7 +223,7 @@ export default function ProfilePage() {
                       <div className="w-full h-full rounded-xl bg-gradient-to-b from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 flex items-center justify-center p-2">
                         <DotCharacter appearance={currentAppearance} size="medium" />
                       </div>
-                      <button 
+                      <button
                         className="absolute -bottom-1 -right-1 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white shadow-lg text-sm"
                         onClick={() => setIsCharacterModalOpen(true)}
                       >
@@ -212,7 +237,7 @@ export default function ProfilePage() {
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                       {settings.profile.email}
                     </p>
-                    
+
                     {settings.profile.bio && (
                       <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                         &ldquo;{settings.profile.bio}&rdquo;
@@ -230,7 +255,7 @@ export default function ProfilePage() {
                       </div>
                     </div>
 
-                    <Button 
+                    <Button
                       onClick={() => setIsEditModalOpen(true)}
                       variant="outline"
                       size="sm"
@@ -265,7 +290,7 @@ export default function ProfilePage() {
                       </div>
                       <span data-testid="user-level" className="text-xl font-bold text-purple-600 dark:text-purple-400">Lv.{totalLevel}</span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                       <div className="flex items-center gap-2">
                         <Star className="w-4 h-4 text-blue-500" />
@@ -273,7 +298,7 @@ export default function ProfilePage() {
                       </div>
                       <span className="text-xl font-bold text-blue-600 dark:text-blue-400">{totalExp.toLocaleString()}</span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                       <div className="flex items-center gap-2">
                         <Target className="w-4 h-4 text-green-500" />
@@ -281,7 +306,7 @@ export default function ProfilePage() {
                       </div>
                       <span className="text-xl font-bold text-green-600 dark:text-green-400">{totalActivities}</span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                       <div className="flex items-center gap-2">
                         <Flame className="w-4 h-4 text-orange-500" />
@@ -290,6 +315,62 @@ export default function ProfilePage() {
                       <span className="text-xl font-bold text-orange-600 dark:text-orange-400">{avgDailyActivities.toFixed(1)}</span>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* 던전 통계 */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.25 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Swords className="w-5 h-5" />
+                    던전 통계
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <Trophy className="w-4 h-4 text-red-500" />
+                        <span className="font-medium">총 클리어</span>
+                      </div>
+                      <span className="text-xl font-bold text-red-600 dark:text-red-400">{dungeonStats.totalClears}회</span>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <Star className="w-4 h-4 text-yellow-500" />
+                        <span className="font-medium">획득 골드</span>
+                      </div>
+                      <span className="text-xl font-bold text-yellow-600 dark:text-yellow-400">{dungeonStats.totalGold.toLocaleString()}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <Award className="w-4 h-4 text-purple-500" />
+                        <span className="font-medium">획득 칭호</span>
+                      </div>
+                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400">{dungeonStats.unlockedTitles.length}개</span>
+                    </div>
+                  </div>
+
+                  {dungeonStats.unlockedTitles.length > 0 && (
+                    <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <h4 className="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">보유 칭호</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {dungeonStats.unlockedTitles.map((title, index) => (
+                          <span key={index} className="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded">
+                            {title}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
@@ -403,7 +484,7 @@ export default function ProfilePage() {
                       </motion.div>
                     ))}
                   </div>
-                  
+
                   {activities.length === 0 && (
                     <div className="text-center py-8 text-gray-500">
                       <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-50" />
@@ -435,37 +516,37 @@ export default function ProfilePage() {
                         🌱 가장 활발한 영역
                       </h4>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {userStats.sort((a, b) => (b.totalActivities || 0) - (a.totalActivities || 0))[0]?.type || 'health'} 스탯에서 
+                        {userStats.sort((a, b) => (b.totalActivities || 0) - (a.totalActivities || 0))[0]?.type || 'health'} 스탯에서
                         가장 많은 활동을 하고 있어요!
                       </p>
                     </div>
-                    
+
                     <div className="p-4 rounded-lg bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20">
                       <h4 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">
                         🚀 성장 속도
                       </h4>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        일평균 {avgDailyActivities.toFixed(1)}회 활동으로 
+                        일평균 {avgDailyActivities.toFixed(1)}회 활동으로
                         꾸준히 성장하고 있어요!
                       </p>
                     </div>
-                    
+
                     <div className="p-4 rounded-lg bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
                       <h4 className="font-semibold text-purple-700 dark:text-purple-300 mb-2">
                         🔥 연속 기록
                       </h4>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {streakDays}일 연속으로 활동 중이에요! 
+                        {streakDays}일 연속으로 활동 중이에요!
                         꾸준함이 힘이에요.
                       </p>
                     </div>
-                    
+
                     <div className="p-4 rounded-lg bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20">
                       <h4 className="font-semibold text-orange-700 dark:text-orange-300 mb-2">
                         ⭐ 다음 목표
                       </h4>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {Math.ceil((totalActivities + 50) / 50) * 50}회 활동까지 
+                        {Math.ceil((totalActivities + 50) / 50) * 50}회 활동까지
                         {Math.ceil((totalActivities + 50) / 50) * 50 - totalActivities}회 남았어요!
                       </p>
                     </div>
@@ -481,7 +562,7 @@ export default function ProfilePage() {
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <div className="p-6">
           <h3 className="text-xl font-bold mb-6">프로필 편집</h3>
-          
+
           <div className="space-y-4">
             <div>
               <label htmlFor="displayName" className="block text-sm font-medium mb-2">
@@ -523,8 +604,8 @@ export default function ProfilePage() {
             <Button onClick={handleSaveProfile} className="flex-1">
               저장
             </Button>
-            <Button 
-              onClick={() => setIsEditModalOpen(false)} 
+            <Button
+              onClick={() => setIsEditModalOpen(false)}
               variant="outline"
               className="flex-1"
             >
@@ -535,9 +616,9 @@ export default function ProfilePage() {
       </Modal>
 
       {/* 캐릭터 커스터마이징 모달 */}
-      <CharacterCustomizationModal 
-        isOpen={isCharacterModalOpen} 
-        onClose={() => setIsCharacterModalOpen(false)} 
+      <CharacterCustomizationModal
+        isOpen={isCharacterModalOpen}
+        onClose={() => setIsCharacterModalOpen(false)}
       />
     </main>
   )

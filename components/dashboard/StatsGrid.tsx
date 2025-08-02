@@ -10,11 +10,11 @@ interface StatsGridProps {
   onStatAction: (_statType: string, _action: string) => void
 }
 
-export const StatsGrid = React.memo(function StatsGrid({ 
-  statTypes, 
-  stats, 
-  isProcessing, 
-  onStatAction 
+export const StatsGrid = React.memo(function StatsGrid({
+  statTypes,
+  stats,
+  isProcessing,
+  onStatAction
 }: StatsGridProps) {
   return (
     <SectionErrorBoundary sectionName="스탯 카드">

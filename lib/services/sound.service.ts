@@ -23,10 +23,10 @@ interface Sound {
 export class SoundService {
   private static instance: SoundService
   private audioContext: AudioContext | null = null
-  private masterVolume: number = 0.5
-  private effectVolume: number = 0.5
-  private musicVolume: number = 0.5
-  private enabled: boolean = true
+  private masterVolume = 0.5
+  private effectVolume = 0.5
+  private musicVolume = 0.5
+  private enabled = true
   private sounds: Map<string, Sound> = new Map()
 
   // 간단한 비프음 설정 (Web Audio API - 0KB 용량)
@@ -39,13 +39,13 @@ export class SoundService {
     hit: { freq: 180, duration: 0.12, type: 'square' as OscillatorType },
     defend: { freq: 130, duration: 0.2, type: 'triangle' as OscillatorType },
     skill_use: { freq: 350, duration: 0.25, type: 'sawtooth' as OscillatorType },
-    
+
     // 마법/치유
     heal_cast: { freq: 440, duration: 0.3, type: 'sine' as OscillatorType },
     buff: { freq: 520, duration: 0.2, type: 'sine' as OscillatorType },
     fire_cast: { freq: 300, duration: 0.15, type: 'sawtooth' as OscillatorType },
     ice_cast: { freq: 600, duration: 0.2, type: 'sine' as OscillatorType },
-    
+
     // UI 효과음
     button_click: { freq: 250, duration: 0.05, type: 'square' as OscillatorType },
     item_pickup: { freq: 600, duration: 0.1, type: 'square' as OscillatorType },
@@ -53,13 +53,13 @@ export class SoundService {
     quest_complete: { freq: 660, duration: 0.4, type: 'sine' as OscillatorType },
     victory: { freq: 700, duration: 0.6, type: 'sine' as OscillatorType },
     defeat: { freq: 80, duration: 0.8, type: 'triangle' as OscillatorType },
-    
+
     // 음악은 제거 (용량 절약)
     menu_bgm: null,
     battle_bgm: null,
     dungeon_bgm: null,
     victory_bgm: null,
-    boss_bgm: null,
+    boss_bgm: null
   }
 
   static getInstance(): SoundService {
@@ -85,11 +85,15 @@ export class SoundService {
   /**
    * 효과음 재생 (Web Audio API 비프음)
    */
-  playEffect(soundId: string, volume: number = 1): void {
-    if (!this.enabled || !this.audioContext) return
+  playEffect(soundId: string, volume = 1): void {
+    if (!this.enabled || !this.audioContext) {
+      return
+    }
 
     const config = this.soundConfigs[soundId as keyof typeof this.soundConfigs]
-    if (!config || config === null) return
+    if (!config || config === null) {
+      return
+    }
 
     try {
       const oscillator = this.audioContext.createOscillator()
@@ -134,17 +138,19 @@ export class SoundService {
     src: string,
     config: SoundConfig
   ): Promise<void> {
-    if (!this.audioContext) return
+    if (!this.audioContext) {
+      return
+    }
 
     const audio = new Audio(src)
     audio.loop = config.loop
-    
+
     const source = this.audioContext.createMediaElementSource(audio)
     const gainNode = this.audioContext.createGain()
-    
+
     source.connect(gainNode)
     gainNode.connect(this.audioContext.destination)
-    
+
     // 초기 볼륨 설정
     gainNode.gain.value = config.fadeIn ? 0 : config.volume
 
@@ -213,7 +219,9 @@ export class SoundService {
    */
   stop(soundId: string): void {
     const sound = this.sounds.get(soundId)
-    if (!sound) return
+    if (!sound) {
+      return
+    }
 
     if (sound.config.fadeOut && sound.gainNode) {
       this.fadeOut(sound, sound.config.fadeOut, () => {
@@ -242,9 +250,9 @@ export class SoundService {
    */
   private async fadeOutAllMusic(): Promise<void> {
     const musicSounds = Array.from(this.sounds.values()).filter(s => s.config.loop)
-    
+
     await Promise.all(
-      musicSounds.map(sound => 
+      musicSounds.map(sound =>
         new Promise<void>(resolve => {
           if (sound.config.fadeOut && sound.gainNode) {
             this.fadeOut(sound, sound.config.fadeOut, () => {
@@ -264,7 +272,9 @@ export class SoundService {
    * 페이드 인
    */
   private fadeIn(sound: Sound, targetVolume: number, duration: number): void {
-    if (!sound.gainNode) return
+    if (!sound.gainNode) {
+      return
+    }
 
     const startTime = this.audioContext!.currentTime
     sound.gainNode.gain.setValueAtTime(0, startTime)
@@ -282,7 +292,7 @@ export class SoundService {
 
     const startTime = this.audioContext!.currentTime
     const currentVolume = sound.gainNode.gain.value
-    
+
     sound.gainNode.gain.setValueAtTime(currentVolume, startTime)
     sound.gainNode.gain.linearRampToValueAtTime(0, startTime + duration / 1000)
 
@@ -341,7 +351,9 @@ export class SoundService {
    * 설정 저장
    */
   private saveSettings(): void {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') {
+      return
+    }
 
     const settings = {
       enabled: this.enabled,
@@ -357,7 +369,9 @@ export class SoundService {
    * 설정 로드
    */
   private loadSettings(): void {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') {
+      return
+    }
 
     const saved = localStorage.getItem('soundSettings')
     if (saved) {
@@ -377,8 +391,10 @@ export class SoundService {
    * 진동 효과 (모바일)
    */
   vibrate(pattern: number | number[]): void {
-    if (!this.enabled) return
-    
+    if (!this.enabled) {
+      return
+    }
+
     if ('vibrate' in navigator) {
       navigator.vibrate(pattern)
     }
@@ -388,8 +404,10 @@ export class SoundService {
    * 레벨업 멜로디 (간단한 비프음 시퀀스)
    */
   playLevelUpMelody(): void {
-    if (!this.enabled || !this.audioContext) return
-    
+    if (!this.enabled || !this.audioContext) {
+      return
+    }
+
     const notes = [440, 554, 659, 880] // A4, C#5, E5, A5
     notes.forEach((freq, index) => {
       setTimeout(() => {
@@ -399,7 +417,9 @@ export class SoundService {
   }
 
   private playTone(frequency: number, duration: number): void {
-    if (!this.audioContext) return
+    if (!this.audioContext) {
+      return
+    }
 
     const oscillator = this.audioContext.createOscillator()
     const gainNode = this.audioContext.createGain()

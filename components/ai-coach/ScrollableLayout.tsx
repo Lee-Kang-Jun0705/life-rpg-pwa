@@ -18,12 +18,12 @@ interface ScrollableLayoutProps {
 }
 
 // 스크롤 성능 최적화를 위한 throttle 함수
-function throttle<T extends (...args: unknown[]) => unknown>(
+function throttle<T extends(...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let inThrottle = false
-  return function (this: unknown, ...args: Parameters<T>) {
+  return function(this: unknown, ...args: Parameters<T>) {
     if (!inThrottle) {
       func.apply(this, args)
       inThrottle = true
@@ -50,7 +50,7 @@ export function ScrollableLayout({
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
       setActiveSection(sectionId)
       onSectionChange?.(sectionId)
-      
+
       // 스크롤 완료 후 플래그 해제
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current)
@@ -62,7 +62,9 @@ export function ScrollableLayout({
   // 스크롤 핸들러 (throttled)
   const handleScroll = useCallback(
     throttle(() => {
-      if (isScrolling) return // 프로그래매틱 스크롤 중에는 무시
+      if (isScrolling) {
+        return
+      } // 프로그래매틱 스크롤 중에는 무시
 
       const scrollPosition = window.scrollY + 100 // 오프셋 추가
 
@@ -107,10 +109,10 @@ export function ScrollableLayout({
                 size="sm"
                 onClick={() => scrollToSection(section.id)}
                 className={cn(
-                  "whitespace-nowrap transition-all",
+                  'whitespace-nowrap transition-all',
                   activeSection === section.id
-                    ? "bg-gradient-to-r from-candy-blue/20 to-candy-purple/20 text-candy-purple font-semibold"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                    ? 'bg-gradient-to-r from-candy-blue/20 to-candy-purple/20 text-candy-purple font-semibold'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-800'
                 )}
               >
                 <span className="text-lg mr-1">{section.emoji}</span>

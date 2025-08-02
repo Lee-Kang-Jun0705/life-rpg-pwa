@@ -1,11 +1,11 @@
 // 몬스터 도감 서비스
 import { dbHelpers } from '@/lib/database'
-import type { 
-  MonsterCollectionEntry, 
-  CollectionState, 
+import type {
+  MonsterCollectionEntry,
+  CollectionState,
   CollectionStats,
   CollectionFilter,
-  CollectionSortOption 
+  CollectionSortOption
 } from '@/lib/types/collection'
 import { COLLECTION_CATEGORIES, COLLECTION_ACHIEVEMENTS, COLLECTION_MILESTONES } from './collection-data'
 import { MONSTER_DATABASE as MONSTERS } from '@/lib/battle/monster-database'
@@ -24,7 +24,7 @@ export class CollectionService {
   async initializeCollection(userId: string): Promise<CollectionState> {
     // DB에서 기존 데이터 로드
     const savedState = await this.loadCollectionState(userId)
-    
+
     if (savedState) {
       return savedState
     }
@@ -55,16 +55,20 @@ export class CollectionService {
   // 몬스터 조우 기록
   async recordMonsterEncounter(userId: string, monsterId: string): Promise<void> {
     const state = await this.loadCollectionState(userId)
-    if (!state) return
+    if (!state) {
+      return
+    }
 
     const entry = state.entries[monsterId]
-    if (!entry) return
+    if (!entry) {
+      return
+    }
 
     // 첫 조우 기록
     if (!entry.isDiscovered) {
       entry.isDiscovered = true
       entry.firstEncounteredAt = new Date()
-      
+
       // 발견 업적 확인
       await this.checkDiscoveryAchievements(userId, state)
     }
@@ -79,10 +83,14 @@ export class CollectionService {
     categoryRewards?: string[]
   }> {
     const state = await this.loadCollectionState(userId)
-    if (!state) return {}
+    if (!state) {
+      return {}
+    }
 
     const entry = state.entries[monsterId]
-    if (!entry) return {}
+    if (!entry) {
+      return {}
+    }
 
     // 첫 처치 기록
     if (!entry.isDefeated) {
@@ -111,7 +119,7 @@ export class CollectionService {
   // 도감 통계 계산
   calculateStats(state: CollectionState): CollectionStats {
     const entries = Object.values(state.entries)
-    
+
     const stats: CollectionStats = {
       totalMonsters: entries.length,
       discoveredMonsters: entries.filter(e => e.isDiscovered).length,
@@ -127,7 +135,7 @@ export class CollectionService {
     // 카테고리별 진행도
     for (const category of state.categories) {
       const categoryMonsters = category.monsterIds
-      const discovered = categoryMonsters.filter(id => 
+      const discovered = categoryMonsters.filter(id =>
         state.entries[id]?.isDiscovered
       ).length
 
@@ -173,7 +181,7 @@ export class CollectionService {
       const query = filter.searchQuery.toLowerCase()
       filtered = filtered.filter(e => {
         const monster = MONSTERS[e.monsterId]
-        return monster?.name.toLowerCase().includes(query) || 
+        return monster?.name.toLowerCase().includes(query) ||
                monster?.description?.toLowerCase().includes(query)
       })
     }
@@ -206,10 +214,12 @@ export class CollectionService {
     const discoveredCount = Object.values(state.entries).filter(e => e.isDiscovered).length
 
     for (const achievement of state.achievements) {
-      if (achievement.isUnlocked) continue
+      if (achievement.isUnlocked) {
+        continue
+      }
 
-      if (achievement.condition.type === 'discover' && 
-          achievement.condition.count && 
+      if (achievement.condition.type === 'discover' &&
+          achievement.condition.count &&
           discoveredCount >= achievement.condition.count) {
         achievement.isUnlocked = true
         achievement.unlockedAt = new Date()
@@ -227,18 +237,20 @@ export class CollectionService {
     const totalKills = Object.values(state.entries).reduce((sum, e) => sum + e.killCount, 0)
 
     for (const achievement of state.achievements) {
-      if (achievement.isUnlocked) continue
+      if (achievement.isUnlocked) {
+        continue
+      }
 
-      if (achievement.condition.type === 'defeat' && 
-          achievement.condition.count && 
+      if (achievement.condition.type === 'defeat' &&
+          achievement.condition.count &&
           defeatedCount >= achievement.condition.count) {
         achievement.isUnlocked = true
         achievement.unlockedAt = new Date()
         unlockedAchievements.push(achievement.id)
       }
 
-      if (achievement.condition.type === 'kill_count' && 
-          achievement.condition.count && 
+      if (achievement.condition.type === 'kill_count' &&
+          achievement.condition.count &&
           totalKills >= achievement.condition.count) {
         achievement.isUnlocked = true
         achievement.unlockedAt = new Date()
@@ -258,7 +270,9 @@ export class CollectionService {
       const defeatedCount = categoryEntries.filter(e => e?.isDefeated).length
 
       for (const reward of category.rewards) {
-        if (reward.isClaimed) continue
+        if (reward.isClaimed) {
+          continue
+        }
 
         if (defeatedCount >= reward.requiredCount) {
           reward.isClaimed = true
@@ -355,10 +369,10 @@ export class CollectionService {
     try {
       // DB에 처치 기록
       const isFirstDefeat = await this.recordMonsterDefeatToDB(userId, monsterId)
-      
+
       // 컬렉션 상태 업데이트
       const result = await this.recordMonsterDefeat(userId, monsterId)
-      
+
       return {
         ...result,
         isFirstDefeat

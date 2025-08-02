@@ -3,9 +3,9 @@
  * 스킬 사용, 효과 적용, 쿨다운 관리 등
  */
 
-import type { 
-  Skill, 
-  SkillExecutionResult, 
+import type {
+  Skill,
+  SkillExecutionResult,
   SkillContext,
   SkillEffect,
   TargetType,
@@ -13,8 +13,8 @@ import type {
   EffectType
 } from '@/lib/types/skill-system'
 import type { CombatParticipant } from '@/lib/types/combat-system'
-import { 
-  SKILL_LEVEL_CONFIG, 
+import {
+  SKILL_LEVEL_CONFIG,
   ELEMENT_EFFECTIVENESS,
   SKILL_EFFECT_CONFIG,
   COMBO_CONFIG
@@ -42,7 +42,7 @@ export class SkillExecutionService {
     _casterId: string,
     _targets: string[],
     _context: SkillContext,
-    _skillLevel: number = 1
+    _skillLevel = 1
   ): SkillExecutionResult {
     const skill = this.getSkill(skillId)
     if (!skill) {
@@ -108,10 +108,14 @@ export class SkillExecutionService {
    */
   isOnCooldown(_userId: string, _skillId: string): boolean {
     const userCooldowns = this.cooldowns.get(userId)
-    if (!userCooldowns) return false
+    if (!userCooldowns) {
+      return false
+    }
 
     const cooldownEnd = userCooldowns.get(skillId)
-    if (!cooldownEnd) return false
+    if (!cooldownEnd) {
+      return false
+    }
 
     return Date.now() < cooldownEnd
   }
@@ -121,10 +125,14 @@ export class SkillExecutionService {
    */
   getRemainingCooldown(_userId: string, _skillId: string): number {
     const userCooldowns = this.cooldowns.get(userId)
-    if (!userCooldowns) return 0
+    if (!userCooldowns) {
+      return 0
+    }
 
     const cooldownEnd = userCooldowns.get(skillId)
-    if (!cooldownEnd) return 0
+    if (!cooldownEnd) {
+      return 0
+    }
 
     const remaining = cooldownEnd - Date.now()
     return remaining > 0 ? remaining : 0
@@ -156,7 +164,7 @@ export class SkillExecutionService {
    */
   private calculateMPCost(_skill: Skill, _level: number): number {
     let baseCost: number
-    
+
     if (typeof skill.mpCost === 'number') {
       baseCost = skill.mpCost
     } else {
@@ -183,33 +191,33 @@ export class SkillExecutionService {
     switch (skill.target) {
       case 'self':
         return [casterId]
-      
+
       case 'singleEnemy':
-        const enemy = context.targets.find(t => 
-          t.id === targets[0] && 
+        const enemy = context.targets.find(t =>
+          t.id === targets[0] &&
           this.isEnemy(casterTeam, t.id, context)
         )
         return enemy ? [enemy.id] : []
-      
+
       case 'allEnemies':
         return context.targets
           .filter(t => this.isEnemy(casterTeam, t.id, context))
           .map(t => t.id)
-      
+
       case 'singleAlly':
-        const ally = context.targets.find(t => 
-          t.id === targets[0] && 
+        const ally = context.targets.find(t =>
+          t.id === targets[0] &&
           !this.isEnemy(casterTeam, t.id, context)
         )
         return ally ? [ally.id] : []
-      
+
       case 'allAllies':
         return context.targets
           .filter(t => !this.isEnemy(casterTeam, t.id, context))
           .map(t => t.id)
-      
+
       case 'randomEnemy':
-        const enemies = context.targets.filter(t => 
+        const enemies = context.targets.filter(t =>
           this.isEnemy(casterTeam, t.id, context)
         )
         if (enemies.length > 0) {
@@ -217,11 +225,11 @@ export class SkillExecutionService {
           return [random.id]
         }
         return []
-      
+
       case 'area':
         // TODO: 범위 공격 구현
         return targets.slice(0, 3) // 임시로 최대 3명
-      
+
       default:
         return []
     }
@@ -233,13 +241,15 @@ export class SkillExecutionService {
   private isEnemy(casterTeam: string, targetId: string, _context: SkillContext): boolean {
     // context에서 target 정보를 찾아서 팀 확인
     const target = context.targets.find(t => t.id === targetId)
-    if (!target) return false
-    
+    if (!target) {
+      return false
+    }
+
     // CombatParticipant에 team 속성이 있다면 사용
     if ('team' in target) {
       return (target as unknown).team !== casterTeam
     }
-    
+
     // 없다면 ID 기반으로 판단
     return targetId.startsWith('enemy_')
   }
@@ -266,7 +276,9 @@ export class SkillExecutionService {
 
     for (const targetId of targets) {
       const target = context.targets.find(t => t.id === targetId)
-      if (!target) continue
+      if (!target) {
+        continue
+      }
 
       for (const effect of skill.effects) {
         const result = this.applySingleEffect(
@@ -277,7 +289,7 @@ export class SkillExecutionService {
           skill,
           context
         )
-        
+
         results.push({
           targetId,
           effect,
@@ -416,7 +428,7 @@ export class SkillExecutionService {
   private checkForCombo(_userId: string): { id: string; name: string } | null {
     const userSkills = this.recentSkills.get(userId) || []
     const combos = Object.values(skillCombos)
-    
+
     return checkComboActivation(userSkills, combos)
   }
 

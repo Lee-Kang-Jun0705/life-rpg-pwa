@@ -8,7 +8,7 @@ export const ITEM_RARITY = {
   RARE: 'rare',
   EPIC: 'epic',
   LEGENDARY: 'legendary'
-} as const;
+} as const
 
 export type ItemRarity = typeof ITEM_RARITY[keyof typeof ITEM_RARITY];
 
@@ -31,7 +31,7 @@ export interface BaseItem {
 }
 
 // 구별된 유니온 타입으로 아이템 종류 구분
-export type Item = 
+export type Item =
   | EquipmentItem
   | ConsumableItem
   | MaterialItem
@@ -50,7 +50,7 @@ export interface EquipmentItem extends BaseItem {
   readonly requirements?: EquipmentRequirements;
 }
 
-export type EquipmentSubType = 
+export type EquipmentSubType =
   | 'sword' | 'axe' | 'spear' | 'staff' | 'bow' // 무기
   | 'light_armor' | 'heavy_armor' | 'robe' // 방어구
   | 'ring' | 'necklace' | 'bracelet'; // 액세서리
@@ -82,11 +82,11 @@ export interface ConsumableItem extends BaseItem {
   readonly charges?: number;
 }
 
-export type ConsumableSubType = 
-  | 'potion' 
-  | 'food' 
-  | 'scroll' 
-  | 'bomb' 
+export type ConsumableSubType =
+  | 'potion'
+  | 'food'
+  | 'scroll'
+  | 'bomb'
   | 'buff_item';
 
 export interface UseEffect {
@@ -97,14 +97,14 @@ export interface UseEffect {
   readonly radius?: number;
 }
 
-export type UseEffectType = 
-  | 'heal_hp' 
-  | 'heal_mp' 
-  | 'buff_attack' 
-  | 'buff_defense' 
+export type UseEffectType =
+  | 'heal_hp'
+  | 'heal_mp'
+  | 'buff_attack'
+  | 'buff_defense'
   | 'buff_speed'
-  | 'damage' 
-  | 'cleanse' 
+  | 'damage'
+  | 'cleanse'
   | 'revive';
 
 // 재료 아이템
@@ -115,18 +115,18 @@ export interface MaterialItem extends BaseItem {
   readonly category: MaterialCategory;
 }
 
-export type MaterialSubType = 
-  | 'enhancement_stone' 
-  | 'protection_stone' 
+export type MaterialSubType =
+  | 'enhancement_stone'
+  | 'protection_stone'
   | 'blessing_powder'
-  | 'monster_part' 
-  | 'ore' 
+  | 'monster_part'
+  | 'ore'
   | 'herb';
 
-export type MaterialCategory = 
-  | 'enhancement' 
-  | 'crafting' 
-  | 'quest' 
+export type MaterialCategory =
+  | 'enhancement'
+  | 'crafting'
+  | 'quest'
   | 'special';
 
 // 기타 아이템
@@ -137,11 +137,11 @@ export interface MiscItem extends BaseItem {
   readonly usable: boolean;
 }
 
-export type MiscSubType = 
-  | 'key' 
-  | 'book' 
-  | 'quest_item' 
-  | 'treasure' 
+export type MiscSubType =
+  | 'key'
+  | 'book'
+  | 'quest_item'
+  | 'treasure'
   | 'special';
 
 // 아이템 효과
@@ -152,10 +152,10 @@ export interface ItemEffect {
   readonly condition?: EffectCondition;
 }
 
-export type ItemEffectStat = 
-  | keyof EquipmentStats 
-  | 'exp_gain' 
-  | 'gold_gain' 
+export type ItemEffectStat =
+  | keyof EquipmentStats
+  | 'exp_gain'
+  | 'gold_gain'
   | 'drop_rate'
   | 'all_stats';
 
@@ -231,23 +231,23 @@ export interface SetBonus {
 
 // 타입 가드 함수들
 export function isEquipmentItem(item: Item): item is EquipmentItem {
-  return item.type === 'equipment';
+  return item.type === 'equipment'
 }
 
 export function isConsumableItem(item: Item): item is ConsumableItem {
-  return item.type === 'consumable';
+  return item.type === 'consumable'
 }
 
 export function isMaterialItem(item: Item): item is MaterialItem {
-  return item.type === 'material';
+  return item.type === 'material'
 }
 
 export function isMiscItem(item: Item): item is MiscItem {
-  return item.type === 'misc';
+  return item.type === 'misc'
 }
 
 export function isStackableItem(item: Item): boolean {
-  return item.stackable && item.maxStack > 1;
+  return item.stackable && item.maxStack > 1
 }
 
 export function canEquipItem(
@@ -255,10 +255,16 @@ export function canEquipItem(
   slot: EquipmentSlot,
   playerLevel: number
 ): item is EquipmentItem {
-  if (!isEquipmentItem(item)) return false;
-  if (item.slot !== slot) return false;
-  if (item.levelRequirement > playerLevel) return false;
-  return true;
+  if (!isEquipmentItem(item)) {
+    return false
+  }
+  if (item.slot !== slot) {
+    return false
+  }
+  if (item.levelRequirement > playerLevel) {
+    return false
+  }
+  return true
 }
 
 // 인벤토리 관련 상수
@@ -269,8 +275,8 @@ export const INVENTORY_CONSTANTS = {
   EQUIPMENT_SLOTS: 4,
   MAX_ENHANCEMENT_LEVEL: 15,
   ENHANCEMENT_BONUS_PER_LEVEL: 0.1,
-  SELL_PRICE_RATIO: 0.3,
-} as const;
+  SELL_PRICE_RATIO: 0.3
+} as const
 
 // 아이템 필터링 옵션
 export interface ItemFilterOptions {
@@ -289,12 +295,12 @@ export interface ItemSortOptions {
   readonly direction: 'asc' | 'desc';
 }
 
-export type ItemSortField = 
-  | 'name' 
-  | 'level' 
-  | 'rarity' 
-  | 'type' 
-  | 'obtainedAt' 
+export type ItemSortField =
+  | 'name'
+  | 'level'
+  | 'rarity'
+  | 'type'
+  | 'obtainedAt'
   | 'value';
 
 // 거래 관련

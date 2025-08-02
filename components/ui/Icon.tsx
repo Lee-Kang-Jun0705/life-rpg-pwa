@@ -14,7 +14,7 @@ import {
   X,
   Check,
   Plus,
-  Minus,
+  Minus
 } from 'lucide-react'
 
 // 나머지 아이콘들은 동적 로드
@@ -29,7 +29,7 @@ const iconMap = {
   check: Check,
   plus: Plus,
   minus: Minus,
-  
+
   // 동적 로드 아이콘들
   sword: dynamic(() => import('lucide-react').then(mod => ({ default: mod.Sword }))),
   shield: dynamic(() => import('lucide-react').then(mod => ({ default: mod.Shield }))),
@@ -50,7 +50,7 @@ const iconMap = {
   scroll: dynamic(() => import('lucide-react').then(mod => ({ default: mod.Scroll }))),
   map: dynamic(() => import('lucide-react').then(mod => ({ default: mod.Map }))),
   target: dynamic(() => import('lucide-react').then(mod => ({ default: mod.Target }))),
-  award: dynamic(() => import('lucide-react').then(mod => ({ default: mod.Award }))),
+  award: dynamic(() => import('lucide-react').then(mod => ({ default: mod.Award })))
 } as const
 
 export type IconName = keyof typeof iconMap
@@ -62,12 +62,12 @@ interface IconProps extends ComponentPropsWithoutRef<'svg'> {
 
 export function Icon({ name, size = 24, className, ...props }: IconProps) {
   const IconComponent = iconMap[name] as LucideIcon
-  
+
   if (!IconComponent) {
     console.warn(`Icon "${name}" not found`)
     return null
   }
-  
+
   return <IconComponent size={size} className={className} {...props} />
 }
 

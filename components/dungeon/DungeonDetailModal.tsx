@@ -4,13 +4,13 @@ import React from 'react'
 import type { Dungeon } from '@/lib/types/dungeon'
 import { DUNGEON_TYPE_INFO, DIFFICULTY_INFO } from '@/lib/dungeon/dungeon-data'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  X, 
-  Clock, 
-  Zap, 
-  Star, 
-  Users, 
-  Sword, 
+import {
+  X,
+  Clock,
+  Zap,
+  Star,
+  Users,
+  Sword,
   Calendar,
   Ticket,
   Trophy,
@@ -102,7 +102,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                 <Target className="w-4 h-4 text-blue-500" />
                 던전 정보
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
@@ -111,7 +111,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                   </div>
                   <div className="text-2xl font-bold">{dungeon.stages}개</div>
                 </div>
-                
+
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Clock className="w-4 h-4 text-green-500" />
@@ -119,7 +119,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                   </div>
                   <div className="text-2xl font-bold">{dungeon.estimatedTime}분</div>
                 </div>
-                
+
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Sword className="w-4 h-4 text-red-500" />
@@ -127,7 +127,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                   </div>
                   <div className="text-2xl font-bold">{dungeon.recommendedCombatPower.toLocaleString()}</div>
                 </div>
-                
+
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Trophy className="w-4 h-4 text-yellow-500" />
@@ -144,7 +144,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                 <AlertTriangle className="w-4 h-4 text-orange-500" />
                 입장 조건
               </h3>
-              
+
               <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="flex items-center gap-2">
@@ -162,7 +162,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                     </div>
                   )}
                 </div>
-                
+
                 {dungeon.requirements.previousDungeon && (
                   <div className="mt-3 pt-3 border-t border-orange-200 dark:border-orange-700">
                     <div className="flex items-center gap-2 text-sm text-orange-700 dark:text-orange-300">
@@ -181,7 +181,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                   <Calendar className="w-4 h-4 text-purple-500" />
                   제한사항
                 </h3>
-                
+
                 <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 space-y-2">
                   {dungeon.dailyLimit && (
                     <div className="text-sm text-purple-700 dark:text-purple-300">
@@ -213,7 +213,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                 <Gift className="w-4 h-4 text-green-500" />
                 보상
               </h3>
-              
+
               <div className="space-y-4">
                 {/* 기본 보상 */}
                 <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
@@ -228,7 +228,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                         <div className="text-xs text-gray-600 dark:text-gray-400">캐릭터 성장</div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-yellow-500 rounded-lg">
                         <Crown className="w-4 h-4 text-white" />
@@ -239,7 +239,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                       </div>
                     </div>
                   </div>
-                  
+
                   {dungeon.rewards.items.length > 0 && (
                     <div className="mt-3">
                       <div className="text-sm font-medium mb-2">드롭 아이템</div>
@@ -273,7 +273,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                           <div className="text-xs text-gray-600 dark:text-gray-400">추가 보너스</div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-yellow-500 rounded-lg">
                           <Crown className="w-4 h-4 text-white" />
@@ -284,7 +284,7 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                         </div>
                       </div>
                     </div>
-                    
+
                     {dungeon.rewards.firstClearBonus.items.length > 0 && (
                       <div className="mt-3">
                         <div className="text-sm font-medium mb-2">보너스 아이템</div>
@@ -318,9 +318,9 @@ export function DungeonDetailModal({ dungeon, isAvailable, onClose, onEnter }: D
                   className={`
                     flex-1 py-3 rounded-lg font-medium transition-all
                     ${isAvailable
-                      ? 'bg-purple-500 text-white hover:bg-purple-600 shadow-lg hover:shadow-xl'
-                      : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                    }
+      ? 'bg-purple-500 text-white hover:bg-purple-600 shadow-lg hover:shadow-xl'
+      : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+    }
                   `}
                 >
                   {isAvailable ? '입장하기' : '입장 불가'}

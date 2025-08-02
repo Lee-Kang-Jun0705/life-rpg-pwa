@@ -13,12 +13,12 @@ interface AchievementNotificationsProps {
   onMarkAllAsRead: () => void
 }
 
-export function AchievementNotifications({ 
-  notifications, 
-  achievements, 
-  onClose, 
-  onMarkAsRead, 
-  onMarkAllAsRead 
+export function AchievementNotifications({
+  notifications,
+  achievements,
+  onClose,
+  onMarkAsRead,
+  onMarkAllAsRead
 }: AchievementNotificationsProps) {
   const sortedNotifications = [...notifications].sort(
     (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
@@ -53,7 +53,7 @@ export function AchievementNotifications({
                   </span>
                 )}
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
                   <button
@@ -90,7 +90,9 @@ export function AchievementNotifications({
               <div className="divide-y divide-gray-200 dark:divide-gray-700">
                 {sortedNotifications.map((notification, index) => {
                   const achievement = achievements[notification.achievementId]
-                  if (!achievement) return null
+                  if (!achievement) {
+                    return null
+                  }
 
                   return (
                     <motion.div
@@ -108,10 +110,10 @@ export function AchievementNotifications({
                         {/* 아이콘 */}
                         <div className={`
                           p-2 rounded-full flex-shrink-0
-                          ${notification.type === 'unlocked' 
-                            ? 'bg-green-500' 
-                            : 'bg-blue-500'
-                          }
+                          ${notification.type === 'unlocked'
+                      ? 'bg-green-500'
+                      : 'bg-blue-500'
+                    }
                         `}>
                           {notification.type === 'unlocked' ? (
                             <Trophy className="w-4 h-4 text-white" />
@@ -125,19 +127,19 @@ export function AchievementNotifications({
                           <div className="flex items-start justify-between">
                             <div>
                               <h4 className="font-medium text-sm">
-                                {notification.type === 'unlocked' 
-                                  ? '업적 달성!' 
+                                {notification.type === 'unlocked'
+                                  ? '업적 달성!'
                                   : '진행도 업데이트'
                                 }
                               </h4>
                               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                                 <span className="font-medium">{achievement.name}</span>
-                                {notification.type === 'unlocked' 
-                                  ? '을(를) 달성했습니다!' 
+                                {notification.type === 'unlocked'
+                                  ? '을(를) 달성했습니다!'
                                   : '의 진행도가 업데이트되었습니다'
                                 }
                               </p>
-                              
+
                               {/* 보상 미리보기 (달성 시에만) */}
                               {notification.type === 'unlocked' && (
                                 <div className="flex flex-wrap gap-1 mt-2">
@@ -200,11 +202,11 @@ export function AchievementNotifications({
 function formatTimestamp(timestamp: Date): string {
   const now = new Date()
   const diff = now.getTime() - new Date(timestamp).getTime()
-  
+
   const minutes = Math.floor(diff / (1000 * 60))
   const hours = Math.floor(diff / (1000 * 60 * 60))
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  
+
   if (minutes < 1) {
     return '방금 전'
   } else if (minutes < 60) {

@@ -17,25 +17,25 @@ export interface CombatStats {
   hp: number
   mp: number
   speed: number
-  
+
   // 부가 스탯
   critRate: number
   critDamage: number
   accuracy: number
   dodge: number
-  
+
   // 저항력
   resistance: number
-  
+
   // 총 전투력
   combatPower: number
 }
 
 class CombatStatsService {
   private static instance: CombatStatsService
-  
+
   private constructor() {}
-  
+
   static getInstance(): CombatStatsService {
     if (!CombatStatsService.instance) {
       CombatStatsService.instance = new CombatStatsService()
@@ -66,11 +66,11 @@ class CombatStatsService {
 
     // 실생활 기반 스탯 계산
     const lifeStats = this.calculateLifeStats(health.level, learning.level, relationship.level, achievement.level)
-    
+
     // 장비 스탯 계산
     const equipment = inventoryService.getInventoryState().equipment
     const equipmentStats = this.calculateEquipmentStats(equipment)
-    
+
     // 최종 스탯 합산 (실생활 + 장비)
     const combatStats: CombatStats = {
       attack: lifeStats.attack + equipmentStats.attack,
@@ -85,10 +85,10 @@ class CombatStatsService {
       resistance: lifeStats.resistance + equipmentStats.resistance,
       combatPower: 0
     }
-    
+
     // 전투력 계산
     combatStats.combatPower = this.calculateCombatPower(combatStats)
-    
+
     return combatStats
   }
 
@@ -124,18 +124,18 @@ class CombatStatsService {
       // 건강: 체력과 물리 공격력에 영향
       hp: BATTLE_CONSTANTS.BASE_HP + healthLevel * 20,
       attack: BATTLE_CONSTANTS.BASE_ATTACK + healthLevel * 5,
-      
+
       // 학습: 마나와 마법 공격력에 영향
       mp: BATTLE_CONSTANTS.BASE_MP + learningLevel * 10,
-      
+
       // 관계: 방어력에 영향
       defense: BATTLE_CONSTANTS.BASE_DEFENSE + relationshipLevel * 3,
-      
+
       // 성취: 속도와 치명타에 영향
       speed: BATTLE_CONSTANTS.BASE_SPEED + achievementLevel * 2,
       critRate: BATTLE_CONSTANTS.BASE_CRITICAL + achievementLevel * 0.02,
       dodge: BATTLE_CONSTANTS.BASE_EVASION + achievementLevel * 0.02,
-      
+
       // 기본값
       critDamage: BATTLE_CONSTANTS.BASE_CRITICAL_DAMAGE,
       accuracy: BATTLE_CONSTANTS.BASE_ACCURACY,
@@ -164,8 +164,10 @@ class CombatStatsService {
 
     // 모든 장비 슬롯 순회
     Object.values(equipment).forEach((item: GeneratedItem | null) => {
-      if (!item) return
-      
+      if (!item) {
+        return
+      }
+
       // 기본 스탯 합산
       if (item.baseStats) {
         stats.attack += item.baseStats.attack || 0
@@ -179,7 +181,7 @@ class CombatStatsService {
         stats.dodge += item.baseStats.dodge || 0
         stats.resistance += item.baseStats.resistance || 0
       }
-      
+
       // 랜덤 스탯 합산
       if (item.randomStats) {
         item.randomStats.forEach(randomStat => {

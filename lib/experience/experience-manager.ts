@@ -1,7 +1,7 @@
-import type { 
-  Activity, 
-  ActivityQuality, 
-  ExpCalculationResult, 
+import type {
+  Activity,
+  ActivityQuality,
+  ExpCalculationResult,
   ExpContext,
   DailyLimitCheck,
   LevelInfo,
@@ -57,8 +57,12 @@ export class ExperienceManager {
 
   // 레벨별 필요 경험치 계산
   calculateRequiredExp(level: number): number {
-    if (level <= 0) return 0
-    if (level === 1) return EXP_CONSTANTS.BASE_EXP_PER_LEVEL
+    if (level <= 0) {
+      return 0
+    }
+    if (level === 1) {
+      return EXP_CONSTANTS.BASE_EXP_PER_LEVEL
+    }
 
     // 레벨별 점진적 증가 공식
     if (level <= 10) {
@@ -159,7 +163,7 @@ export class ExperienceManager {
       // 시간대 보너스/페널티 (TimeRestrictionService 사용)
       const timeService = TimeRestrictionService.getInstance()
       const timeState = timeService.getCurrentTimeState(activity.statType)
-      
+
       if (timeState.isRestricted) {
         // 활동이 차단된 경우
         return {
@@ -181,7 +185,7 @@ export class ExperienceManager {
           }
         }
       }
-      
+
       const timeMultiplier = timeState.multiplier
       if (timeMultiplier > 1) {
         // 시간대 보너스
@@ -228,10 +232,10 @@ export class ExperienceManager {
       // 균형 보너스/페널티
       const balanceService = BalanceService.getInstance()
       const balanceBonusResult = await balanceService.calculateBalanceBonus(activity.userId, activity.statType)
-      
+
       if (balanceBonusResult.success) {
         const balanceBonus = balanceBonusResult.data
-        
+
         if (balanceBonus.multiplier > 1) {
           // 균형 보너스
           const bonus = balanceBonus.multiplier - 1
@@ -298,12 +302,12 @@ export class ExperienceManager {
       // 피로도 체크
       const fatigueService = FatigueService.getInstance()
       const fatigueStateResult = await fatigueService.getFatigueState(activity.userId)
-      
+
       let fatigueEfficiency = 1.0
       if (fatigueStateResult.success) {
         const fatigueState = fatigueStateResult.data
         fatigueEfficiency = fatigueState.experienceEfficiency
-        
+
         // 피로도 페널티 추가
         if (fatigueEfficiency < 1.0) {
           penalties.push({
@@ -313,13 +317,13 @@ export class ExperienceManager {
             reason: `현재 피로도: ${fatigueState.currentFatigue}%`
           })
         }
-        
+
         // 피로도 경고 추가
         if (fatigueState.warnings.length > 0) {
           warnings.push(...fatigueState.warnings)
         }
       }
-      
+
       // 균형 상태 확인 및 경고 추가
       const balanceStateResult = await balanceService.getBalanceState(activity.userId)
       if (balanceStateResult.success) {
@@ -374,9 +378,9 @@ export class ExperienceManager {
   ): Promise<DailyLimitCheck> {
     const limitService = DailyLimitService.getInstance()
     const result = await limitService.tryAddExperience(userId, statType, requestedExp)
-    
+
     const grantedExp = result.success ? result.data || 0 : 0
-    
+
     const limitResult = await limitService.getDailyLimit(userId, statType)
     const limit = limitResult.success ? limitResult.data : null
 
@@ -416,10 +420,18 @@ export class ExperienceManager {
 
   // 연속 활동 보너스 계산
   private calculateStreakBonus(streakDays: number): number {
-    if (streakDays < 3) return 0
-    if (streakDays < 7) return 0.1 // 10%
-    if (streakDays < 30) return 0.2 // 20%
-    if (streakDays < 100) return 0.5 // 50%
+    if (streakDays < 3) {
+      return 0
+    }
+    if (streakDays < 7) {
+      return 0.1
+    } // 10%
+    if (streakDays < 30) {
+      return 0.2
+    } // 20%
+    if (streakDays < 100) {
+      return 0.5
+    } // 50%
     return 1.0 // 100%
   }
 
@@ -443,13 +455,23 @@ export class ExperienceManager {
     let bonus = 0
 
     // 다양한 활동 종류 보너스
-    if (uniqueActivityNames.size >= 4) bonus += 0.1
-    if (uniqueActivityNames.size >= 8) bonus += 0.2
-    if (uniqueActivityNames.size >= 12) bonus += 0.3
+    if (uniqueActivityNames.size >= 4) {
+      bonus += 0.1
+    }
+    if (uniqueActivityNames.size >= 8) {
+      bonus += 0.2
+    }
+    if (uniqueActivityNames.size >= 12) {
+      bonus += 0.3
+    }
 
     // 다양한 스탯 타입 보너스
-    if (uniqueStatTypes.size >= 3) bonus += 0.2
-    if (uniqueStatTypes.size === 4) bonus += 0.3
+    if (uniqueStatTypes.size >= 3) {
+      bonus += 0.2
+    }
+    if (uniqueStatTypes.size === 4) {
+      bonus += 0.3
+    }
 
     return Math.min(bonus, 1.0) // 최대 100%
   }
@@ -462,18 +484,24 @@ export class ExperienceManager {
   ): Promise<number> {
     // 최근 1시간 내 동일한 활동 횟수 계산
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
-    
+
     const recentSameActivities = previousActivities.filter(
-      activity => 
-        activity.activityName === activityName && 
+      activity =>
+        activity.activityName === activityName &&
         new Date(activity.timestamp) >= oneHourAgo
     )
 
     const count = recentSameActivities.length
 
-    if (count < 2) return 0
-    if (count < 5) return 0.1 // 10% 페널티
-    if (count < 10) return 0.3 // 30% 페널티
+    if (count < 2) {
+      return 0
+    }
+    if (count < 5) {
+      return 0.1
+    } // 10% 페널티
+    if (count < 10) {
+      return 0.3
+    } // 30% 페널티
     return 0.5 // 50% 페널티
   }
 
@@ -483,7 +511,7 @@ export class ExperienceManager {
     const tomorrow = new Date(now)
     tomorrow.setDate(tomorrow.getDate() + 1)
     tomorrow.setHours(0, 0, 0, 0)
-    
+
     const diffMs = tomorrow.getTime() - now.getTime()
     return Math.floor(diffMs / (1000 * 60))
   }
@@ -510,7 +538,7 @@ export class ExperienceManager {
       if (stat) {
         const newTotalExp = stat.totalExp + grantedExp
         const levelInfo = this.calculateLevel(newTotalExp)
-        
+
         await db.playerStats
           .where('[userId+statType]')
           .equals([activity.userId, activity.statType])
@@ -522,7 +550,7 @@ export class ExperienceManager {
           })
       } else {
         const levelInfo = this.calculateLevel(grantedExp)
-        
+
         await db.playerStats.add({
           _userId: activity.userId,
           statType: activity.statType,

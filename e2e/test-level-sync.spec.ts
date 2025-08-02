@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('레벨 동기화 테스트', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async({ page }) => {
     // 로컬 스토리지 초기화
     await page.goto('http://localhost:3000')
     await page.evaluate(() => {
@@ -12,7 +12,7 @@ test.describe('레벨 동기화 테스트', () => {
     await page.reload()
   })
 
-  test('모든 페이지에서 레벨이 0부터 시작하고 동기화되는지 확인', async ({ page }) => {
+  test('모든 페이지에서 레벨이 0부터 시작하고 동기화되는지 확인', async({ page }) => {
     // 1. 대시보드 확인
     await page.goto('http://localhost:3000/dashboard')
     await page.waitForTimeout(2000) // 데이터 로드 대기
@@ -20,7 +20,7 @@ test.describe('레벨 동기화 테스트', () => {
     // 총 레벨 확인
     const totalLevel = await page.locator('text=/Lv\\.\\d+/').first().textContent()
     console.log('대시보드 총 레벨:', totalLevel)
-    
+
     // 각 스탯 레벨 확인
     const statLevels = await page.locator('.text-sm.mt-2.opacity-90').allTextContents()
     console.log('스탯 레벨들:', statLevels)
@@ -51,7 +51,7 @@ test.describe('레벨 동기화 테스트', () => {
     expect(adventureLevel).toContain('Lv.0')
   })
 
-  test('활동 추가 후 레벨 동기화 확인', async ({ page }) => {
+  test('활동 추가 후 레벨 동기화 확인', async({ page }) => {
     await page.goto('http://localhost:3000/dashboard')
     await page.waitForTimeout(2000)
 

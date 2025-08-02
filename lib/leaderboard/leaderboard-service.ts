@@ -1,7 +1,7 @@
 import { dbHelpers } from '@/lib/database'
-import { 
-  LeaderboardCategory, 
-  LeaderboardEntry, 
+import {
+  LeaderboardCategory,
+  LeaderboardEntry,
   LeaderboardData,
   LeaderboardStats,
   LeaderboardFilter
@@ -10,7 +10,7 @@ import { GAME_CONFIG } from '../types/dashboard'
 
 export class LeaderboardService {
   private static instance: LeaderboardService
-  
+
   static getInstance(): LeaderboardService {
     if (!LeaderboardService.instance) {
       LeaderboardService.instance = new LeaderboardService()
@@ -23,7 +23,7 @@ export class LeaderboardService {
     try {
       // 임시 더미 데이터 생성
       const entries = await this.generateLeaderboardEntries(filter)
-      
+
       return {
         category: filter.category,
         timeFrame: filter.timeFrame,
@@ -144,7 +144,7 @@ export class LeaderboardService {
   // 점수 생성 로직
   private generateScore(filter: LeaderboardFilter, index: number, isCurrentUser?: boolean): number {
     let baseScore = 1000
-    
+
     // 현재 사용자는 중간 정도 순위
     if (isCurrentUser) {
       baseScore = 750
@@ -194,7 +194,7 @@ export class LeaderboardService {
       category: 'overall',
       timeFrame
     })
-    
+
     return leaderboard.entries[0] || null
   }
 
@@ -214,7 +214,7 @@ export class LeaderboardService {
     }
 
     const change = previousRank - currentRank
-    
+
     if (change > 0) {
       return { change, direction: 'up' }
     } else if (change < 0) {
@@ -276,7 +276,7 @@ export class LeaderboardService {
   }> {
     try {
       const data = await dbHelpers.getUserRankingData(userId)
-      
+
       // 개인 최고 기록 계산
       const personalBests: Record<string, number> = {}
       data.stats.forEach((stat) => {

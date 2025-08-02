@@ -37,16 +37,16 @@ type MutableDeep<T> = {
 export class AutoBattleManager {
   private state: MutableBattleState
   private actionQueue: BattleAction[] = []
-  private turnTimer: number = 0
+  private turnTimer = 0
   private comboCounter: Map<string, number> = new Map()
-  private battleSpeed: number = 1000 // ms per action
+  private battleSpeed = 1000 // ms per action
   private onActionCallback?: (action: BattleAction) => void
   private onStateChangeCallback?: (state: BattleState) => void
 
   constructor(
     playerCharacter: BattleCharacter,
     enemyCharacter: BattleCharacter,
-    battleSpeed: number = 1000
+    battleSpeed = 1000
   ) {
     this.battleSpeed = battleSpeed
     this.state = {
@@ -190,7 +190,7 @@ export class AutoBattleManager {
   ): Promise<BattleResult> {
     this.onActionCallback = onAction
     this.onStateChangeCallback = onStateChange
-    
+
     this.state.phase = 'fighting'
     this.updateState()
 
@@ -216,14 +216,14 @@ export class AutoBattleManager {
   // 턴 실행
   private async executeTurn() {
     this.state.turn++
-    
+
     // 상태 이상 효과 적용
     this.applyStatusEffects()
-    
+
     // 속도에 따른 행동 순서 결정
     const playerSpeed = this.getEffectiveSpeed(this.state.player)
     const enemySpeed = this.getEffectiveSpeed(this.state.enemy)
-    
+
     if (playerSpeed >= enemySpeed) {
       await this.executeCharacterAction(this.state.player, this.state.enemy)
       if (!this.isBattleOver()) {
@@ -235,13 +235,13 @@ export class AutoBattleManager {
         await this.executeCharacterAction(this.state.player, this.state.enemy)
       }
     }
-    
+
     // 쿨다운 감소
     this.updateCooldowns()
-    
+
     // 상태 이상 지속시간 감소
     this.updateStatusEffects()
-    
+
     this.updateState()
   }
 
@@ -250,19 +250,21 @@ export class AutoBattleManager {
     const availableSkills = attacker.skills.filter(
       skill => skill.currentCooldown === 0 && attacker.stats.mp >= skill.mpCost
     )
-    
-    if (availableSkills.length === 0) return
-    
+
+    if (availableSkills.length === 0) {
+      return
+    }
+
     const selectedSkill = this.selectSkill(attacker, defender, availableSkills)
     const action = await this.executeSkill(attacker, defender, selectedSkill)
-    
+
     this.state.actions.push(action)
     this.actionQueue.push(action)
-    
+
     if (this.onActionCallback) {
       this.onActionCallback(action)
     }
-    
+
     // MP 소모 및 쿨다운 적용
     attacker.stats.mp -= selectedSkill.mpCost
     // Find and update the skill in the attacker's skills array
@@ -284,16 +286,20 @@ export class AutoBattleManager {
     // HP가 낮으면 힐 우선
     if (attacker.stats.hp < attacker.stats.maxHp * 0.3) {
       const healSkill = availableSkills.find(s => s.type === 'heal')
-      if (healSkill) return healSkill
+      if (healSkill) {
+        return healSkill
+      }
     }
-    
+
     // 버프가 없으면 버프 사용
     const hasBuffs = attacker.statusEffects.some(e => e.type === 'buff')
     if (!hasBuffs) {
       const buffSkill = availableSkills.find(s => s.type === 'buff')
-      if (buffSkill) return buffSkill
+      if (buffSkill) {
+        return buffSkill
+      }
     }
-    
+
     // 콤보 가능한 스킬 확인
     const lastAction = this.actionQueue[this.actionQueue.length - 1]
     if (lastAction && lastAction.attacker === attacker.id) {
@@ -304,7 +310,7 @@ export class AutoBattleManager {
         return comboSkills[0]
       }
     }
-    
+
     // 약점 공격 우선
     if (defender.weaknesses) {
       const weaknessSkills = availableSkills.filter(
@@ -314,12 +320,12 @@ export class AutoBattleManager {
         return weaknessSkills[0]
       }
     }
-    
+
     // 가장 강력한 공격 스킬 사용
     const attackSkills = availableSkills
       .filter(s => s.type === 'damage')
       .sort((a, b) => (b.power || 0) - (a.power || 0))
-    
+
     return attackSkills[0] || availableSkills[0]
   }
 
@@ -330,20 +336,20 @@ export class AutoBattleManager {
     skill: BattleSkill
   ): Promise<BattleAction> {
     let action: BattleAction
-    
+
     switch (skill.type) {
       case 'damage':
         const damageResult = this.calculateDamage(attacker, defender, skill)
-        
+
         if (!damageResult.isEvaded) {
           defender.stats.hp = Math.max(0, defender.stats.hp - damageResult.damage)
-          
+
           // 상태 이상 효과 적용
           if (skill.statusEffect) {
             this.applyStatusEffect(defender, skill.statusEffect)
           }
         }
-        
+
         action = {
           id: `action_${Date.now()}`,
           attacker: attacker.id,
@@ -359,12 +365,12 @@ export class AutoBattleManager {
           statusEffectApplied: skill.statusEffect?.name
         }
         break
-        
+
       case 'heal':
         const healAmount = skill.healAmount || 0
         const actualHeal = Math.min(healAmount, attacker.stats.maxHp - attacker.stats.hp)
         attacker.stats.hp += actualHeal
-        
+
         action = {
           id: `action_${Date.now()}`,
           attacker: attacker.id,
@@ -376,14 +382,14 @@ export class AutoBattleManager {
           healing: actualHeal
         }
         break
-        
+
       case 'buff':
       case 'debuff':
         if (skill.statusEffect) {
           const target = skill.type === 'buff' ? attacker : defender
           this.applyStatusEffect(target, skill.statusEffect)
         }
-        
+
         action = {
           id: `action_${Date.now()}`,
           attacker: attacker.id,
@@ -395,7 +401,7 @@ export class AutoBattleManager {
           statusEffectApplied: skill.statusEffect?.name
         }
         break
-        
+
       default:
         action = {
           id: `action_${Date.now()}`,
@@ -407,7 +413,7 @@ export class AutoBattleManager {
           action: 'skill' as const
         }
     }
-    
+
     // 콤보 카운터 업데이트
     if (skill.comboWith) {
       const comboCount = (this.comboCounter.get(attacker.id) || 0) + 1
@@ -419,7 +425,7 @@ export class AutoBattleManager {
     } else {
       this.comboCounter.set(attacker.id, 0)
     }
-    
+
     return action
   }
 
@@ -438,17 +444,17 @@ export class AutoBattleManager {
     if (Math.random() < defender.stats.evasion) {
       return { damage: 0, isCritical: false, isEvaded: true }
     }
-    
+
     // 기본 데미지 계산
-    const attackStat = skill.damageType === 'physical' 
-      ? attacker.stats.attack 
+    const attackStat = skill.damageType === 'physical'
+      ? attacker.stats.attack
       : attacker.stats.magicAttack
     const defenseStat = skill.damageType === 'physical'
       ? defender.stats.defense
       : defender.stats.magicDefense
-    
+
     const baseDamage = (attackStat * (skill.power || 100) / 100) - (defenseStat / 2)
-    
+
     // 속성 보정
     let elementalBonus = 1
     if (skill.element && skill.element !== 'neutral') {
@@ -458,21 +464,21 @@ export class AutoBattleManager {
         elementalBonus = 0.5
       }
     }
-    
+
     // 크리티컬 체크
     const isCritical = Math.random() < attacker.stats.critical
     const criticalMultiplier = isCritical ? attacker.stats.criticalDamage : 1
-    
+
     // 랜덤 변동
     const variance = 0.9 + Math.random() * 0.2
-    
+
     // 콤보 보너스
     const comboBonus = 1 + (this.comboCounter.get(attacker.id) || 0) * 0.1
-    
+
     const finalDamage = Math.floor(
       Math.max(1, baseDamage * elementalBonus * criticalMultiplier * variance * comboBonus)
     )
-    
+
     return {
       damage: finalDamage,
       isCritical,
@@ -484,7 +490,7 @@ export class AutoBattleManager {
   // 상태 이상 효과 적용
   private applyStatusEffect(target: MutableDeep<BattleCharacter>, effect: StatusEffect) {
     const existingIndex = target.statusEffects.findIndex(e => e.id === effect.id)
-    
+
     if (existingIndex !== -1 && !effect.stackable) {
       // 스택 불가능한 경우 지속시간만 갱신
       target.statusEffects[existingIndex] = {
@@ -510,13 +516,13 @@ export class AutoBattleManager {
   // 효과적인 속도 계산 (버프/디버프 포함)
   private getEffectiveSpeed(character: MutableDeep<BattleCharacter>): number {
     let speed = character.stats.speed
-    
+
     character.statusEffects.forEach(effect => {
       if (effect.stats?.speed) {
         speed += effect.stats.speed
       }
     })
-    
+
     return Math.max(1, speed)
   }
 
@@ -552,7 +558,9 @@ export class AutoBattleManager {
 
   // 승자 확인
   private getWinner(): 'player' | 'enemy' | null {
-    if (!this.isBattleOver()) return null
+    if (!this.isBattleOver()) {
+      return null
+    }
     return this.state.player.stats.hp > 0 ? 'player' : 'enemy'
   }
 
@@ -562,7 +570,7 @@ export class AutoBattleManager {
     const baseExp = 50 + enemyLevel * 10
     const turnBonus = Math.max(0, 20 - this.state.turn) * 2
     const comboBonus = Math.max(...Array.from(this.comboCounter.values())) * 5
-    
+
     return baseExp + turnBonus + comboBonus
   }
 
@@ -571,7 +579,7 @@ export class AutoBattleManager {
     const enemyLevel = this.state.enemy.stats.level
     const baseGold = 20 + enemyLevel * 5
     const randomBonus = Math.floor(Math.random() * 10)
-    
+
     return {
       gold: baseGold + randomBonus,
       items: Math.random() < 0.3 ? ['potion_small'] : []

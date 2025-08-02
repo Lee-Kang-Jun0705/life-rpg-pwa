@@ -112,7 +112,7 @@ export const DAILY_MISSION_TEMPLATES: Omit<DailyMission, 'id' | 'current' | 'isC
     target: 30,
     rewards: { exp: 50, gold: 30, items: ['stamina-potion'] }
   },
-  
+
   // 학습 미션
   {
     title: '독서하기',
@@ -130,7 +130,7 @@ export const DAILY_MISSION_TEMPLATES: Omit<DailyMission, 'id' | 'current' | 'isC
     target: 1,
     rewards: { exp: 40, gold: 20, items: ['wisdom-scroll'] }
   },
-  
+
   // 관계 미션
   {
     title: '감사 표현하기',
@@ -148,7 +148,7 @@ export const DAILY_MISSION_TEMPLATES: Omit<DailyMission, 'id' | 'current' | 'isC
     target: 30,
     rewards: { exp: 35, gold: 18, energy: 5 }
   },
-  
+
   // 성취 미션
   {
     title: '할 일 완료하기',
@@ -166,7 +166,7 @@ export const DAILY_MISSION_TEMPLATES: Omit<DailyMission, 'id' | 'current' | 'isC
     target: 1,
     rewards: { exp: 60, gold: 40, items: ['exp-booster'] }
   },
-  
+
   // 일반 미션
   {
     title: '던전 클리어',

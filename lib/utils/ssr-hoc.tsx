@@ -40,7 +40,7 @@ export function withSSRSafeData<P extends object, D>(
 
     useEffect(() => {
       if (isClient()) {
-        const loadData = async () => {
+        const loadData = async() => {
           try {
             const result = await fetchData()
             setData(result)
@@ -80,14 +80,14 @@ export function withBrowserAPI<P extends object>(
       const allAvailable = dependencies.every(dep => {
         const parts = dep.split('.')
         let current: unknown = window
-        
+
         for (const part of parts) {
           if (!current || typeof current !== 'object' || current === null || !(part in current)) {
             return false
           }
           current = (current as Record<string, unknown>)[part]
         }
-        
+
         return true
       })
 

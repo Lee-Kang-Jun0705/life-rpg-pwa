@@ -20,7 +20,7 @@ export class ServiceWorkerManager {
         this.registration = await navigator.serviceWorker.register('/sw-enhanced.js', {
           scope: '/'
         })
-        
+
         console.log('[SW Manager] Service Worker registered')
 
         // SW 업데이트 체크
@@ -123,7 +123,7 @@ export function useServiceWorker() {
 
   useEffect(() => {
     const swManager = ServiceWorkerManager.getInstance()
-    
+
     swManager.register().then(registered => {
       setIsRegistered(registered)
     })

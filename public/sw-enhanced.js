@@ -53,7 +53,7 @@ self.addEventListener('fetch', event => {
 // 백그라운드 동기화
 self.addEventListener('sync', event => {
   console.log('[SW] Background sync triggered:', event.tag)
-  
+
   if (event.tag === SYNC_TAG) {
     event.waitUntil(syncGameData())
   }
@@ -62,7 +62,7 @@ self.addEventListener('sync', event => {
 // 메시지 수신 (클라이언트와 통신)
 self.addEventListener('message', event => {
   console.log('[SW] Message received:', event.data)
-  
+
   if (event.data.type === 'SYNC_NOW') {
     event.waitUntil(syncGameData())
   }

@@ -82,7 +82,7 @@ describe('DashboardClient 컴포넌트', () => {
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       // LoadingState 컴포넌트의 특징적인 요소 확인
       expect(screen.getByText('로딩 중...')).toBeInTheDocument()
     })
@@ -99,7 +99,7 @@ describe('DashboardClient 컴포넌트', () => {
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       expect(screen.getByText(errorMessage)).toBeInTheDocument()
       expect(screen.getByText('다시 시도')).toBeInTheDocument()
     })
@@ -110,7 +110,7 @@ describe('DashboardClient 컴포넌트', () => {
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       // DashboardContent가 렌더링되는지 확인
       expect(screen.getByText('Life RPG')).toBeInTheDocument()
       expect(screen.getByText('스탯 올리기')).toBeInTheDocument()
@@ -118,23 +118,23 @@ describe('DashboardClient 컴포넌트', () => {
   })
 
   describe('스탯 액션 테스트', () => {
-    test('스탯 액션 시 레벨업 감지가 작동한다', async () => {
+    test('스탯 액션 시 레벨업 감지가 작동한다', async() => {
       render(
         <TestWrapper>
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       // 스탯 카드 클릭 시뮬레이션
       const statCards = screen.getAllByTestId('stat-card')
       fireEvent.click(statCards[0])
-      
+
       // 모달에서 활동 선택
       await waitFor(() => {
         const activityButton = screen.getByText('운동하기')
         fireEvent.click(activityButton)
       })
-      
+
       expect(mockDetectLevelUp).toHaveBeenCalled()
       expect(mockHandleStatAction).toHaveBeenCalled()
     })
@@ -154,7 +154,7 @@ describe('DashboardClient 컴포넌트', () => {
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       // 레벨업 축하 컴포넌트가 표시되는지 확인
       expect(screen.getByText(/레벨업!/)).toBeInTheDocument()
       expect(screen.getByText(/Lv\.2/)).toBeInTheDocument()
@@ -165,7 +165,7 @@ describe('DashboardClient 컴포넌트', () => {
     test('에러 발생 시 콘솔에 로그가 출력된다', () => {
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
       const errorMessage = '테스트 에러'
-      
+
       mockUseDashboard.mockReturnValue({
         ...defaultMockDashboardData,
         error: errorMessage
@@ -176,9 +176,9 @@ describe('DashboardClient 컴포넌트', () => {
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       expect(consoleErrorSpy).toHaveBeenCalledWith('[Dashboard] Error:', errorMessage)
-      
+
       consoleErrorSpy.mockRestore()
     })
 
@@ -193,10 +193,10 @@ describe('DashboardClient 컴포넌트', () => {
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       const retryButton = screen.getByText('다시 시도')
       fireEvent.click(retryButton)
-      
+
       expect(mockLoadUserData).toHaveBeenCalled()
     })
   })
@@ -208,16 +208,16 @@ describe('DashboardClient 컴포넌트', () => {
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       const initialRenderCount = mockUseDashboard.mock.calls.length
-      
+
       // 동일한 props로 리렌더링
       rerender(
         <TestWrapper>
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       // useDashboard가 추가로 호출되지 않았는지 확인
       expect(mockUseDashboard.mock.calls.length).toBe(initialRenderCount)
     })
@@ -226,18 +226,18 @@ describe('DashboardClient 컴포넌트', () => {
   describe('음성 입력 테스트', () => {
     test('음성 입력 에러 발생 시 콘솔에 로그가 출력된다', () => {
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
-      
+
       render(
         <TestWrapper>
           <DashboardClient />
         </TestWrapper>
       )
-      
+
       // EnhancedVoiceInput의 onError 콜백 시뮬레이션
       const error = new Error('음성 인식 실패')
       // 실제로는 EnhancedVoiceInput 컴포넌트가 mock되어 있으므로
       // 직접적인 테스트는 어렵지만, 구조적으로 확인
-      
+
       consoleErrorSpy.mockRestore()
     })
   })

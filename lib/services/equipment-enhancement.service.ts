@@ -50,16 +50,16 @@ const ENHANCEMENT_CONFIG = {
     25,  // 11→12
     20,  // 12→13
     15,  // 13→14
-    10,  // 14→15
+    10  // 14→15
   ],
-  
+
   // 강화 실패 패널티
   failurePenalty: {
     0: { downgrade: false, destroy: false },
     5: { downgrade: true, destroy: false },  // 5레벨부터 하락 가능
-    10: { downgrade: true, destroy: true },  // 10레벨부터 파괴 가능
+    10: { downgrade: true, destroy: true }  // 10레벨부터 파괴 가능
   },
-  
+
   // 골드 비용 계산
   goldCostFormula: (level: number, rarity: Rarity) => {
     const rarityMultiplier: Record<Rarity, number> = {
@@ -72,7 +72,7 @@ const ENHANCEMENT_CONFIG = {
     }
     return Math.floor(100 * Math.pow(1.5, level) * rarityMultiplier[rarity])
   },
-  
+
   // 스탯 증가율
   statIncreaseRate: {
     common: 1.05,
@@ -82,7 +82,7 @@ const ENHANCEMENT_CONFIG = {
     legendary: 1.18,
     mythic: 1.22
   },
-  
+
   // 대성공 확률
   criticalSuccessRate: 0.1, // 10%
   criticalSuccessBonus: 1.5 // 스탯 증가량 50% 추가
@@ -116,7 +116,7 @@ class EquipmentEnhancementService {
   async enhanceEquipment(
     itemId: string,
     materials: Array<{ id: string; quantity: number }>,
-    useProtection: boolean = false
+    useProtection = false
   ): Promise<EnhancementResult | { success: false; error: string }> {
     try {
       // 장비 정보 가져오기
@@ -176,7 +176,7 @@ class EquipmentEnhancementService {
         // 강화 성공
         const previousLevel = equipment.enhancementLevel || 0
         const newLevel = previousLevel + 1
-        
+
         // 스탯 증가 계산
         const statsImproved = this.calculateStatImprovement(
           equipment,
@@ -240,7 +240,7 @@ class EquipmentEnhancementService {
    */
   private calculateMaterialBonus(materials: Array<{ id: string; quantity: number }>): number {
     let bonus = 0
-    
+
     for (const material of materials) {
       const item = inventoryService.getItem(material.id)
       if (item && item.type === 'material') {
@@ -249,7 +249,7 @@ class EquipmentEnhancementService {
         bonus += tierBonus * material.quantity * 2 // 티어당 2% 보너스
       }
     }
-    
+
     return bonus
   }
 
@@ -261,12 +261,14 @@ class EquipmentEnhancementService {
     criticalSuccess: boolean
   ): Record<string, number> {
     const improvement: Record<string, number> = {}
-    
-    if (!equipment.stats) return improvement
-    
+
+    if (!equipment.stats) {
+      return improvement
+    }
+
     const increaseRate = ENHANCEMENT_CONFIG.statIncreaseRate[equipment.rarity]
     const multiplier = criticalSuccess ? ENHANCEMENT_CONFIG.criticalSuccessBonus : 1
-    
+
     // 각 스탯별 증가량 계산
     for (const [stat, value] of Object.entries(equipment.stats)) {
       if (typeof value === 'number' && value > 0) {
@@ -274,7 +276,7 @@ class EquipmentEnhancementService {
         improvement[stat] = increase
       }
     }
-    
+
     return improvement
   }
 
@@ -286,12 +288,12 @@ class EquipmentEnhancementService {
     useProtection: boolean
   ): Promise<{ item: EnhanceableItem; destroyed: boolean; downgraded: boolean }> {
     const level = equipment.enhancementLevel || 0
-    
+
     // 보호 아이템 사용 시 패널티 없음
     if (useProtection) {
       return { item: equipment, destroyed: false, downgraded: false }
     }
-    
+
     // 레벨별 패널티 확인
     if (level >= 10 && ENHANCEMENT_CONFIG.failurePenalty[10].destroy) {
       // 파괴 확률 (10% + 레벨당 2%)
@@ -301,29 +303,29 @@ class EquipmentEnhancementService {
         return { item: equipment, destroyed: true, downgraded: false }
       }
     }
-    
+
     if (level >= 5 && ENHANCEMENT_CONFIG.failurePenalty[5].downgrade) {
       // 하락 확률 (30% + 레벨당 5%)
       const downgradeChance = 30 + (level - 5) * 5
       if (Math.random() * 100 < downgradeChance) {
         equipment.enhancementLevel = Math.max(0, level - 1)
-        
+
         // 스탯 감소
         if (equipment.stats) {
           const decreaseRate = 1 / ENHANCEMENT_CONFIG.statIncreaseRate[equipment.rarity]
           for (const [stat, value] of Object.entries(equipment.stats)) {
             if (typeof value === 'number' && value > 0) {
-              (equipment.stats[stat as keyof typeof equipment.stats] as number) = 
+              (equipment.stats[stat as keyof typeof equipment.stats] as number) =
                 Math.floor(value * decreaseRate)
             }
           }
         }
-        
+
         inventoryService.updateItem(equipment.id, equipment)
         return { item: equipment, destroyed: false, downgraded: true }
       }
     }
-    
+
     return { item: equipment, destroyed: false, downgraded: false }
   }
 
@@ -348,17 +350,17 @@ class EquipmentEnhancementService {
     const baseSuccessRate = ENHANCEMENT_CONFIG.successRates[level] || 10
     const materialBonus = this.calculateMaterialBonus(materials)
     const successRate = Math.min(100, baseSuccessRate + materialBonus)
-    
+
     const goldCost = ENHANCEMENT_CONFIG.goldCostFormula(level, equipment.rarity)
     const expectedStats = this.calculateStatImprovement(equipment, false)
-    
+
     const risks = {
       canDowngrade: level >= 5,
       canDestroy: level >= 10,
       downgradeChance: level >= 5 ? 30 + (level - 5) * 5 : 0,
       destroyChance: level >= 10 ? 10 + (level - 10) * 2 : 0
     }
-    
+
     return { successRate, goldCost, expectedStats, risks }
   }
 
@@ -366,8 +368,8 @@ class EquipmentEnhancementService {
    * 강화 재료 목록 가져오기
    */
   getEnhancementMaterials(): GeneratedItem[] {
-    return inventoryService.getItems().filter(item => 
-      item.type === 'material' && 
+    return inventoryService.getItems().filter(item =>
+      item.type === 'material' &&
       ['stone', 'essence', 'crystal', 'fragment'].includes((item as unknown).subType || '')
     )
   }
@@ -377,29 +379,33 @@ class EquipmentEnhancementService {
    */
   recommendMaterials(
     equipment: EnhanceableItem,
-    targetSuccessRate: number = 80
+    targetSuccessRate = 80
   ): Array<{ id: string; quantity: number }> {
     const level = equipment.enhancementLevel || 0
     const baseSuccessRate = ENHANCEMENT_CONFIG.successRates[level] || 10
     const needed = targetSuccessRate - baseSuccessRate
-    
-    if (needed <= 0) return []
-    
+
+    if (needed <= 0) {
+      return []
+    }
+
     const materials = this.getEnhancementMaterials()
     const recommendations: Array<{ id: string; quantity: number }> = []
-    
+
     // 높은 티어 재료부터 추천
     materials.sort((a, b) => ((b as unknown).tier || 1) - ((a as unknown).tier || 1))
-    
+
     let remainingBonus = needed
     for (const material of materials) {
-      if (remainingBonus <= 0) break
-      
+      if (remainingBonus <= 0) {
+        break
+      }
+
       const tier = (material as unknown).tier || 1
       const bonusPerItem = tier * 2
       const quantity = Math.ceil(remainingBonus / bonusPerItem)
       const materialQuantity = (material as unknown)?.quantity || 1
-      
+
       if (materialQuantity >= quantity) {
         recommendations.push({ id: material.id, quantity })
         break
@@ -408,7 +414,7 @@ class EquipmentEnhancementService {
         remainingBonus -= materialQuantity * bonusPerItem
       }
     }
-    
+
     return recommendations
   }
 }

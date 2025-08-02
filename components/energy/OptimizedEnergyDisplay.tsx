@@ -13,28 +13,30 @@ interface OptimizedEnergyDisplayProps {
   onEnergyChange?: (energy: number) => void
 }
 
-export function OptimizedEnergyDisplay({ 
-  userId, 
-  compact = false, 
-  onEnergyChange 
+export function OptimizedEnergyDisplay({
+  userId,
+  compact = false,
+  onEnergyChange
 }: OptimizedEnergyDisplayProps) {
   const [energyState, setEnergyState] = useState<PlayerEnergyState | null>(null)
   const [displayEnergy, setDisplayEnergy] = useState(0)
   const [timeUntilNext, setTimeUntilNext] = useState(0)
   const [loading, setLoading] = useState(true)
   const [canClaimBonus, setCanClaimBonus] = useState(false)
-  
+
   const energyService = OptimizedEnergyService.getInstance()
   const { registerTimer, registerInterval } = usePerformanceMonitor('energy')
   const visibility = useVisibilityManager()
 
   // 에너지 상태 계산 (UI 업데이트용)
-  const updateEnergyDisplay = useCallback(async () => {
-    if (!energyState) return
-    
+  const updateEnergyDisplay = useCallback(async() => {
+    if (!energyState) {
+      return
+    }
+
     const currentState = await energyService.calculateEnergyState(userId)
     setDisplayEnergy(currentState.energy.current)
-    
+
     // 다음 회복 시간 계산
     if (currentState.energy.current < currentState.energy.max) {
       const nextTime = energyService.getTimeUntilNextRegen(currentState)
@@ -42,7 +44,7 @@ export function OptimizedEnergyDisplay({
     } else {
       setTimeUntilNext(0)
     }
-    
+
     if (onEnergyChange && currentState.energy.current !== energyState.energy.current) {
       onEnergyChange(currentState.energy.current)
       setEnergyState(currentState)
@@ -50,13 +52,13 @@ export function OptimizedEnergyDisplay({
   }, [energyState, userId, energyService, onEnergyChange])
 
   // 초기 로드 및 오프라인 회복
-  const loadInitialState = useCallback(async () => {
+  const loadInitialState = useCallback(async() => {
     try {
       // 오프라인 회복 계산
       const state = await energyService.calculateOfflineRecovery(userId)
       setEnergyState(state)
       setDisplayEnergy(state.energy.current)
-      
+
       // 일일 보너스 가능 여부
       if (state.lastDailyBonus) {
         const lastClaim = new Date(state.lastDailyBonus)
@@ -66,7 +68,7 @@ export function OptimizedEnergyDisplay({
       } else {
         setCanClaimBonus(true)
       }
-      
+
       if (onEnergyChange) {
         onEnergyChange(state.energy.current)
       }
@@ -78,13 +80,13 @@ export function OptimizedEnergyDisplay({
   }, [userId, energyService, onEnergyChange])
 
   // 일일 보너스 수령
-  const claimDailyBonus = async () => {
+  const claimDailyBonus = async() => {
     try {
       const result = await energyService.claimDailyBonus(userId)
       setEnergyState(result)
       setDisplayEnergy(result.energy.current)
       setCanClaimBonus(false)
-      
+
       if (onEnergyChange) {
         onEnergyChange(result.energy.current)
       }
@@ -107,7 +109,7 @@ export function OptimizedEnergyDisplay({
 
     // 다음 회복 시간 계산
     const timeToNext = energyService.getTimeUntilNextRegen(energyState)
-    
+
     // 다음 회복 시점에 업데이트 예약 (visibility manager 사용)
     visibility.registerTimeout('energy-next-regen', () => {
       updateEnergyDisplay()
@@ -139,7 +141,7 @@ export function OptimizedEnergyDisplay({
 
     window.addEventListener('focus', handleFocus)
     document.addEventListener('click', handleUserInteraction)
-    
+
     return () => {
       window.removeEventListener('focus', handleFocus)
       document.removeEventListener('click', handleUserInteraction)
@@ -148,12 +150,14 @@ export function OptimizedEnergyDisplay({
 
   // 시간 포맷팅
   const formatTime = (seconds: number): string => {
-    if (seconds <= 0) return '0:00'
-    
+    if (seconds <= 0) {
+      return '0:00'
+    }
+
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
     const secs = Math.floor(seconds % 60)
-    
+
     if (hours > 0) {
       return `${hours}h ${minutes}m`
     } else if (minutes > 0) {
@@ -164,7 +168,7 @@ export function OptimizedEnergyDisplay({
   }
 
   if (loading || !energyState) {
-    return <div className="animate-pulse bg-gray-200 rounded h-8 w-32"></div>
+    return <div className="animate-pulse bg-gray-200 rounded h-8 w-32" />
   }
 
   if (compact) {
@@ -191,9 +195,9 @@ export function OptimizedEnergyDisplay({
             {displayEnergy}/{energyState.energy.max}
           </span>
         </div>
-        
+
         <div className="w-full bg-gray-200 rounded-full h-2.5">
-          <div 
+          <div
             className="bg-yellow-500 h-2.5 rounded-full transition-all duration-300"
             style={{ width: `${(displayEnergy / energyState.energy.max) * 100}%` }}
           />

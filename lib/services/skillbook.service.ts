@@ -10,9 +10,9 @@ import type { GeneratedItem } from '@/lib/types/item-system'
 
 class SkillBookService {
   private static instance: SkillBookService
-  
+
   private constructor() {}
-  
+
   static getInstance(): SkillBookService {
     if (!SkillBookService.instance) {
       SkillBookService.instance = new SkillBookService()
@@ -102,7 +102,7 @@ class SkillBookService {
    * 아이템이 스킬북인지 확인
    */
   isSkillBook(_item: GeneratedItem): boolean {
-    return item.type === 'consumable' && 
+    return item.type === 'consumable' &&
            item.consumableEffect?.type === 'skill_book' &&
            !!item.consumableEffect.skillId
   }

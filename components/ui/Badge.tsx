@@ -29,7 +29,7 @@ export function Badge({
           'bg-gray-200 text-gray-900 dark:bg-gray-600 dark:text-gray-100': variant === 'secondary',
           'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': variant === 'success',
           'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300': variant === 'warning',
-          'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300': variant === 'danger',
+          'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300': variant === 'danger'
         },
         className
       )}

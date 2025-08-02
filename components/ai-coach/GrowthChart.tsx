@@ -16,33 +16,33 @@ export function GrowthChart({ data }: GrowthChartProps) {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line 
-          type="monotone" 
-          dataKey="health" 
-          stroke="#96CEB4" 
-          name="건강" 
-          strokeWidth={3} 
+        <Line
+          type="monotone"
+          dataKey="health"
+          stroke="#96CEB4"
+          name="건강"
+          strokeWidth={3}
         />
-        <Line 
-          type="monotone" 
-          dataKey="learning" 
-          stroke="#87CEEB" 
-          name="학습" 
-          strokeWidth={3} 
+        <Line
+          type="monotone"
+          dataKey="learning"
+          stroke="#87CEEB"
+          name="학습"
+          strokeWidth={3}
         />
-        <Line 
-          type="monotone" 
-          dataKey="relationship" 
-          stroke="#FFB6C1" 
-          name="관계" 
-          strokeWidth={3} 
+        <Line
+          type="monotone"
+          dataKey="relationship"
+          stroke="#FFB6C1"
+          name="관계"
+          strokeWidth={3}
         />
-        <Line 
-          type="monotone" 
-          dataKey="achievement" 
-          stroke="#FECA57" 
-          name="성취" 
-          strokeWidth={3} 
+        <Line
+          type="monotone"
+          dataKey="achievement"
+          stroke="#FECA57"
+          name="성취"
+          strokeWidth={3}
         />
       </LineChart>
     </ResponsiveContainer>

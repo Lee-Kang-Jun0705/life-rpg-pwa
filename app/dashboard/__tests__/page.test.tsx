@@ -51,26 +51,26 @@ describe('Dashboard Page', () => {
     jest.clearAllMocks()
   })
 
-  it('대시보드가 렌더링되어야 함', async () => {
+  it('대시보드가 렌더링되어야 함', async() => {
     render(<Dashboard />)
-    
+
     await waitFor(() => {
       expect(screen.getByText(/Life RPG/)).toBeInTheDocument()
     })
   })
 
-  it('환영 메시지가 표시되어야 함', async () => {
+  it('환영 메시지가 표시되어야 함', async() => {
     render(<Dashboard />)
-    
+
     await waitFor(() => {
       const welcomeText = screen.getByText(/님,|안녕하세요/)
       expect(welcomeText).toBeInTheDocument()
     })
   })
 
-  it('스탯 카드들이 표시되어야 함', async () => {
+  it('스탯 카드들이 표시되어야 함', async() => {
     render(<Dashboard />)
-    
+
     await waitFor(() => {
       expect(screen.getByText('건강')).toBeInTheDocument()
       expect(screen.getByText('학습')).toBeInTheDocument()
@@ -79,9 +79,9 @@ describe('Dashboard Page', () => {
     })
   })
 
-  it('스탯 값들이 올바르게 표시되어야 함', async () => {
+  it('스탯 값들이 올바르게 표시되어야 함', async() => {
     render(<Dashboard />)
-    
+
     await waitFor(() => {
       expect(screen.getByText('80')).toBeInTheDocument()
       expect(screen.getByText('60')).toBeInTheDocument()
@@ -90,25 +90,25 @@ describe('Dashboard Page', () => {
     })
   })
 
-  it('최근 활동이 표시되어야 함', async () => {
+  it('최근 활동이 표시되어야 함', async() => {
     render(<Dashboard />)
-    
+
     await waitFor(() => {
       expect(screen.getByText('최근 활동')).toBeInTheDocument()
       expect(screen.getByText('테스트 활동')).toBeInTheDocument()
     })
   })
 
-  it('음성 입력 버튼이 표시되어야 함', async () => {
+  it('음성 입력 버튼이 표시되어야 함', async() => {
     render(<Dashboard />)
-    
+
     await waitFor(() => {
       const voiceButton = screen.getByRole('button', { name: /음성으로 활동 기록/ })
       expect(voiceButton).toBeInTheDocument()
     })
   })
 
-  it('오프라인 상태가 표시되어야 함', async () => {
+  it('오프라인 상태가 표시되어야 함', async() => {
     // 오프라인 상태 시뮬레이션
     Object.defineProperty(navigator, 'onLine', {
       writable: true,
@@ -116,7 +116,7 @@ describe('Dashboard Page', () => {
     })
 
     render(<Dashboard />)
-    
+
     await waitFor(() => {
       expect(screen.getByText('오프라인')).toBeInTheDocument()
     })

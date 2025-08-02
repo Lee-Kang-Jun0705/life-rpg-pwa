@@ -16,7 +16,7 @@ export const ALL_ITEMS: Record<string, Item> = {
   ...ARMOR_ITEMS,
   ...ACCESSORY_ITEMS,
   ...CONSUMABLE_ITEMS,
-  ...MATERIAL_ITEMS,
+  ...MATERIAL_ITEMS
 }
 
 // 아이템 통계
@@ -27,21 +27,21 @@ export const ITEM_STATISTICS = {
     armor: Object.values(ALL_ITEMS).filter(item => item.type === 'armor').length,
     accessory: Object.values(ALL_ITEMS).filter(item => item.type === 'accessory').length,
     consumable: Object.values(ALL_ITEMS).filter(item => item.type === 'consumable').length,
-    material: Object.values(ALL_ITEMS).filter(item => item.type === 'material').length,
+    material: Object.values(ALL_ITEMS).filter(item => item.type === 'material').length
   },
   byRarity: {
     common: Object.values(ALL_ITEMS).filter(item => item.rarity === 'common').length,
     uncommon: Object.values(ALL_ITEMS).filter(item => item.rarity === 'uncommon').length,
     rare: Object.values(ALL_ITEMS).filter(item => item.rarity === 'rare').length,
     epic: Object.values(ALL_ITEMS).filter(item => item.rarity === 'epic').length,
-    legendary: Object.values(ALL_ITEMS).filter(item => item.rarity === 'legendary').length,
+    legendary: Object.values(ALL_ITEMS).filter(item => item.rarity === 'legendary').length
   },
   byLevel: {
     '1-10': Object.values(ALL_ITEMS).filter(item => item.level >= 1 && item.level <= 10).length,
     '11-20': Object.values(ALL_ITEMS).filter(item => item.level >= 11 && item.level <= 20).length,
     '21-30': Object.values(ALL_ITEMS).filter(item => item.level >= 21 && item.level <= 30).length,
     '31-40': Object.values(ALL_ITEMS).filter(item => item.level >= 31 && item.level <= 40).length,
-    '41-50': Object.values(ALL_ITEMS).filter(item => item.level >= 41 && item.level <= 50).length,
+    '41-50': Object.values(ALL_ITEMS).filter(item => item.level >= 41 && item.level <= 50).length
   }
 }
 

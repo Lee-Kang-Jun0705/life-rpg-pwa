@@ -60,7 +60,7 @@ export function InventoryGrid({
       {items.map((invItem, index) => {
         const item = invItem.item
         const isSelected = selectedItems.has(item.uniqueId)
-        
+
         return (
           <motion.div
             key={item.uniqueId}
@@ -89,10 +89,10 @@ export function InventoryGrid({
               <span className="text-3xl">
                 {item.icon || (
                   item.type === 'weapon' ? '⚔️' :
-                  item.type === 'armor' ? '🛡️' :
-                  item.type === 'accessory' ? '💎' :
-                  item.type === 'consumable' ? '🧪' :
-                  '📦'
+                    item.type === 'armor' ? '🛡️' :
+                      item.type === 'accessory' ? '💎' :
+                        item.type === 'consumable' ? '🧪' :
+                          '📦'
                 )}
               </span>
             </div>
@@ -160,7 +160,7 @@ export function InventoryGrid({
 
             {/* 아이템 이름 툴팁 */}
             <div className="
-              absolute bottom-full left-1/2 -translate-x-1/2 mb-2 
+              absolute bottom-full left-1/2 -translate-x-1/2 mb-2
               opacity-0 group-hover:opacity-100 pointer-events-none
               transition-opacity z-10
             ">

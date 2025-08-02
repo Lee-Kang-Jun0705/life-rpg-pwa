@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { persistenceService } from '@/lib/services/persistence.service'
-import { 
-  Save, 
+import {
+  Save,
   CloudOff,
   Check,
   AlertCircle,
@@ -19,16 +19,16 @@ export function SaveLoadIndicator() {
   useEffect(() => {
     // 초기 저장 시간 로드
     loadLastSaveTime()
-    
+
     // 저장 이벤트 리스너
     const handleSave = () => {
       setSaveStatus('saving')
       setShowStatus(true)
-      
+
       setTimeout(() => {
         setSaveStatus('saved')
         loadLastSaveTime()
-        
+
         setTimeout(() => {
           setShowStatus(false)
           setSaveStatus('idle')
@@ -38,27 +38,27 @@ export function SaveLoadIndicator() {
 
     // 전역 저장 이벤트 리스너 (커스텀 이벤트)
     window.addEventListener('game-save', handleSave)
-    
+
     return () => {
       window.removeEventListener('game-save', handleSave)
     }
   }, [])
 
-  const loadLastSaveTime = async () => {
+  const loadLastSaveTime = async() => {
     const time = await persistenceService.getLastSaveTime('player-1')
     setLastSaveTime(time)
   }
 
-  const handleManualSave = async () => {
+  const handleManualSave = async() => {
     try {
       setSaveStatus('saving')
       setShowStatus(true)
-      
+
       await persistenceService.saveAll('player-1')
-      
+
       setSaveStatus('saved')
       await loadLastSaveTime()
-      
+
       setTimeout(() => {
         setShowStatus(false)
         setSaveStatus('idle')
@@ -66,7 +66,7 @@ export function SaveLoadIndicator() {
     } catch (error) {
       console.error('Save failed:', error)
       setSaveStatus('error')
-      
+
       setTimeout(() => {
         setShowStatus(false)
         setSaveStatus('idle')
@@ -78,13 +78,19 @@ export function SaveLoadIndicator() {
     const now = new Date()
     const diff = now.getTime() - date.getTime()
     const minutes = Math.floor(diff / 60000)
-    
-    if (minutes < 1) return '방금 전'
-    if (minutes < 60) return `${minutes}분 전`
-    
+
+    if (minutes < 1) {
+      return '방금 전'
+    }
+    if (minutes < 60) {
+      return `${minutes}분 전`
+    }
+
     const hours = Math.floor(minutes / 60)
-    if (hours < 24) return `${hours}시간 전`
-    
+    if (hours < 24) {
+      return `${hours}시간 전`
+    }
+
     const days = Math.floor(hours / 24)
     return `${days}일 전`
   }

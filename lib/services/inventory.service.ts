@@ -3,10 +3,10 @@
  * 아이템 저장, 정렬, 필터링, 장착 관리
  */
 
-import type { 
-  GeneratedItem, 
-  InventoryItem, 
-  ItemFilter, 
+import type {
+  GeneratedItem,
+  InventoryItem,
+  ItemFilter,
   ItemSortOption,
   ItemType,
   ItemRarity,
@@ -16,7 +16,7 @@ import type {
 import { INVENTORY_CONFIG } from '../constants/game.constants'
 import { soundService } from './sound.service'
 
-export type EquipmentSlot = 
+export type EquipmentSlot =
   | 'weapon'
   | 'helmet'
   | 'armor'
@@ -70,11 +70,13 @@ class InventoryService {
   }
 
   // 아이템 추가
-  addItem(item: GeneratedItem, quantity: number = 1): boolean {
-    if (quantity <= 0) return false
+  addItem(item: GeneratedItem, quantity = 1): boolean {
+    if (quantity <= 0) {
+      return false
+    }
 
     const existingItem = this.inventory.get(item.uniqueId)
-    
+
     if (existingItem) {
       // 스택 가능한 아이템인 경우
       if (item.stackable && existingItem.quantity < (item.maxStack || INVENTORY_CONFIG.DEFAULT_MAX_STACK)) {
@@ -82,7 +84,7 @@ class InventoryService {
           existingItem.quantity + quantity,
           item.maxStack || INVENTORY_CONFIG.DEFAULT_MAX_STACK
         )
-        
+
         this.inventory.set(item.uniqueId, {
           ...existingItem,
           quantity: newQuantity
@@ -113,11 +115,15 @@ class InventoryService {
   }
 
   // 아이템 제거
-  removeItem(uniqueId: string, quantity: number = 1): boolean {
+  removeItem(uniqueId: string, quantity = 1): boolean {
     const inventoryItem = this.inventory.get(uniqueId)
-    if (!inventoryItem) return false
+    if (!inventoryItem) {
+      return false
+    }
 
-    if (inventoryItem.equipped) return false // 장착된 아이템은 제거 불가
+    if (inventoryItem.equipped) {
+      return false
+    } // 장착된 아이템은 제거 불가
 
     if (inventoryItem.quantity > quantity) {
       // 수량 감소
@@ -136,12 +142,16 @@ class InventoryService {
   // 아이템 장착
   equipItem(uniqueId: string, slot?: EquipmentSlot): boolean {
     const inventoryItem = this.inventory.get(uniqueId)
-    if (!inventoryItem) return false
+    if (!inventoryItem) {
+      return false
+    }
 
     const item = inventoryItem.item
     const targetSlot = slot || this.getSlotForItemType(item.type)
-    
-    if (!targetSlot) return false
+
+    if (!targetSlot) {
+      return false
+    }
 
     // 현재 장착된 아이템 해제
     const currentEquipped = this.equipment[targetSlot]
@@ -170,7 +180,9 @@ class InventoryService {
   // 아이템 장착 해제
   unequipItem(slot: EquipmentSlot): boolean {
     const item = this.equipment[slot]
-    if (!item) return false
+    if (!item) {
+      return false
+    }
 
     // 장비 슬롯에서 제거
     this.equipment = {
@@ -199,9 +211,15 @@ class InventoryService {
         return 'armor'
       case 'accessory':
         // 빈 액세서리 슬롯 찾기
-        if (!this.equipment.accessory1) return 'accessory1'
-        if (!this.equipment.accessory2) return 'accessory2'
-        if (!this.equipment.accessory3) return 'accessory3'
+        if (!this.equipment.accessory1) {
+          return 'accessory1'
+        }
+        if (!this.equipment.accessory2) {
+          return 'accessory2'
+        }
+        if (!this.equipment.accessory3) {
+          return 'accessory3'
+        }
         return null
       default:
         return null
@@ -211,7 +229,9 @@ class InventoryService {
   // 아이템 잠금/해제
   toggleItemLock(uniqueId: string): boolean {
     const item = this.inventory.get(uniqueId)
-    if (!item) return false
+    if (!item) {
+      return false
+    }
 
     this.inventory.set(uniqueId, {
       ...item,
@@ -228,20 +248,32 @@ class InventoryService {
     return items.filter(invItem => {
       const item = invItem.item
 
-      if (filter.type && !filter.type.includes(item.type)) return false
-      if (filter.rarity && !filter.rarity.includes(item.rarity)) return false
-      if (filter.minLevel && item.level < filter.minLevel) return false
-      if (filter.maxLevel && item.level > filter.maxLevel) return false
-      if (filter.hasSetBonus !== undefined && !!item.setId !== filter.hasSetBonus) return false
-      if (filter.hasSpecialEffect !== undefined && 
-          !!(item.specialEffects && item.specialEffects.length > 0) !== filter.hasSpecialEffect) return false
+      if (filter.type && !filter.type.includes(item.type)) {
+        return false
+      }
+      if (filter.rarity && !filter.rarity.includes(item.rarity)) {
+        return false
+      }
+      if (filter.minLevel && item.level < filter.minLevel) {
+        return false
+      }
+      if (filter.maxLevel && item.level > filter.maxLevel) {
+        return false
+      }
+      if (filter.hasSetBonus !== undefined && !!item.setId !== filter.hasSetBonus) {
+        return false
+      }
+      if (filter.hasSpecialEffect !== undefined &&
+          !!(item.specialEffects && item.specialEffects.length > 0) !== filter.hasSpecialEffect) {
+        return false
+      }
 
       return true
     })
   }
 
   // 아이템 정렬
-  sortItems(items: InventoryItem[], sortBy: ItemSortOption, ascending: boolean = true): InventoryItem[] {
+  sortItems(items: InventoryItem[], sortBy: ItemSortOption, ascending = true): InventoryItem[] {
     const sorted = [...items].sort((a, b) => {
       let compareValue = 0
 
@@ -284,11 +316,11 @@ class InventoryService {
 
     // 모든 스탯 수집
     const allStats = new Set<StatType>()
-    
+
     // 기본 스탯
     Object.entries(item1.baseStats).forEach(([stat]) => allStats.add(stat as StatType))
     Object.entries(item2.baseStats).forEach(([stat]) => allStats.add(stat as StatType))
-    
+
     // 랜덤 스탯
     item1.randomStats.forEach(rs => allStats.add(rs.type))
     item2.randomStats.forEach(rs => allStats.add(rs.type))
@@ -312,7 +344,7 @@ class InventoryService {
     const betterScore = better.reduce((sum, b) => sum + b.difference, 0)
     const worseScore = worse.reduce((sum, w) => sum + w.difference, 0)
     const totalScore = betterScore + worseScore
-    
+
     const overallScore = totalScore === 0 ? 0 : (betterScore - worseScore) / totalScore
 
     return {
@@ -412,7 +444,7 @@ class InventoryService {
   // 아이템 검색
   searchItems(query: string): InventoryItem[] {
     const lowerQuery = query.toLowerCase()
-    
+
     return Array.from(this.inventory.values()).filter(invItem => {
       const item = invItem.item
       return (
@@ -445,9 +477,9 @@ class InventoryService {
   clearInventory(): void {
     // 장착된 아이템만 유지
     const equippedItems = Array.from(this.inventory.values()).filter(item => item.equipped)
-    
+
     this.inventory.clear()
-    
+
     equippedItems.forEach(item => {
       this.inventory.set(item.item.uniqueId, item)
     })
@@ -455,8 +487,8 @@ class InventoryService {
 
   // 인벤토리 데이터 복원 (영속성을 위한)
   restoreInventory(
-    items: InventoryItem[], 
-    equipment: Equipment, 
+    items: InventoryItem[],
+    equipment: Equipment,
     maxSlots: number
   ): void {
     // 인벤토리 초기화
@@ -496,7 +528,9 @@ class InventoryService {
   // 아이템 업데이트
   updateItem(uniqueId: string, updates: Partial<GeneratedItem>): boolean {
     const invItem = this.inventory.get(uniqueId)
-    if (!invItem) return false
+    if (!invItem) {
+      return false
+    }
 
     // ReadonlyArray를 일반 배열로 변환
     const updatedItem = {
@@ -504,7 +538,7 @@ class InventoryService {
       ...updates,
       baseStats: updates.baseStats || invItem.item.baseStats,
       randomStats: updates.randomStats ? [...updates.randomStats] : [...invItem.item.randomStats],
-      specialEffects: updates.specialEffects ? [...updates.specialEffects] : 
+      specialEffects: updates.specialEffects ? [...updates.specialEffects] :
         (invItem.item.specialEffects ? [...invItem.item.specialEffects] : undefined)
     } as GeneratedItem
 

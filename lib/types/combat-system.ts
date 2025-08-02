@@ -69,7 +69,7 @@ export const StatusEffectType = {
   SHIELD: 'shield',
   IMMUNITY: 'immunity',
   REFLECT: 'reflect',
-  
+
   // 디버프
   ATTACK_DOWN: 'attackDown',
   DEFENSE_DOWN: 'defenseDown',
@@ -82,12 +82,12 @@ export const StatusEffectType = {
   SILENCE: 'silence',
   BLIND: 'blind',
   CURSE: 'curse',
-  
+
   // 특수
   TAUNT: 'taunt',
   STEALTH: 'stealth',
   INVINCIBLE: 'invincible',
-  BERSERK: 'berserk',
+  BERSERK: 'berserk'
 } as const
 
 export type StatusEffectType = typeof StatusEffectType[keyof typeof StatusEffectType]
@@ -242,10 +242,12 @@ export interface CombatResult {
 
 // 타입 가드
 export function isValidCombatParticipant(value: unknown): value is CombatParticipant {
-  if (typeof value !== 'object' || value === null) return false
-  
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+
   const participant = value as Record<string, unknown>
-  
+
   return (
     typeof participant.id === 'string' &&
     typeof participant.name === 'string' &&
@@ -276,22 +278,22 @@ export function calculateDamage(
   attacker: CombatStats,
   defender: CombatStats,
   skill?: Skill,
-  isCritical: boolean = false
+  isCritical = false
 ): DamageCalculation {
   const baseDamage = skill?.effects[0]?.value as number || attacker.attack
   const attackPower = attacker.attack
   const defense = defender.defense
-  
+
   // 기본 데미지 = (공격력 * 스킬 계수 - 방어력) * 난수
   const rawDamage = Math.max(1, baseDamage + attackPower - defense)
   const variance = 0.9 + Math.random() * 0.2 // 90% ~ 110%
-  
+
   let finalDamage = rawDamage * variance
-  
+
   if (isCritical) {
     finalDamage *= attacker.critDamage
   }
-  
+
   return {
     baseDamage,
     attackPower,

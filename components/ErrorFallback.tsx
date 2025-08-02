@@ -18,15 +18,15 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
               <span className="text-4xl">⚠️</span>
             </div>
           </div>
-          
+
           <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
             오류가 발생했습니다
           </h1>
-          
+
           <p className="text-center text-gray-600 dark:text-gray-400 mb-6">
             {error.message || '알 수 없는 오류가 발생했습니다.'}
           </p>
-          
+
           <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mb-6">
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
               이 문제가 계속되면 다음을 시도해보세요:
@@ -37,7 +37,7 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
               <li>다른 브라우저에서 시도해보세요</li>
             </ul>
           </div>
-          
+
           <div className="flex gap-3">
             <Button
               onClick={resetError}
@@ -61,7 +61,7 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
             </Button>
           </div>
         </div>
-        
+
         {process.env.NODE_ENV === 'development' && (
           <details className="mt-4 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
             <summary className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300">

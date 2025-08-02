@@ -9,7 +9,7 @@ export const BATTLE_EFFECTS = {
   slash: '⚔️',
   punch: '👊',
   kick: '🦵',
-  
+
   // 마법 공격
   fire: '🔥',
   ice: '❄️',
@@ -17,19 +17,19 @@ export const BATTLE_EFFECTS = {
   water: '💧',
   earth: '🪨',
   wind: '🌪️',
-  
+
   // 치유/버프
   heal: '💚',
   shield: '🛡️',
   buff: '⬆️',
   debuff: '⬇️',
-  
+
   // 상태이상
   poison: '☠️',
   stun: '💫',
   sleep: '😴',
   confusion: '❓',
-  
+
   // 특수 효과
   critical: '💥',
   dodge: '💨',
@@ -61,17 +61,17 @@ export const ANIMATION_CLASSES = {
   fadeIn: 'animate-fade-in',
   slideUp: 'animate-slide-up',
   zoomIn: 'animate-zoom-in',
-  
+
   // 공격 애니메이션
   shake: 'animate-shake',
   pulse: 'animate-pulse',
   bounce: 'animate-bounce',
-  
+
   // 이펙트 애니메이션
   sparkle: 'animate-sparkle',
   glow: 'animate-glow',
   rotate: 'animate-spin',
-  
+
   // 사라지는 애니메이션
   fadeOut: 'animate-fade-out',
   shrink: 'animate-shrink'
@@ -85,7 +85,7 @@ export const SOUND_EFFECTS = {
   heal: 400,
   levelUp: 800,
   coin: 600,
-  
+
   // 지속시간 (ms)
   duration: {
     short: 100,
@@ -101,14 +101,14 @@ export const COLORS = {
   mana: '#3b82f6', // 파란색
   damage: '#ef4444', // 빨간색
   experience: '#f59e0b', // 노란색
-  
+
   // 희귀도 색상
   common: '#9ca3af',
   uncommon: '#10b981',
   rare: '#3b82f6',
   epic: '#8b5cf6',
   legendary: '#f59e0b',
-  
+
   // 상태 색상
   positive: '#10b981',
   negative: '#ef4444',

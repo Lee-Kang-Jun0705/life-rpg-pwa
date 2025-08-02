@@ -8,7 +8,7 @@ export const SkillCategory = {
   ATTACK: 'attack',
   DEFENSE: 'defense',
   SUPPORT: 'support',
-  SPECIAL: 'special',
+  SPECIAL: 'special'
 } as const
 
 export type SkillCategory = typeof SkillCategory[keyof typeof SkillCategory]
@@ -18,7 +18,7 @@ export const SkillType = {
   ACTIVE: 'active',
   PASSIVE: 'passive',
   TOGGLE: 'toggle',
-  COMBO: 'combo',
+  COMBO: 'combo'
 } as const
 
 export type SkillType = typeof SkillType[keyof typeof SkillType]
@@ -31,7 +31,7 @@ export const TargetType = {
   SINGLE_ALLY: 'singleAlly',
   ALL_ALLIES: 'allAllies',
   RANDOM_ENEMY: 'randomEnemy',
-  AREA: 'area',
+  AREA: 'area'
 } as const
 
 export type TargetType = typeof TargetType[keyof typeof TargetType]
@@ -58,7 +58,7 @@ export const EffectType = {
   DISPEL: 'dispel',
   STEAL: 'steal',
   COPY: 'copy',
-  EXECUTE: 'execute',
+  EXECUTE: 'execute'
 } as const
 
 export type EffectType = typeof EffectType[keyof typeof EffectType]
@@ -72,7 +72,7 @@ export const ElementType = {
   NATURE: 'nature',
   HOLY: 'holy',
   DARK: 'dark',
-  NEUTRAL: 'neutral',
+  NEUTRAL: 'neutral'
 } as const
 
 export type ElementType = typeof ElementType[keyof typeof ElementType]
@@ -202,10 +202,12 @@ export interface SkillUpgrade {
 
 // 타입 가드 함수
 export function isValidSkill(value: unknown): value is Skill {
-  if (typeof value !== 'object' || value === null) return false
-  
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+
   const skill = value as Record<string, unknown>
-  
+
   return (
     typeof skill.id === 'string' &&
     typeof skill.name === 'string' &&
@@ -234,7 +236,7 @@ export interface SkillFilter {
 }
 
 // 스킬 정렬 옵션
-export type SkillSortOption = 
+export type SkillSortOption =
   | 'name'
   | 'level'
   | 'category'

@@ -74,7 +74,7 @@ export function DailyMissionCard({ mission, onProgress, onComplete }: DailyMissi
               </p>
             </div>
           </div>
-          
+
           {/* 난이도 표시 */}
           <div className="flex items-center gap-1">
             {[...Array(difficultyStars[mission.difficulty])].map((_, i) => (

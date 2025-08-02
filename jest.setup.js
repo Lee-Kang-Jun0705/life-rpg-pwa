@@ -34,26 +34,26 @@ global.IDBVersionChangeEvent = FDBVersionChangeEvent
 // Crypto API 모킹
 const crypto = {
   subtle: {
-    digest: jest.fn(async (algorithm, data) => {
+    digest: jest.fn(async(algorithm, data) => {
       return new ArrayBuffer(32)
     }),
-    generateKey: jest.fn(async () => ({ type: 'secret' })),
-    importKey: jest.fn(async () => ({ type: 'secret' })),
-    deriveKey: jest.fn(async () => ({ type: 'secret' })),
-    deriveBits: jest.fn(async () => new ArrayBuffer(32)),
-    encrypt: jest.fn(async (algorithm, key, data) => {
+    generateKey: jest.fn(async() => ({ type: 'secret' })),
+    importKey: jest.fn(async() => ({ type: 'secret' })),
+    deriveKey: jest.fn(async() => ({ type: 'secret' })),
+    deriveBits: jest.fn(async() => new ArrayBuffer(32)),
+    encrypt: jest.fn(async(algorithm, key, data) => {
       // 실제 암호화를 시뮬레이션
       const encoder = new TextEncoder()
       const decoded = encoder.encode('encrypted-' + Date.now())
       return decoded.buffer
     }),
-    decrypt: jest.fn(async (algorithm, key, data) => {
+    decrypt: jest.fn(async(algorithm, key, data) => {
       // 실제 복호화를 시뮬레이션
       const encoder = new TextEncoder()
       const decoded = encoder.encode('decrypted-data')
       return decoded.buffer
     }),
-    exportKey: jest.fn(async () => new ArrayBuffer(32))
+    exportKey: jest.fn(async() => new ArrayBuffer(32))
   },
   getRandomValues: jest.fn((array) => {
     for (let i = 0; i < array.length; i++) {
@@ -79,7 +79,7 @@ jest.mock('next/navigation', () => ({
       replace: jest.fn(),
       back: jest.fn(),
       prefetch: jest.fn(),
-      reload: jest.fn(),
+      reload: jest.fn()
     }
   },
   usePathname() {
@@ -87,7 +87,7 @@ jest.mock('next/navigation', () => ({
   },
   useSearchParams() {
     return new URLSearchParams()
-  },
+  }
 }))
 
 // localStorage 모킹
@@ -95,7 +95,7 @@ const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
-  clear: jest.fn(),
+  clear: jest.fn()
 }
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
@@ -113,8 +113,8 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: jest.fn(),
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
+    dispatchEvent: jest.fn()
+  }))
 })
 
 // navigator 속성 모킹
@@ -151,10 +151,10 @@ global.Audio = jest.fn().mockImplementation(() => ({
 // AudioContext 모킹
 global.AudioContext = jest.fn().mockImplementation(() => ({
   createGain: jest.fn(() => ({
-    gain: { 
-      value: 1, 
-      setValueAtTime: jest.fn(), 
-      linearRampToValueAtTime: jest.fn() 
+    gain: {
+      value: 1,
+      setValueAtTime: jest.fn(),
+      linearRampToValueAtTime: jest.fn()
     },
     connect: jest.fn()
   })),

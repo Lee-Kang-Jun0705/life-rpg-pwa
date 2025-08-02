@@ -25,7 +25,7 @@ describe('BackupManager', () => {
   })
 
   describe('createBackup', () => {
-    it('should create a backup without encryption', async () => {
+    it('should create a backup without encryption', async() => {
       // Mock data
       const mockProfileData = [{ id: 1, userId: 'user1', displayName: 'Test User' }]
       const mockStatData = [{ id: 1, userId: 'user1', type: 'strength', value: 10 }]
@@ -48,7 +48,7 @@ describe('BackupManager', () => {
       expect(backup.metadata).toHaveProperty('createdAt')
       expect(backup.metadata).toHaveProperty('deviceInfo')
       expect(backup.metadata).toHaveProperty('checksum')
-      
+
       // Verify data
       expect(backup.data.profiles).toEqual(mockProfileData)
       expect(backup.data.stats).toEqual(mockStatData)
@@ -57,10 +57,10 @@ describe('BackupManager', () => {
       expect(backup.data.settings).toEqual(mockSettingData)
     })
 
-    it('should create an encrypted backup when password is provided', async () => {
+    it('should create an encrypted backup when password is provided', async() => {
       const password = 'test-password'
       const encryptedData = 'encrypted-data'
-      
+
       // Mock encryption
       ;(CryptoUtil.encryptObject as jest.Mock).mockResolvedValue(encryptedData)
 
@@ -88,7 +88,7 @@ describe('BackupManager', () => {
       expect(result).toBe(encryptedData)
     })
 
-    it('should handle errors during backup creation', async () => {
+    it('should handle errors during backup creation', async() => {
       // Mock error
       const error = new Error('Database error')
       mockProfiles.toArray.mockRejectedValue(error)
@@ -99,7 +99,7 @@ describe('BackupManager', () => {
   })
 
   describe('restoreBackup', () => {
-    it('should restore an unencrypted backup', async () => {
+    it('should restore an unencrypted backup', async() => {
       const backup = {
         version: 1,
         metadata: {
@@ -118,7 +118,7 @@ describe('BackupManager', () => {
 
       // Mock validation
       jest.spyOn(BackupManager as unknown, 'validateBackup').mockReturnValue(true)
-      
+
       // Mock database operations
       const mockTransaction = jest.fn((mode, ...args) => {
         const callback = args[args.length - 1]
@@ -131,7 +131,7 @@ describe('BackupManager', () => {
 
       const mockClear = jest.fn().mockResolvedValue(undefined)
       const mockBulkAdd = jest.fn().mockResolvedValue(undefined)
-      
+
       mockProfiles.clear = mockClear
       mockProfiles.bulkAdd = mockBulkAdd
       mockStats.clear = mockClear
@@ -142,14 +142,14 @@ describe('BackupManager', () => {
 
       // Verify transaction was used
       expect(mockTransaction).toHaveBeenCalled()
-      
+
       // Verify data was cleared and restored
       expect(mockClear).toHaveBeenCalledTimes(2)
       expect(mockBulkAdd).toHaveBeenCalledWith(backup.data.profiles)
       expect(mockBulkAdd).toHaveBeenCalledWith(backup.data.stats)
     })
 
-    it('should restore an encrypted backup with correct password', async () => {
+    it('should restore an encrypted backup with correct password', async() => {
       const encryptedBackup = 'encrypted-backup-string'
       const password = 'test-password'
       const decryptedBackup = {
@@ -170,10 +170,10 @@ describe('BackupManager', () => {
 
       // Mock decryption
       ;(CryptoUtil.decryptObject as jest.Mock).mockResolvedValue(decryptedBackup)
-      
+
       // Mock validation
       jest.spyOn(BackupManager as unknown, 'validateBackup').mockReturnValue(true)
-      
+
       // Mock transaction
       mockDb.transaction = jest.fn().mockResolvedValue(undefined)
 
@@ -184,14 +184,14 @@ describe('BackupManager', () => {
       expect(CryptoUtil.decryptObject).toHaveBeenCalledWith(encryptedBackup, password)
     })
 
-    it('should throw error for invalid backup format', async () => {
+    it('should throw error for invalid backup format', async() => {
       const invalidBackup = { invalid: 'data' }
 
       await expect(BackupManager.restoreBackup(invalidBackup as unknown))
         .rejects.toThrow('유효하지 않은 백업 파일입니다')
     })
 
-    it('should throw error when decryption fails', async () => {
+    it('should throw error when decryption fails', async() => {
       const encryptedBackup = 'encrypted-backup'
       const wrongPassword = 'wrong-password'
 
@@ -203,14 +203,14 @@ describe('BackupManager', () => {
   })
 
   describe('exportToFile', () => {
-    it('should create a downloadable backup file', async () => {
+    it('should create a downloadable backup file', async() => {
       const backup = { test: 'data' }
-      
+
       // Mock DOM methods
       const mockCreateElement = jest.spyOn(document, 'createElement')
       const mockAppendChild = jest.spyOn(document.body, 'appendChild').mockImplementation()
       const mockRemoveChild = jest.spyOn(document.body, 'removeChild').mockImplementation()
-      
+
       const mockAnchor = {
         href: '',
         download: '',
@@ -241,7 +241,7 @@ describe('BackupManager', () => {
   })
 
   describe('importFromFile', () => {
-    it('should import backup from file', async () => {
+    it('should import backup from file', async() => {
       const fileContent = JSON.stringify({ test: 'data' })
       const file = new File([fileContent], 'backup.json', { type: 'application/json' })
 
@@ -255,7 +255,7 @@ describe('BackupManager', () => {
 
       // Create promise and trigger file read
       const importPromise = BackupManager.importFromFile(file)
-      
+
       // Simulate successful file read
       mockFileReader.onload({ target: { result: fileContent } } as unknown)
 
@@ -265,7 +265,7 @@ describe('BackupManager', () => {
       expect(mockFileReader.readAsText).toHaveBeenCalledWith(file)
     })
 
-    it('should handle file read errors', async () => {
+    it('should handle file read errors', async() => {
       const file = new File([''], 'backup.json')
 
       // Mock FileReader
@@ -278,7 +278,7 @@ describe('BackupManager', () => {
 
       // Create promise and trigger error
       const importPromise = BackupManager.importFromFile(file)
-      
+
       // Simulate file read error
       mockFileReader.onerror(new Error('Read error'))
 
@@ -328,7 +328,7 @@ describe('BackupManager', () => {
   })
 
   describe('calculateChecksum', () => {
-    it('should calculate checksum for backup data', async () => {
+    it('should calculate checksum for backup data', async() => {
       const backup = {
         version: 1,
         metadata: { createdAt: '2024-01-01' },

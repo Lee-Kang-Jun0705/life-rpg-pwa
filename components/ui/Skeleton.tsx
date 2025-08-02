@@ -12,18 +12,18 @@ interface SkeletonProps {
   animated?: boolean
 }
 
-export function Skeleton({ 
-  className = '', 
+export function Skeleton({
+  className = '',
   variant = 'rectangular',
   width,
   height,
   lines = 1,
   animated = true
 }: SkeletonProps) {
-  
+
   const baseClasses = 'bg-gray-200 dark:bg-gray-700'
   const animationClasses = animated ? 'animate-pulse' : ''
-  
+
   const getVariantClasses = () => {
     switch (variant) {
       case 'text':
@@ -39,8 +39,12 @@ export function Skeleton({
   }
 
   const style: React.CSSProperties = {}
-  if (width) style.width = typeof width === 'number' ? `${width}px` : width
-  if (height) style.height = typeof height === 'number' ? `${height}px` : height
+  if (width) {
+    style.width = typeof width === 'number' ? `${width}px` : width
+  }
+  if (height) {
+    style.height = typeof height === 'number' ? `${height}px` : height
+  }
 
   if (variant === 'text' && lines > 1) {
     return (
@@ -55,10 +59,10 @@ export function Skeleton({
             }}
             initial={animated ? { opacity: 0.5 } : undefined}
             animate={animated ? { opacity: [0.5, 1, 0.5] } : undefined}
-            transition={animated ? { 
-              duration: 1.5, 
+            transition={animated ? {
+              duration: 1.5,
               repeat: Infinity,
-              delay: index * 0.1 
+              delay: index * 0.1
             } : undefined}
           />
         ))}
@@ -135,12 +139,12 @@ export function TableSkeleton({ rows = 5, columns = 4 }: { rows?: number, column
           <Skeleton key={`header-${index}`} variant="text" width="80%" />
         ))}
       </div>
-      
+
       {/* 행들 */}
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <div key={`row-${rowIndex}`} className="grid gap-4 p-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
           {Array.from({ length: columns }).map((_, colIndex) => (
-            <Skeleton key={`cell-${rowIndex}-${colIndex}`} variant="text" width={colIndex === 0 ? "60%" : "90%"} />
+            <Skeleton key={`cell-${rowIndex}-${colIndex}`} variant="text" width={colIndex === 0 ? '60%' : '90%'} />
           ))}
         </div>
       ))}

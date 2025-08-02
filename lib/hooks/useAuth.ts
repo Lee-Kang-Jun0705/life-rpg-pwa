@@ -21,7 +21,7 @@ export function useAuth() {
         isAuthenticated: false
       }
     }
-    
+
     // 클라이언트에서는 즉시 localStorage 확인
     const storedUserId = localStorage.getItem('userId')
     if (storedUserId) {
@@ -31,7 +31,7 @@ export function useAuth() {
         isAuthenticated: true
       }
     }
-    
+
     // userId가 없으면 기본값 설정
     const defaultUserId = 'user-1'
     localStorage.setItem('userId', defaultUserId)
@@ -44,12 +44,14 @@ export function useAuth() {
 
   useEffect(() => {
     // SSR 환경에서만 실행
-    if (typeof window === 'undefined' || authState.userId) return
-    
+    if (typeof window === 'undefined' || authState.userId) {
+      return
+    }
+
     // TODO: 실제 인증 시스템 구현
     // 현재는 로컬 스토리지에서 userId 가져오기
     const storedUserId = localStorage.getItem('userId')
-    
+
     if (storedUserId) {
       setAuthState({
         userId: storedUserId,

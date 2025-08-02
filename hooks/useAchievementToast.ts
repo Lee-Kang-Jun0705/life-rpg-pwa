@@ -9,10 +9,12 @@ let lastNotificationCount = 0
 export function useAchievementToast() {
   const { toast } = useToast()
 
-  const checkForNewAchievements = useCallback(async () => {
+  const checkForNewAchievements = useCallback(async() => {
     try {
       const state = await achievementService.getAchievementState()
-      if (!state) return
+      if (!state) {
+        return
+      }
 
       // 읽지 않은 'unlocked' 타입의 알림만 필터링
       const unreadUnlockedNotifications = state.notifications.filter(
@@ -57,11 +59,11 @@ export function useAchievementToast() {
           'Cannot read properties of null',
           'db is null'
         ]
-        
-        const shouldIgnore = ignorableErrors.some(msg => 
+
+        const shouldIgnore = ignorableErrors.some(msg =>
           error.name === msg || error.message.includes(msg)
         )
-        
+
         if (!shouldIgnore && process.env.NODE_ENV === 'development') {
           console.warn('[Achievements] Database not ready yet:', error.message)
         }

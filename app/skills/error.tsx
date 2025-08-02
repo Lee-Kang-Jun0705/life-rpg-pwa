@@ -2,7 +2,7 @@
 
 export default function SkillsError({
   error,
-  reset,
+  reset
 }: {
   error: Error & { digest?: string }
   _reset: () => void

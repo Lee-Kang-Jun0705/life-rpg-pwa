@@ -33,14 +33,14 @@ export default function DebugPage() {
     checkDatabase()
   }, [checkDatabase])
 
-  const checkDatabase = useCallback(async () => {
+  const checkDatabase = useCallback(async() => {
     try {
       console.log('🔍 Checking database...')
-      
+
       // 1. IndexedDB 존재 확인
       const hasIndexedDB = 'indexedDB' in window
       console.log('Has IndexedDB:', hasIndexedDB)
-      
+
       if (!hasIndexedDB) {
         setDbStatus({ error: 'IndexedDB not supported' })
         return
@@ -50,7 +50,7 @@ export default function DebugPage() {
       const dbName = 'LifeRPGDatabase'
       const databases = await indexedDB.databases?.() || []
       console.log('Available databases:', databases)
-      
+
       // 3. Dexie 데이터베이스 확인
       try {
         const db = await waitForDatabase()
@@ -59,7 +59,7 @@ export default function DebugPage() {
         console.log('DB name:', dbInstance.name)
         console.log('DB version:', dbInstance.verno)
         console.log('DB tables:', dbInstance.tables?.map((t) => t.name) || [])
-        
+
         setDbStatus({
           loading: false,
           hasDB: true,
@@ -68,7 +68,7 @@ export default function DebugPage() {
           tables: dbInstance.tables?.map((t) => t.name) || [],
           databases
         })
-        
+
         // 4. 사용자 데이터 확인
         await checkUserData()
       } catch (dbError) {
@@ -90,19 +90,19 @@ export default function DebugPage() {
     }
   }, [checkUserData])
 
-  const checkUserData = useCallback(async () => {
+  const checkUserData = useCallback(async() => {
     try {
       const userId = GAME_CONFIG.DEFAULT_USER_ID
       console.log('Checking user data for:', userId)
-      
+
       // 프로필 확인
       const profile = await dbHelpers.getProfile(userId)
       console.log('Profile:', profile)
-      
+
       // 스탯 확인
       const stats = await dbHelpers.getStats(userId)
       console.log('Stats:', stats)
-      
+
       setUserDataStatus({
         loading: false,
         userId,
@@ -124,14 +124,14 @@ export default function DebugPage() {
     }
   }, [])
 
-  const initializeUserData = async () => {
+  const initializeUserData = async() => {
     try {
       const userId = GAME_CONFIG.DEFAULT_USER_ID
       console.log('Initializing user data...')
-      
+
       await dbHelpers.initializeUserData(userId, 'test@example.com', 'Test User')
       console.log('User data initialized!')
-      
+
       // 다시 확인
       await checkUserData()
     } catch (err) {
@@ -140,7 +140,7 @@ export default function DebugPage() {
     }
   }
 
-  const clearDatabase = async () => {
+  const clearDatabase = async() => {
     try {
       console.log('Clearing database...')
       const db = await waitForDatabase()
@@ -148,7 +148,7 @@ export default function DebugPage() {
       await dbInstance.delete()
       await dbInstance.open()
       console.log('Database cleared!')
-      
+
       // 다시 확인
       await checkDatabase()
     } catch (err) {
@@ -160,14 +160,14 @@ export default function DebugPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <h1 className="text-3xl font-bold mb-8">Database Debug Page</h1>
-      
+
       {error && (
         <div className="bg-red-900 border border-red-700 p-4 rounded mb-6">
           <h2 className="text-xl font-semibold mb-2">Error</h2>
           <pre className="text-sm">{error}</pre>
         </div>
       )}
-      
+
       <div className="space-y-6">
         {/* Database Status */}
         <div className="bg-gray-800 p-6 rounded-lg">
@@ -180,7 +180,7 @@ export default function DebugPage() {
             </pre>
           )}
         </div>
-        
+
         {/* User Data Status */}
         <div className="bg-gray-800 p-6 rounded-lg">
           <h2 className="text-xl font-semibold mb-4">User Data Status</h2>
@@ -192,7 +192,7 @@ export default function DebugPage() {
             </pre>
           )}
         </div>
-        
+
         {/* Actions */}
         <div className="bg-gray-800 p-6 rounded-lg">
           <h2 className="text-xl font-semibold mb-4">Actions</h2>
@@ -203,14 +203,14 @@ export default function DebugPage() {
             >
               Refresh Status
             </button>
-            
+
             <button
               onClick={initializeUserData}
               className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
             >
               Initialize User Data
             </button>
-            
+
             <button
               onClick={clearDatabase}
               className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded"

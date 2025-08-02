@@ -60,7 +60,7 @@ export function AnalysisTab({ userStats, activityPattern }: AnalysisTabProps) {
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {activityPattern.weakDays.map(day => (
-                <span 
+                <span
                   key={day}
                   className="px-3 py-1 bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400 rounded-full text-sm"
                 >

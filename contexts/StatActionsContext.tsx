@@ -21,17 +21,21 @@ export function StatActionsProvider({ children }: { children: ReactNode }) {
 
   // DB에서 커스텀 액션 불러오기
   useEffect(() => {
-    if (!isDatabaseReady) return
+    if (!isDatabaseReady) {
+      return
+    }
 
-    const loadCustomActions = async () => {
+    const loadCustomActions = async() => {
       try {
-        if (!db || !isDatabaseReady) return
-        
+        if (!db || !isDatabaseReady) {
+          return
+        }
+
         // 데이터베이스가 열려있는지 확인
         if (!db.isOpen()) {
           await db.open()
         }
-        
+
         const setting = await db.playerData.get('custom_stat_actions')
         if (setting?.data && typeof setting.data === 'string') {
           setStatActions(JSON.parse(setting.data))
@@ -45,31 +49,33 @@ export function StatActionsProvider({ children }: { children: ReactNode }) {
             'Cannot read properties of null',
             'db is null'
           ]
-          
-          const shouldIgnore = ignorableErrors.some(msg => 
+
+          const shouldIgnore = ignorableErrors.some(msg =>
             error.name === msg || error.message.includes(msg)
           )
-          
+
           if (!shouldIgnore && process.env.NODE_ENV === 'development') {
             console.warn('[StatActions] Database not ready yet:', error.message)
           }
         }
       }
     }
-    
+
     loadCustomActions()
   }, [isDatabaseReady])
 
   // DB에 저장
-  const saveToDb = useCallback(async (actions: StatActionsConfig) => {
+  const saveToDb = useCallback(async(actions: StatActionsConfig) => {
     // DB가 준비되지 않았으면 저장하지 않음
     if (!isDatabaseReady) {
       console.log('Database not ready, skipping save')
       return
     }
-    
+
     try {
-      if (!db) return
+      if (!db) {
+        return
+      }
       await db.playerData.put({
         id: 'custom_stat_actions',
         data: JSON.stringify(actions),

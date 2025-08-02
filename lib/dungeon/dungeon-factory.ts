@@ -1,7 +1,7 @@
-import { 
-  Dungeon, 
-  DungeonType, 
-  DifficultyLevel, 
+import {
+  Dungeon,
+  DungeonType,
+  DifficultyLevel,
   Challenge,
   DungeonStatus
 } from './types'
@@ -80,7 +80,7 @@ export class DungeonFactory {
    */
   static createInfiniteTowerDungeon(floor: number): Dungeon {
     const difficulty = this.getDifficultyByFloor(floor)
-    
+
     return {
       id: `infinite-tower-${floor}`,
       name: `무한의 탑 ${floor}층`,
@@ -142,7 +142,7 @@ export class DungeonFactory {
    * 난이도와 타입에 따른 보상 계산
    */
   private static getRewardsByDifficulty(
-    _difficulty: DifficultyLevel, 
+    _difficulty: DifficultyLevel,
     _type: DungeonType
   ): Dungeon['rewards'] {
     const baseRewards = {
@@ -201,10 +201,18 @@ export class DungeonFactory {
    * 층수에 따른 난이도 결정
    */
   private static getDifficultyByFloor(floor: number): DifficultyLevel {
-    if (floor <= 10) return 'easy'
-    if (floor <= 25) return 'normal'
-    if (floor <= 50) return 'hard'
-    if (floor <= 75) return 'expert'
+    if (floor <= 10) {
+      return 'easy'
+    }
+    if (floor <= 25) {
+      return 'normal'
+    }
+    if (floor <= 50) {
+      return 'hard'
+    }
+    if (floor <= 75) {
+      return 'expert'
+    }
     return 'legendary'
   }
 }

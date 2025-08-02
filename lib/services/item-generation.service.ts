@@ -3,10 +3,10 @@
  * 랜덤 스탯, 희귀도 기반 생성 등
  */
 
-import type { 
-  Item, 
-  GeneratedItem, 
-  ItemGenerationOptions, 
+import type {
+  Item,
+  GeneratedItem,
+  ItemGenerationOptions,
   ItemGenerationResult,
   ItemRarity,
   RandomStat,
@@ -14,11 +14,11 @@ import type {
   BaseStats,
   SpecialEffect
 } from '@/lib/types/item-system'
-import { 
-  ITEM_RARITY_CONFIG, 
-  RANDOM_STAT_POOLS, 
+import {
+  ITEM_RARITY_CONFIG,
+  RANDOM_STAT_POOLS,
   STAT_TIER_RANGES,
-  ITEM_TYPE_DEFAULTS 
+  ITEM_TYPE_DEFAULTS
 } from '@/lib/constants/item.constants'
 import { baseItems } from '@/lib/data/base-items'
 import { IdGenerators } from '@/lib/utils/id-generator'
@@ -146,11 +146,11 @@ export class ItemGenerationService {
     for (const [stat, value] of Object.entries(baseStats)) {
       if (typeof value === 'number') {
         // 희귀도 범위 내에서 랜덤 배율
-        const rarityMultiplier = 
-          rarityConfig.statMultiplier.min + 
+        const rarityMultiplier =
+          rarityConfig.statMultiplier.min +
           (rarityConfig.statMultiplier.max - rarityConfig.statMultiplier.min) * rng()
 
-        calculatedStatsObj[stat] = 
+        calculatedStatsObj[stat] =
           Math.floor(value * levelMultiplier * rarityMultiplier)
       }
     }
@@ -169,7 +169,7 @@ export class ItemGenerationService {
   ): ReadonlyArray<RandomStat> {
     const rarityConfig = ITEM_RARITY_CONFIG[rarity]
     const statPool = RANDOM_STAT_POOLS[itemType as keyof typeof RANDOM_STAT_POOLS]
-    
+
     if (!statPool || rarityConfig.maxRandomStats === 0) {
       return []
     }
@@ -180,11 +180,13 @@ export class ItemGenerationService {
     // 보장된 스탯 먼저 추가
     if (guaranteedStats) {
       for (const statType of guaranteedStats) {
-        if (randomStats.length >= rarityConfig.maxRandomStats) break
-        
+        if (randomStats.length >= rarityConfig.maxRandomStats) {
+          break
+        }
+
         const tier = this.rollStatTier(rng)
         const value = this.rollStatValue(tier, rng)
-        
+
         randomStats.push({ type: statType, value, tier })
         usedStats.add(statType)
       }
@@ -199,10 +201,10 @@ export class ItemGenerationService {
     while (randomStats.length < rarityConfig.maxRandomStats && availableStats.length > 0) {
       const index = Math.floor(rng() * availableStats.length)
       const statType = availableStats.splice(index, 1)[0] as StatType
-      
+
       const tier = this.rollStatTier(rng)
       const value = this.rollStatValue(tier, rng)
-      
+
       randomStats.push({ type: statType, value, tier })
     }
 
@@ -248,7 +250,7 @@ export class ItemGenerationService {
     }
 
     const effects: SpecialEffect[] = []
-    
+
     // 희귀도별 효과 개수
     const effectCount = rarity === 'legendary' ? 2 : 1
 
@@ -263,7 +265,7 @@ export class ItemGenerationService {
         trigger: { type: 'onAttack', chance: 100 },
         effect: {
           type: 'heal',
-          value: 0.1,
+          value: 0.1
         }
       })
     }
@@ -294,7 +296,7 @@ export class ItemGenerationService {
     monsterType: 'common' | 'elite' | 'boss' | 'legendary'
   ): GeneratedItem | null {
     const rng = this.createRNG(Date.now())
-    
+
     // 드롭 여부 결정
     const dropChance = this.getDropChance(monsterType)
     if (rng() > dropChance) {
@@ -303,13 +305,13 @@ export class ItemGenerationService {
 
     // 희귀도 결정
     const rarity = this.rollItemRarity(monsterType, rng)
-    
+
     // 아이템 타입 결정
     const itemType = this.rollItemType(rng)
-    
+
     // 해당 타입의 기본 아이템 중 랜덤 선택
     const baseItemId = this.selectRandomBaseItem(itemType, monsterLevel)
-    
+
     if (!baseItemId) {
       return null
     }
@@ -378,8 +380,8 @@ export class ItemGenerationService {
    */
   private selectRandomBaseItem(itemType: string, level: number): string | null {
     const candidates = Object.entries(baseItems)
-      .filter(([_, item]) => 
-        item.type === itemType && 
+      .filter(([_, item]) =>
+        item.type === itemType &&
         item.level <= level &&
         item.level >= Math.max(1, level - 10)
       )

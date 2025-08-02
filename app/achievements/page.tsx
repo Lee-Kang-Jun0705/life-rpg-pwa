@@ -4,9 +4,9 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { AchievementService } from '@/lib/achievements/achievement-service'
 import { GAME_CONFIG } from '@/lib/types/dashboard'
 import { ACHIEVEMENT_CATEGORIES, ACHIEVEMENT_DIFFICULTIES } from '@/lib/achievements/achievement-data'
-import type { 
-  AchievementSystemState, 
-  AchievementFilter, 
+import type {
+  AchievementSystemState,
+  AchievementFilter,
   AchievementSortOption,
   AchievementCategory,
   AchievementDifficulty
@@ -21,7 +21,7 @@ export default function AchievementsPage() {
   const [achievementState, setAchievementState] = useState<AchievementSystemState | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'all' | 'unlocked' | 'locked'>('all')
-  
+
   // 필터 및 정렬
   const [filter, setFilter] = useState<AchievementFilter>({})
   const [sortBy, setSortBy] = useState<AchievementSortOption>('category')
@@ -31,11 +31,11 @@ export default function AchievementsPage() {
 
   const achievementService = AchievementService.getInstance()
 
-  const loadAchievementData = useCallback(async () => {
+  const loadAchievementData = useCallback(async() => {
     try {
       setIsLoading(true)
       const state = await achievementService.initializeAchievements(GAME_CONFIG.DEFAULT_USER_ID)
-      
+
       // 임시로 일부 업적 달성 상태 설정
       if (state.achievements['first-steps']) {
         state.achievements['first-steps'].isUnlocked = true
@@ -53,7 +53,7 @@ export default function AchievementsPage() {
         state.progress['level-up-master'].current = 7
         state.progress['level-up-master'].percentage = 70
       }
-      
+
       setAchievementState(state)
     } catch (error) {
       console.error('Failed to load achievement data:', error)
@@ -78,8 +78,8 @@ export default function AchievementsPage() {
   // 필터링 및 정렬
   const filteredAchievements = achievementService.filterAndSortAchievements(
     achievementState.achievements,
-    { 
-      ...filter, 
+    {
+      ...filter,
       searchQuery,
       unlocked: activeTab === 'unlocked' ? true : activeTab === 'locked' ? false : undefined
     },
@@ -105,7 +105,7 @@ export default function AchievementsPage() {
                 다양한 도전과제를 완료하고 보상을 획득하세요
               </p>
             </div>
-            
+
             {/* 알림 버튼 */}
             <button
               onClick={() => setShowNotifications(true)}
@@ -184,7 +184,7 @@ export default function AchievementsPage() {
                 <Filter className="w-4 h-4" />
                 필터
               </button>
-              
+
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as AchievementSortOption)}
@@ -289,7 +289,7 @@ export default function AchievementsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredAchievements.map((achievement, index) => {
             const progress = achievementState.progress[achievement.id]
-            
+
             return (
               <motion.div
                 key={achievement.id}

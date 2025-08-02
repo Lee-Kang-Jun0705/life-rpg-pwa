@@ -17,7 +17,7 @@ export function ErrorState({ error, onRetry }: ErrorStateProps) {
             오류가 발생했습니다
           </h2>
           <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
-          <Button 
+          <Button
             onClick={onRetry}
             className="bg-red-600 hover:bg-red-700"
           >

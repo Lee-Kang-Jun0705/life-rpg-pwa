@@ -21,16 +21,24 @@ function convertInventoryItemToEquipment(item: InventoryItem): Equipment {
   const typeMapping: Record<string, EquipmentType> = {
     weapon: 'weapon',
     armor: 'armor',
-    accessory: 'accessory',
+    accessory: 'accessory'
   }
 
   // 기본 스탯 변환
   const stats: Equipment['stats'] = {}
   if (item.statBonus) {
-    if (item.statBonus.health) stats.hp = item.statBonus.health
-    if (item.statBonus.learning) stats.health = item.statBonus.learning
-    if (item.statBonus.achievement) stats.attack = item.statBonus.achievement
-    if (item.statBonus.relationship) stats.defense = item.statBonus.relationship
+    if (item.statBonus.health) {
+      stats.hp = item.statBonus.health
+    }
+    if (item.statBonus.learning) {
+      stats.health = item.statBonus.learning
+    }
+    if (item.statBonus.achievement) {
+      stats.attack = item.statBonus.achievement
+    }
+    if (item.statBonus.relationship) {
+      stats.defense = item.statBonus.relationship
+    }
   }
 
   // effects를 specialEffects로 변환
@@ -38,7 +46,7 @@ function convertInventoryItemToEquipment(item: InventoryItem): Equipment {
     id: `effect-${index}`,
     name: effect,
     description: effect,
-    type: 'passive' as const,
+    type: 'passive' as const
   }))
 
   return {
@@ -53,7 +61,7 @@ function convertInventoryItemToEquipment(item: InventoryItem): Equipment {
     stats,
     specialEffects,
     price: item.price,
-    enhancementLevel: (item as EnhanceableItem).enhancementLevel || 0,
+    enhancementLevel: (item as EnhanceableItem).enhancementLevel || 0
   }
 }
 
@@ -74,16 +82,18 @@ export function ImprovedEquipmentScreen() {
     }
   }, [userId])
 
-  const loadCharacterData = async () => {
-    if (!userId) return
-    
+  const loadCharacterData = async() => {
+    if (!userId) {
+      return
+    }
+
     try {
       // Performance: 캐시 확인
       const cachedProfile = sessionStorage.getItem(`profile-${userId}`)
       if (cachedProfile) {
         const profileData = JSON.parse(cachedProfile)
         setProfile(profileData)
-        
+
         // 캐시된 데이터로 즉시 표시
         const tempCharacter: Character = {
           id: userId,
@@ -117,7 +127,7 @@ export function ImprovedEquipmentScreen() {
         }
         setCharacter(tempCharacter)
         setLoading(false)
-        
+
         // 백그라운드에서 최신 데이터 확인
         dbHelpers.getProfile(userId).then(freshData => {
           if (freshData && JSON.stringify(freshData) !== cachedProfile) {
@@ -125,10 +135,10 @@ export function ImprovedEquipmentScreen() {
             setProfile(freshData)
           }
         }).catch(console.error)
-        
+
         return
       }
-      
+
       // 캐시가 없으면 새로 로드
       const profileData = await dbHelpers.getProfile(userId)
       if (profileData) {
@@ -180,16 +190,16 @@ export function ImprovedEquipmentScreen() {
   const equipmentSlots = [
     { id: 'weapon', name: '무기', icon: '⚔️', type: 'weapon' },
     { id: 'armor', name: '갑옷', icon: '🛡️', type: 'armor' },
-    { id: 'accessory', name: '액세서리', icon: '💎', type: 'accessory' },
+    { id: 'accessory', name: '액세서리', icon: '💎', type: 'accessory' }
   ]
 
   const getItemsForSlot = (slotType: string) => {
-    return inventoryItems.filter(item => 
+    return inventoryItems.filter(item =>
       item.category === slotType && item.isEquippable
     )
   }
 
-  const handleEquip = async (itemId: string) => {
+  const handleEquip = async(itemId: string) => {
     const success = await equipItem(itemId)
     if (success) {
       loadCharacterData()
@@ -197,7 +207,7 @@ export function ImprovedEquipmentScreen() {
     }
   }
 
-  const handleUnequip = async (itemId: string) => {
+  const handleUnequip = async(itemId: string) => {
     const success = await unequipItem(itemId)
     if (success) {
       loadCharacterData()
@@ -230,7 +240,7 @@ export function ImprovedEquipmentScreen() {
       attack: character?.combatStats?.attack || 0,
       defense: character?.combatStats?.defense || 0,
       hp: character?.combatStats?.hp || 100,
-      mp: character?.combatStats?.mp || 50,
+      mp: character?.combatStats?.mp || 50
     }
 
     Object.values(equippedItems).forEach(item => {
@@ -241,10 +251,18 @@ export function ImprovedEquipmentScreen() {
           if (match) {
             const stat = match[1]
             const value = parseInt(match[2])
-            if (stat.includes('공격')) totalStats.attack += value
-            if (stat.includes('방어')) totalStats.defense += value
-            if (stat.includes('체력')) totalStats.hp += value
-            if (stat.includes('마나')) totalStats.mp += value
+            if (stat.includes('공격')) {
+              totalStats.attack += value
+            }
+            if (stat.includes('방어')) {
+              totalStats.defense += value
+            }
+            if (stat.includes('체력')) {
+              totalStats.hp += value
+            }
+            if (stat.includes('마나')) {
+              totalStats.mp += value
+            }
           }
         })
       }
@@ -256,7 +274,7 @@ export function ImprovedEquipmentScreen() {
   if (loading || shopLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full"></div>
+        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full" />
       </div>
     )
   }
@@ -265,7 +283,7 @@ export function ImprovedEquipmentScreen() {
 
   return (
     <div className="min-h-screen p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-7xl mx-auto"
@@ -283,67 +301,67 @@ export function ImprovedEquipmentScreen() {
 
         <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
           {/* 좌측: 캐릭터 프리뷰 */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-gradient-to-br from-gray-800/50 to-gray-700/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-700/50"
           >
             <h2 className="text-xl font-bold text-white mb-4">캐릭터</h2>
-            
+
             {/* 3D 캐릭터 프리뷰 영역 */}
             <div className="relative h-64 md:h-96 bg-gray-900/50 rounded-xl mb-4 md:mb-6 overflow-hidden">
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 flex items-center justify-center"
                 animate={{ rotateY: characterRotation }}
                 transition={{ duration: 0.5 }}
               >
                 {/* 캐릭터 아바타 */}
                 <div className="relative">
-                  <motion.div 
+                  <motion.div
                     className="text-9xl"
-                    animate={{ 
-                      y: [0, -10, 0],
+                    animate={{
+                      y: [0, -10, 0]
                     }}
-                    transition={{ 
+                    transition={{
                       duration: 3,
                       repeat: Infinity,
-                      ease: "easeInOut"
+                      ease: 'easeInOut'
                     }}
                   >
                     {profile?.avatar || '🧙‍♂️'}
                   </motion.div>
-                  
+
                   {/* 장착 아이템 시각화 */}
                   {equippedItems.weapon && (
-                    <motion.div 
+                    <motion.div
                       className="absolute -right-8 top-1/2 -translate-y-1/2 text-5xl"
-                      animate={{ 
-                        rotate: [0, 5, 0, -5, 0],
+                      animate={{
+                        rotate: [0, 5, 0, -5, 0]
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 4,
-                        repeat: Infinity,
+                        repeat: Infinity
                       }}
                     >
                       {equippedItems.weapon.icon}
                     </motion.div>
                   )}
-                  
+
                   {equippedItems.armor && (
                     <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-50">
                       {equippedItems.armor.icon}
                     </div>
                   )}
-                  
+
                   {equippedItems.accessory && (
-                    <motion.div 
+                    <motion.div
                       className="absolute -top-6 left-1/2 -translate-x-1/2 text-3xl"
-                      animate={{ 
-                        scale: [1, 1.2, 1],
+                      animate={{
+                        scale: [1, 1.2, 1]
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 2,
-                        repeat: Infinity,
+                        repeat: Infinity
                       }}
                     >
                       {equippedItems.accessory.icon}
@@ -385,28 +403,28 @@ export function ImprovedEquipmentScreen() {
           </motion.div>
 
           {/* 우측: 장비 슬롯 */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-gradient-to-br from-gray-800/50 to-gray-700/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-700/50"
           >
             <h2 className="text-xl font-bold text-white mb-4">장비 슬롯</h2>
-            
+
             <div className="space-y-4">
               {equipmentSlots.map((slot) => {
                 const equippedItem = equippedItems[slot.type as keyof typeof equippedItems]
                 const availableItems = getItemsForSlot(slot.type)
-                
+
                 return (
                   <motion.div
                     key={slot.id}
                     whileHover={{ scale: 1.02 }}
                     className="relative"
                   >
-                    <div 
+                    <div
                       className={`relative bg-gray-800/50 rounded-xl p-4 border transition-all cursor-pointer ${
-                        selectedSlot === slot.id 
-                          ? 'border-purple-500 shadow-lg shadow-purple-500/20' 
+                        selectedSlot === slot.id
+                          ? 'border-purple-500 shadow-lg shadow-purple-500/20'
                           : 'border-gray-700/50 hover:border-gray-600'
                       }`}
                       onClick={() => setSelectedSlot(selectedSlot === slot.id ? null : slot.id)}
@@ -432,7 +450,7 @@ export function ImprovedEquipmentScreen() {
                             )}
                           </div>
                         </div>
-                        
+
                         <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${
                           selectedSlot === slot.id ? 'rotate-90' : ''
                         }`} />
@@ -476,7 +494,7 @@ export function ImprovedEquipmentScreen() {
                         >
                           <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-700/50">
                             <h4 className="text-sm font-medium text-gray-400 mb-3">보유 {slot.name}</h4>
-                            
+
                             {availableItems.length > 0 ? (
                               <div className="grid grid-cols-1 gap-2">
                                 {availableItems.map((item) => (
@@ -501,7 +519,7 @@ export function ImprovedEquipmentScreen() {
                                           </div>
                                         </div>
                                       </div>
-                                      
+
                                       <div className="flex items-center gap-2">
                                         {!item.isEquipped && (
                                           <button
@@ -523,7 +541,7 @@ export function ImprovedEquipmentScreen() {
                                         )}
                                       </div>
                                     </div>
-                                    
+
                                     {item.effects && (
                                       <div className="mt-2 space-y-1">
                                         {item.effects.map((effect, index) => (
@@ -558,14 +576,14 @@ export function ImprovedEquipmentScreen() {
       {selectedEquipmentForEnhancement && (
         <EnhancementModal
           equipment={convertInventoryItemToEquipment(selectedEquipmentForEnhancement)}
-          onEnhance={async (material, useProtection) => {
+          onEnhance={async(material, useProtection) => {
             try {
               const result = await equipmentEnhancementService.enhanceEquipment(
                 selectedEquipmentForEnhancement.id,
                 material ? [{ id: material.id, quantity: 1 }] : [],
                 useProtection ?? false
               )
-              
+
               if ('success' in result && result.success) {
                 loadCharacterData()
                 return {
@@ -580,7 +598,7 @@ export function ImprovedEquipmentScreen() {
                   destroyed: failureResult.destroyed || false
                 }
               }
-              
+
               return { success: false }
             } catch (error) {
               console.error('Enhancement error:', error)

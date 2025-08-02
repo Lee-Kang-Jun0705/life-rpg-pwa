@@ -27,10 +27,10 @@ const applyTheme = (theme: 'light' | 'dark') => {
   root.classList.add(theme)
 }
 
-export const ThemeProvider = React.memo(function ThemeProvider({ 
-  children 
-}: { 
-  children: React.ReactNode 
+export const ThemeProvider = React.memo(function ThemeProvider({
+  children
+}: {
+  children: React.ReactNode
 }) {
   const [theme, setThemeState] = useState<Theme>('system')
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light')
@@ -45,7 +45,7 @@ export const ThemeProvider = React.memo(function ThemeProvider({
   // 초기 마운트 시 테마 로드
   useEffect(() => {
     setMounted(true)
-    
+
     // 로컬 스토리지에서 저장된 테마 가져오기
     const savedTheme = localStorage.getItem('theme') as Theme | null
     if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
@@ -55,21 +55,25 @@ export const ThemeProvider = React.memo(function ThemeProvider({
 
   // 테마 변경 시 처리
   useEffect(() => {
-    if (!mounted) return
+    if (!mounted) {
+      return
+    }
 
     const systemTheme = getSystemTheme()
     const appliedTheme = theme === 'system' ? systemTheme : theme as 'light' | 'dark'
-    
+
     setResolvedTheme(appliedTheme)
     applyTheme(appliedTheme)
   }, [theme, mounted])
 
   // 시스템 테마 변경 감지
   useEffect(() => {
-    if (!mounted || theme !== 'system') return
+    if (!mounted || theme !== 'system') {
+      return
+    }
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    
+
     const handleChange = (e: MediaQueryListEvent) => {
       const newTheme = e.matches ? 'dark' : 'light'
       setResolvedTheme(newTheme)

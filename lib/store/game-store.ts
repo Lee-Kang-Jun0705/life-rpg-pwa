@@ -71,10 +71,10 @@ export class GameStore {
       console.log('Game store already initialized for user:', userId)
       return
     }
-    
+
     this.state.isLoading = true
     this.notifySubscribers(['isLoading'])
-    
+
     try {
       // 프로필 로드
       const profile = await db.profiles.where('userId').equals(userId).first()
@@ -87,7 +87,7 @@ export class GameStore {
           currentExperience: profile.currentExperience || 0,
           avatar: profile.avatar
         }
-        
+
         // 전투 스탯 계산
         this.updateCombatStats(profile.level)
         console.log('Profile loaded:', { level: profile.level, exp: profile.totalExperience })
@@ -102,7 +102,7 @@ export class GameStore {
           currentExperience: 0,
           avatar: undefined
         }
-        
+
         // DB에 저장
         await db.profiles.add({
           userId,
@@ -116,7 +116,7 @@ export class GameStore {
           updatedAt: new Date()
         })
       }
-      
+
       // 스탯 로드
       const stats = await db.stats.where('userId').equals(userId).toArray()
       for (const stat of stats) {
@@ -126,7 +126,7 @@ export class GameStore {
           activities: stat.totalActivities
         }
       }
-      
+
       this.initialized = true
       this.state.error = null
     } catch (error) {
@@ -147,24 +147,24 @@ export class GameStore {
 
     try {
       // 트랜잭션으로 원자성 보장
-      await db.transaction('rw', db.stats, db.profiles, db.activities, async () => {
+      await db.transaction('rw', db.stats, db.profiles, db.activities, async() => {
         // 1. 스탯 업데이트
         const currentStat = this.state.stats[statType]
         const newExperience = currentStat.experience + amount
         const { level: newStatLevel } = calculateLevelFromExperience(newExperience)
-        
+
         this.state.stats[statType] = {
           level: newStatLevel,
           experience: newExperience,
           activities: currentStat.activities + 1
         }
-        
+
         // DB에 스탯 저장
         const dbStat = await db.stats
           .where('userId').equals(this.state.profile!.userId)
           .and(stat => stat.type === statType)
           .first()
-        
+
         if (dbStat) {
           await db.stats.update(dbStat.id!, {
             level: newStatLevel,
@@ -173,12 +173,12 @@ export class GameStore {
             updatedAt: new Date()
           })
         }
-        
+
         // 2. 프로필 레벨 재계산
         const totalExp = Object.values(this.state.stats)
           .reduce((sum, stat) => sum + stat.experience, 0)
         const { level: newLevel, currentExp } = calculateLevelFromExperience(totalExp)
-        
+
         const oldLevel = this.state.profile!.level
         this.state.profile = {
           ...this.state.profile!,
@@ -186,12 +186,12 @@ export class GameStore {
           totalExperience: totalExp,
           currentExperience: currentExp
         }
-        
+
         // DB에 프로필 저장
         const dbProfile = await db.profiles
           .where('userId').equals(this.state.profile.userId)
           .first()
-        
+
         if (dbProfile) {
           await db.profiles.update(dbProfile.id!, {
             level: newLevel,
@@ -200,12 +200,12 @@ export class GameStore {
             updatedAt: new Date()
           })
         }
-        
+
         // 3. 레벨업 시 전투 스탯 재계산
         if (newLevel !== oldLevel) {
           this.updateCombatStats(newLevel)
         }
-        
+
         // 4. 활동 기록 저장
         await db.activities.add({
           userId: this.state.profile.userId,
@@ -216,13 +216,13 @@ export class GameStore {
           synced: false
         })
       })
-      
+
       // 구독자들에게 변경 알림
       this.notifySubscribers(['stats', 'profile', 'combat'])
-      
+
       // 다른 탭에 변경 사항 브로드캐스트
       realTimeSync.broadcast('DATA_UPDATED', ['stats', 'profiles', 'activities'])
-      
+
     } catch (error) {
       console.error('경험치 업데이트 실패:', error)
       throw error
@@ -249,7 +249,7 @@ export class GameStore {
   async heal(type: 'hp' | 'mp', amount: number): Promise<void> {
     const max = type === 'hp' ? this.state.combat.maxHp : this.state.combat.maxMp
     const current = this.state.combat[type]
-    
+
     this.state.combat[type] = Math.min(current + amount, max)
     this.notifySubscribers(['combat'])
   }
@@ -259,14 +259,14 @@ export class GameStore {
    */
   subscribe(slice: StateSlice | StateSlice[], listener: Listener): () => void {
     const slices = Array.isArray(slice) ? slice : [slice]
-    
+
     slices.forEach(s => {
       if (!this.subscribers.has(s)) {
         this.subscribers.set(s, new Set())
       }
       this.subscribers.get(s)!.add(listener)
     })
-    
+
     // 구독 해제 함수 반환
     return () => {
       slices.forEach(s => {
@@ -304,8 +304,10 @@ export class GameStore {
    * DB에서 최신 데이터로 새로고침
    */
   async refreshFromDatabase(): Promise<void> {
-    if (!this.state.profile) return
-    
+    if (!this.state.profile) {
+      return
+    }
+
     this.initialized = false
     await this.initialize(this.state.profile.userId)
   }

@@ -7,12 +7,12 @@ export const STAT_TYPE = {
   LEARNING: 'learning',
   RELATIONSHIP: 'relationship',
   ACHIEVEMENT: 'achievement'
-} as const;
+} as const
 
 export type StatType = typeof STAT_TYPE[keyof typeof STAT_TYPE];
 
 // 기본 Result 타입
-export type Result<T, E = Error> = 
+export type Result<T, E = Error> =
   | { success: true; data: T }
   | { success: false; error: E };
 
@@ -23,16 +23,16 @@ export class GameError extends Error {
     public readonly code: string,
     public readonly context?: Record<string, unknown>
   ) {
-    super(message);
-    this.name = 'GameError';
+    super(message)
+    this.name = 'GameError'
   }
 }
 
 // 특수 에러 클래스들
 export class ValidationError extends GameError {
   constructor(message: string, field: string, value: unknown) {
-    super(message, 'VALIDATION_ERROR', { field, value });
-    this.name = 'ValidationError';
+    super(message, 'VALIDATION_ERROR', { field, value })
+    this.name = 'ValidationError'
   }
 }
 
@@ -42,8 +42,8 @@ export class ResourceNotFoundError extends GameError {
       `${resourceType} not found: ${resourceId}`,
       'RESOURCE_NOT_FOUND',
       { resourceType, resourceId }
-    );
-    this.name = 'ResourceNotFoundError';
+    )
+    this.name = 'ResourceNotFoundError'
   }
 }
 
@@ -53,8 +53,8 @@ export class PermissionError extends GameError {
       `Permission denied for ${action} on ${resource}`,
       'PERMISSION_DENIED',
       { action, resource }
-    );
-    this.name = 'PermissionError';
+    )
+    this.name = 'PermissionError'
   }
 }
 
@@ -64,8 +64,8 @@ export class RateLimitError extends GameError {
       `Rate limit exceeded for ${action}`,
       'RATE_LIMIT_EXCEEDED',
       { action, limit, window }
-    );
-    this.name = 'RateLimitError';
+    )
+    this.name = 'RateLimitError'
   }
 }
 
@@ -102,7 +102,7 @@ export interface Schedule {
   readonly monthly?: number[]; // days of month
 }
 
-export type DayOfWeek = 
+export type DayOfWeek =
   | 'monday'
   | 'tuesday'
   | 'wednesday'
@@ -147,7 +147,7 @@ export interface Settings {
   readonly [key: string]: SettingValue;
 }
 
-export type SettingValue = 
+export type SettingValue =
   | string
   | number
   | boolean
@@ -219,7 +219,7 @@ export interface Color {
 }
 
 // 비교 연산자
-export type ComparisonOperator = 
+export type ComparisonOperator =
   | 'eq'  // equal
   | 'ne'  // not equal
   | 'gt'  // greater than
@@ -272,7 +272,7 @@ export interface Validator {
   readonly message?: string;
 }
 
-export type ValidatorType = 
+export type ValidatorType =
   | 'required'
   | 'min'
   | 'max'
@@ -291,27 +291,27 @@ export const CONSTANTS = {
   MAX_PAGE_SIZE: 100,
   DEFAULT_TIMEZONE: 'UTC',
   SUPPORTED_LANGUAGES: ['ko', 'en', 'ja', 'zh'] as const,
-  SUPPORTED_CURRENCIES: ['KRW', 'USD', 'JPY', 'CNY'] as const,
-} as const;
+  SUPPORTED_CURRENCIES: ['KRW', 'USD', 'JPY', 'CNY'] as const
+} as const
 
 // 헬퍼 타입 가드
 export function isError(value: unknown): value is Error {
-  return value instanceof Error;
+  return value instanceof Error
 }
 
 export function isGameError(value: unknown): value is GameError {
-  return value instanceof GameError;
+  return value instanceof GameError
 }
 
 export function hasProperty<T extends object, K extends PropertyKey>(
   obj: T,
   key: K
 ): obj is T & Record<K, unknown> {
-  return key in obj;
+  return key in obj
 }
 
 export function isNonNullable<T>(value: T): value is NonNullable<T> {
-  return value !== null && value !== undefined;
+  return value !== null && value !== undefined
 }
 
 // 유틸리티 함수 타입

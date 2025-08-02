@@ -8,7 +8,7 @@ import { ChevronLeft, Settings } from 'lucide-react'
 
 export default function SettingsPage() {
   const router = useRouter()
-  
+
   return (
     <GameLayout>
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
@@ -47,7 +47,7 @@ export default function SettingsPage() {
                 개인화 설정
               </button>
             </div>
-            
+
             {/* 저장 관리 */}
             <SaveManagement />
           </div>

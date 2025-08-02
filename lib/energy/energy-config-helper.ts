@@ -5,15 +5,17 @@ import { ENERGY_CONFIG } from '@/lib/types/energy'
 export const EnergyHelper = {
   // 다음 회복까지 남은 시간 (초)
   calculateTimeToNextRegen(lastUpdate: Date, currentEnergy: number, maxEnergy: number): number {
-    if (currentEnergy >= maxEnergy) return 0
-    
+    if (currentEnergy >= maxEnergy) {
+      return 0
+    }
+
     const now = Date.now()
     const timeSinceLastUpdate = now - lastUpdate.getTime()
     const secondsSinceLastUpdate = timeSinceLastUpdate / 1000
-    
+
     // 마지막 회복 이후 경과 시간의 나머지
     const remainingSeconds = ENERGY_CONFIG.REGEN_INTERVAL - (secondsSinceLastUpdate % ENERGY_CONFIG.REGEN_INTERVAL)
-    
+
     return Math.ceil(remainingSeconds)
   },
 
@@ -23,20 +25,22 @@ export const EnergyHelper = {
     const offlineMs = now - lastUpdate.getTime()
     const maxOfflineMs = maxOfflineHours * 60 * 60 * 1000
     const effectiveMs = Math.min(offlineMs, maxOfflineMs)
-    
+
     const regenCycles = Math.floor(effectiveMs / (ENERGY_CONFIG.REGEN_INTERVAL * 1000))
     const energyGained = regenCycles * ENERGY_CONFIG.REGEN_AMOUNT
-    
+
     return Math.min(currentEnergy + energyGained, maxEnergy) - currentEnergy
   },
 
   // 전체 회복까지 필요한 시간 (초)
   calculateTimeToFull(currentEnergy: number, maxEnergy: number, nextRegenIn: number): number {
-    if (currentEnergy >= maxEnergy) return 0
-    
+    if (currentEnergy >= maxEnergy) {
+      return 0
+    }
+
     const energyNeeded = maxEnergy - currentEnergy
     const cyclesNeeded = Math.ceil(energyNeeded / ENERGY_CONFIG.REGEN_AMOUNT)
-    
+
     // 첫 회복까지 시간 + 나머지 사이클
     return nextRegenIn + ((cyclesNeeded - 1) * ENERGY_CONFIG.REGEN_INTERVAL)
   },
@@ -48,23 +52,27 @@ export const EnergyHelper = {
 
   // 일일 보너스 수령 가능 여부
   canClaimDailyBonus(lastClaim: Date | null): boolean {
-    if (!lastClaim) return true
-    
+    if (!lastClaim) {
+      return true
+    }
+
     const now = new Date()
     const timeDiff = now.getTime() - lastClaim.getTime()
     const dayInMs = 24 * 60 * 60 * 1000
-    
+
     return timeDiff >= dayInMs
   },
 
   // 연속 보너스 일수 계산
   calculateBonusStreak(lastClaim: Date | null, currentStreak: number): number {
-    if (!lastClaim) return 1
-    
+    if (!lastClaim) {
+      return 1
+    }
+
     const now = new Date()
     const diff = now.getTime() - lastClaim.getTime()
     const daysDiff = Math.floor(diff / (24 * 60 * 60 * 1000))
-    
+
     // 정확히 1일 차이면 연속, 아니면 리셋
     return daysDiff === 1 ? currentStreak + 1 : 1
   }
@@ -77,12 +85,12 @@ export const TicketHelper = {
     const now = new Date()
     const reset = new Date()
     reset.setHours(resetHour, 0, 0, 0)
-    
+
     // 오늘 리셋 시간이 지났으면 내일로
     if (reset <= now) {
       reset.setDate(reset.getDate() + 1)
     }
-    
+
     return Math.floor((reset.getTime() - now.getTime()) / 1000)
   },
 
@@ -91,7 +99,7 @@ export const TicketHelper = {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
     const secs = seconds % 60
-    
+
     if (hours > 0) {
       return `${hours}시간 ${minutes}분`
     } else if (minutes > 0) {

@@ -15,7 +15,7 @@ import { characterService } from './character.service'
 class PersistenceService {
   private static instance: PersistenceService
   private autoSaveInterval: NodeJS.Timeout | null = null
-  private lastSaveTime: number = 0
+  private lastSaveTime = 0
 
   private constructor() {
     // 자동 저장 시작
@@ -63,7 +63,9 @@ class PersistenceService {
   async saveCharacter(characterId: string): Promise<void> {
     try {
       const character = characterService.getCharacter()
-      if (!character) return
+      if (!character) {
+        return
+      }
 
       await db.characters.put({
         id: characterId,
@@ -80,7 +82,9 @@ class PersistenceService {
   async loadCharacter(characterId: string): Promise<boolean> {
     try {
       const data = await db.characters.get(characterId)
-      if (!data) return false
+      if (!data) {
+        return false
+      }
 
       characterService.restoreCharacter(data.character)
       console.log('Character loaded successfully')
@@ -95,7 +99,7 @@ class PersistenceService {
   async saveInventory(characterId: string): Promise<void> {
     try {
       const inventoryState = inventoryService.getInventoryState()
-      
+
       await db.inventory.put({
         id: characterId,
         items: inventoryState.items,
@@ -113,7 +117,9 @@ class PersistenceService {
   async loadInventory(characterId: string): Promise<boolean> {
     try {
       const data = await db.inventory.get(characterId)
-      if (!data) return false
+      if (!data) {
+        return false
+      }
 
       // 인벤토리 서비스 복원 메소드 사용
       inventoryService.restoreInventory(
@@ -169,7 +175,7 @@ class PersistenceService {
       }
 
       console.log(`Loading ${data.learnedSkills.length} skills...`)
-      
+
       // 배치 복원 메서드를 사용하여 성능 최적화
       console.time('restoreAllSkills')
       await skillManagementService.restoreAllSkills({
@@ -190,9 +196,9 @@ class PersistenceService {
   }
 
   // 모든 데이터 저장
-  async saveAll(characterId: string = 'player-1'): Promise<void> {
+  async saveAll(characterId = 'player-1'): Promise<void> {
     const now = Date.now()
-    
+
     // 최소 저장 간격 (5초)
     if (now - this.lastSaveTime < 5000) {
       return
@@ -204,7 +210,7 @@ class PersistenceService {
         this.saveInventory(characterId),
         this.saveSkills(characterId)
       ])
-      
+
       this.lastSaveTime = now
       console.log('All data saved successfully')
     } catch (error) {
@@ -213,19 +219,19 @@ class PersistenceService {
   }
 
   // 모든 데이터 불러오기
-  async loadAll(characterId: string = 'player-1'): Promise<boolean> {
+  async loadAll(characterId = 'player-1'): Promise<boolean> {
     try {
       const results = await Promise.all([
         this.loadCharacter(characterId),
         this.loadInventory(characterId),
         this.loadSkills(characterId)
       ])
-      
+
       const success = results.every(result => result)
       if (success) {
         console.log('All data loaded successfully')
       }
-      
+
       return success
     } catch (error) {
       console.error('Failed to load all data:', error)
@@ -243,7 +249,7 @@ class PersistenceService {
         // 던전 진행도 삭제
         db.dungeonProgress.where('userId').equals(characterId).delete()
       ])
-      
+
       console.log('Character data deleted successfully')
     } catch (error) {
       console.error('Failed to delete character data:', error)

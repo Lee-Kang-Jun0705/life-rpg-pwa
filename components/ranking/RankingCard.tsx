@@ -15,7 +15,7 @@ interface RankingCardProps {
 const rankColors = {
   1: 'from-yellow-400 to-yellow-600', // 금
   2: 'from-gray-300 to-gray-500',     // 은
-  3: 'from-orange-400 to-orange-600', // 동
+  3: 'from-orange-400 to-orange-600' // 동
 }
 
 const changeIcons = {
@@ -27,7 +27,7 @@ const changeIcons = {
 
 const changeColors = {
   up: 'text-green-500',
-  down: 'text-red-500', 
+  down: 'text-red-500',
   same: 'text-gray-400',
   new: 'text-blue-500'
 }
@@ -35,7 +35,7 @@ const changeColors = {
 export function RankingCard({ entry, category, showChange = true, isCurrentUser = false }: RankingCardProps) {
   const ChangeIcon = changeIcons[entry.change]
   const isTopThree = entry.rank <= 3
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -43,10 +43,10 @@ export function RankingCard({ entry, category, showChange = true, isCurrentUser 
       whileHover={{ scale: 1.01 }}
       className={`
         relative p-4 rounded-xl border transition-all
-        ${isCurrentUser 
-          ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-600' 
-          : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
-        }
+        ${isCurrentUser
+      ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-600'
+      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+    }
         ${isTopThree ? 'shadow-lg' : 'shadow-sm hover:shadow-md'}
       `}
     >
@@ -168,11 +168,11 @@ function getCategoryUnit(_category: string): string {
 function formatLastActive(lastActive: Date): string {
   const now = new Date()
   const diff = now.getTime() - lastActive.getTime()
-  
+
   const minutes = Math.floor(diff / (1000 * 60))
   const hours = Math.floor(diff / (1000 * 60 * 60))
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  
+
   if (minutes < 1) {
     return '방금 전'
   } else if (minutes < 60) {

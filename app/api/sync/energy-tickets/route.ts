@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     // 변경 사항 확인
     const energyFull = energyState.energy.current >= ENERGY_CONFIG.MAX_ENERGY
-    const ticketsReset = ticketState.lastReset && 
+    const ticketsReset = ticketState.lastReset &&
       new Date(ticketState.lastReset).toDateString() !== new Date().toDateString()
 
     // 응답

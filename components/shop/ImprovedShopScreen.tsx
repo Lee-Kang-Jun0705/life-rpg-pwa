@@ -70,9 +70,11 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
     }
   }, [userId])
 
-  const loadCharacterData = async () => {
-    if (!userId) return
-    
+  const loadCharacterData = async() => {
+    if (!userId) {
+      return
+    }
+
     try {
       const profile = await dbHelpers.getProfile(userId)
       if (profile) {
@@ -130,7 +132,9 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
   })
 
   const canAfford = (item: ShopItem) => {
-    if (!character) return false
+    if (!character) {
+      return false
+    }
     return character.gold >= item.price
   }
 
@@ -159,7 +163,7 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full"></div>
+        <div className="animate-spin w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full" />
       </div>
     )
   }
@@ -167,7 +171,7 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
   return (
     <div className="min-h-screen p-2">
       {/* 상단 정보 바 - 크기 대폭 축소 */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-7xl mx-auto mb-3"
@@ -183,7 +187,7 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
                 <p className="text-[10px] text-white font-semibold">다양한 상인들이 특별한 물품을 판매합니다</p>
               </div>
             </div>
-            
+
             {character && (
               <div className="flex items-center gap-3 text-xs">
                 <div className="flex items-center gap-1">
@@ -203,7 +207,7 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-3">
         {/* 좌측 상인 목록 - 크기 축소 */}
         <div className="lg:col-span-1">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-gray-800/50 rounded-lg p-2 backdrop-blur-sm border border-gray-700/50"
@@ -290,21 +294,21 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
                   whileHover={{ scale: affordable ? 1.02 : 1 }}
                   className="relative"
                 >
-                  <div 
+                  <div
                     className={`relative overflow-hidden rounded-lg border transition-all ${
-                      affordable 
-                        ? 'border-gray-700/50 hover:border-purple-500/50 cursor-pointer' 
+                      affordable
+                        ? 'border-gray-700/50 hover:border-purple-500/50 cursor-pointer'
                         : 'border-gray-800/50 opacity-60'
                     }`}
                     onClick={() => affordable && setSelectedItem(item)}
                   >
                     {/* 희귀도 배경 */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${rarityGradient} opacity-10`} />
-                    
+
                     {/* 아이템 이미지 영역 - 높이 축소 */}
                     <div className="relative h-20 bg-gray-800/50 flex items-center justify-center">
                       <span className="text-3xl">{item.icon || '📦'}</span>
-                      
+
                       {/* 희귀도 별 */}
                       <div className="absolute top-1 right-1 flex">
                         {[...Array(stars)].map((_, i) => (
@@ -324,7 +328,7 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
                     <div className="relative p-2.5">
                       <h4 className="font-bold text-sm text-white mb-0.5">{item.name}</h4>
                       <p className="text-[10px] text-gray-400 mb-2 line-clamp-1">{item.description}</p>
-                      
+
                       {/* 가격 - 크기 축소 */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
@@ -396,7 +400,7 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
               </div>
               <h3 className="text-2xl font-bold text-white mb-2 text-center">{selectedItem.name}</h3>
               <p className="text-gray-400 mb-4">{selectedItem.description}</p>
-              
+
               {selectedItem.effects && (
                 <div className="bg-purple-500/10 rounded-lg p-3 mb-4">
                   <div className="text-sm text-purple-300">

@@ -8,7 +8,9 @@ interface LeaderboardStatsProps {
 }
 
 export function LeaderboardStats({ stats }: LeaderboardStatsProps) {
-  if (!stats) return null
+  if (!stats) {
+    return null
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -27,7 +27,9 @@ export function ErrorNotifications() {
     setNotifications(prev => prev.filter(n => n.id !== id))
   }
 
-  if (notifications.length === 0) return null
+  if (notifications.length === 0) {
+    return null
+  }
 
   return (
     <div className="fixed top-16 right-4 z-50 space-y-2 max-w-sm" role="status" aria-live="polite">
@@ -35,7 +37,7 @@ export function ErrorNotifications() {
         <div
           key={notification.id}
           className={cn(
-            "animate-in slide-in-from-right p-4 rounded-lg shadow-lg flex items-start gap-3",
+            'animate-in slide-in-from-right p-4 rounded-lg shadow-lg flex items-start gap-3',
             {
               'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300': notification.type === 'error',
               'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300': notification.type === 'warning',

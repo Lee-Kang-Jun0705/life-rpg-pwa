@@ -12,9 +12,9 @@ import type { ShopItem } from '@/lib/shop/types'
 
 class ShopSyncService {
   private static instance: ShopSyncService
-  
+
   private constructor() {}
-  
+
   static getInstance(): ShopSyncService {
     if (!ShopSyncService.instance) {
       ShopSyncService.instance = new ShopSyncService()
@@ -25,14 +25,14 @@ class ShopSyncService {
   /**
    * 상점에서 아이템 구매 처리
    */
-  async purchaseItem(_userId: string, _shopItem: ShopItem, _quantity: number = 1): Promise<{
+  async purchaseItem(_userId: string, _shopItem: ShopItem, _quantity = 1): Promise<{
     success: boolean
     message: string
     goldSpent?: number
   }> {
     try {
       const totalCost = shopItem.price * quantity
-      
+
       // 1. 플레이어 골드 확인
       const player = await playerService.getPlayer(userId)
       if (!player || player.gold < totalCost) {
@@ -77,13 +77,13 @@ class ShopSyncService {
             value: baseItem.value,
             stackable: false
           })
-          
+
           // 인벤토리 서비스에 추가
           const addSuccess = inventoryService.addItem(generatedItem, 1)
           if (!addSuccess) {
             console.error('Failed to add item to inventory service')
           }
-          
+
           // DB에 추가
           await playerService.addItemToInventory(userId, {
             itemId: baseItem.id,
@@ -101,13 +101,13 @@ class ShopSyncService {
           stackable: true,
           maxStack: baseItem.maxStack || 99
         })
-        
+
         // 인벤토리 서비스에 추가
         const addSuccess = inventoryService.addItem(generatedItem, quantity)
         if (!addSuccess) {
           console.error('Failed to add stackable item to inventory service')
         }
-        
+
         // DB에 추가
         await playerService.addItemToInventory(userId, {
           itemId: baseItem.id,
@@ -144,7 +144,7 @@ class ShopSyncService {
     try {
       // 인벤토리 서비스에서 아이템 판매 처리
       const { totalGold, soldCount } = inventoryService.sellItems(itemUniqueIds)
-      
+
       if (soldCount === 0) {
         return {
           success: false,
@@ -178,7 +178,9 @@ class ShopSyncService {
   async syncInventory(_userId: string): Promise<void> {
     try {
       const player = await playerService.getPlayer(userId)
-      if (!player) return
+      if (!player) {
+        return
+      }
 
       // 인벤토리 서비스 초기화
       inventoryService.clearInventory()
@@ -186,7 +188,9 @@ class ShopSyncService {
       // DB 인벤토리 데이터를 인벤토리 서비스로 로드
       for (const invItem of player.inventory) {
         const baseItem = ALL_ITEMS[invItem.itemId]
-        if (!baseItem) continue
+        if (!baseItem) {
+          continue
+        }
 
         const generatedItem = itemGeneratorService.generateItem({
           ...baseItem,
@@ -214,14 +218,18 @@ class ShopSyncService {
     try {
       // 메모리에서 장착
       const equipped = inventoryService.equipItem(itemUniqueId, slot as unknown)
-      if (!equipped) return false
+      if (!equipped) {
+        return false
+      }
 
       // DB 업데이트
       const item = inventoryService.getItem(itemUniqueId)
-      if (!item) return false
+      if (!item) {
+        return false
+      }
 
       await playerService.equipItem(userId, item.id, slot)
-      
+
       return true
     } catch (error) {
       console.error('Equip sync error:', error)
@@ -236,10 +244,12 @@ class ShopSyncService {
     try {
       // 메모리에서 장착 해제
       const unequipped = inventoryService.unequipItem(slot as unknown)
-      if (!unequipped) return false
+      if (!unequipped) {
+        return false
+      }
 
       // TODO: DB 업데이트 구현
-      
+
       return true
     } catch (error) {
       console.error('Unequip sync error:', error)

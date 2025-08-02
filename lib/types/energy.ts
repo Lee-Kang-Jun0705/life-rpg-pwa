@@ -27,7 +27,7 @@ export const DUNGEON_ENERGY_COST = {
   special: 40,
   daily: 15,
   weekly: 25
-} as const;
+} as const
 
 // 에너지 설정
 export const ENERGY_CONFIG = {
@@ -40,7 +40,7 @@ export const ENERGY_CONFIG = {
   PURCHASE_AMOUNT: 60,
   OVERFLOW_ALLOWED: false,
   DEFAULT_USER_ID: 'local-user'
-} as const;
+} as const
 
 // 에너지 트랜잭션
 export interface EnergyTransaction {
@@ -174,32 +174,34 @@ export interface EnergyEvent {
 
 // 타입 가드
 export function isEnergyPotion(item: unknown): item is EnergyPotion {
-  return typeof item === 'object' && item !== null && 'energyAmount' in item;
+  return typeof item === 'object' && item !== null && 'energyAmount' in item
 }
 
 export function isBattleTicket(item: unknown): item is BattleTicket {
-  return typeof item === 'object' && item !== null && 'type' in item && 
-    ['normal', 'premium', 'event'].includes((item as { type: string }).type);
+  return typeof item === 'object' && item !== null && 'type' in item &&
+    ['normal', 'premium', 'event'].includes((item as { type: string }).type)
 }
 
 // 에너지 계산 헬퍼
 export function calculateEnergyRegen(
-  lastRegenTime: Date, 
+  lastRegenTime: Date,
   currentTime: Date = new Date()
 ): number {
-  const timeDiff = currentTime.getTime() - lastRegenTime.getTime();
-  const minutesPassed = timeDiff / (1000 * 60);
-  return Math.floor(minutesPassed * ENERGY_CONFIG.REGEN_RATE);
+  const timeDiff = currentTime.getTime() - lastRegenTime.getTime()
+  const minutesPassed = timeDiff / (1000 * 60)
+  return Math.floor(minutesPassed * ENERGY_CONFIG.REGEN_RATE)
 }
 
 export function calculateTimeUntilFull(
-  current: number, 
+  current: number,
   max: number,
   regenRate: number = ENERGY_CONFIG.REGEN_RATE
 ): number {
-  const deficit = max - current;
-  if (deficit <= 0) return 0;
-  return Math.ceil(deficit / regenRate) * 60; // 초 단위
+  const deficit = max - current
+  if (deficit <= 0) {
+    return 0
+  }
+  return Math.ceil(deficit / regenRate) * 60 // 초 단위
 }
 
 // 에너지 관련 상수
@@ -209,5 +211,5 @@ export const ENERGY_CONSTANTS = {
   DAILY_RESET_HOUR: 4, // 오전 4시 리셋
   BONUS_CLAIM_COOLDOWN: 24 * 60 * 60 * 1000, // 24시간
   POTION_STACK_LIMIT: 99,
-  TICKET_STACK_LIMIT: 50,
-} as const;
+  TICKET_STACK_LIMIT: 50
+} as const

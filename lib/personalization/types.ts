@@ -14,17 +14,17 @@ export interface UserPreferences {
     detailLevel: number     // 1-10: 1=간단히, 10=자세히
     emotionalSupport: number // 1-10: 감정적 지원 정도
   }
-  
+
   // 선호하는 피드백
   feedbackPreferences: {
     tone: 'supportive' | 'challenging' | 'balanced'
     frequency: 'minimal' | 'moderate' | 'frequent'
     format: 'text' | 'visual' | 'mixed'
   }
-  
+
   // 민감한 주제
   sensitivities: string[]
-  
+
   // 주요 목표
   primaryGoal: string
   secondaryGoals: string[]
@@ -56,7 +56,7 @@ export interface ProModeData extends LightModeData {
   duration?: number
   location?: string
   tags?: string[]
-  
+
   detailedContext: {
     weather?: string
     previousActivity?: string
@@ -65,12 +65,12 @@ export interface ProModeData extends LightModeData {
     socialContext?: string
     deviceInfo?: string
   }
-  
+
   media?: {
     photos?: string[]
     photoAnalysis?: string
   }
-  
+
   metrics?: {
     heartRate?: number
     caloriesBurned?: number
@@ -87,13 +87,13 @@ export interface LightPatterns {
     bestTimeSlot: string
     completionRate: number
   }
-  
+
   simplePatterns: {
     morningPerson: boolean
     weekendWarrior: boolean
     consistencyScore: number
   }
-  
+
   basicRecommendations: {
     nextBestTime: string
     suggestedActivity: string
@@ -108,7 +108,7 @@ export interface ProPatterns extends LightPatterns {
     seasonalPatterns: string[]
     correlations: Record<string, number>
   }
-  
+
   deepPatterns: {
     activitySequences: string[][]
     contextualSuccess: Record<string, number>
@@ -117,14 +117,14 @@ export interface ProPatterns extends LightPatterns {
     motivationCycles: string[]
     stressPatterns: string[]
   }
-  
+
   proInsights: {
     yearlyGrowthCurve: number[]
     skillProgressionMap: Record<string, number>
     personalRecords: Record<string, number | string | Date>
     futureProjections: Record<string, number>
   }
-  
+
   precisionRecommendations: {
     microAdjustments: string[]
     personalizedPrograms: Array<{

@@ -6,11 +6,11 @@ import type { GeneratedItem } from '@/lib/types/item-system'
 import type { Equipment, EquipmentSlot } from '@/lib/services/inventory.service'
 import { inventoryService } from '@/lib/services/inventory.service'
 import { skillBookService } from '@/lib/services/skillbook.service'
-import { 
-  X, 
-  Sword, 
-  Shield, 
-  Zap, 
+import {
+  X,
+  Sword,
+  Shield,
+  Zap,
   Target,
   TrendingUp,
   Lock,
@@ -44,11 +44,11 @@ export function ItemDetailModal({
   currentEquipment
 }: ItemDetailModalProps) {
   const [showComparison, setShowComparison] = useState(false)
-  
+
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
       case 'common': return 'text-gray-400'
-      case 'uncommon': return 'text-green-400' 
+      case 'uncommon': return 'text-green-400'
       case 'rare': return 'text-blue-400'
       case 'epic': return 'text-purple-400'
       case 'legendary': return 'text-orange-400'
@@ -71,8 +71,12 @@ export function ItemDetailModal({
 
   // 현재 장착된 같은 타입의 아이템 찾기
   const getEquippedItemOfSameType = (): GeneratedItem | null => {
-    if (item.type === 'weapon') return currentEquipment.weapon
-    if (item.type === 'armor') return currentEquipment.armor
+    if (item.type === 'weapon') {
+      return currentEquipment.weapon
+    }
+    if (item.type === 'armor') {
+      return currentEquipment.armor
+    }
     if (item.type === 'accessory') {
       // 액세서리는 첫 번째로 장착된 것과 비교
       return currentEquipment.accessory1 || currentEquipment.accessory2 || currentEquipment.accessory3
@@ -93,7 +97,7 @@ export function ItemDetailModal({
   }
 
   const equippedSlot = getEquippedSlot()
-  
+
   // 스킬북 정보 가져오기
   const skillBookInfo = skillBookService.isSkillBook(item) ? skillBookService.getSkillBookInfo(item) : null
 
@@ -121,18 +125,18 @@ export function ItemDetailModal({
           >
             <X className="w-5 h-5" />
           </button>
-          
+
           <div className="flex items-start gap-4">
             <div className="text-6xl">
               {item.icon || (
                 item.type === 'weapon' ? '⚔️' :
-                item.type === 'armor' ? '🛡️' :
-                item.type === 'accessory' ? '💎' :
-                item.type === 'consumable' ? '🧪' :
-                '📦'
+                  item.type === 'armor' ? '🛡️' :
+                    item.type === 'accessory' ? '💎' :
+                      item.type === 'consumable' ? '🧪' :
+                        '📦'
               )}
             </div>
-            
+
             <div className="flex-1">
               <h2 className="text-2xl font-bold mb-1">{item.name}</h2>
               <div className="flex items-center gap-3 text-sm">
@@ -248,7 +252,7 @@ export function ItemDetailModal({
                 <ChevronRight className={`w-4 h-4 transition-transform ${showComparison ? 'rotate-90' : ''}`} />
                 현재 장착 아이템과 비교
               </button>
-              
+
               <AnimatePresence>
                 {showComparison && (
                   <motion.div
@@ -269,7 +273,7 @@ export function ItemDetailModal({
                           ))}
                         </div>
                       )}
-                      
+
                       {comparison.worse.length > 0 && (
                         <div>
                           <div className="text-sm font-semibold text-red-400 mb-1">더 낮은 스탯</div>
@@ -281,30 +285,30 @@ export function ItemDetailModal({
                           ))}
                         </div>
                       )}
-                      
+
                       <div className="pt-2 border-t border-gray-600">
                         <div className="flex justify-between items-center">
                           <span className="text-sm font-semibold">총 평가</span>
                           <div className="flex items-center gap-2">
                             <div className="w-24 bg-gray-600 rounded-full h-2">
-                              <div 
+                              <div
                                 className={`h-2 rounded-full transition-all ${
                                   comparison.overallScore > 0 ? 'bg-green-500' : 'bg-red-500'
                                 }`}
-                                style={{ 
+                                style={{
                                   width: `${Math.abs(comparison.overallScore) * 50 + 50}%`,
                                   marginLeft: comparison.overallScore < 0 ? `${50 - Math.abs(comparison.overallScore) * 50}%` : '0'
                                 }}
                               />
                             </div>
                             <span className={`text-sm font-semibold ${
-                              comparison.overallScore > 0 ? 'text-green-400' : 
-                              comparison.overallScore < 0 ? 'text-red-400' : 
-                              'text-gray-400'
+                              comparison.overallScore > 0 ? 'text-green-400' :
+                                comparison.overallScore < 0 ? 'text-red-400' :
+                                  'text-gray-400'
                             }`}>
-                              {comparison.overallScore > 0 ? '상승' : 
-                               comparison.overallScore < 0 ? '하락' : 
-                               '동일'}
+                              {comparison.overallScore > 0 ? '상승' :
+                                comparison.overallScore < 0 ? '하락' :
+                                  '동일'}
                             </span>
                           </div>
                         </div>
@@ -337,8 +341,8 @@ export function ItemDetailModal({
             <button
               onClick={onToggleLock}
               className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-                locked 
-                  ? 'bg-yellow-600 hover:bg-yellow-700' 
+                locked
+                  ? 'bg-yellow-600 hover:bg-yellow-700'
                   : 'bg-gray-700 hover:bg-gray-600'
               }`}
               data-testid="toggle-lock-btn"

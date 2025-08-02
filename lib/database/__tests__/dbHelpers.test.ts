@@ -182,7 +182,7 @@ describe('dbHelpers', () => {
   })
 
   describe('updateStat', () => {
-    it('기존 스탯의 경험치를 증가시켜야 함', async () => {
+    it('기존 스탯의 경험치를 증가시켜야 함', async() => {
       // Mock 설정
       const mockFirst = jest.fn().mockResolvedValue(mockStat)
       ;(db.stats.where as jest.Mock).mockReturnValue({
@@ -209,7 +209,7 @@ describe('dbHelpers', () => {
       )
     })
 
-    it('스탯이 없으면 업데이트하지 않아야 함', async () => {
+    it('스탯이 없으면 업데이트하지 않아야 함', async() => {
       const mockFirst = jest.fn().mockResolvedValue(null)
       ;(db.stats.where as jest.Mock).mockReturnValue({
         equals: jest.fn().mockReturnValue({
@@ -225,7 +225,7 @@ describe('dbHelpers', () => {
   })
 
   describe('addActivity', () => {
-    it('활동을 추가하고 스탯을 업데이트해야 함', async () => {
+    it('활동을 추가하고 스탯을 업데이트해야 함', async() => {
       const activity = {
         userId: mockUserId,
         statType: 'health' as const,
@@ -237,7 +237,7 @@ describe('dbHelpers', () => {
 
       // Mock 설정
       ;(db.activities.add as jest.Mock).mockResolvedValue(123)
-      
+
       // updateStat 스파이
       const updateStatSpy = jest.spyOn(dbHelpers, 'updateStat').mockResolvedValue(1)
 
@@ -245,10 +245,10 @@ describe('dbHelpers', () => {
 
       // 활동 추가 확인
       expect(db.activities.add).toHaveBeenCalledWith(activity)
-      
+
       // 스탯 업데이트 확인
       expect(updateStatSpy).toHaveBeenCalledWith(mockUserId, 'health', 30)
-      
+
       expect(result).toBe(123)
 
       // 스파이 정리
@@ -257,7 +257,7 @@ describe('dbHelpers', () => {
   })
 
   describe('getRecentActivities', () => {
-    it('최근 활동 목록을 가져와야 함', async () => {
+    it('최근 활동 목록을 가져와야 함', async() => {
       const mockActivities = [
         { id: 1, activityName: 'Run', timestamp: new Date() },
         { id: 2, activityName: 'Study', timestamp: new Date() }
@@ -281,7 +281,7 @@ describe('dbHelpers', () => {
   })
 
   describe('initializeUserData', () => {
-    it('사용자 초기 데이터를 생성해야 함', async () => {
+    it('사용자 초기 데이터를 생성해야 함', async() => {
       ;(db.profiles.add as jest.Mock).mockResolvedValue(1)
       ;(db.stats.add as jest.Mock).mockResolvedValue(1)
       ;(db.characters.add as jest.Mock).mockResolvedValue(1)
@@ -301,7 +301,7 @@ describe('dbHelpers', () => {
 
       // 4개 스탯 생성 확인
       expect(db.stats.add).toHaveBeenCalledTimes(4)
-      
+
       // 건강 스탯 생성 확인
       expect(db.stats.add).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -326,7 +326,7 @@ describe('dbHelpers', () => {
   })
 
   describe('getProfile', () => {
-    it('사용자 프로필을 가져와야 함', async () => {
+    it('사용자 프로필을 가져와야 함', async() => {
       const mockProfile: UserProfile = {
         id: 1,
         userId: mockUserId,
@@ -353,7 +353,7 @@ describe('dbHelpers', () => {
   })
 
   describe('updateCharacterAppearance', () => {
-    it('캐릭터 외모를 업데이트해야 함', async () => {
+    it('캐릭터 외모를 업데이트해야 함', async() => {
       const mockCharacter: Character = {
         id: 1,
         userId: mockUserId,

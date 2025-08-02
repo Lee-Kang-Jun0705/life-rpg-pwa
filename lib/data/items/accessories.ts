@@ -17,9 +17,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 1,
     baseStats: { hp: 20 },
     value: 25,
-    stackable: false,
+    stackable: false
   },
-  
+
   silver_ring: {
     id: 'silver_ring',
     name: '은 반지',
@@ -29,9 +29,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 5,
     baseStats: { mp: 25, mpRegen: 1 },
     value: 100,
-    stackable: false,
+    stackable: false
   },
-  
+
   gold_ring: {
     id: 'gold_ring',
     name: '금 반지',
@@ -41,9 +41,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 10,
     baseStats: { hp: 50, mp: 30 },
     value: 350,
-    stackable: false,
+    stackable: false
   },
-  
+
   ruby_ring: {
     id: 'ruby_ring',
     name: '루비 반지',
@@ -53,9 +53,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 15,
     baseStats: { attack: 10, critRate: 0.05 },
     value: 600,
-    stackable: false,
+    stackable: false
   },
-  
+
   sapphire_ring: {
     id: 'sapphire_ring',
     name: '사파이어 반지',
@@ -65,9 +65,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 15,
     baseStats: { mp: 60, spellPower: 15 },
     value: 600,
-    stackable: false,
+    stackable: false
   },
-  
+
   emerald_ring: {
     id: 'emerald_ring',
     name: '에메랄드 반지',
@@ -77,7 +77,7 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 15,
     baseStats: { hpRegen: 5, mpRegen: 3 },
     value: 600,
-    stackable: false,
+    stackable: false
   },
 
   // 중급 반지 (20-30 레벨)
@@ -90,9 +90,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 25,
     baseStats: { attack: 25, critDamage: 0.2 },
     value: 1500,
-    stackable: false,
+    stackable: false
   },
-  
+
   ring_of_wisdom: {
     id: 'ring_of_wisdom',
     name: '지혜의 반지',
@@ -102,9 +102,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 25,
     baseStats: { mp: 100, spellPower: 30, cooldownReduction: 0.1 },
     value: 1500,
-    stackable: false,
+    stackable: false
   },
-  
+
   ring_of_protection: {
     id: 'ring_of_protection',
     name: '수호의 반지',
@@ -114,7 +114,7 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 28,
     baseStats: { defense: 15, resistance: 0.1, damageReduction: 0.05 },
     value: 1800,
-    stackable: false,
+    stackable: false
   },
 
   // 고급 반지 (35-50 레벨)
@@ -127,9 +127,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 40,
     baseStats: { allStats: 20, cooldownReduction: 0.2 },
     value: 6000,
-    stackable: false,
+    stackable: false
   },
-  
+
   soul_ring: {
     id: 'soul_ring',
     name: '영혼의 반지',
@@ -139,7 +139,7 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 48,
     baseStats: { hp: 200, mp: 200, lifesteal: 0.15, spellVamp: 0.15 },
     value: 15000,
-    stackable: false,
+    stackable: false
   },
 
   // === 목걸이류 ===
@@ -153,9 +153,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 2,
     baseStats: { hp: 30, speed: 2 },
     value: 40,
-    stackable: false,
+    stackable: false
   },
-  
+
   bead_necklace: {
     id: 'bead_necklace',
     name: '구슬 목걸이',
@@ -165,9 +165,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 6,
     baseStats: { mp: 40, resistance: 0.03 },
     value: 120,
-    stackable: false,
+    stackable: false
   },
-  
+
   iron_chain_necklace: {
     id: 'iron_chain_necklace',
     name: '철사슬 목걸이',
@@ -177,7 +177,7 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 8,
     baseStats: { defense: 8, hp: 40 },
     value: 180,
-    stackable: false,
+    stackable: false
   },
 
   // 중급 목걸이
@@ -190,9 +190,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 18,
     baseStats: { attack: 15, hp: 80 },
     value: 700,
-    stackable: false,
+    stackable: false
   },
-  
+
   amulet_of_magic: {
     id: 'amulet_of_magic',
     name: '마법의 부적',
@@ -202,9 +202,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 18,
     baseStats: { spellPower: 25, mp: 80 },
     value: 700,
-    stackable: false,
+    stackable: false
   },
-  
+
   holy_symbol: {
     id: 'holy_symbol',
     name: '성스러운 심볼',
@@ -214,7 +214,7 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 30,
     baseStats: { holyDamage: 20, darkResistance: 0.3, healingPower: 0.2 },
     value: 2000,
-    stackable: false,
+    stackable: false
   },
 
   // 고급 목걸이
@@ -227,9 +227,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 38,
     baseStats: { allStats: 15, critRate: 0.15, accuracy: 0.2 },
     value: 5500,
-    stackable: false,
+    stackable: false
   },
-  
+
   heart_of_ocean: {
     id: 'heart_of_ocean',
     name: '바다의 심장',
@@ -239,9 +239,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 42,
     baseStats: { hp: 300, mp: 200, waterResistance: 0.5, breathUnderwater: true },
     value: 7000,
-    stackable: false,
+    stackable: false
   },
-  
+
   celestial_pendant: {
     id: 'celestial_pendant',
     name: '천상의 펜던트',
@@ -251,7 +251,7 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 50,
     baseStats: { allStats: 30, dodge: 0.15, divineProtection: 0.1 },
     value: 20000,
-    stackable: false,
+    stackable: false
   },
 
   // === 귀걸이류 ===
@@ -264,9 +264,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 3,
     baseStats: { accuracy: 0.05, speed: 3 },
     value: 60,
-    stackable: false,
+    stackable: false
   },
-  
+
   crystal_earring: {
     id: 'crystal_earring',
     name: '수정 귀걸이',
@@ -276,9 +276,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 12,
     baseStats: { mp: 50, mpRegen: 2 },
     value: 400,
-    stackable: false,
+    stackable: false
   },
-  
+
   moonstone_earring: {
     id: 'moonstone_earring',
     name: '월장석 귀걸이',
@@ -288,9 +288,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 26,
     baseStats: { dodge: 0.08, speed: 15, nightVision: true },
     value: 1600,
-    stackable: false,
+    stackable: false
   },
-  
+
   phoenix_feather_earring: {
     id: 'phoenix_feather_earring',
     name: '불사조 깃털 귀걸이',
@@ -300,7 +300,7 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 45,
     baseStats: { fireResistance: 0.4, hpRegen: 10, reviveChance: 0.05 },
     value: 8000,
-    stackable: false,
+    stackable: false
   },
 
   // === 팔찌류 ===
@@ -313,9 +313,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 2,
     baseStats: { hp: 25, defense: 2 },
     value: 35,
-    stackable: false,
+    stackable: false
   },
-  
+
   bone_bracelet: {
     id: 'bone_bracelet',
     name: '뼈 팔찌',
@@ -325,9 +325,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 7,
     baseStats: { attack: 5, lifesteal: 0.02 },
     value: 150,
-    stackable: false,
+    stackable: false
   },
-  
+
   mana_bracelet: {
     id: 'mana_bracelet',
     name: '마나 팔찌',
@@ -337,9 +337,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 16,
     baseStats: { mp: 80, mpRegen: 4 },
     value: 650,
-    stackable: false,
+    stackable: false
   },
-  
+
   warrior_bracelet: {
     id: 'warrior_bracelet',
     name: '전사의 팔찌',
@@ -349,7 +349,7 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 32,
     baseStats: { attack: 30, attackSpeed: 0.15, critRate: 0.1 },
     value: 2500,
-    stackable: false,
+    stackable: false
   },
 
   // === 특수 액세서리 ===
@@ -362,9 +362,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 20,
     baseStats: { luck: 20, dropRate: 0.2, goldFind: 0.2 },
     value: 1000,
-    stackable: false,
+    stackable: false
   },
-  
+
   berserker_tattoo: {
     id: 'berserker_tattoo',
     name: '광전사의 문신',
@@ -374,9 +374,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 35,
     baseStats: { attack: 40, berserkMode: true, damageReduction: -0.1 },
     value: 4500,
-    stackable: false,
+    stackable: false
   },
-  
+
   scholar_monocle: {
     id: 'scholar_monocle',
     name: '학자의 모노클',
@@ -386,9 +386,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 24,
     baseStats: { mp: 100, experienceGain: 0.2, identifyItems: true },
     value: 1400,
-    stackable: false,
+    stackable: false
   },
-  
+
   assassin_cloak_pin: {
     id: 'assassin_cloak_pin',
     name: '암살자의 망토핀',
@@ -398,9 +398,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 36,
     baseStats: { critRate: 0.25, stealth: 0.3, backstabDamage: 0.5 },
     value: 5000,
-    stackable: false,
+    stackable: false
   },
-  
+
   crown_of_kings: {
     id: 'crown_of_kings',
     name: '왕의 왕관',
@@ -410,9 +410,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 50,
     baseStats: { allStats: 40, leadership: true, auraEffect: 'royal' },
     value: 25000,
-    stackable: false,
+    stackable: false
   },
-  
+
   dimensional_key: {
     id: 'dimensional_key',
     name: '차원의 열쇠',
@@ -422,9 +422,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 49,
     baseStats: { portalAccess: true, spaceTimeResistance: 0.5 },
     value: 22000,
-    stackable: false,
+    stackable: false
   },
-  
+
   infinity_stone_holder: {
     id: 'infinity_stone_holder',
     name: '무한의 돌 홀더',
@@ -434,7 +434,7 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 50,
     baseStats: { socketSlots: 6, powerAmplification: 2.0 },
     value: 30000,
-    stackable: false,
+    stackable: false
   },
 
   // === 세트 액세서리 ===
@@ -447,9 +447,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 30,
     baseStats: { spellPower: 35, elementalAffinity: 0.1, setBonus: 'elementalist' },
     value: 2200,
-    stackable: false,
+    stackable: false
   },
-  
+
   element_set_necklace: {
     id: 'element_set_necklace',
     name: '원소술사의 목걸이',
@@ -459,9 +459,9 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 30,
     baseStats: { mp: 150, elementalResistance: 0.2, setBonus: 'elementalist' },
     value: 2500,
-    stackable: false,
+    stackable: false
   },
-  
+
   thief_set_gloves_accessory: {
     id: 'thief_set_gloves_accessory',
     name: '도적의 장갑 장신구',
@@ -471,6 +471,6 @@ export const ACCESSORY_ITEMS: Record<string, Item> = {
     level: 28,
     baseStats: { dodge: 0.1, critRate: 0.15, stealChance: 0.1, setBonus: 'thief' },
     value: 2000,
-    stackable: false,
+    stackable: false
   }
 }

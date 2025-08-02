@@ -29,7 +29,7 @@ export const DUNGEON_REWARD_ITEMS: Record<string, ShopItem> = {
     maxStack: 99,
     effects: ['즉시 학습 +20 경험치']
   },
-  
+
   // 주간 보스 보상
   'legendary-sword': {
     id: 'legendary-sword',
@@ -55,7 +55,7 @@ export const DUNGEON_REWARD_ITEMS: Record<string, ShopItem> = {
     isEquippable: true,
     effects: ['성취 +25', '명예의 상징']
   },
-  
+
   // 특별 보상
   'dungeon-key': {
     id: 'dungeon-key',
@@ -81,7 +81,7 @@ export const DUNGEON_REWARD_ITEMS: Record<string, ShopItem> = {
     maxStack: 20,
     effects: ['30분간 경험치 2배']
   },
-  
+
   // 난이도별 추가 보상
   'champion-armor': {
     id: 'champion-armor',

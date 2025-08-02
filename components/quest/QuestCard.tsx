@@ -51,15 +51,15 @@ export function QuestCard({ quest, onClick, isActive }: QuestCardProps) {
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className={cn(
-        "relative overflow-hidden rounded-lg border transition-all cursor-pointer",
-        quest.status === 'locked' ? "border-gray-700 opacity-60" : "border-gray-600",
-        isActive && "ring-2 ring-purple-500"
+        'relative overflow-hidden rounded-lg border transition-all cursor-pointer',
+        quest.status === 'locked' ? 'border-gray-700 opacity-60' : 'border-gray-600',
+        isActive && 'ring-2 ring-purple-500'
       )}
       onClick={onClick}
     >
       {/* 배경 그라데이션 */}
       <div className={cn(
-        "absolute inset-0 opacity-10 bg-gradient-to-br",
+        'absolute inset-0 opacity-10 bg-gradient-to-br',
         getTypeColor()
       )} />
 
@@ -74,9 +74,9 @@ export function QuestCard({ quest, onClick, isActive }: QuestCardProps) {
             <p className="text-sm text-gray-400 line-clamp-2">{quest.description}</p>
           </div>
           <span className={cn(
-            "px-2 py-1 text-xs font-medium rounded-full bg-gradient-to-r",
+            'px-2 py-1 text-xs font-medium rounded-full bg-gradient-to-r',
             getTypeColor(),
-            "text-white"
+            'text-white'
           )}>
             {quest.type === 'main' && '메인'}
             {quest.type === 'daily' && '일일'}

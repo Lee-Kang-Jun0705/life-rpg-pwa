@@ -6,7 +6,7 @@ export class AICoachService {
   // API 키는 서버 사이드에서만 사용
 
   // 성장 그래프 데이터 생성
-  async getGrowthChartData(userId: string, days: number = 30): Promise<ChartDataPoint[]> {
+  async getGrowthChartData(userId: string, days = 30): Promise<ChartDataPoint[]> {
     const endDate = new Date()
     const startDate = new Date()
     startDate.setDate(startDate.getDate() - days)
@@ -19,7 +19,7 @@ export class AICoachService {
 
     // 일별 경험치 합계 계산
     const dailyData = new Map<string, { [key: string]: number }>()
-    
+
     activities.forEach((activity) => {
       const dateKey = activity.timestamp.toISOString().split('T')[0]
       if (!dailyData.has(dateKey)) {
@@ -67,7 +67,7 @@ export class AICoachService {
 
     for (const stat of stats) {
       const statActivities = activities.filter((a) => a.statType === stat.type)
-      const dailyGrowth = statActivities.length > 0 
+      const dailyGrowth = statActivities.length > 0
         ? statActivities.reduce((sum, a) => sum + a.experience, 0) / 30
         : 0
 
@@ -82,10 +82,13 @@ export class AICoachService {
 
       const recentExp = recentActivities.reduce((sum, a) => sum + a.experience, 0)
       const previousExp = previousActivities.reduce((sum, a) => sum + a.experience, 0)
-      
+
       let trend: 'improving' | 'stable' | 'declining' = 'stable'
-      if (recentExp > previousExp * 1.2) trend = 'improving'
-      else if (recentExp < previousExp * 0.8) trend = 'declining'
+      if (recentExp > previousExp * 1.2) {
+        trend = 'improving'
+      } else if (recentExp < previousExp * 0.8) {
+        trend = 'declining'
+      }
 
       // 개선 제안 생성
       const suggestions = this.generateSuggestions(stat.type, dailyGrowth, trend, statActivities)
@@ -94,8 +97,8 @@ export class AICoachService {
         statType: stat.type,
         growthRate: dailyGrowth,
         trend,
-        lastActivityDate: statActivities.length > 0 
-          ? statActivities[statActivities.length - 1].timestamp 
+        lastActivityDate: statActivities.length > 0
+          ? statActivities[statActivities.length - 1].timestamp
           : null,
         totalActivities: statActivities.length,
         suggestions
@@ -169,7 +172,7 @@ export class AICoachService {
     const advice: PersonalizedAdvice[] = []
 
     // 강점 분석
-    const strongestStat = stats.reduce((max, stat) => 
+    const strongestStat = stats.reduce((max, stat) =>
       (stat.level || 1) > (max.level || 1) ? stat : max
     )
     advice.push({
@@ -185,7 +188,7 @@ export class AICoachService {
     })
 
     // 약점 분석
-    const weakestStat = stats.reduce((min, stat) => 
+    const weakestStat = stats.reduce((min, stat) =>
       (stat.level || 1) < (min.level || 1) ? stat : min
     )
     const weakAnalysis = growthAnalyses.find(a => a.statType === weakestStat.type)
@@ -318,11 +321,15 @@ export class AICoachService {
     switch (statType) {
       case 'health':
         suggestions.push('매일 10분 산책부터 시작해보세요')
-        if (growthRate < 10) suggestions.push('물 마시기 알림을 설정해보세요')
+        if (growthRate < 10) {
+          suggestions.push('물 마시기 알림을 설정해보세요')
+        }
         break
       case 'learning':
         suggestions.push('하루 10페이지 독서 습관을 만들어보세요')
-        if (trend === 'stable') suggestions.push('새로운 분야의 강의를 들어보세요')
+        if (trend === 'stable') {
+          suggestions.push('새로운 분야의 강의를 들어보세요')
+        }
         break
       case 'relationship':
         suggestions.push('하루 1명에게 안부 메시지를 보내보세요')

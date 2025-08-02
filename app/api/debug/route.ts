@@ -4,7 +4,7 @@ export async function GET() {
   try {
     // 서버 측에서는 DB 접근 불가
     const isServer = typeof window === 'undefined'
-    
+
     return NextResponse.json({
       status: 'ok',
       environment: {

@@ -10,8 +10,8 @@ import { GAME_CONFIG } from '@/lib/types/dashboard'
 
 describe('데이터베이스 통합 테스트', () => {
   const testUserId = 'test-user-integration'
-  
-  beforeEach(async () => {
+
+  beforeEach(async() => {
     // 테스트 데이터 정리
     try {
       const activities = await dbHelpers.getActivities(testUserId)
@@ -25,13 +25,13 @@ describe('데이터베이스 통합 테스트', () => {
     }
   })
 
-  test('스탯 초기화 및 기본값 검증', async () => {
+  test('스탯 초기화 및 기본값 검증', async() => {
     const stats = await dbHelpers.getStats(testUserId)
-    
+
     // 기본 스탯이 생성되어야 함
     expect(stats).toBeInstanceOf(Array)
     expect(stats.length).toBe(4) // 4개 스탯 (health, learning, relationship, achievement)
-    
+
     // 각 스탯의 기본 구조 확인
     const statTypes = ['health', 'learning', 'relationship', 'achievement']
     for (const statType of statTypes) {
@@ -42,7 +42,7 @@ describe('데이터베이스 통합 테스트', () => {
     }
   })
 
-  test('활동 추가 및 경험치 누적', async () => {
+  test('활동 추가 및 경험치 누적', async() => {
     // 활동 추가
     const activityData = {
       userId: testUserId,
@@ -53,20 +53,20 @@ describe('데이터베이스 통합 테스트', () => {
       timestamp: new Date(),
       synced: false
     }
-    
+
     const activity = await dbHelpers.addActivity(activityData)
     expect(activity.id).toBeDefined()
     expect(activity.experience).toBe(50)
-    
+
     // 스탯 업데이트 확인
     const stats = await dbHelpers.getStats(testUserId)
     const healthStat = stats.find(s => s.type === 'health')
-    
+
     expect(healthStat).toBeDefined()
     expect(healthStat?.experience).toBeGreaterThanOrEqual(50)
   })
 
-  test('레벨업 로직 검증', async () => {
+  test('레벨업 로직 검증', async() => {
     // 많은 경험치를 한 번에 추가하여 레벨업 유발
     const largeExpActivity = {
       userId: testUserId,
@@ -77,19 +77,19 @@ describe('데이터베이스 통합 테스트', () => {
       timestamp: new Date(),
       synced: false
     }
-    
+
     await dbHelpers.addActivity(largeExpActivity)
-    
+
     // 레벨업 확인
     const stats = await dbHelpers.getStats(testUserId)
     const learningStat = stats.find(s => s.type === 'learning')
-    
+
     expect(learningStat).toBeDefined()
     expect(learningStat?.level).toBeGreaterThan(1)
     expect(learningStat?.experience).toBeGreaterThanOrEqual(0)
   })
 
-  test('다중 스탯 동시 업데이트', async () => {
+  test('다중 스탯 동시 업데이트', async() => {
     const multiStatActivities = [
       {
         userId: testUserId,
@@ -119,25 +119,25 @@ describe('데이터베이스 통합 테스트', () => {
         synced: false
       }
     ]
-    
+
     // 모든 활동 추가
     for (const activityData of multiStatActivities) {
       await dbHelpers.addActivity(activityData)
     }
-    
+
     // 모든 스탯이 업데이트되었는지 확인
     const stats = await dbHelpers.getStats(testUserId)
-    
+
     const healthStat = stats.find(s => s.type === 'health')
     const relationshipStat = stats.find(s => s.type === 'relationship')
     const achievementStat = stats.find(s => s.type === 'achievement')
-    
+
     expect(healthStat?.experience).toBeGreaterThanOrEqual(75)
     expect(relationshipStat?.experience).toBeGreaterThanOrEqual(60)
     expect(achievementStat?.experience).toBeGreaterThanOrEqual(100)
   })
 
-  test('총 레벨 계산 정확성', async () => {
+  test('총 레벨 계산 정확성', async() => {
     // 각 스탯에 다른 양의 경험치 추가
     const activities = [
       { statType: 'health', experience: 150 },
@@ -145,7 +145,7 @@ describe('데이터베이스 통합 테스트', () => {
       { statType: 'relationship', experience: 100 },
       { statType: 'achievement', experience: 300 }
     ]
-    
+
     for (const { statType, experience } of activities) {
       await dbHelpers.addActivity({
         userId: testUserId,
@@ -157,19 +157,19 @@ describe('데이터베이스 통합 테스트', () => {
         synced: false
       })
     }
-    
+
     // 총 레벨 계산
     const stats = await dbHelpers.getStats(testUserId)
     const totalLevel = stats.reduce((sum, stat) => sum + stat.level, 0)
-    
+
     expect(totalLevel).toBeGreaterThan(4) // 기본 레벨 4보다는 높아야 함
     expect(totalLevel).toBeLessThan(30) // 너무 높지는 않아야 함 (현실적인 범위 조정)
-    
+
     console.log(`계산된 총 레벨: ${totalLevel}`)
     console.log('각 스탯 레벨:', stats.map(s => ({ type: s.type, level: s.level, exp: s.experience })))
   })
 
-  test('중복 데이터 방지 검증', async () => {
+  test('중복 데이터 방지 검증', async() => {
     // 동일한 활동을 여러 번 추가
     const activityData = {
       userId: testUserId,
@@ -180,21 +180,21 @@ describe('데이터베이스 통합 테스트', () => {
       timestamp: new Date(),
       synced: false
     }
-    
+
     const activity1 = await dbHelpers.addActivity(activityData)
     const activity2 = await dbHelpers.addActivity(activityData)
-    
+
     // 두 활동이 서로 다른 ID를 가져야 함
     expect(activity1.id).not.toBe(activity2.id)
-    
+
     // 활동 목록에서 두 개 모두 확인되어야 함
     const activities = await dbHelpers.getActivities(testUserId)
     const matchingActivities = activities.filter(a => a.activityName === '동일 활동')
-    
+
     expect(matchingActivities.length).toBe(2)
   })
 
-  test('데이터 영속성 및 일관성', async () => {
+  test('데이터 영속성 및 일관성', async() => {
     // 활동 추가
     const activity = await dbHelpers.addActivity({
       userId: testUserId,
@@ -205,25 +205,25 @@ describe('데이터베이스 통합 테스트', () => {
       timestamp: new Date(),
       synced: false
     })
-    
+
     expect(activity.id).toBeDefined()
-    
+
     // 데이터 재조회하여 영속성 확인
     const activities = await dbHelpers.getActivities(testUserId)
     const persistedActivity = activities.find(a => a.id === activity.id)
-    
+
     expect(persistedActivity).toBeDefined()
     expect(persistedActivity?.activityName).toBe('영속성 테스트')
     expect(persistedActivity?.experience).toBe(80)
-    
+
     // 스탯도 일관성 있게 업데이트되었는지 확인
     const stats = await dbHelpers.getStats(testUserId)
     const learningStat = stats.find(s => s.type === 'learning')
-    
+
     expect(learningStat?.experience).toBeGreaterThanOrEqual(80)
   })
 
-  test('동기화 상태 관리', async () => {
+  test('동기화 상태 관리', async() => {
     // 동기화되지 않은 활동 추가
     await dbHelpers.addActivity({
       userId: testUserId,
@@ -234,7 +234,7 @@ describe('데이터베이스 통합 테스트', () => {
       timestamp: new Date(),
       synced: false
     })
-    
+
     // 동기화된 활동 추가
     await dbHelpers.addActivity({
       userId: testUserId,
@@ -245,15 +245,15 @@ describe('데이터베이스 통합 테스트', () => {
       timestamp: new Date(),
       synced: true
     })
-    
+
     // 모든 활동 조회
     const allActivities = await dbHelpers.getActivities(testUserId)
     const unsyncedActivities = allActivities.filter(a => !a.synced && a.activityName?.includes('활동'))
     const syncedActivities = allActivities.filter(a => a.synced && a.activityName?.includes('활동'))
-    
+
     expect(unsyncedActivities.length).toBeGreaterThanOrEqual(1)
     expect(syncedActivities.length).toBeGreaterThanOrEqual(1)
-    
+
     console.log(`미동기화 활동: ${unsyncedActivities.length}개`)
     console.log(`동기화된 활동: ${syncedActivities.length}개`)
   })

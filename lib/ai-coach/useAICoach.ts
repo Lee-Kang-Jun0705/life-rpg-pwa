@@ -3,11 +3,11 @@ import { dbHelpers } from '@/lib/database/client'
 import { GAME_CONFIG, STAT_TYPES } from '@/lib/types/dashboard'
 import { Stat } from '@/lib/types/dashboard'
 import { AICoachService } from './ai-coach-service'
-import type { 
-  GrowthAnalysis, 
-  ActivityPattern, 
-  PersonalizedAdvice, 
-  ChartDataPoint 
+import type {
+  GrowthAnalysis,
+  ActivityPattern,
+  PersonalizedAdvice,
+  ChartDataPoint
 } from './types'
 
 // 초기 상태 정의
@@ -18,7 +18,7 @@ const INITIAL_STATE = {
   activityPattern: null as ActivityPattern | null,
   personalizedAdvice: [] as PersonalizedAdvice[],
   isLoading: true,
-  error: null as string | null,
+  error: null as string | null
 }
 
 export function useAICoach() {
@@ -47,11 +47,11 @@ export function useAICoach() {
   }, [])
 
   // 초기 데이터 로드 (프로필 및 스탯)
-  const initializeUserData = useCallback(async () => {
+  const initializeUserData = useCallback(async() => {
     try {
       // 프로필 확인
       const profile = await dbHelpers.getProfile(GAME_CONFIG.DEFAULT_USER_ID)
-      
+
       if (!profile) {
         console.log('🆕 Initializing new user data...')
         await dbHelpers.initializeUserData(
@@ -63,15 +63,15 @@ export function useAICoach() {
 
       // 스탯 로드
       let stats = await dbHelpers.getStats(GAME_CONFIG.DEFAULT_USER_ID)
-      
+
       if (!stats || stats.length === 0) {
         console.log('📊 Creating default stats...')
         const defaultStats = createDefaultStats()
-        
+
         await Promise.all(
           defaultStats.map(stat => dbHelpers.saveStat(stat))
         )
-        
+
         stats = await dbHelpers.getStats(GAME_CONFIG.DEFAULT_USER_ID)
       }
 
@@ -83,7 +83,7 @@ export function useAICoach() {
   }, [createDefaultStats])
 
   // 분석 데이터 로드 (병렬 처리)
-  const loadAnalysisData = useCallback(async (stats: Stat[]) => {
+  const loadAnalysisData = useCallback(async(stats: Stat[]) => {
     try {
       // 병렬로 데이터 로드
       const [chartData, analyses, pattern] = await Promise.all([
@@ -108,25 +108,31 @@ export function useAICoach() {
   }, [aiCoachService])
 
   // 메인 데이터 로드 함수
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async() => {
     // 이미 초기화 중이거나 완료된 경우 skip
-    if (!isMountedRef.current || isInitializedRef.current) return
-    
+    if (!isMountedRef.current || isInitializedRef.current) {
+      return
+    }
+
     try {
       updateState({ isLoading: true, error: null })
 
       // 1단계: 사용자 데이터 초기화
       const stats = await initializeUserData()
-      
-      if (!isMountedRef.current) return
+
+      if (!isMountedRef.current) {
+        return
+      }
 
       // 상태 업데이트 (스탯만 먼저)
       updateState({ userStats: stats })
 
       // 2단계: 분석 데이터 로드 (병렬)
       const { chartData, analyses, pattern, advice } = await loadAnalysisData(stats)
-      
-      if (!isMountedRef.current) return
+
+      if (!isMountedRef.current) {
+        return
+      }
 
       // 최종 상태 업데이트
       updateState({
@@ -148,19 +154,21 @@ export function useAICoach() {
   }, [initializeUserData, loadAnalysisData, updateState])
 
   // 데이터 새로고침
-  const refreshData = useCallback(async () => {
-    if (!isMountedRef.current) return
+  const refreshData = useCallback(async() => {
+    if (!isMountedRef.current) {
+      return
+    }
 
     try {
       updateState({ isLoading: true, error: null })
-      
+
       const stats = await dbHelpers.getStats(GAME_CONFIG.DEFAULT_USER_ID)
       if (!stats || stats.length === 0) {
         throw new Error('No stats found')
       }
 
       const { chartData, analyses, pattern, advice } = await loadAnalysisData(stats)
-      
+
       updateState({
         userStats: stats,
         growthData: chartData,
@@ -182,7 +190,7 @@ export function useAICoach() {
   useEffect(() => {
     isMountedRef.current = true
     isInitializedRef.current = false
-    
+
     // 약간의 지연 후 로드 (DB 초기화 대기)
     const timer = setTimeout(() => {
       loadData()

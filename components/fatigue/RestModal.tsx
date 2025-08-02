@@ -59,20 +59,24 @@ export function RestModal({ userId, isOpen, onClose }: RestModalProps) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [isResting, setIsResting] = useState(false)
 
-  if (!isOpen || !fatigueState) return null
+  if (!isOpen || !fatigueState) {
+    return null
+  }
 
-  const handleRest = async () => {
+  const handleRest = async() => {
     const option = REST_OPTIONS.find(opt => opt.id === selectedOption)
-    if (!option) return
+    if (!option) {
+      return
+    }
 
     setIsResting(true)
-    
+
     try {
       const success = await recordRest(option.duration)
-      
+
       if (success) {
         await refreshFatigue()
-        
+
         // 성공 메시지 표시
         setTimeout(() => {
           onClose()
@@ -87,7 +91,7 @@ export function RestModal({ userId, isOpen, onClose }: RestModalProps) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
         <h2 className="text-xl font-bold mb-4">휴식 시간</h2>
-        
+
         <div className="mb-6">
           <div className="flex items-center justify-between text-sm mb-2">
             <span>현재 피로도</span>
@@ -96,7 +100,7 @@ export function RestModal({ userId, isOpen, onClose }: RestModalProps) {
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
+            <div
               className="bg-orange-500 h-2 rounded-full transition-all"
               style={{ width: `${fatigueState.currentFatigue}%` }}
             />

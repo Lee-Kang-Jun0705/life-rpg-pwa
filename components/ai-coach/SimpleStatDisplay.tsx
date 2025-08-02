@@ -80,8 +80,8 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
         <button
           onClick={() => setViewMode('bars')}
           className={`px-6 py-3 rounded-full text-sm font-medium transition-all ${
-            viewMode === 'bars' 
-              ? 'bg-purple-600 text-white shadow-lg scale-105' 
+            viewMode === 'bars'
+              ? 'bg-purple-600 text-white shadow-lg scale-105'
               : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:scale-105'
           }`}
         >
@@ -91,8 +91,8 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
         <button
           onClick={() => setViewMode('donuts')}
           className={`px-6 py-3 rounded-full text-sm font-medium transition-all ${
-            viewMode === 'donuts' 
-              ? 'bg-purple-600 text-white shadow-lg scale-105' 
+            viewMode === 'donuts'
+              ? 'bg-purple-600 text-white shadow-lg scale-105'
               : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:scale-105'
           }`}
         >
@@ -104,78 +104,78 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
       {/* 보기 모드에 따른 렐더링 */}
       {viewMode === 'bars' && (
         <div className="space-y-3">
-        {userStats.map((stat, index) => {
-          const config = STAT_CONFIG[stat.type as keyof typeof STAT_CONFIG]
-          const level = stat.level || 0
-          const experience = stat.experience || 0
-          const expProgress = experience % 100
-          const percentage = (level / 10) * 100 // 10레벨 기준
+          {userStats.map((stat, index) => {
+            const config = STAT_CONFIG[stat.type as keyof typeof STAT_CONFIG]
+            const level = stat.level || 0
+            const experience = stat.experience || 0
+            const expProgress = experience % 100
+            const percentage = (level / 10) * 100 // 10레벨 기준
 
-          return (
-            <motion.div
-              key={stat.type}
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className={`${config.bgColor} rounded-2xl p-5 shadow-lg`}
-            >
-              {/* 상단 정보 */}
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-4xl">{config.emoji}</span>
-                  <div>
-                    <h3 className="text-xl font-bold">{config.name}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {experience} EXP
-                    </p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-black bg-gradient-to-r ${config.color} bg-clip-text text-transparent">
-                    Lv.{level}
-                  </div>
-                  {level === maxLevel && level > 1 && (
-                    <div className="text-xs text-orange-500 font-medium animate-pulse">
-                      최고 레벨!
+            return (
+              <motion.div
+                key={stat.type}
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className={`${config.bgColor} rounded-2xl p-5 shadow-lg`}
+              >
+                {/* 상단 정보 */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">{config.emoji}</span>
+                    <div>
+                      <h3 className="text-xl font-bold">{config.name}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {experience} EXP
+                      </p>
                     </div>
-                  )}
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-black bg-gradient-to-r ${config.color} bg-clip-text text-transparent">
+                    Lv.{level}
+                    </div>
+                    {level === maxLevel && level > 1 && (
+                      <div className="text-xs text-orange-500 font-medium animate-pulse">
+                      최고 레벨!
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* 레벨 진행 바 */}
-              <div className="space-y-2">
-                <div className="flex justify-between text-xs font-medium text-gray-600 dark:text-gray-400">
-                  <span>레벨 진행도</span>
-                  <span>{Math.min(percentage, 100)}%</span>
+                {/* 레벨 진행 바 */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs font-medium text-gray-600 dark:text-gray-400">
+                    <span>레벨 진행도</span>
+                    <span>{Math.min(percentage, 100)}%</span>
+                  </div>
+                  <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                    <motion.div
+                      className={`h-full ${config.barColor}`}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${Math.min(percentage, 100)}%` }}
+                      transition={{ duration: 1, delay: index * 0.1 }}
+                    />
+                  </div>
                 </div>
-                <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                  <motion.div
-                    className={`h-full ${config.barColor}`}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${Math.min(percentage, 100)}%` }}
-                    transition={{ duration: 1, delay: index * 0.1 }}
-                  />
-                </div>
-              </div>
 
-              {/* 경험치 진행 바 */}
-              <div className="mt-3 space-y-1">
-                <div className="flex justify-between text-xs font-medium text-gray-600 dark:text-gray-400">
-                  <span>다음 레벨까지</span>
-                  <span>{100 - expProgress} EXP</span>
+                {/* 경험치 진행 바 */}
+                <div className="mt-3 space-y-1">
+                  <div className="flex justify-between text-xs font-medium text-gray-600 dark:text-gray-400">
+                    <span>다음 레벨까지</span>
+                    <span>{100 - expProgress} EXP</span>
+                  </div>
+                  <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                    <motion.div
+                      className="h-full bg-gray-400 dark:bg-gray-500"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${expProgress}%` }}
+                      transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
+                    />
+                  </div>
                 </div>
-                <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gray-400 dark:bg-gray-500"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${expProgress}%` }}
-                    transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-                  />
-                </div>
-              </div>
-            </motion.div>
-          )
-        })}
+              </motion.div>
+            )
+          })}
         </div>
       )}
 
@@ -189,7 +189,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
           <h3 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-rose-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
             레벨 분포도
           </h3>
-          
+
           {/* 도넛 차트 컨테이너 */}
           <div className="relative max-w-md mx-auto">
             {/* 메인 도넛 차트 */}
@@ -210,7 +210,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
                     )
                   })}
                 </defs>
-                
+
                 {/* 배경 링 */}
                 <circle
                   cx="200"
@@ -220,17 +220,17 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
                   stroke="#f3f4f6"
                   strokeWidth="60"
                 />
-                
+
                 {/* 스탯 섹션 */}
                 {userStats.map((stat, index) => {
                   const config = STAT_CONFIG[stat.type as keyof typeof STAT_CONFIG]
                   const level = stat.level || 0
                   const percentage = (level / totalLevel) * 100
                   const circumference = 2 * Math.PI * 140
-                  const offset = userStats.slice(0, index).reduce((sum, s) => 
+                  const offset = userStats.slice(0, index).reduce((sum, s) =>
                     sum + ((s.level || 0) / totalLevel) * 100, 0
                   )
-                  
+
                   return (
                     <motion.circle
                       key={index}
@@ -243,24 +243,24 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
                       strokeDasharray={`${(percentage / 100) * circumference} ${circumference}`}
                       strokeDashoffset={`${-(offset / 100) * circumference}`}
                       initial={{ strokeDashoffset: 0, opacity: 0 }}
-                      animate={{ 
+                      animate={{
                         strokeDashoffset: `${-(offset / 100) * circumference}`,
-                        opacity: 1 
+                        opacity: 1
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 1,
                         delay: index * 0.2,
-                        ease: "easeInOut"
+                        ease: 'easeInOut'
                       }}
                       filter="url(#donutShadow)"
                       className="cursor-pointer hover:brightness-110 transition-all"
                     />
                   )
                 })}
-                
+
                 {/* 섹션 구분선 */}
                 {userStats.map((stat, index) => {
-                  const offset = userStats.slice(0, index).reduce((sum, s) => 
+                  const offset = userStats.slice(0, index).reduce((sum, s) =>
                     sum + ((s.level || 0) / totalLevel) * 360, 0
                   )
                   const angle = offset * Math.PI / 180
@@ -268,7 +268,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
                   const y1 = 200 + 110 * Math.sin(angle)
                   const x2 = 200 + 170 * Math.cos(angle)
                   const y2 = 200 + 170 * Math.sin(angle)
-                  
+
                   return (
                     <line
                       key={`line-${index}`}
@@ -282,13 +282,13 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
                   )
                 })}
               </svg>
-              
+
               {/* 중앙 정보 */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div 
+                <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ delay: 0.5, type: "spring" }}
+                  transition={{ delay: 0.5, type: 'spring' }}
                   className="bg-white dark:bg-gray-800 rounded-full p-8 shadow-inner"
                 >
                   <div className="text-center">
@@ -310,14 +310,14 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
                 </motion.div>
               </div>
             </div>
-            
+
             {/* 범례 */}
             <div className="mt-8 grid grid-cols-2 gap-4">
               {userStats.map((stat, i) => {
                 const config = STAT_CONFIG[stat.type as keyof typeof STAT_CONFIG]
                 const level = stat.level || 0
                 const percentage = (level / totalLevel * 100).toFixed(1)
-                
+
                 return (
                   <motion.div
                     key={i}
@@ -364,7 +364,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
               })}
             </div>
           </div>
-          
+
           {/* 하단 인사이트 */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
@@ -376,7 +376,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
               <span className="text-2xl">💡</span>
               <div className="text-left">
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  가장 높은 스탯: {STAT_CONFIG[userStats.reduce((max, stat) => 
+                  가장 높은 스탯: {STAT_CONFIG[userStats.reduce((max, stat) =>
                     (stat.level || 0) > (max.level || 0) ? stat : max
                   ).type as keyof typeof STAT_CONFIG].name}
                 </p>
@@ -404,7 +404,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
           <div className="text-center p-3 bg-white/50 dark:bg-gray-800/50 rounded-xl">
             <div className="text-sm text-gray-600 dark:text-gray-400">최고 레벨</div>
             <div className="text-2xl font-bold">
-              {STAT_CONFIG[userStats.reduce((max, stat) => 
+              {STAT_CONFIG[userStats.reduce((max, stat) =>
                 (stat.level || 1) > (max.level || 1) ? stat : max
               ).type as keyof typeof STAT_CONFIG].emoji} {maxLevel}
             </div>
@@ -412,7 +412,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
           <div className="text-center p-3 bg-white/50 dark:bg-gray-800/50 rounded-xl">
             <div className="text-sm text-gray-600 dark:text-gray-400">최저 레벨</div>
             <div className="text-2xl font-bold">
-              {STAT_CONFIG[userStats.reduce((min, stat) => 
+              {STAT_CONFIG[userStats.reduce((min, stat) =>
                 (stat.level || 0) < (min.level || 0) ? stat : min
               ).type as keyof typeof STAT_CONFIG].emoji} {minLevel}
             </div>

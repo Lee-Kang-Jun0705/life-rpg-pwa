@@ -110,7 +110,7 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
             {stats.defeatedMonsters} / {stats.totalMonsters}
           </span>
         </div>
-        
+
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
@@ -119,7 +119,7 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
             className="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full"
           />
         </div>
-        
+
         <div className="text-center mt-2 text-sm text-gray-600 dark:text-gray-400">
           {stats.completionRate}% 완료
         </div>
@@ -137,7 +137,7 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {stats.categoryProgress.map((progress, index) => {
               const percentage = Math.floor((progress.discovered / progress.total) * 100)
-              
+
               return (
                 <div key={progress.categoryId} className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-2">
@@ -148,7 +148,7 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
                       {progress.discovered}/{progress.total}
                     </span>
                   </div>
-                  
+
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                     <motion.div
                       initial={{ width: 0 }}
@@ -157,7 +157,7 @@ export function CollectionStats({ stats }: CollectionStatsProps) {
                       className="bg-gradient-to-r from-blue-400 to-purple-500 h-full rounded-full"
                     />
                   </div>
-                  
+
                   <div className="text-xs text-center mt-1 text-gray-600 dark:text-gray-400">
                     {percentage}%
                   </div>

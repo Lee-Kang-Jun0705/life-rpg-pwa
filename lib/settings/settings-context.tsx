@@ -26,12 +26,12 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     loadSettings()
   }, [])
 
-  const loadSettings = async () => {
+  const loadSettings = async() => {
     try {
       // 로컬 스토리지에서 먼저 확인
       const savedSettings = safeLocalStorage.getItem(SETTINGS_KEY)
       const parsed = safeJSONParse<Partial<Settings> | null>(savedSettings, null)
-      
+
       if (parsed && typeof parsed === 'object') {
         setSettings({
           ...DEFAULT_SETTINGS,
@@ -43,7 +43,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       // IndexedDB에서 프로필 정보 로드 (로컬 사용자)
       const userId = 'local-user' // 오프라인 PWA이므로 로컬 사용자 ID 사용
       const profile = await profileRepository.findOneByUserId(userId)
-      
+
       if (profile) {
         setSettings(prev => ({
           ...prev,
@@ -64,7 +64,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const updateSettings = async (updates: Partial<Settings>) => {
+  const updateSettings = async(updates: Partial<Settings>) => {
     try {
       const newSettings = {
         ...settings,
@@ -74,7 +74,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
       // 로컬 스토리지에 저장
       safeLocalStorage.setItem(SETTINGS_KEY, JSON.stringify(newSettings))
-      
+
       // 프로필 변경사항은 IndexedDB에도 저장
       if (updates.profile) {
         const userId = 'local-user'
@@ -92,16 +92,16 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       }
 
     } catch (error) {
-      errorManager.logError(error as Error, { 
-        context: 'updateSettings', 
-        updatesJson: JSON.stringify(updates) 
+      errorManager.logError(error as Error, {
+        context: 'updateSettings',
+        updatesJson: JSON.stringify(updates)
       })
       errorManager.notifyUser('설정 저장에 실패했습니다', 'error')
       throw error
     }
   }
 
-  const resetSettings = async () => {
+  const resetSettings = async() => {
     try {
       safeLocalStorage.removeItem(SETTINGS_KEY)
       setSettings(DEFAULT_SETTINGS)

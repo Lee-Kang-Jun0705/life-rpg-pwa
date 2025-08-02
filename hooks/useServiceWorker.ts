@@ -11,7 +11,7 @@ export function useServiceWorker() {
       return
     }
 
-    const registerSW = async () => {
+    const registerSW = async() => {
       try {
         // Next-PWA가 자동으로 생성한 Service Worker 등록
         const reg = await navigator.serviceWorker.ready
@@ -71,7 +71,7 @@ export function useServiceWorker() {
     isReady,
     registration,
     error,
-    update: async () => {
+    update: async() => {
       if (registration) {
         try {
           await registration.update()

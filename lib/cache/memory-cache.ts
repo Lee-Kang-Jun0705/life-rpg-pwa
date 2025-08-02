@@ -7,7 +7,7 @@
 const CACHE_CONFIG = {
   MAX_SIZE: 100, // 최대 캐시 항목 수
   CLEANUP_INTERVAL: 60000, // 1분마다 정리
-  DEFAULT_TTL: 300000, // 기본 TTL 5분
+  DEFAULT_TTL: 300000 // 기본 TTL 5분
 } as const
 
 interface CacheItem<T> {
@@ -53,7 +53,7 @@ class MemoryCache {
    */
   get<T>(key: string): T | null {
     const item = this.cache.get(key)
-    
+
     if (!item) {
       return null
     }
@@ -142,14 +142,14 @@ class MemoryCache {
 export const memoryCache = new MemoryCache()
 
 // 캐시 데코레이터
-export function withCache<T extends (...args: unknown[]) => any>(
-  fn: T,
-  keyGenerator: (...args: Parameters<T>) => string,
-  ttl: number = 300000
-): T {
-  return ((...args: Parameters<T>) => {
+export function withCache<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => TReturn,
+  keyGenerator: (...args: TArgs) => string,
+  ttl = 300000
+): (...args: TArgs) => TReturn {
+  return ((...args: TArgs) => {
     const key = keyGenerator(...args)
-    
+
     // 캐시에서 확인
     const cached = memoryCache.get(key)
     if (cached !== null) {
@@ -170,5 +170,5 @@ export function withCache<T extends (...args: unknown[]) => any>(
     // 동기 결과
     memoryCache.set(key, result, ttl)
     return result
-  }) as T
+  })
 }

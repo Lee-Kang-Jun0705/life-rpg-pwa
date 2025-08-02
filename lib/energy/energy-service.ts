@@ -1,9 +1,9 @@
 // 에너지 시스템 서비스
 // 던전 입장 및 게임 플레이 제한 관리
 
-import { 
-  Energy, 
-  EnergyTransaction, 
+import {
+  Energy,
+  EnergyTransaction,
   EnergyUpdateResult,
   EnergyCheckResult,
   PlayerEnergyState,
@@ -20,7 +20,7 @@ import { db } from '@/lib/database'
 
 export class EnergyService {
   private static instance: EnergyService
-  
+
   static getInstance(): EnergyService {
     if (!EnergyService.instance) {
       EnergyService.instance = new EnergyService()
@@ -45,13 +45,13 @@ export class EnergyService {
       // 자연 회복 계산
       const currentTime = new Date()
       const regenAmount = calculateEnergyRegen(energyData.lastRegenTime, currentTime)
-      
+
       if (regenAmount > 0) {
         const newEnergy = Math.min(
           energyData.current + regenAmount,
           energyData.max
         )
-        
+
         // 업데이트
         await db.playerEnergy.update(energyData.id!, {
           current: newEnergy,
@@ -110,13 +110,13 @@ export class EnergyService {
 
   // 에너지 소비
   async consumeEnergy(
-    userId: string, 
-    amount: number, 
+    userId: string,
+    amount: number,
     _reason: string
   ): Promise<EnergyUpdateResult> {
     try {
       const state = await this.getPlayerEnergyState(userId)
-      
+
       // 에너지 부족 체크
       if (state.energy.current < amount) {
         return {
@@ -174,11 +174,11 @@ export class EnergyService {
     userId: string,
     amount: number,
     _reason: string,
-    allowOverflow: boolean = false
+    allowOverflow = false
   ): Promise<EnergyUpdateResult> {
     try {
       const state = await this.getPlayerEnergyState(userId)
-      
+
       let newEnergy = state.energy.current + amount
       let overflow = 0
 
@@ -202,7 +202,7 @@ export class EnergyService {
       await db.playerEnergy
         .where('userId')
         .equals(userId)
-        .modify({ 
+        .modify({
           current: newEnergy,
           lastRegenTime: new Date() // 회복 시간 리셋
         })
@@ -251,7 +251,7 @@ export class EnergyService {
         const lastClaim = new Date(energyData.lastDailyBonus)
         const now = new Date()
         const timeDiff = now.getTime() - lastClaim.getTime()
-        
+
         if (timeDiff < ENERGY_CONSTANTS.BONUS_CLAIM_COOLDOWN) {
           const hoursLeft = Math.ceil((ENERGY_CONSTANTS.BONUS_CLAIM_COOLDOWN - timeDiff) / (1000 * 60 * 60))
           return {
@@ -294,7 +294,7 @@ export class EnergyService {
     const state = await this.getPlayerEnergyState(userId)
     const required = DUNGEON_ENERGY_COST[dungeonType as keyof typeof DUNGEON_ENERGY_COST] || 20
     const hasEnough = state.energy.current >= required
-    
+
     return {
       hasEnough,
       current: state.energy.current,
@@ -317,15 +317,15 @@ export class EnergyService {
     // DB에서 실제 데이터 가져오기
     const { dbHelpers } = await import('@/lib/database')
     const activities = await dbHelpers.getActivitiesByDateRange(
-      userId, 
-      new Date(new Date().setHours(0, 0, 0, 0)), 
+      userId,
+      new Date(new Date().setHours(0, 0, 0, 0)),
       new Date(new Date().setHours(23, 59, 59, 999))
     )
-    
-    const dungeonActivities = activities.filter(a => 
+
+    const dungeonActivities = activities.filter(a =>
       a.activityName.includes('던전') || a.activityName.includes('dungeon')
     )
-    
+
     return {
       dungeonRuns: {
         current: dungeonActivities.length,
@@ -349,7 +349,7 @@ export class EnergyService {
   async getEnergyRegenTimer(userId: string): Promise<EnergyRegenTimer> {
     const state = await this.getPlayerEnergyState(userId)
     const now = new Date()
-    
+
     // 다음 회복까지 시간
     const timeSinceLastRegen = now.getTime() - state.energy.lastRegenTime.getTime()
     const minutesSinceLastRegen = timeSinceLastRegen / (1000 * 60)
@@ -384,7 +384,7 @@ export class EnergyService {
     }
 
     const id = await db.playerEnergy.add(initialEnergy)
-    
+
     // 초기 전투 티켓도 생성
     await db.battleTickets.add({
       userId,
@@ -410,17 +410,17 @@ export class EnergyService {
   // 에너지 구매
   async purchaseEnergy(userId: string, _cost: number): Promise<EnergyUpdateResult> {
     const { dbHelpers } = await import('@/lib/database')
-    
+
     // 프리미엄 화폐로 비용 차감
     const resources = await dbHelpers.getUserResources(userId)
     if (!resources || resources.premiumCurrency < cost) {
       throw new GameError('INSUFFICIENT_CURRENCY', '프리미엄 화폐가 부족합니다')
     }
-    
+
     await dbHelpers.updateUserResources(userId, {
       premiumCurrency: resources.premiumCurrency - cost
     })
-    
+
     return this.restoreEnergy(
       userId,
       ENERGY_CONFIG.PURCHASE_AMOUNT,
@@ -433,7 +433,7 @@ export class EnergyService {
   private async getEnergyPotionsFromInventory(userId: string) {
     const { dbHelpers } = await import('@/lib/database')
     const potions = await dbHelpers.getInventoryItems(userId, 'consumable')
-    
+
     return potions
       .filter(item => item.itemId.includes('energy_potion'))
       .map(item => ({
@@ -448,7 +448,7 @@ export class EnergyService {
   private async getPremiumTicketsFromInventory(userId: string) {
     const { dbHelpers } = await import('@/lib/database')
     const tickets = await dbHelpers.getInventoryItems(userId, 'consumable')
-    
+
     return tickets
       .filter(item => item.itemId.includes('premium_ticket'))
       .map(item => ({

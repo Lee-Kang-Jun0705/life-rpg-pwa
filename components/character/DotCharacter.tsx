@@ -17,7 +17,7 @@ export function DotCharacter({ appearance, size = 'medium', className }: DotChar
 
   if (appearance.style === 'emoji') {
     return (
-      <div 
+      <div
         className={cn(
           'flex items-center justify-center rounded-full',
           sizeClasses[size],
@@ -32,7 +32,7 @@ export function DotCharacter({ appearance, size = 'medium', className }: DotChar
 
   // Pixel art style
   return (
-    <div 
+    <div
       className={cn(
         'relative overflow-hidden rounded-lg',
         sizeClasses[size],
@@ -40,7 +40,7 @@ export function DotCharacter({ appearance, size = 'medium', className }: DotChar
       )}
     >
       <div className="absolute inset-0 flex items-center justify-center">
-        <div 
+        <div
           className="w-3/4 h-3/4 rounded-lg"
           style={{ backgroundColor: appearance.color }}
         >

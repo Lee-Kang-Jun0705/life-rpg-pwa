@@ -120,10 +120,10 @@ export function SeasonInfo({ season }: SeasonInfoProps) {
                     <div className={`
                       w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
                       ${reward.rank === 1 ? 'bg-yellow-400 text-yellow-900' :
-                        reward.rank === 2 ? 'bg-gray-300 text-gray-800' :
+                      reward.rank === 2 ? 'bg-gray-300 text-gray-800' :
                         reward.rank === 3 ? 'bg-orange-400 text-orange-900' :
-                        'bg-white/20'
-                      }
+                          'bg-white/20'
+                    }
                     `}>
                       {reward.rank}
                     </div>
@@ -134,7 +134,7 @@ export function SeasonInfo({ season }: SeasonInfoProps) {
                     </div>
                   )}
                 </div>
-                
+
                 <div className="flex items-center gap-2 text-xs">
                   {reward.rewards.gold && (
                     <span className="flex items-center gap-1">
@@ -160,7 +160,7 @@ export function SeasonInfo({ season }: SeasonInfoProps) {
                   )}
                 </div>
               </div>
-              
+
               {reward.rewards.title && (
                 <div className="mt-1 text-xs opacity-75">
                   칭호: {reward.rewards.title}
@@ -168,7 +168,7 @@ export function SeasonInfo({ season }: SeasonInfoProps) {
               )}
             </motion.div>
           ))}
-          
+
           {season.rewards.length > 3 && (
             <div className="text-center text-xs opacity-75 mt-2">
               + {season.rewards.length - 3}개 더 많은 순위별 보상
@@ -184,16 +184,16 @@ export function SeasonInfo({ season }: SeasonInfoProps) {
 function getTimeLeft(endDate: Date) {
   const now = new Date()
   const diff = endDate.getTime() - now.getTime()
-  
+
   if (diff <= 0) {
     return { days: 0, hours: 0, minutes: 0, seconds: 0 }
   }
-  
+
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
   const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-  
+
   return { days, hours, minutes, seconds }
 }
 
@@ -202,6 +202,6 @@ function getSeasonProgress(startDate: Date, endDate: Date): number {
   const now = new Date()
   const total = endDate.getTime() - startDate.getTime()
   const current = now.getTime() - startDate.getTime()
-  
+
   return Math.max(0, Math.min(100, (current / total) * 100))
 }

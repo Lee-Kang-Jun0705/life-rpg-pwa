@@ -68,8 +68,8 @@ export function AdviceTab({ personalizedAdvice }: AdviceTabProps) {
   return (
     <div className="space-y-4">
       {sortedAdvice.map((advice, index) => (
-        <Card 
-          key={index} 
+        <Card
+          key={index}
           className={`border-l-4 ${getPriorityBorderColor(advice.priority)}`}
         >
           <CardHeader>
@@ -84,11 +84,11 @@ export function AdviceTab({ personalizedAdvice }: AdviceTabProps) {
                 </span>
                 <span className={`text-xs px-3 py-1 rounded-full font-semibold ${
                   advice.priority === 'high' ? 'bg-gradient-to-r from-candy-pink/30 to-candy-pink/10 text-candy-pink' :
-                  advice.priority === 'medium' ? 'bg-gradient-to-r from-candy-yellow/30 to-candy-yellow/10 text-candy-yellow' :
-                  'bg-gradient-to-r from-candy-green/30 to-candy-green/10 text-candy-green'
+                    advice.priority === 'medium' ? 'bg-gradient-to-r from-candy-yellow/30 to-candy-yellow/10 text-candy-yellow' :
+                      'bg-gradient-to-r from-candy-green/30 to-candy-green/10 text-candy-green'
                 }`}>
                   {advice.priority === 'high' ? '높음' :
-                   advice.priority === 'medium' ? '보통' : '낮음'}
+                    advice.priority === 'medium' ? '보통' : '낮음'}
                 </span>
               </div>
             </div>
@@ -104,8 +104,8 @@ export function AdviceTab({ personalizedAdvice }: AdviceTabProps) {
               </p>
               <ul className="space-y-2">
                 {advice.actionItems.map((item, i) => (
-                  <li 
-                    key={i} 
+                  <li
+                    key={i}
                     className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400"
                   >
                     <span className="flex-shrink-0 w-5 h-5 bg-primary/10 text-primary rounded-full flex items-center justify-center text-xs font-medium mt-0.5">

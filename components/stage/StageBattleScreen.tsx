@@ -19,11 +19,11 @@ interface StageBattleScreenProps {
   onExit: () => void
 }
 
-export function StageBattleScreen({ 
-  dungeonId, 
-  stageId, 
+export function StageBattleScreen({
+  dungeonId,
+  stageId,
   onStageComplete,
-  onExit 
+  onExit
 }: StageBattleScreenProps) {
   const [stage, setStage] = useState<Stage | null>(null)
   const [currentWave, setCurrentWave] = useState(0)
@@ -31,7 +31,7 @@ export function StageBattleScreen({
   const [battleState, setBattleState] = useState<BattleState | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  
+
   // 전투 통계
   const [statistics, setStatistics] = useState({
     startTime: Date.now(),
@@ -41,42 +41,42 @@ export function StageBattleScreen({
     skillsUsed: 0,
     comboDamage: 0
   })
-  
+
   // 목표 진행도
   const [objectives, setObjectives] = useState<StageObjective[]>([])
-  
+
   const energyService = EnergyService.getInstance()
   const stageService = StageService.getInstance()
 
   // 스테이지 초기화
   useEffect(() => {
-    const initStage = async () => {
+    const initStage = async() => {
       try {
         setIsLoading(true)
-        
+
         // 스테이지 데이터 가져오기
         const stageData = getStageById(stageId)
         if (!stageData) {
           throw new Error('스테이지를 찾을 수 없습니다')
         }
-        
+
         setStage(stageData)
         setObjectives(stageData.objectives.map(obj => ({
           ...obj,
           current: 0,
           completed: false
         })))
-        
+
         // 스테이지 시작
         await stageService.startStage(
           GAME_CONFIG.DEFAULT_USER_ID,
           dungeonId,
           stageId
         )
-        
+
         // 첫 웨이브 시작
         await startWave(0, stageData)
-        
+
         setIsLoading(false)
       } catch (err) {
         setError(err instanceof Error ? err.message : '스테이지 초기화 실패')
@@ -88,10 +88,12 @@ export function StageBattleScreen({
   }, [dungeonId, stageId])
 
   // 웨이브 시작
-  const startWave = async (waveIndex: number, stageData: Stage) => {
+  const startWave = async(waveIndex: number, stageData: Stage) => {
     try {
       const battleConfig = getBattleConfig(stageId)
-      if (!battleConfig) return
+      if (!battleConfig) {
+        return
+      }
 
       if (waveIndex >= battleConfig.waveCount) {
         // 모든 웨이브 완료
@@ -104,10 +106,10 @@ export function StageBattleScreen({
       // 이 웨이브의 몬스터 생성
       const monsterCount = battleConfig.monstersPerWave[waveIndex] || 3
       const monsterIds = []
-      
+
       // 보스 웨이브인지 확인
       const isBossWave = waveIndex === battleConfig.waveCount - 1 && stageData.bossId
-      
+
       if (isBossWave && stageData.bossId) {
         monsterIds.push(stageData.bossId)
       } else {
@@ -122,7 +124,9 @@ export function StageBattleScreen({
       // 임시로 첫 번째 몬스터와만 전투
       const monsterId = monsterIds[0]
       const monsterData = getMonsterById(monsterId)
-      if (!monsterData) return
+      if (!monsterData) {
+        return
+      }
 
       // 플레이어 캐릭터 생성
       const playerCharacter = await AutoBattleManager.createPlayerCharacter(
@@ -183,7 +187,7 @@ export function StageBattleScreen({
   const updateStatistics = (action: BattleAction) => {
     setStatistics(prev => {
       const updated = { ...prev }
-      
+
       if (action.damage) {
         if (action.attacker === GAME_CONFIG.DEFAULT_USER_ID || action.attacker.includes('player')) {
           updated.damageDealt += action.damage
@@ -191,15 +195,15 @@ export function StageBattleScreen({
           updated.damageTaken += action.damage
         }
       }
-      
+
       if (action.skill) {
         updated.skillsUsed++
       }
-      
+
       if (action.comboCount && action.comboCount > 1) {
         updated.comboDamage += action.damage || 0
       }
-      
+
       return updated
     })
   }
@@ -218,9 +222,9 @@ export function StageBattleScreen({
               completed: newCurrent >= obj.target
             }
           }
-          
+
           // 보스 처치 목표
-          if (obj.type === 'defeat_boss' && !obj.completed && 
+          if (obj.type === 'defeat_boss' && !obj.completed &&
               stageData.bossId && battleState?.enemy.id === stageData.bossId) {
             return {
               ...obj,
@@ -228,28 +232,28 @@ export function StageBattleScreen({
               completed: true
             }
           }
-          
+
           return obj
         })
-        
+
         setStatistics(prev => ({
           ...prev,
           monstersDefeated: prev.monstersDefeated + 1
         }))
-        
+
         return updated
       }
-      
+
       return prev
     })
   }
 
   // 스테이지 완료
-  const completeStage = async () => {
+  const completeStage = async() => {
     try {
       const clearTime = Math.floor((Date.now() - statistics.startTime) / 1000)
-      const healthPercent = battleState?.player.stats.hp 
-        ? battleState.player.stats.hp / battleState.player.stats.maxHp 
+      const healthPercent = battleState?.player.stats.hp
+        ? battleState.player.stats.hp / battleState.player.stats.maxHp
         : 0
 
       const result = await stageService.completeStage(
@@ -274,7 +278,7 @@ export function StageBattleScreen({
   }
 
   // 스테이지 실패
-  const failStage = async () => {
+  const failStage = async() => {
     const result: StageResult = {
       stageId,
       success: false,
@@ -358,7 +362,7 @@ export function StageBattleScreen({
               </div>
             </div>
           </div>
-          
+
           {/* 목표 진행도 */}
           <div className="grid grid-cols-3 gap-4">
             {objectives.map((objective, index) => (
@@ -474,7 +478,7 @@ export function StageBattleScreen({
               <span className="text-white font-medium">{statistics.monstersDefeated}</span>
             </div>
           </div>
-          
+
           <button
             onClick={onExit}
             className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"

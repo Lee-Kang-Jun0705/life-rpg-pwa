@@ -16,7 +16,7 @@ export interface ShopItem extends BaseEntity {
   maxStack?: number
 }
 
-export type ItemCategory = 
+export type ItemCategory =
   | 'weapon'
   | 'armor'
   | 'accessory'
@@ -24,7 +24,7 @@ export type ItemCategory =
   | 'material'
   | 'special'
 
-export type ItemRarity = 
+export type ItemRarity =
   | 'common'
   | 'uncommon'
   | 'rare'
@@ -60,7 +60,7 @@ export interface ItemEffect {
   description: string
 }
 
-export type EffectType = 
+export type EffectType =
   | 'heal'
   | 'damage'
   | 'buff'
@@ -78,7 +78,7 @@ export interface InventoryItem extends ShopItem {
   slot?: EquipmentSlot
 }
 
-export type EquipmentSlot = 
+export type EquipmentSlot =
   | 'weapon'
   | 'armor'
   | 'helmet'

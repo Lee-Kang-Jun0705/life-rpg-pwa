@@ -121,7 +121,7 @@ export interface EquipmentFilter {
 }
 
 // 장비 정렬 옵션
-export type EquipmentSortOption = 
+export type EquipmentSortOption =
   | 'name'
   | 'level'
   | 'rarity'
@@ -133,7 +133,7 @@ export type EquipmentSortOption =
 // 장비 스탯 계산
 export function calculateEquipmentPower(equipment: Equipment): number {
   const stats = equipment.stats
-  const basepower = 
+  const basepower =
     (stats.attack || 0) * 2 +
     (stats.defense || 0) * 1.5 +
     (stats.hp || 0) * 0.1 +
@@ -143,7 +143,7 @@ export function calculateEquipmentPower(equipment: Equipment): number {
 
   // 강화 레벨에 따른 보너스
   const enhancementBonus = (equipment.enhancementLevel || 0) * 0.1
-  
+
   // 희귀도에 따른 보너스
   const rarityMultiplier = {
     common: 1,
@@ -159,31 +159,31 @@ export function calculateEquipmentPower(equipment: Equipment): number {
 
 // 세트 보너스 확인
 export function getActiveSetBonuses(
-  _equippedGear: EquippedGear, 
+  _equippedGear: EquippedGear,
   _equipmentSets: EquipmentSet[]
 ): { setId: string; bonuses: SetBonus[] }[] {
   const activeBonuses: { setId: string; bonuses: SetBonus[] }[] = []
-  
+
   // 장착된 장비 목록
   const equippedItems = Object.values(equippedGear).filter(Boolean) as Equipment[]
-  
+
   // 각 세트별로 확인
   for (const set of equipmentSets) {
-    const equippedPieces = equippedItems.filter(item => 
+    const equippedPieces = equippedItems.filter(item =>
       item.setId === set.id
     ).length
 
     if (equippedPieces > 0) {
-      const bonuses = set.setBonuses.filter(bonus => 
+      const bonuses = set.setBonuses.filter(bonus =>
         equippedPieces >= bonus.requiredPieces
       )
-      
+
       if (bonuses.length > 0) {
         activeBonuses.push({ setId: set.id, bonuses })
       }
     }
   }
-  
+
   return activeBonuses
 }
 
@@ -193,31 +193,31 @@ export function calculateTotalStats(
   _equipmentSets: EquipmentSet[]
 ): EquipmentStats {
   const totalStats: EquipmentStats = {}
-  
+
   // 장비 스탯 합산
   const equippedItems = Object.values(equippedGear).filter(Boolean) as Equipment[]
-  
+
   for (const item of equippedItems) {
     for (const [stat, value] of Object.entries(item.stats)) {
-      totalStats[stat as keyof EquipmentStats] = 
+      totalStats[stat as keyof EquipmentStats] =
         (totalStats[stat as keyof EquipmentStats] || 0) + value
     }
   }
-  
+
   // 세트 보너스 적용
   const activeBonuses = getActiveSetBonuses(equippedGear, equipmentSets)
-  
+
   for (const { bonuses } of activeBonuses) {
     for (const bonus of bonuses) {
       if (bonus.stats) {
         for (const [stat, value] of Object.entries(bonus.stats)) {
-          totalStats[stat as keyof EquipmentStats] = 
+          totalStats[stat as keyof EquipmentStats] =
             (totalStats[stat as keyof EquipmentStats] || 0) + value
         }
       }
     }
   }
-  
+
   return totalStats
 }
 
@@ -242,11 +242,11 @@ export function calculateEnhancementSuccessRate(
     25,  // 11->12
     15,  // 12->13
     10,  // 13->14
-    5,   // 14->15
+    5   // 14->15
   ]
-  
+
   const baseRate = baseRates[currentLevel] || 5
   const materialBonus = baseMaterial?.successRateBonus || 0
-  
+
   return Math.min(100, baseRate + materialBonus)
 }

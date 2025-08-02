@@ -15,6 +15,7 @@ export interface MonsterData extends Omit<DungeonMonster, 'drops'> {
   aiPattern: 'aggressive' | 'defensive' | 'balanced' | 'strategic'
   drops: MonsterDrop[]
   resistances?: ElementalResistance
+  abilities?: string[] // 특수 능력 ID 목록
 }
 
 export interface MonsterDrop {
@@ -43,7 +44,7 @@ export const MONSTER_SKILLS: Record<string, MonsterSkill> = {
     cooldown: 0,
     description: '일반적인 물리 공격'
   },
-  
+
   // 특수 공격
   'power_strike': {
     id: 'power_strike',
@@ -58,7 +59,7 @@ export const MONSTER_SKILLS: Record<string, MonsterSkill> = {
       duration: 1
     }]
   },
-  
+
   'poison_bite': {
     id: 'poison_bite',
     name: '독 물기',
@@ -72,7 +73,7 @@ export const MONSTER_SKILLS: Record<string, MonsterSkill> = {
       element: 'dark'
     }]
   },
-  
+
   'rage': {
     id: 'rage',
     name: '격노',
@@ -85,7 +86,7 @@ export const MONSTER_SKILLS: Record<string, MonsterSkill> = {
       duration: 3
     } as SkillEffect]
   },
-  
+
   'heal': {
     id: 'heal',
     name: '치유',
@@ -97,7 +98,7 @@ export const MONSTER_SKILLS: Record<string, MonsterSkill> = {
       value: 0.3 // 최대 HP의 30%
     }]
   },
-  
+
   'shield_bash': {
     id: 'shield_bash',
     name: '방패 타격',
@@ -131,7 +132,7 @@ export function calculateMonsterStats(level: number, type: string): {
   // 타입별 기본 스탯 가져오기
   const baseStats = getBaseStatsForType(type)
   const levelMultiplier = 1 + (level - 1) * 0.1
-  
+
   return {
     hp: Math.floor(baseStats.hp * levelMultiplier),
     attack: Math.floor(baseStats.attack * levelMultiplier),
@@ -151,7 +152,7 @@ function getBaseStatsForType(type: string): MonsterBaseStats {
     'demon': { hp: 120, attack: 30, defense: 15, speed: 45 },
     'boss': { hp: 300, attack: 40, defense: 30, speed: 30 }
   }
-  
+
   return baseStatsMap[type] || { hp: 100, attack: 20, defense: 10, speed: 40 }
 }
 
@@ -171,6 +172,7 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
     description: '젤리 같은 몸체를 가진 약한 몬스터',
     type: 'normal',
     skills: ['basic_attack'],
+    abilities: ['poison'], // 낮은 확률로 독 공격
     aiPattern: 'aggressive',
     drops: [
       { itemId: 'slime_gel', dropRate: 0.5, minQuantity: 1, maxQuantity: 3 },
@@ -181,7 +183,7 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
       ice: 20
     }
   },
-  
+
   'goblin': {
     name: '고블린',
     icon: '👺',
@@ -194,20 +196,21 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
       { itemId: 'copper_coin', dropRate: 0.8, minQuantity: 5, maxQuantity: 15 }
     ]
   },
-  
+
   'wolf': {
     name: '늑대',
     icon: '🐺',
     description: '빠른 속도로 공격하는 야수',
     type: 'beast',
     skills: ['basic_attack', 'poison_bite'],
+    abilities: ['doubleStrike'], // 연속 공격
     aiPattern: 'aggressive',
     drops: [
       { itemId: 'wolf_pelt', dropRate: 0.4 },
       { itemId: 'wolf_fang', dropRate: 0.2 }
     ]
   },
-  
+
   // 중급 몬스터 (레벨 11-30)
   'orc_warrior': {
     name: '오크 전사',
@@ -215,6 +218,7 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
     description: '강력한 전투력을 가진 오크족',
     type: 'humanoid',
     skills: ['basic_attack', 'power_strike', 'rage'],
+    abilities: ['heal'], // 체력이 낮을 때 치유
     aiPattern: 'aggressive',
     drops: [
       { itemId: 'orc_tusk', dropRate: 0.3 },
@@ -226,13 +230,14 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
       ice: -10
     }
   },
-  
+
   'skeleton_knight': {
     name: '스켈레톤 기사',
     icon: '💀',
     description: '언데드 기사단의 일원',
     type: 'undead',
     skills: ['basic_attack', 'shield_bash', 'power_strike'],
+    abilities: ['lifeDrain', 'curse'], // 생명력 흡수와 저주
     aiPattern: 'defensive',
     drops: [
       { itemId: 'bone_fragment', dropRate: 0.6, minQuantity: 1, maxQuantity: 3 },
@@ -244,13 +249,14 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
       dark: 50
     }
   },
-  
+
   'mage_apprentice': {
     name: '마법사 수습생',
     icon: '🧙',
     description: '마법을 배우기 시작한 적대적 마법사',
     type: 'humanoid',
     skills: ['basic_attack', 'heal'],
+    abilities: ['freeze', 'fireBreath'], // 빙결과 화염 공격
     aiPattern: 'strategic',
     drops: [
       { itemId: 'magic_dust', dropRate: 0.4 },
@@ -258,7 +264,7 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
       { itemId: 'mana_potion', dropRate: 0.2 }
     ]
   },
-  
+
   // 고급 몬스터 (레벨 31-50)
   'dragon_whelp': {
     name: '어린 드래곤',
@@ -266,6 +272,7 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
     description: '아직 성장 중인 드래곤',
     type: 'dragon',
     skills: ['basic_attack', 'power_strike', 'rage'],
+    abilities: ['fireBreath', 'lavaArmor'], // 화염 숨결과 용암 갑옷
     aiPattern: 'aggressive',
     drops: [
       { itemId: 'dragon_scale', dropRate: 0.3 },
@@ -278,13 +285,14 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
       lightning: 30
     }
   },
-  
+
   'demon_soldier': {
     name: '악마 병사',
     icon: '👿',
     description: '마계에서 온 정예 병사',
     type: 'demon',
     skills: ['basic_attack', 'power_strike', 'rage', 'poison_bite'],
+    abilities: ['hellfire', 'curse'], // 지옥불과 저주
     aiPattern: 'aggressive',
     drops: [
       { itemId: 'demon_horn', dropRate: 0.25 },
@@ -296,7 +304,7 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
       holy: -70
     }
   },
-  
+
   // 보스 몬스터
   'goblin_king': {
     name: '고블린 왕',
@@ -304,6 +312,7 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
     description: '고블린들의 지배자',
     type: 'boss',
     skills: ['basic_attack', 'power_strike', 'rage', 'heal'],
+    abilities: ['divineWrath', 'shadowClone', 'heal'], // 신의 분노, 그림자 분신, 치유
     aiPattern: 'strategic',
     drops: [
       { itemId: 'goblin_crown', dropRate: 0.5 },
@@ -311,13 +320,14 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
       { itemId: 'gold_coin', dropRate: 1, minQuantity: 100, maxQuantity: 300 }
     ]
   },
-  
+
   'lich': {
     name: '리치',
     icon: '🧟',
     description: '강력한 언데드 마법사',
     type: 'boss',
     skills: ['basic_attack', 'heal', 'shield_bash', 'power_strike'],
+    abilities: ['voidCall', 'curse', 'lifeDrain', 'timeWarp'], // 무의 부름, 저주, 생명력 흡수, 시간 조작
     aiPattern: 'strategic',
     drops: [
       { itemId: 'lich_phylactery', dropRate: 0.3 },
@@ -335,19 +345,19 @@ export const MONSTER_TEMPLATES: Record<string, Omit<MonsterData, 'id' | 'level' 
 
 // 몬스터 생성 함수
 export function createMonster(
-  templateId: string, 
+  templateId: string,
   level: number,
   modifier?: Partial<MonsterData>,
-  difficultyMultiplier: number = 1.0
+  difficultyMultiplier = 1.0
 ): MonsterData {
   const template = MONSTER_TEMPLATES[templateId]
   if (!template) {
     throw new Error(`Monster template not found: ${templateId}`)
   }
-  
+
   // 스탯 계산
   const baseStats = calculateMonsterStats(level, template.type)
-  
+
   // 난이도에 따른 스탯 조정
   const stats = {
     hp: Math.floor(baseStats.hp * difficultyMultiplier),
@@ -355,7 +365,7 @@ export function createMonster(
     defense: Math.floor(baseStats.defense * difficultyMultiplier),
     speed: Math.floor(baseStats.speed * (0.9 + difficultyMultiplier * 0.1)) // 속도는 조금만 증가
   }
-  
+
   return {
     id: `${templateId}_${level}_${Date.now()}`,
     ...template,
@@ -372,21 +382,21 @@ function getBaseStatsForTemplate(templateId: string): MonsterBaseStats {
     'slime': { hp: 50, attack: 10, defense: 5, speed: 30 },
     'goblin': { hp: 80, attack: 15, defense: 8, speed: 40 },
     'wolf': { hp: 70, attack: 18, defense: 6, speed: 50 },
-    
+
     // 중급
     'orc_warrior': { hp: 200, attack: 35, defense: 25, speed: 35 },
     'skeleton_knight': { hp: 180, attack: 30, defense: 30, speed: 25 },
     'mage_apprentice': { hp: 120, attack: 40, defense: 15, speed: 40 },
-    
+
     // 고급
     'dragon_whelp': { hp: 500, attack: 80, defense: 60, speed: 45 },
     'demon_soldier': { hp: 400, attack: 90, defense: 50, speed: 55 },
-    
+
     // 보스
     'goblin_king': { hp: 1000, attack: 60, defense: 40, speed: 35 },
     'lich': { hp: 1500, attack: 100, defense: 70, speed: 30 }
   }
-  
+
   return baseStatsMap[templateId] || { hp: 100, attack: 20, defense: 10, speed: 40 }
 }
 
@@ -401,7 +411,7 @@ export const DUNGEON_MONSTERS: Record<string, DungeonMonsterConfig> = {
     ],
     boss: { templateId: 'goblin_king', level: 10 }
   },
-  
+
   'dark_cave': {
     name: '어둠의 동굴',
     monsters: [
@@ -411,7 +421,7 @@ export const DUNGEON_MONSTERS: Record<string, DungeonMonsterConfig> = {
     ],
     boss: { templateId: 'lich', level: 20 }
   },
-  
+
   'demon_fortress': {
     name: '악마의 요새',
     monsters: [
@@ -442,7 +452,7 @@ export function generateStageMonsters(
   difficulty: 'easy' | 'normal' | 'hard' | 'nightmare' = 'normal'
 ): MonsterData[] {
   const dungeonConfig = DUNGEON_MONSTERS[dungeonId]
-  
+
   // 난이도별 스탯 배율
   const difficultyMultipliers = {
     'easy': 0.8,
@@ -451,15 +461,15 @@ export function generateStageMonsters(
     'nightmare': 2.0
   }
   const statMultiplier = difficultyMultipliers[difficulty] || 1.0
-  
+
   if (!dungeonConfig) {
     // 기본 몬스터 생성
     return [createMonster('slime', stageNumber, undefined, statMultiplier)]
   }
-  
+
   const monsterCount = getMonsterCount(stageNumber, difficulty)
   const monsters: MonsterData[] = []
-  
+
   // 보스 스테이지 체크
   const isBossStage = stageNumber % 5 === 0
   if (isBossStage && dungeonConfig.boss) {
@@ -469,15 +479,15 @@ export function generateStageMonsters(
     monsters.push(createMonster(dungeonConfig.boss.templateId, bossLevel, undefined, bossMultiplier))
     return monsters
   }
-  
+
   // 일반 몬스터 생성
   for (let i = 0; i < monsterCount; i++) {
     const monsterType = selectMonsterByWeight(dungeonConfig.monsters)
     const level = getRandomLevel(monsterType.levelRange, stageNumber)
-    
+
     monsters.push(createMonster(monsterType.templateId, level, undefined, statMultiplier))
   }
-  
+
   return monsters
 }
 
@@ -490,7 +500,7 @@ function getMonsterCount(stageNumber: number, difficulty: string): number {
     'hard': 1.2,
     'nightmare': 1.5
   }[difficulty] || 1
-  
+
   return Math.max(1, Math.floor(baseCount * difficultyMultiplier))
 }
 
@@ -498,14 +508,14 @@ function getMonsterCount(stageNumber: number, difficulty: string): number {
 function selectMonsterByWeight(monsters: Array<{ templateId: string; weight: number; levelRange: [number, number] }>) {
   const totalWeight = monsters.reduce((sum, m) => sum + m.weight, 0)
   let random = Math.random() * totalWeight
-  
+
   for (const monster of monsters) {
     random -= monster.weight
     if (random <= 0) {
       return monster
     }
   }
-  
+
   return monsters[0]
 }
 
@@ -524,7 +534,7 @@ export const getMonsterData = (monsterId: string, level: number): MonsterData =>
   }
 
   const stats = calculateMonsterStats(level, template.type)
-  
+
   return {
     id: monsterId,
     ...template,

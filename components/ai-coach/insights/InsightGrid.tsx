@@ -45,7 +45,7 @@ export function InsightGrid({ cards }: InsightGridProps) {
           <div className="absolute -right-4 -top-4 text-6xl opacity-20" aria-hidden="true">
             {card.emoji}
           </div>
-          
+
           {/* 컨텐츠 */}
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
@@ -58,7 +58,7 @@ export function InsightGrid({ cards }: InsightGridProps) {
             <div className="text-xs opacity-90">
               {card.subValue}
             </div>
-            
+
             {/* 클릭 시 추가 정보 */}
             {activeCard === card.id && (
               <div className="mt-3 pt-3 border-t border-white/30 text-xs animate-bounce-in">

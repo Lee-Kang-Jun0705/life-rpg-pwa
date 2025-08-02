@@ -56,9 +56,9 @@ jest.mock('@/lib/shop', () => ({
 }))
 
 describe('HeroSection 컴포넌트', () => {
-  it('캐릭터 정보가 올바르게 표시되어야 함', async () => {
+  it('캐릭터 정보가 올바르게 표시되어야 함', async() => {
     render(<HeroSection />)
-    
+
     await waitFor(() => {
       expect(screen.getByText('테스트 모험가')).toBeInTheDocument()
       expect(screen.getByText('Lv.10')).toBeInTheDocument()
@@ -66,17 +66,17 @@ describe('HeroSection 컴포넌트', () => {
     })
   })
 
-  it('경험치 바가 올바른 비율로 표시되어야 함', async () => {
+  it('경험치 바가 올바른 비율로 표시되어야 함', async() => {
     render(<HeroSection />)
-    
+
     await waitFor(() => {
       expect(screen.getByText('500 / 1000')).toBeInTheDocument()
     })
   })
 
-  it('모든 스탯 카드가 표시되어야 함', async () => {
+  it('모든 스탯 카드가 표시되어야 함', async() => {
     render(<HeroSection />)
-    
+
     await waitFor(() => {
       expect(screen.getByText('공격력')).toBeInTheDocument()
       expect(screen.getByText('방어력')).toBeInTheDocument()
@@ -93,7 +93,7 @@ describe('GameTabLayout 컴포넌트', () => {
     { id: 'tab1', label: '탭1', emoji: '🎮', description: '첫 번째 탭' },
     { id: 'tab2', label: '탭2', emoji: '🎯', description: '두 번째 탭' }
   ]
-  
+
   const mockChildren = [
     <div key="1">콘텐츠1</div>,
     <div key="2">콘텐츠2</div>
@@ -105,7 +105,7 @@ describe('GameTabLayout 컴포넌트', () => {
         {mockChildren}
       </GameTabLayout>
     )
-    
+
     expect(screen.getAllByText('탭1')).toHaveLength(2) // 데스크톱과 모바일 각각 1개
     expect(screen.getAllByText('탭2')).toHaveLength(2) // 데스크톱과 모바일 각각 1개
     expect(screen.getAllByText('🎮')).toHaveLength(2)
@@ -119,23 +119,23 @@ describe('GameTabLayout 컴포넌트', () => {
         {mockChildren}
       </GameTabLayout>
     )
-    
+
     const tab2Button = screen.getByTestId('ai-coach-tab-tab2')
     fireEvent.click(tab2Button)
-    
+
     expect(onTabChange).toHaveBeenCalledWith('tab2')
   })
 
-  it('탭 호버 시 툴팁이 표시되어야 함', async () => {
+  it('탭 호버 시 툴팁이 표시되어야 함', async() => {
     render(
       <GameTabLayout tabs={mockTabs}>
         {mockChildren}
       </GameTabLayout>
     )
-    
+
     const tab1Button = screen.getByTestId('ai-coach-tab-tab1')
     fireEvent.mouseEnter(tab1Button)
-    
+
     await waitFor(() => {
       expect(screen.getByText('첫 번째 탭')).toBeInTheDocument()
     })
@@ -168,30 +168,30 @@ describe('ImprovedDungeonList 컴포넌트', () => {
 
   it('던전 카드가 올바르게 렌더링되어야 함', () => {
     render(
-      <ImprovedDungeonList 
-        dungeons={mockDungeons} 
-        onSelectDungeon={() => {}} 
+      <ImprovedDungeonList
+        dungeons={mockDungeons}
+        onSelectDungeon={() => {}}
         playerLevel={10}
       />
     )
-    
+
     expect(screen.getByText('고블린 소굴')).toBeInTheDocument()
     expect(screen.getByText('어둠의 성')).toBeInTheDocument()
   })
 
   it('플레이어 레벨이 낮으면 던전이 잠겨야 함', () => {
     render(
-      <ImprovedDungeonList 
-        dungeons={mockDungeons} 
-        onSelectDungeon={() => {}} 
+      <ImprovedDungeonList
+        dungeons={mockDungeons}
+        onSelectDungeon={() => {}}
         playerLevel={10}
       />
     )
-    
+
     // 레벨 20 던전은 잠겨있어야 함
     const lockedDungeon = screen.getByText('어둠의 성').closest('[data-testid="dungeon-card"]')
     expect(lockedDungeon).toHaveTextContent('Lv.20+')
-    
+
     // opacity-60 클래스로 잠긴 상태 확인
     expect(lockedDungeon?.querySelector('.opacity-60')).toBeInTheDocument()
   })
@@ -199,17 +199,17 @@ describe('ImprovedDungeonList 컴포넌트', () => {
   it('던전 클릭 시 콜백이 호출되어야 함', () => {
     const onSelectDungeon = jest.fn()
     render(
-      <ImprovedDungeonList 
-        dungeons={mockDungeons} 
-        onSelectDungeon={onSelectDungeon} 
+      <ImprovedDungeonList
+        dungeons={mockDungeons}
+        onSelectDungeon={onSelectDungeon}
         playerLevel={10}
       />
     )
-    
+
     // 던전 카드 내부의 클릭 가능한 영역을 찾음
     const unlockedDungeonCard = screen.getByText('고블린 소굴').closest('[data-testid="dungeon-card"]')
     const clickableArea = unlockedDungeonCard?.querySelector('div[class*="cursor-pointer"]')
-    
+
     if (clickableArea) {
       fireEvent.click(clickableArea)
       expect(onSelectDungeon).toHaveBeenCalledWith(mockDungeons[0])
@@ -239,14 +239,14 @@ describe('ImprovedShopScreen 컴포넌트', () => {
     }
   ]
 
-  it('모든 NPC 상인이 표시되어야 함', async () => {
+  it('모든 NPC 상인이 표시되어야 함', async() => {
     render(
-      <ImprovedShopScreen 
-        shopItems={mockShopItems} 
+      <ImprovedShopScreen
+        shopItems={mockShopItems}
         onPurchase={() => {}}
       />
     )
-    
+
     await waitFor(() => {
       expect(screen.getByText('일반 상인 토비')).toBeInTheDocument()
       expect(screen.getByText('대장장이 브론')).toBeInTheDocument()
@@ -255,23 +255,23 @@ describe('ImprovedShopScreen 컴포넌트', () => {
     })
   })
 
-  it('상인 클릭 시 해당 상인의 아이템만 표시되어야 함', async () => {
+  it('상인 클릭 시 해당 상인의 아이템만 표시되어야 함', async() => {
     render(
-      <ImprovedShopScreen 
-        shopItems={mockShopItems} 
+      <ImprovedShopScreen
+        shopItems={mockShopItems}
         onPurchase={() => {}}
       />
     )
-    
+
     // 대장장이 클릭
     fireEvent.click(screen.getByText('대장장이 브론'))
-    
+
     await waitFor(() => {
       expect(screen.getByText('최고급 장비들을 준비했습니다')).toBeInTheDocument()
     })
   })
 
-  it('골드가 부족하면 아이템을 구매할 수 없어야 함', async () => {
+  it('골드가 부족하면 아이템을 구매할 수 없어야 함', async() => {
     // Mock character with specific gold amount
     jest.mocked(dbHelpers.getProfile).mockResolvedValueOnce({
       character: {
@@ -294,19 +294,19 @@ describe('ImprovedShopScreen 컴포넌트', () => {
         }
       }
     } as any)
-    
+
     const expensiveItem = {
       ...mockShopItems[0],
       price: 100 // 보유 골드(50)보다 비싼 아이템
     }
-    
+
     render(
-      <ImprovedShopScreen 
-        shopItems={[expensiveItem]} 
+      <ImprovedShopScreen
+        shopItems={[expensiveItem]}
         onPurchase={() => {}}
       />
     )
-    
+
     await waitFor(() => {
       const itemCard = screen.getByText('체력 포션').closest('div')
       expect(itemCard?.parentElement).toHaveClass('opacity-60')
@@ -315,18 +315,18 @@ describe('ImprovedShopScreen 컴포넌트', () => {
 })
 
 describe('ImprovedEquipmentScreen 컴포넌트', () => {
-  it('캐릭터 프리뷰가 표시되어야 함', async () => {
+  it('캐릭터 프리뷰가 표시되어야 함', async() => {
     render(<ImprovedEquipmentScreen />)
-    
+
     await waitFor(() => {
       expect(screen.getByText('캐릭터')).toBeInTheDocument()
       expect(screen.getByText('정면')).toBeInTheDocument()
     })
   })
 
-  it('모든 장비 슬롯이 표시되어야 함', async () => {
+  it('모든 장비 슬롯이 표시되어야 함', async() => {
     render(<ImprovedEquipmentScreen />)
-    
+
     await waitFor(() => {
       expect(screen.getByText('무기')).toBeInTheDocument()
       expect(screen.getByText('갑옷')).toBeInTheDocument()
@@ -334,16 +334,16 @@ describe('ImprovedEquipmentScreen 컴포넌트', () => {
     })
   })
 
-  it('캐릭터 회전 버튼이 작동해야 함', async () => {
+  it('캐릭터 회전 버튼이 작동해야 함', async() => {
     render(<ImprovedEquipmentScreen />)
-    
+
     await waitFor(() => {
       const leftButton = screen.getByText('←')
       const rightButton = screen.getByText('→')
-      
+
       fireEvent.click(leftButton)
       fireEvent.click(rightButton)
-      
+
       // 정면 버튼 클릭으로 리셋
       fireEvent.click(screen.getByText('정면'))
     })
@@ -353,7 +353,7 @@ describe('ImprovedEquipmentScreen 컴포넌트', () => {
 describe('ImprovedCollectionScreen 컴포넌트', () => {
   it('컬렉션 카테고리가 모두 표시되어야 함', () => {
     render(<ImprovedCollectionScreen />)
-    
+
     expect(screen.getByText('전체')).toBeInTheDocument()
     expect(screen.getByText('무기')).toBeInTheDocument()
     expect(screen.getByText('방어구')).toBeInTheDocument()
@@ -362,23 +362,23 @@ describe('ImprovedCollectionScreen 컴포넌트', () => {
 
   it('검색 기능이 작동해야 함', () => {
     render(<ImprovedCollectionScreen />)
-    
+
     const searchInput = screen.getByPlaceholderText('아이템 검색...')
     fireEvent.change(searchInput, { target: { value: '철검' } })
-    
+
     expect(searchInput).toHaveValue('철검')
   })
 
   it('보기 모드 전환이 작동해야 함', () => {
     render(<ImprovedCollectionScreen />)
-    
+
     // 그리드 뷰 아이콘을 찾아서 클릭
     const buttons = screen.getAllByRole('button')
     const viewToggleButton = buttons.find(button => {
       // button 내부에 svg가 있는지 확인
       return button.querySelector('svg')
     })
-    
+
     if (viewToggleButton) {
       fireEvent.click(viewToggleButton)
       // 버튼이 클릭되었는지 확인 (상태 변경은 컴포넌트 내부에서 처리)
@@ -388,10 +388,10 @@ describe('ImprovedCollectionScreen 컴포넌트', () => {
 
   it('수집한 것만 보기 필터가 작동해야 함', () => {
     render(<ImprovedCollectionScreen />)
-    
+
     const filterButton = screen.getByText('수집한 것만')
     fireEvent.click(filterButton)
-    
+
     // 버튼이 활성화 상태로 변경되어야 함
     expect(filterButton).toHaveClass('bg-purple-600')
   })

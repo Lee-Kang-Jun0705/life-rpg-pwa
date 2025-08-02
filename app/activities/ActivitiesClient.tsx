@@ -19,7 +19,7 @@ export default function ActivitiesClient() {
   const [statFilter, setStatFilter] = useState<StatFilter>('all')
 
   useEffect(() => {
-    const loadActivities = async () => {
+    const loadActivities = async() => {
       try {
         setLoading(true)
         const allActivities = await dbHelpers.getActivities(GAME_CONFIG.DEFAULT_USER_ID)
@@ -52,7 +52,7 @@ export default function ActivitiesClient() {
           return isToday(date)
         })
         break
-      case 'week':
+      case 'week': {
         const weekStart = startOfWeek(now, { locale: ko })
         const weekEnd = endOfWeek(now, { locale: ko })
         filtered = filtered.filter(a => {
@@ -60,7 +60,8 @@ export default function ActivitiesClient() {
           return date >= weekStart && date <= weekEnd
         })
         break
-      case 'month':
+      }
+      case 'month': {
         const monthStart = startOfMonth(now)
         const monthEnd = endOfMonth(now)
         filtered = filtered.filter(a => {
@@ -68,6 +69,7 @@ export default function ActivitiesClient() {
           return date >= monthStart && date <= monthEnd
         })
         break
+      }
     }
 
     return filtered
@@ -76,11 +78,11 @@ export default function ActivitiesClient() {
   // 날짜별 그룹화
   const groupedActivities = useMemo(() => {
     const groups: { [key: string]: Activity[] } = {}
-    
+
     filteredActivities.forEach(activity => {
       const date = new Date(activity.timestamp)
       const dateKey = format(date, 'yyyy-MM-dd')
-      
+
       if (!groups[dateKey]) {
         groups[dateKey] = []
       }
@@ -91,7 +93,7 @@ export default function ActivitiesClient() {
       .sort(([a], [b]) => b.localeCompare(a))
       .map(([date, activities]) => ({
         date,
-        activities: activities.sort((a, b) => 
+        activities: activities.sort((a, b) =>
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         )
       }))
@@ -134,8 +136,12 @@ export default function ActivitiesClient() {
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)
-    if (isToday(date)) return '오늘'
-    if (isYesterday(date)) return '어제'
+    if (isToday(date)) {
+      return '오늘'
+    }
+    if (isYesterday(date)) {
+      return '어제'
+    }
     return format(date, 'M월 d일 (EEE)', { locale: ko })
   }
 
@@ -149,7 +155,7 @@ export default function ActivitiesClient() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
           <p className="text-gray-600">로딩 중...</p>
         </div>
       </div>
@@ -272,7 +278,7 @@ export default function ActivitiesClient() {
                     ({activities.length}개 활동)
                   </span>
                 </h3>
-                
+
                 <div className="space-y-3">
                   {activities.map((activity, index) => (
                     <motion.div

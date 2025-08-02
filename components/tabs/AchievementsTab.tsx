@@ -88,8 +88,8 @@ export function AchievementsTab() {
   ]
 
   // 필터링된 업적
-  const filteredAchievements = selectedCategory === 'all' 
-    ? achievements 
+  const filteredAchievements = selectedCategory === 'all'
+    ? achievements
     : achievements.filter(a => a.category === selectedCategory)
 
   // 전체 진행도 계산
@@ -125,7 +125,7 @@ export function AchievementsTab() {
         </div>
 
         <Progress value={completionRate} className="h-2 mb-2" />
-        
+
         {/* 카테고리별 통계 - 크기 축소 */}
         <div className="grid grid-cols-3 gap-2">
           {categoryStats.map(stat => {
@@ -167,18 +167,18 @@ export function AchievementsTab() {
       {/* 업적 목록 - 간격과 패딩 축소 */}
       <div className="space-y-2">
         {filteredAchievements.map(achievement => (
-          <Card 
+          <Card
             key={achievement.id}
             className={`p-2.5 transition-all ${
-              achievement.completed 
-                ? 'bg-green-50 dark:bg-green-900/20 border-green-200' 
+              achievement.completed
+                ? 'bg-green-50 dark:bg-green-900/20 border-green-200'
                 : ''
             }`}
           >
             <div className="flex items-start gap-2.5">
               {/* 아이콘 */}
               <div className="text-2xl">{achievement.icon}</div>
-              
+
               {/* 내용 */}
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
@@ -187,21 +187,21 @@ export function AchievementsTab() {
                     <Badge className="bg-green-500 text-white text-[10px] px-2 py-0.5">완료</Badge>
                   )}
                 </div>
-                
+
                 <p className="text-xs text-gray-600 mb-1.5">{achievement.description}</p>
-                
+
                 {/* 진행도 */}
                 <div className="mb-1">
                   <div className="flex justify-between text-[10px] mb-0.5">
                     <span>진행도</span>
                     <span>{achievement.progress}/{achievement.maxProgress}</span>
                   </div>
-                  <Progress 
-                    value={(achievement.progress / achievement.maxProgress) * 100} 
+                  <Progress
+                    value={(achievement.progress / achievement.maxProgress) * 100}
                     className="h-1.5"
                   />
                 </div>
-                
+
                 {/* 보상 */}
                 <div className="flex gap-3 text-[10px]">
                   <span className="text-purple-600">+{achievement.reward.exp} EXP</span>

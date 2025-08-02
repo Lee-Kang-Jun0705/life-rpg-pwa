@@ -17,9 +17,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 1,
     baseStats: { attack: 5 },
     value: 50,
-    stackable: false,
+    stackable: false
   },
-  
+
   wooden_sword: {
     id: 'wooden_sword',
     name: '나무 검',
@@ -29,9 +29,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 2,
     baseStats: { attack: 7, speed: 2 },
     value: 80,
-    stackable: false,
+    stackable: false
   },
-  
+
   bronze_sword: {
     id: 'bronze_sword',
     name: '청동 검',
@@ -41,9 +41,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 5,
     baseStats: { attack: 12 },
     value: 150,
-    stackable: false,
+    stackable: false
   },
-  
+
   iron_sword: {
     id: 'iron_sword',
     name: '철검',
@@ -53,9 +53,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 8,
     baseStats: { attack: 18 },
     value: 250,
-    stackable: false,
+    stackable: false
   },
-  
+
   fine_steel_sword: {
     id: 'fine_steel_sword',
     name: '정제된 강철검',
@@ -65,7 +65,7 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 10,
     baseStats: { attack: 25, critRate: 0.05 },
     value: 400,
-    stackable: false,
+    stackable: false
   },
 
   // 도끼류
@@ -78,9 +78,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 3,
     baseStats: { attack: 9, critDamage: 0.1 },
     value: 100,
-    stackable: false,
+    stackable: false
   },
-  
+
   lumberjack_axe: {
     id: 'lumberjack_axe',
     name: '벌목용 도끼',
@@ -90,9 +90,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 6,
     baseStats: { attack: 15, critDamage: 0.15 },
     value: 180,
-    stackable: false,
+    stackable: false
   },
-  
+
   battle_axe: {
     id: 'battle_axe',
     name: '전투 도끼',
@@ -102,7 +102,7 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 12,
     baseStats: { attack: 30, critDamage: 0.2 },
     value: 500,
-    stackable: false,
+    stackable: false
   },
 
   // 창류
@@ -115,9 +115,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 2,
     baseStats: { attack: 6, accuracy: 0.05 },
     value: 70,
-    stackable: false,
+    stackable: false
   },
-  
+
   hunting_spear: {
     id: 'hunting_spear',
     name: '사냥용 창',
@@ -127,9 +127,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 7,
     baseStats: { attack: 16, accuracy: 0.1 },
     value: 200,
-    stackable: false,
+    stackable: false
   },
-  
+
   pike: {
     id: 'pike',
     name: '파이크',
@@ -139,7 +139,7 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 15,
     baseStats: { attack: 35, accuracy: 0.15, speed: -5 },
     value: 600,
-    stackable: false,
+    stackable: false
   },
 
   // 지팡이류 (마법사용)
@@ -152,9 +152,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 1,
     baseStats: { attack: 3, mp: 10 },
     value: 60,
-    stackable: false,
+    stackable: false
   },
-  
+
   apprentice_staff: {
     id: 'apprentice_staff',
     name: '견습생의 지팡이',
@@ -164,9 +164,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 5,
     baseStats: { attack: 8, mp: 20 },
     value: 160,
-    stackable: false,
+    stackable: false
   },
-  
+
   crystal_staff: {
     id: 'crystal_staff',
     name: '수정 지팡이',
@@ -176,7 +176,7 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 10,
     baseStats: { attack: 15, mp: 35, mpRegen: 2 },
     value: 450,
-    stackable: false,
+    stackable: false
   },
 
   // === 중급 무기 (11-25 레벨) ===
@@ -189,9 +189,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 15,
     baseStats: { attack: 40, critRate: 0.08 },
     value: 800,
-    stackable: false,
+    stackable: false
   },
-  
+
   knights_sword: {
     id: 'knights_sword',
     name: '기사의 검',
@@ -201,9 +201,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 20,
     baseStats: { attack: 55, defense: 10, critRate: 0.1 },
     value: 1500,
-    stackable: false,
+    stackable: false
   },
-  
+
   dual_blades: {
     id: 'dual_blades',
     name: '쌍검',
@@ -213,9 +213,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 22,
     baseStats: { attack: 50, speed: 15, critRate: 0.15 },
     value: 1800,
-    stackable: false,
+    stackable: false
   },
-  
+
   executioner_axe: {
     id: 'executioner_axe',
     name: '처형자의 도끼',
@@ -225,9 +225,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 25,
     baseStats: { attack: 70, critDamage: 0.5, speed: -10 },
     value: 2000,
-    stackable: false,
+    stackable: false
   },
-  
+
   war_hammer: {
     id: 'war_hammer',
     name: '전쟁 망치',
@@ -237,7 +237,7 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 18,
     baseStats: { attack: 45, armorPenetration: 20 },
     value: 1000,
-    stackable: false,
+    stackable: false
   },
 
   // === 고급 무기 (26-40 레벨) ===
@@ -250,9 +250,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 30,
     baseStats: { attack: 80, speed: 20, critRate: 0.15 },
     value: 3500,
-    stackable: false,
+    stackable: false
   },
-  
+
   flame_sword: {
     id: 'flame_sword',
     name: '화염검',
@@ -262,9 +262,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 35,
     baseStats: { attack: 90, fireDamage: 30 },
     value: 4500,
-    stackable: false,
+    stackable: false
   },
-  
+
   frost_blade: {
     id: 'frost_blade',
     name: '서리 검',
@@ -274,9 +274,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 35,
     baseStats: { attack: 85, iceDamage: 35, slowChance: 0.2 },
     value: 4500,
-    stackable: false,
+    stackable: false
   },
-  
+
   thunder_spear: {
     id: 'thunder_spear',
     name: '뇌전창',
@@ -286,9 +286,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 38,
     baseStats: { attack: 95, lightningDamage: 40, accuracy: 0.2 },
     value: 5000,
-    stackable: false,
+    stackable: false
   },
-  
+
   archmage_staff: {
     id: 'archmage_staff',
     name: '대마법사의 지팡이',
@@ -298,7 +298,7 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 40,
     baseStats: { attack: 50, mp: 100, mpRegen: 10, spellPower: 50 },
     value: 6000,
-    stackable: false,
+    stackable: false
   },
 
   // === 전설 무기 (41-50 레벨) ===
@@ -311,9 +311,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 50,
     baseStats: { attack: 150, defense: 30, hp: 100, critRate: 0.25, holyDamage: 50 },
     value: 15000,
-    stackable: false,
+    stackable: false
   },
-  
+
   ragnarok: {
     id: 'ragnarok',
     name: '라그나로크',
@@ -323,9 +323,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 50,
     baseStats: { attack: 180, critDamage: 1.0, darkDamage: 60 },
     value: 18000,
-    stackable: false,
+    stackable: false
   },
-  
+
   mjolnir: {
     id: 'mjolnir',
     name: '묠니르',
@@ -335,9 +335,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 48,
     baseStats: { attack: 160, lightningDamage: 80, stunChance: 0.3 },
     value: 16000,
-    stackable: false,
+    stackable: false
   },
-  
+
   gungnir: {
     id: 'gungnir',
     name: '궁니르',
@@ -347,9 +347,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 49,
     baseStats: { attack: 170, accuracy: 0.5, critRate: 0.3, piercing: true },
     value: 17000,
-    stackable: false,
+    stackable: false
   },
-  
+
   staff_of_eternity: {
     id: 'staff_of_eternity',
     name: '영원의 지팡이',
@@ -359,7 +359,7 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 50,
     baseStats: { attack: 80, mp: 200, mpRegen: 25, spellPower: 100, cooldownReduction: 0.3 },
     value: 20000,
-    stackable: false,
+    stackable: false
   },
 
   // === 특수 무기 ===
@@ -372,9 +372,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 25,
     baseStats: { attack: 45, speed: 30, critRate: 0.3, critDamage: 0.5 },
     value: 2200,
-    stackable: false,
+    stackable: false
   },
-  
+
   berserker_axe: {
     id: 'berserker_axe',
     name: '광전사의 도끼',
@@ -384,9 +384,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 35,
     baseStats: { attack: 100, lifesteal: 0.15, berserkBonus: true },
     value: 5500,
-    stackable: false,
+    stackable: false
   },
-  
+
   soul_reaper: {
     id: 'soul_reaper',
     name: '영혼 수확자',
@@ -396,9 +396,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 40,
     baseStats: { attack: 110, lifesteal: 0.2, soulHarvest: 0.1 },
     value: 7000,
-    stackable: false,
+    stackable: false
   },
-  
+
   void_blade: {
     id: 'void_blade',
     name: '공허의 검',
@@ -408,9 +408,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 45,
     baseStats: { attack: 140, voidDamage: 50, ignoreDefense: 0.3 },
     value: 12000,
-    stackable: false,
+    stackable: false
   },
-  
+
   phoenix_staff: {
     id: 'phoenix_staff',
     name: '불사조의 지팡이',
@@ -420,7 +420,7 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 47,
     baseStats: { attack: 70, mp: 150, spellPower: 80, resurrection: 0.1 },
     value: 14000,
-    stackable: false,
+    stackable: false
   },
 
   // 활/석궁류
@@ -433,9 +433,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 4,
     baseStats: { attack: 8, accuracy: 0.1, range: 10 },
     value: 120,
-    stackable: false,
+    stackable: false
   },
-  
+
   longbow: {
     id: 'longbow',
     name: '장궁',
@@ -445,9 +445,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 12,
     baseStats: { attack: 28, accuracy: 0.15, range: 15 },
     value: 550,
-    stackable: false,
+    stackable: false
   },
-  
+
   elven_bow: {
     id: 'elven_bow',
     name: '엘프의 활',
@@ -457,9 +457,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 28,
     baseStats: { attack: 65, accuracy: 0.25, critRate: 0.2, range: 20 },
     value: 3000,
-    stackable: false,
+    stackable: false
   },
-  
+
   windforce: {
     id: 'windforce',
     name: '윈드포스',
@@ -469,9 +469,9 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 46,
     baseStats: { attack: 130, speed: 40, knockback: 0.5, multishot: 2 },
     value: 13000,
-    stackable: false,
+    stackable: false
   },
-  
+
   repeating_crossbow: {
     id: 'repeating_crossbow',
     name: '연발 석궁',
@@ -481,6 +481,6 @@ export const WEAPON_ITEMS: Record<string, Item> = {
     level: 24,
     baseStats: { attack: 40, attackSpeed: 0.5, accuracy: 0.2 },
     value: 2400,
-    stackable: false,
+    stackable: false
   }
 }

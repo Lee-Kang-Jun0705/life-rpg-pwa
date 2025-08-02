@@ -30,13 +30,15 @@ export function VoiceInputResult({
   activity,
   position
 }: VoiceInputResultProps) {
-  if (isListening || !activity.description) return null
+  if (isListening || !activity.description) {
+    return null
+  }
 
-  const positionClass = position === 'bottom-center' 
-    ? 'bottom-28 left-1/2 -translate-x-1/2' 
-    : position === 'bottom-right' 
-    ? 'bottom-28 right-6' 
-    : 'bottom-28 left-6'
+  const positionClass = position === 'bottom-center'
+    ? 'bottom-28 left-1/2 -translate-x-1/2'
+    : position === 'bottom-right'
+      ? 'bottom-28 right-6'
+      : 'bottom-28 left-6'
 
   return (
     <div className={cn(
@@ -49,11 +51,11 @@ export function VoiceInputResult({
           <span>✅</span>
           <span className="font-medium">인식 완료</span>
         </div>
-        
+
         <div className="text-gray-700 dark:text-gray-300">
           {activity.description}
         </div>
-        
+
         {activity.type && (
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-500 dark:text-gray-400">

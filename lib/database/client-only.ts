@@ -13,13 +13,13 @@ export function getClientDatabase(): LifeRPGDatabase | null {
   if (typeof window === 'undefined') {
     return null
   }
-  
+
   if (!dbInstance) {
     // 동적 import로 Dexie 로드
     const { LifeRPGDatabase } = require('./index')
     dbInstance = new LifeRPGDatabase()
   }
-  
+
   return dbInstance
 }
 
@@ -30,7 +30,7 @@ export async function waitForDatabase(): Promise<LifeRPGDatabase> {
   if (typeof window === 'undefined') {
     throw new Error('Database is not available on server side')
   }
-  
+
   // 데이터베이스가 초기화될 때까지 대기
   return new Promise((resolve) => {
     const checkDb = () => {

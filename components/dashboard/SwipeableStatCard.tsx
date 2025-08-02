@@ -44,26 +44,28 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
   const [isSwipingLocked, setIsSwipingLocked] = useState(false)
   const [mouseStart, setMouseStart] = useState<{ x: number; y: number } | null>(null)
   const [isPressed, setIsPressed] = useState(false)
-  
+
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
-  
+
   // useMemo로 actions 최적화
-  const actions = useMemo(() => 
-    SWIPE_ACTIONS[statType.type] || [], 
-    [statType.type]
+  const actions = useMemo(() =>
+    SWIPE_ACTIONS[statType.type] || [],
+  [statType.type]
   )
-  
+
   // 그라데이션 클래스 매핑 (타입 안정성 개선)
   const gradientClasses: Record<string, GradientClass> = {
     health: 'gradient-health',
     learning: 'gradient-learning',
     relationship: 'gradient-relationship',
-    achievement: 'gradient-achievement',
+    achievement: 'gradient-achievement'
   } as const
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (isProcessing || isSwipingLocked) return
+    if (isProcessing || isSwipingLocked) {
+      return
+    }
     touchStartRef.current = {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY
@@ -72,14 +74,16 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
   }, [isProcessing, isSwipingLocked])
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!touchStartRef.current || isProcessing || isSwipingLocked) return
-    
+    if (!touchStartRef.current || isProcessing || isSwipingLocked) {
+      return
+    }
+
     const deltaX = e.touches[0].clientX - touchStartRef.current.x
     const deltaY = e.touches[0].clientY - touchStartRef.current.y
     const threshold = 30
-    
+
     let detectedAction: SwipeAction | null = null
-    
+
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       // 좌우 스와이프
       if (deltaX > threshold) {
@@ -95,26 +99,28 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
         detectedAction = actions.find(a => a.direction === 'down') || null
       }
     }
-    
+
     if (detectedAction && detectedAction !== showAction) {
       setShowAction(detectedAction)
     }
   }, [actions, isProcessing, isSwipingLocked, showAction])
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    if (!touchStartRef.current || isProcessing || isSwipingLocked) return
-    
+    if (!touchStartRef.current || isProcessing || isSwipingLocked) {
+      return
+    }
+
     const touchEnd = {
       x: e.changedTouches[0].clientX,
       y: e.changedTouches[0].clientY
     }
-    
+
     const deltaX = touchEnd.x - touchStartRef.current.x
     const deltaY = touchEnd.y - touchStartRef.current.y
     const threshold = 50
-    
+
     let finalAction: SwipeAction | null = null
-    
+
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
       // 좌우 스와이프
       if (deltaX > 0) {
@@ -130,11 +136,11 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
         finalAction = actions.find(a => a.direction === 'down') || null
       }
     }
-    
+
     if (finalAction) {
       setIsSwipingLocked(true)
       onAction(statType.type, finalAction.action)
-      
+
       // 시각적 피드백
       if (cardRef.current) {
         cardRef.current.classList.add('animate-rubber-band')
@@ -144,7 +150,7 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
         }, 800)
       }
     }
-    
+
     // 상태 초기화
     touchStartRef.current = null
     setIsPressed(false)
@@ -159,20 +165,24 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
 
   // 데스크톱 마우스 이벤트 핸들러
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (isProcessing || isSwipingLocked) return
+    if (isProcessing || isSwipingLocked) {
+      return
+    }
     setMouseStart({ x: e.clientX, y: e.clientY })
     setIsPressed(true)
   }, [isProcessing, isSwipingLocked])
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!mouseStart || isProcessing || isSwipingLocked) return
-    
+    if (!mouseStart || isProcessing || isSwipingLocked) {
+      return
+    }
+
     const deltaX = e.clientX - mouseStart.x
     const deltaY = e.clientY - mouseStart.y
     const threshold = 30
-    
+
     let detectedAction: SwipeAction | null = null
-    
+
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX > threshold) {
         detectedAction = actions.find(a => a.direction === 'right') || null
@@ -186,21 +196,23 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
         detectedAction = actions.find(a => a.direction === 'down') || null
       }
     }
-    
+
     if (detectedAction && detectedAction !== showAction) {
       setShowAction(detectedAction)
     }
   }, [actions, isProcessing, isSwipingLocked, mouseStart, showAction])
 
   const handleMouseUp = useCallback((e: React.MouseEvent) => {
-    if (!mouseStart || isProcessing || isSwipingLocked) return
-    
+    if (!mouseStart || isProcessing || isSwipingLocked) {
+      return
+    }
+
     const deltaX = e.clientX - mouseStart.x
     const deltaY = e.clientY - mouseStart.y
     const threshold = 50
-    
+
     let finalAction: SwipeAction | null = null
-    
+
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
       if (deltaX > 0) {
         finalAction = actions.find(a => a.direction === 'right') || null
@@ -214,11 +226,11 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
         finalAction = actions.find(a => a.direction === 'down') || null
       }
     }
-    
+
     if (finalAction) {
       setIsSwipingLocked(true)
       onAction(statType.type, finalAction.action)
-      
+
       if (cardRef.current) {
         cardRef.current.classList.add('animate-bounce')
         setTimeout(() => {
@@ -227,13 +239,13 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
         }, 500)
       }
     }
-    
+
     setMouseStart(null)
     setTimeout(() => setShowAction(null), 300)
   }, [actions, isProcessing, isSwipingLocked, mouseStart, onAction, statType.type])
 
   return (
-    <div 
+    <div
       ref={cardRef}
       data-testid={`stat-card-${statType.type}`}
       className={`relative group touch-none select-none transition-transform duration-200 ${isPressed ? 'scale-95' : ''}`}
@@ -262,20 +274,20 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
             <div className="absolute top-4 right-4 text-8xl rotate-12">✨</div>
             <div className="absolute bottom-4 left-4 text-6xl -rotate-12">⭐</div>
           </div>
-          
+
           {/* 진행도 배경 */}
-          <div 
+          <div
             className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-30 transition-all duration-500"
             style={{ height: `${progress}%` }}
           />
-          
+
           <div className="relative z-10 flex flex-col items-center justify-center">
             <div className="text-6xl md:text-7xl mb-2 animate-float">{statType.emoji}</div>
             <div className="text-xl font-black text-white drop-shadow-lg">Lv.{stat?.level || 1}</div>
-            
+
             {/* 진행도 바 */}
             <div className="w-full max-w-[120px] bg-white/20 backdrop-blur-sm rounded-full h-3 mt-3 overflow-hidden">
-              <div 
+              <div
                 className="bg-white rounded-full h-full transition-all duration-500 relative overflow-hidden"
                 style={{ width: `${progress}%` }}
               >
@@ -285,7 +297,7 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
           </div>
         </Button>
       </div>
-      
+
       {/* 스와이프 방향 표시 */}
       <AnimatePresence>
         {showAction && (
@@ -303,7 +315,7 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
           </motion.div>
         )}
       </AnimatePresence>
-      
+
       {/* 스와이프 가이드 (데스크톱) */}
       <div className="absolute inset-0 pointer-events-none hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
         <div className="relative w-32 h-32">
@@ -314,7 +326,7 @@ export const SwipeableStatCard = React.memo(function SwipeableStatCard({ statTyp
               left: 'left-0 top-1/2 -translate-y-1/2',
               right: 'right-0 top-1/2 -translate-y-1/2'
             }
-            
+
             return (
               <div
                 key={`swipe-guide-${statType.type}-${action.direction}-${action.action}`}

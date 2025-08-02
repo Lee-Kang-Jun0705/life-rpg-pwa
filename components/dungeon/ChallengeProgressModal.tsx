@@ -23,11 +23,15 @@ export function ChallengeProgressModal({
   const [inputValue, setInputValue] = useState<string>('')
   const [isUpdating, setIsUpdating] = useState(false)
 
-  if (!challenge) return null
+  if (!challenge) {
+    return null
+  }
 
-  const handleUpdateProgress = async () => {
+  const handleUpdateProgress = async() => {
     const value = parseInt(inputValue)
-    if (isNaN(value) || value < 0) return
+    if (isNaN(value) || value < 0) {
+      return
+    }
 
     setIsUpdating(true)
     try {
@@ -39,7 +43,7 @@ export function ChallengeProgressModal({
     }
   }
 
-  const handleQuickComplete = async () => {
+  const handleQuickComplete = async() => {
     setIsUpdating(true)
     try {
       await onComplete()
@@ -49,8 +53,8 @@ export function ChallengeProgressModal({
     }
   }
 
-  const progressPercentage = challenge.targetValue > 0 
-    ? (challenge.currentValue / challenge.targetValue) * 100 
+  const progressPercentage = challenge.targetValue > 0
+    ? (challenge.currentValue / challenge.targetValue) * 100
     : 0
 
   return (

@@ -23,7 +23,7 @@ export default function BattlePage() {
   const [showRewardModal, setShowRewardModal] = useState(false)
   const [earnedRewards, setEarnedRewards] = useState<{ exp: number; coins: number; items?: string[] } | null>(null)
   const [ticketCount, setTicketCount] = useState(0)
-  
+
   const ticketService = BattleTicketService.getInstance()
 
   // 몬스터 티어별 그룹
@@ -34,21 +34,21 @@ export default function BattlePage() {
     legendary: getMonstersByTier('legendary')
   }
 
-  const handleStartBattle = async (monsterId: string) => {
+  const handleStartBattle = async(monsterId: string) => {
     // 티켓 체크는 AutoBattleScreen에서 수행
     setSelectedMonsterId(monsterId)
     setIsBattling(true)
   }
 
-  const handleBattleEnd = async (result: BattleResult) => {
+  const handleBattleEnd = async(result: BattleResult) => {
     setIsBattling(false)
     setSelectedMonsterId(null)
-    
+
     if (result.winner === 'player' && result.rewards) {
       // 도감 서비스 초기화
       const collectionService = CollectionService.getInstance()
       const achievementService = AchievementService.getInstance()
-      
+
       // 몬스터 처치 기록 (도감)
       if (selectedMonsterId) {
         await collectionService.recordMonsterDefeat(
@@ -56,14 +56,14 @@ export default function BattlePage() {
           selectedMonsterId
         )
       }
-      
+
       // 업적 진행
       await achievementService.updateProgress(
         GAME_CONFIG.DEFAULT_USER_ID,
         'battles-won',
         1
       )
-      
+
       // 특정 몬스터 처치 업적
       if (selectedMonsterId) {
         await achievementService.updateProgress(
@@ -72,10 +72,10 @@ export default function BattlePage() {
           1
         )
       }
-      
+
       // 보상 처리
       await addCoins(result.rewards.gold || 0)
-      
+
       // 골드 획득 업적
       if (result.rewards.gold) {
         await achievementService.updateProgress(
@@ -84,7 +84,7 @@ export default function BattlePage() {
           result.rewards.gold
         )
       }
-      
+
       // 아이템 보상
       if (result.rewards.items) {
         for (const itemId of result.rewards.items) {
@@ -101,7 +101,7 @@ export default function BattlePage() {
             })
           }
         }
-        
+
         // 아이템 획득 업적
         await achievementService.updateProgress(
           GAME_CONFIG.DEFAULT_USER_ID,
@@ -109,7 +109,7 @@ export default function BattlePage() {
           result.rewards.items.length
         )
       }
-      
+
       setEarnedRewards({
         exp: 0, // 경험치는 제거
         coins: result.rewards.gold || 0,
@@ -127,7 +127,7 @@ export default function BattlePage() {
       ...monstersByTier.legendary
     ]
     const monster = allMonsters.find(m => m.id === selectedMonsterId)
-    
+
     if (monster) {
       return (
         <AutoBattleScreen
@@ -155,10 +155,10 @@ export default function BattlePage() {
 
         {/* 리소스 표시 - 최적화된 컴포넌트 사용 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <OptimizedEnergyDisplay 
-            userId={GAME_CONFIG.DEFAULT_USER_ID} 
+          <OptimizedEnergyDisplay
+            userId={GAME_CONFIG.DEFAULT_USER_ID}
           />
-          <OptimizedBattleTicketDisplay 
+          <OptimizedBattleTicketDisplay
             userId={GAME_CONFIG.DEFAULT_USER_ID}
             onTicketChange={setTicketCount}
           />
@@ -259,11 +259,11 @@ export default function BattlePage() {
 }
 
 // 몬스터 카드 컴포넌트
-function MonsterCard({ 
-  monster, 
-  onSelect, 
-  disabled 
-}: { 
+function MonsterCard({
+  monster,
+  onSelect,
+  disabled
+}: {
   monster: MonsterData
   onSelect: () => void
   disabled?: boolean
@@ -276,7 +276,7 @@ function MonsterCard({
   }
 
   return (
-    <div 
+    <div
       className={`
         relative rounded-xl p-4 border-2 transition-all cursor-pointer
         ${tierColors[monster.tier]}

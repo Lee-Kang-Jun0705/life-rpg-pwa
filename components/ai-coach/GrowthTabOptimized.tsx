@@ -32,7 +32,7 @@ export function GrowthTab({ growthData, growthAnalyses }: GrowthTabProps) {
             <ChartComponent data={growthData} />
           ) : (
             <p className="text-gray-500 text-center py-8">
-              아직 성장 데이터가 충분하지 않습니다. 
+              아직 성장 데이터가 충분하지 않습니다.
               더 많은 활동을 기록해보세요!
             </p>
           )}

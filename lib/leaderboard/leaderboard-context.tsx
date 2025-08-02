@@ -2,9 +2,9 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { LeaderboardService } from './leaderboard-service'
-import { 
-  LeaderboardCategory, 
-  LeaderboardData, 
+import {
+  LeaderboardCategory,
+  LeaderboardData,
   LeaderboardStats,
   LeaderboardFilter
 } from './types'
@@ -35,16 +35,16 @@ export function LeaderboardProvider({ children }: { children: ReactNode }) {
   const leaderboardService = LeaderboardService.getInstance()
 
   // 리더보드 데이터 로드
-  const loadLeaderboard = async () => {
+  const loadLeaderboard = async() => {
     setIsLoading(true)
     setError(null)
-    
+
     try {
       const [data, stats] = await Promise.all([
         leaderboardService.getLeaderboard(currentFilter),
         leaderboardService.getLeaderboardStats()
       ])
-      
+
       setLeaderboardData(data)
       setLeaderboardStats(stats)
     } catch (err) {
@@ -61,12 +61,12 @@ export function LeaderboardProvider({ children }: { children: ReactNode }) {
   }
 
   // 리더보드 새로고침
-  const refreshLeaderboard = async () => {
+  const refreshLeaderboard = async() => {
     await loadLeaderboard()
   }
 
   // 사용자 점수 업데이트
-  const updateUserScore = async (category: LeaderboardCategory, scoreIncrease: number) => {
+  const updateUserScore = async(category: LeaderboardCategory, scoreIncrease: number) => {
     try {
       await leaderboardService.updateUserScore('default-user', category, scoreIncrease)
       // 점수 업데이트 후 리더보드 새로고침

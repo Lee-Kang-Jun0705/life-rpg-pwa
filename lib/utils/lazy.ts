@@ -25,24 +25,24 @@ export const LazyComponents = {
   Settings: lazy(() => import('@/app/settings/page')),
 
   // 복잡한 컴포넌트들
-  CharacterCustomization: lazy(() => 
+  CharacterCustomization: lazy(() =>
     import('@/components/character/CharacterCustomizationModal').then(m => ({ default: m.CharacterCustomizationModal }))
   ),
-  DungeonDetail: lazy(() => 
-    import('@/components/dungeon/DungeonDetailModal').then(m => ({ 
-      default: (m as Record<string, ComponentType>).DungeonDetailModal || (m as { default: ComponentType }).default 
+  DungeonDetail: lazy(() =>
+    import('@/components/dungeon/DungeonDetailModal').then(m => ({
+      default: (m as Record<string, ComponentType>).DungeonDetailModal || (m as { default: ComponentType }).default
     }))
   ),
-  AchievementDetail: lazy(() => 
-    import('@/components/achievements/AchievementDetailModal').then(m => ({ 
-      default: (m as Record<string, ComponentType>).AchievementDetailModal || (m as { default: ComponentType }).default 
+  AchievementDetail: lazy(() =>
+    import('@/components/achievements/AchievementDetailModal').then(m => ({
+      default: (m as Record<string, ComponentType>).AchievementDetailModal || (m as { default: ComponentType }).default
     }))
   ),
-  VoiceInput: lazy(() => 
-    import('@/components/voice/EnhancedVoiceInput').then(m => ({ 
-      default: (m as Record<string, ComponentType>).EnhancedVoiceInput || (m as { default: ComponentType }).default 
+  VoiceInput: lazy(() =>
+    import('@/components/voice/EnhancedVoiceInput').then(m => ({
+      default: (m as Record<string, ComponentType>).EnhancedVoiceInput || (m as { default: ComponentType }).default
     }))
-  ),
+  )
 }
 
 // 에러 바운더리와 함께 사용할 수 있는 래퍼
@@ -63,52 +63,52 @@ export function withErrorBoundary<P extends object>(
 }
 
 // Suspense와 함께 사용할 로딩 컴포넌트
-export const DefaultLoader = (): ReactElement => 
-  React.createElement('div', 
-    { className: "flex items-center justify-center min-h-[200px]" },
-    React.createElement('div', { 
-      className: "animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" 
+export const DefaultLoader = (): ReactElement =>
+  React.createElement('div',
+    { className: 'flex items-center justify-center min-h-[200px]' },
+    React.createElement('div', {
+      className: 'animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500'
     })
   )
 
 // 페이지별 최적화된 로더들
 export const PageLoaders = {
-  Dashboard: (): ReactElement => 
-    React.createElement('div', 
-      { className: "p-4 space-y-4" },
-      React.createElement('div', { 
-        className: "h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" 
+  Dashboard: (): ReactElement =>
+    React.createElement('div',
+      { className: 'p-4 space-y-4' },
+      React.createElement('div', {
+        className: 'h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse'
       }),
-      React.createElement('div', 
-        { className: "grid grid-cols-2 gap-4" },
-        ...Array.from({ length: 4 }, (_, i) => 
+      React.createElement('div',
+        { className: 'grid grid-cols-2 gap-4' },
+        ...Array.from({ length: 4 }, (_, i) =>
           React.createElement('div', {
             key: i,
-            className: "h-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
+            className: 'h-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse'
           })
         )
       )
     ),
-  
-  Profile: (): ReactElement => 
-    React.createElement('div', 
-      { className: "p-4 space-y-4" },
-      React.createElement('div', 
-        { className: "flex items-center space-x-4" },
-        React.createElement('div', { 
-          className: "w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" 
+
+  Profile: (): ReactElement =>
+    React.createElement('div',
+      { className: 'p-4 space-y-4' },
+      React.createElement('div',
+        { className: 'flex items-center space-x-4' },
+        React.createElement('div', {
+          className: 'w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse'
         }),
-        React.createElement('div', 
-          { className: "space-y-2" },
-          React.createElement('div', { 
-            className: "h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse" 
+        React.createElement('div',
+          { className: 'space-y-2' },
+          React.createElement('div', {
+            className: 'h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse'
           }),
-          React.createElement('div', { 
-            className: "h-3 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse" 
+          React.createElement('div', {
+            className: 'h-3 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse'
           })
         )
       )
     ),
-  
-  Default: DefaultLoader,
+
+  Default: DefaultLoader
 }

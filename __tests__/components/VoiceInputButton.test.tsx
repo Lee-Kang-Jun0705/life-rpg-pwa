@@ -16,11 +16,11 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     ;(useVoiceInputTrigger as any).mockReturnValue({
       isVisible: true
     })
-    
+
     ;(useSpeechRecognition as any).mockReturnValue({
       transcript: '',
       isListening: false,
@@ -34,7 +34,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
   describe('기본 렌더링', () => {
     it('음성 입력 버튼이 표시되어야 함', () => {
       render(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       const button = screen.getByRole('button', { name: /음성.*입력/i })
       expect(button).toBeInTheDocument()
     })
@@ -46,7 +46,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       })
 
       render(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       expect(screen.getByText(/음성 인식이 지원되지 않습니다/i)).toBeInTheDocument()
     })
   })
@@ -63,10 +63,10 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       })
 
       render(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       const button = screen.getByRole('button', { name: /음성.*입력/i })
       fireEvent.click(button)
-      
+
       expect(mockStartListening).toHaveBeenCalledWith({
         continuous: false,
         language: 'ko-KR'
@@ -84,21 +84,21 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       })
 
       render(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       expect(screen.getByText(/오프라인 모드/i)).toBeInTheDocument()
     })
   })
 
   describe('음성 인식 프로세스', () => {
-    it('음성 인식을 시작하고 중지할 수 있어야 함', async () => {
+    it('음성 인식을 시작하고 중지할 수 있어야 함', async() => {
       const { rerender } = render(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       const button = screen.getByRole('button', { name: /음성.*입력/i })
-      
+
       // 시작
       fireEvent.click(button)
       expect(mockStartListening).toHaveBeenCalled()
-      
+
       // 리스닝 상태로 변경
       ;(useSpeechRecognition as any).mockReturnValue({
         transcript: '',
@@ -108,20 +108,20 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
         hasRecognitionSupport: true,
         isOnline: true
       })
-      
+
       rerender(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       // 중지
       fireEvent.click(button)
       expect(mockStopListening).toHaveBeenCalled()
     })
 
-    it('음성 인식 결과를 처리하고 활동으로 저장해야 함', async () => {
+    it('음성 인식 결과를 처리하고 활동으로 저장해야 함', async() => {
       const { rerender } = render(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       const button = screen.getByRole('button', { name: /음성.*입력/i })
       fireEvent.click(button)
-      
+
       // 음성 인식 결과 시뮬레이션
       ;(useSpeechRecognition as any).mockReturnValue({
         transcript: '30분 운동했어요',
@@ -131,9 +131,9 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
         hasRecognitionSupport: true,
         isOnline: true
       })
-      
+
       rerender(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       await waitFor(() => {
         expect(mockAddActivity).toHaveBeenCalledWith({
           statType: 'health',
@@ -145,7 +145,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       })
     })
 
-    it('오프라인 상태에서 저장된 활동은 synced가 false여야 함', async () => {
+    it('오프라인 상태에서 저장된 활동은 synced가 false여야 함', async() => {
       ;(useSpeechRecognition as any).mockReturnValue({
         transcript: '',
         isListening: false,
@@ -156,10 +156,10 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       })
 
       const { rerender } = render(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       const button = screen.getByRole('button', { name: /음성.*입력/i })
       fireEvent.click(button)
-      
+
       // 음성 인식 결과
       ;(useSpeechRecognition as any).mockReturnValue({
         transcript: '책 읽기 완료',
@@ -169,9 +169,9 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
         hasRecognitionSupport: true,
         isOnline: false
       })
-      
+
       rerender(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       await waitFor(() => {
         expect(mockAddActivity).toHaveBeenCalledWith({
           statType: 'learning',
@@ -193,12 +193,12 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
     ]
 
     testCases.forEach(({ transcript, expectedType }) => {
-      it(`"${transcript}"는 ${expectedType} 타입으로 분류되어야 함`, async () => {
+      it(`"${transcript}"는 ${expectedType} 타입으로 분류되어야 함`, async() => {
         const { rerender } = render(<VoiceInputButton addActivity={mockAddActivity} />)
-        
+
         const button = screen.getByRole('button', { name: /음성.*입력/i })
         fireEvent.click(button)
-        
+
         ;(useSpeechRecognition as any).mockReturnValue({
           transcript,
           isListening: false,
@@ -207,9 +207,9 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
           hasRecognitionSupport: true,
           isOnline: true
         })
-        
+
         rerender(<VoiceInputButton addActivity={mockAddActivity} />)
-        
+
         await waitFor(() => {
           expect(mockAddActivity).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -235,16 +235,16 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       })
 
       render(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       expect(screen.getByText(/마이크 접근 권한이 없습니다/i)).toBeInTheDocument()
     })
 
-    it('빈 음성 입력은 처리하지 않아야 함', async () => {
+    it('빈 음성 입력은 처리하지 않아야 함', async() => {
       const { rerender } = render(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       const button = screen.getByRole('button', { name: /음성.*입력/i })
       fireEvent.click(button)
-      
+
       // 빈 transcript
       ;(useSpeechRecognition as any).mockReturnValue({
         transcript: '',
@@ -254,9 +254,9 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
         hasRecognitionSupport: true,
         isOnline: true
       })
-      
+
       rerender(<VoiceInputButton addActivity={mockAddActivity} />)
-      
+
       await waitFor(() => {
         expect(mockAddActivity).not.toHaveBeenCalled()
       })

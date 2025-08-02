@@ -2,8 +2,8 @@
 
 import React from 'react'
 import type { ItemFilter, ItemSortOption, ItemType, ItemRarity } from '@/lib/types/item-system'
-import { 
-  SortAsc, 
+import {
+  SortAsc,
   SortDesc,
   Sword,
   Shield,
@@ -60,7 +60,7 @@ export function InventoryFilters({
     const newTypes = currentTypes.includes(type)
       ? currentTypes.filter(t => t !== type)
       : [...currentTypes, type]
-    
+
     onFilterChange({
       ...filter,
       type: newTypes.length === 0 ? undefined : newTypes
@@ -72,7 +72,7 @@ export function InventoryFilters({
     const newRarities = currentRarities.includes(rarity)
       ? currentRarities.filter(r => r !== rarity)
       : [...currentRarities, rarity]
-    
+
     onFilterChange({
       ...filter,
       rarity: newRarities.length === 0 ? undefined : newRarities
@@ -94,10 +94,10 @@ export function InventoryFilters({
                   onClick={() => toggleTypeFilter(value)}
                   className={`
                     px-3 py-2 rounded-lg flex items-center gap-2 transition-colors
-                    ${isActive 
-                      ? 'bg-purple-600 text-white' 
-                      : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
-                    }
+                    ${isActive
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                }
                   `}
                   data-testid={`filter-type-${value}`}
                 >
@@ -121,10 +121,10 @@ export function InventoryFilters({
                   onClick={() => toggleRarityFilter(value)}
                   className={`
                     px-3 py-2 rounded-lg transition-colors
-                    ${isActive 
-                      ? 'bg-purple-600 text-white' 
-                      : 'bg-gray-700 hover:bg-gray-600'
-                    }
+                    ${isActive
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-700 hover:bg-gray-600'
+                }
                   `}
                   data-testid={`filter-rarity-${value}`}
                 >
@@ -184,10 +184,10 @@ export function InventoryFilters({
               })}
               className={`
                 px-3 py-2 rounded-lg transition-colors
-                ${filter.hasSetBonus === true 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
-                }
+                ${filter.hasSetBonus === true
+      ? 'bg-purple-600 text-white'
+      : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+    }
               `}
               data-testid="filter-set-bonus"
             >
@@ -200,10 +200,10 @@ export function InventoryFilters({
               })}
               className={`
                 px-3 py-2 rounded-lg transition-colors
-                ${filter.hasSpecialEffect === true 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
-                }
+                ${filter.hasSpecialEffect === true
+      ? 'bg-purple-600 text-white'
+      : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+    }
               `}
               data-testid="filter-special-effect"
             >

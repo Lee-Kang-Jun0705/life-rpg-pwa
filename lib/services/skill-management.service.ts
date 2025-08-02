@@ -3,10 +3,10 @@
  * 스킬 학습, 레벨업, 쿨다운, 퀵슬롯 관리
  */
 
-import type { 
-  Skill, 
-  LearnedSkill, 
-  SkillFilter, 
+import type {
+  Skill,
+  LearnedSkill,
+  SkillFilter,
   SkillSortOption,
   SkillTreeNode,
   SkillUpgrade
@@ -26,9 +26,9 @@ class SkillManagementService {
   private static instance: SkillManagementService
   private learnedSkills: Map<string, LearnedSkill> = new Map()
   private quickSlots: Map<number, string> = new Map()
-  private skillPoints: number = 0
+  private skillPoints = 0
   private userId: string = GAME_CONFIG.DEFAULT_USER_ID
-  private initialized: boolean = false
+  private initialized = false
 
   private constructor() {
     // 초기화는 별도로 수행
@@ -43,12 +43,14 @@ class SkillManagementService {
 
   // DB에서 데이터 로드 및 초기화
   async initialize(userId: string = GAME_CONFIG.DEFAULT_USER_ID): Promise<void> {
-    if (this.initialized && this.userId === userId) return
-    
+    if (this.initialized && this.userId === userId) {
+      return
+    }
+
     this.userId = userId
     this.learnedSkills.clear()
     this.quickSlots.clear()
-    
+
     // 학습한 스킬 로드
     const learnedSkillsData = await dbHelpers.getLearnedSkills(userId)
     for (const skillData of learnedSkillsData) {
@@ -61,12 +63,12 @@ class SkillManagementService {
         slot: skillData.slot
       }
       this.learnedSkills.set(skillData.skillId, learned)
-      
+
       if (skillData.slot) {
         this.quickSlots.set(skillData.slot, skillData.skillId)
       }
     }
-    
+
     // 스킬 포인트 로드
     const skillPointData = await dbHelpers.getSkillPoints(userId)
     if (skillPointData) {
@@ -81,12 +83,12 @@ class SkillManagementService {
         updatedAt: new Date()
       })
     }
-    
+
     // 기본 스킬이 없으면 학습
     if (this.learnedSkills.size === 0) {
       await this.learnBasicSkills()
     }
-    
+
     this.initialized = true
   }
 
@@ -95,7 +97,7 @@ class SkillManagementService {
     // 기본 공격 스킬 학습 및 퀵슬롯 1번에 장착
     await this.learnSkill('basic_attack')
     await this.assignToQuickSlot('basic_attack', 1)
-    
+
     // 방어 스킬 학습 및 퀵슬롯 2번에 장착
     await this.learnSkill('defend')
     await this.assignToQuickSlot('defend', 2)
@@ -104,13 +106,19 @@ class SkillManagementService {
   // 스킬 학습
   async learnSkill(skillId: string): Promise<boolean> {
     const skill = this.getSkill(skillId)
-    if (!skill) return false
+    if (!skill) {
+      return false
+    }
 
     // 이미 학습한 스킬인지 확인
-    if (this.learnedSkills.has(skillId)) return false
+    if (this.learnedSkills.has(skillId)) {
+      return false
+    }
 
     // 요구사항 확인
-    if (!this.checkSkillRequirements(skill)) return false
+    if (!this.checkSkillRequirements(skill)) {
+      return false
+    }
 
     // 스킬 학습
     const learned: LearnedSkill = {
@@ -121,9 +129,9 @@ class SkillManagementService {
       isActive: false,
       slot: undefined
     }
-    
+
     this.learnedSkills.set(skillId, learned)
-    
+
     // DB에 저장
     await dbHelpers.saveLearnedSkill({
       userId: this.userId,
@@ -141,10 +149,14 @@ class SkillManagementService {
   // 스킬북으로 스킬 학습 (스킬 포인트 소비 없음)
   learnSkillFromBook(skillId: string): boolean {
     const skill = this.getSkill(skillId)
-    if (!skill) return false
+    if (!skill) {
+      return false
+    }
 
     // 이미 학습한 스킬인지 확인
-    if (this.learnedSkills.has(skillId)) return false
+    if (this.learnedSkills.has(skillId)) {
+      return false
+    }
 
     // 스킬 학습
     const learned: LearnedSkill = {
@@ -155,9 +167,9 @@ class SkillManagementService {
       isActive: false,
       slot: undefined
     }
-    
+
     this.learnedSkills.set(skillId, learned)
-    
+
     // DB에 저장 (async 호출하지만 결과 기다리지 않음)
     void dbHelpers.saveLearnedSkill({
       userId: this.userId,
@@ -174,10 +186,12 @@ class SkillManagementService {
 
   // 스킬 학습 취소 (롤백용)
   unlearnSkill(skillId: string): boolean {
-    if (!this.learnedSkills.has(skillId)) return false
-    
+    if (!this.learnedSkills.has(skillId)) {
+      return false
+    }
+
     this.learnedSkills.delete(skillId)
-    
+
     // 퀵슬롯에서도 제거
     for (const [slot, id] of this.quickSlots.entries()) {
       if (id === skillId) {
@@ -185,28 +199,36 @@ class SkillManagementService {
         break
       }
     }
-    
+
     // DB에서 삭제 (async 호출하지만 결과 기다리지 않음)
     void dbHelpers.deleteLearnedSkill(this.userId, skillId)
       .catch(error => console.error('Failed to delete learned skill:', error))
-    
+
     return true
   }
 
   // 스킬 레벨업
   async upgradeSkill(skillId: string): Promise<boolean> {
     const learnedSkill = this.learnedSkills.get(skillId)
-    if (!learnedSkill) return false
+    if (!learnedSkill) {
+      return false
+    }
 
     const skill = this.getSkill(skillId)
-    if (!skill) return false
+    if (!skill) {
+      return false
+    }
 
     // 최대 레벨 확인
-    if (learnedSkill.level >= skill.maxLevel) return false
+    if (learnedSkill.level >= skill.maxLevel) {
+      return false
+    }
 
     // 스킬 포인트 확인
     const pointsRequired = this.getUpgradePointsCost(learnedSkill.level)
-    if (this.skillPoints < pointsRequired) return false
+    if (this.skillPoints < pointsRequired) {
+      return false
+    }
 
     // 레벨업
     this.skillPoints -= pointsRequired
@@ -216,7 +238,7 @@ class SkillManagementService {
       experience: 0
     }
     this.learnedSkills.set(skillId, updatedSkill)
-    
+
     // DB 업데이트
     const skillData = await dbHelpers.getLearnedSkill(this.userId, skillId)
     if (skillData) {
@@ -226,7 +248,7 @@ class SkillManagementService {
         experience: 0
       })
     }
-    
+
     // 스킬 포인트 업데이트
     const pointData = await dbHelpers.getSkillPoints(this.userId)
     if (pointData) {
@@ -241,20 +263,26 @@ class SkillManagementService {
 
   // 스킬 요구사항 확인
   private checkSkillRequirements(skill: Skill): boolean {
-    if (!skill.requirements) return true
+    if (!skill.requirements) {
+      return true
+    }
 
     // 레벨 요구사항
     if (skill.requirements.level) {
       // TODO: 플레이어 레벨 확인
       const playerLevel = 10
-      if (playerLevel < skill.requirements.level) return false
+      if (playerLevel < skill.requirements.level) {
+        return false
+      }
     }
 
     // 선행 스킬 요구사항
     if (skill.requirements.skills) {
       for (const req of skill.requirements.skills) {
         const learned = this.learnedSkills.get(req.id)
-        if (!learned || learned.level < req.level) return false
+        if (!learned || learned.level < req.level) {
+          return false
+        }
       }
     }
 
@@ -264,13 +292,19 @@ class SkillManagementService {
   // 퀵슬롯 설정
   async assignToQuickSlot(skillId: string, slot: number): Promise<boolean> {
     const learnedSkill = this.learnedSkills.get(skillId)
-    if (!learnedSkill) return false
+    if (!learnedSkill) {
+      return false
+    }
 
     const skill = this.getSkill(skillId)
-    if (!skill || skill.type === 'passive') return false
+    if (!skill || skill.type === 'passive') {
+      return false
+    }
 
     // 슬롯 범위 확인
-    if (slot < 1 || slot > SKILL_CONFIG.MAX_QUICK_SLOTS) return false
+    if (slot < 1 || slot > SKILL_CONFIG.MAX_QUICK_SLOTS) {
+      return false
+    }
 
     // 기존 슬롯에서 제거
     const currentSkillInSlot = this.quickSlots.get(slot)
@@ -281,7 +315,7 @@ class SkillManagementService {
           ...currentLearned,
           slot: undefined
         })
-        
+
         // DB 업데이트
         const skillData = await dbHelpers.getLearnedSkill(this.userId, currentSkillInSlot)
         if (skillData) {
@@ -305,7 +339,7 @@ class SkillManagementService {
       ...learnedSkill,
       slot
     })
-    
+
     // DB에 저장
     await dbHelpers.saveQuickSlot({
       userId: this.userId,
@@ -313,7 +347,7 @@ class SkillManagementService {
       skillId,
       updatedAt: new Date()
     })
-    
+
     const skillData = await dbHelpers.getLearnedSkill(this.userId, skillId)
     if (skillData) {
       await dbHelpers.saveLearnedSkill({
@@ -328,20 +362,24 @@ class SkillManagementService {
   // 퀵슬롯 제거
   async removeFromQuickSlot(slot: number): Promise<boolean> {
     const skillId = this.quickSlots.get(slot)
-    if (!skillId) return false
+    if (!skillId) {
+      return false
+    }
 
     const learnedSkill = this.learnedSkills.get(skillId)
-    if (!learnedSkill) return false
+    if (!learnedSkill) {
+      return false
+    }
 
     this.quickSlots.delete(slot)
     this.learnedSkills.set(skillId, {
       ...learnedSkill,
       slot: undefined
     })
-    
+
     // DB 업데이트
     await dbHelpers.clearQuickSlot(this.userId, slot)
-    
+
     const skillData = await dbHelpers.getLearnedSkill(this.userId, skillId)
     if (skillData) {
       await dbHelpers.saveLearnedSkill({
@@ -381,7 +419,7 @@ class SkillManagementService {
   }
 
   // 스킬 정렬
-  sortSkills(skills: Skill[], sortBy: SkillSortOption, ascending: boolean = true): Skill[] {
+  sortSkills(skills: Skill[], sortBy: SkillSortOption, ascending = true): Skill[] {
     const sorted = [...skills].sort((a, b) => {
       let compareValue = 0
 
@@ -417,7 +455,9 @@ class SkillManagementService {
   // 스킬 데미지 계산 (정렬용)
   private getSkillDamage(skill: Skill): number {
     const damageEffect = skill.effects.find(e => e.type === 'damage')
-    if (!damageEffect) return 0
+    if (!damageEffect) {
+      return 0
+    }
 
     if (typeof damageEffect.value === 'number') {
       return damageEffect.value
@@ -458,7 +498,7 @@ class SkillManagementService {
   // 퀵슬롯 상태
   getQuickSlots(): SkillSlot[] {
     const slots: SkillSlot[] = []
-    
+
     for (let i = 1; i <= SKILL_CONFIG.MAX_QUICK_SLOTS; i++) {
       slots.push({
         slot: i,
@@ -500,12 +540,18 @@ class SkillManagementService {
   // 스킬 사용 (쿨다운 적용)
   useSkill(skillId: string): boolean {
     const learned = this.learnedSkills.get(skillId)
-    if (!learned) return false
+    if (!learned) {
+      return false
+    }
 
-    if (learned.cooldownRemaining > 0) return false
+    if (learned.cooldownRemaining > 0) {
+      return false
+    }
 
     const skill = this.getSkill(skillId)
-    if (!skill) return false
+    if (!skill) {
+      return false
+    }
 
     // 쿨다운 적용
     this.learnedSkills.set(skillId, {
@@ -519,10 +565,14 @@ class SkillManagementService {
   // 토글 스킬 상태 변경
   toggleSkill(skillId: string): boolean {
     const learned = this.learnedSkills.get(skillId)
-    if (!learned) return false
+    if (!learned) {
+      return false
+    }
 
     const skill = this.getSkill(skillId)
-    if (!skill || skill.type !== 'toggle') return false
+    if (!skill || skill.type !== 'toggle') {
+      return false
+    }
 
     this.learnedSkills.set(skillId, {
       ...learned,
@@ -541,20 +591,20 @@ class SkillManagementService {
     })
 
     this.skillPoints += totalPoints
-    
+
     // 모든 스킬 삭제
     for (const [skillId] of this.learnedSkills) {
       await dbHelpers.deleteLearnedSkill(this.userId, skillId)
     }
-    
+
     // 모든 퀵슬롯 삭제
     for (let i = 1; i <= SKILL_CONFIG.MAX_QUICK_SLOTS; i++) {
       await dbHelpers.clearQuickSlot(this.userId, i)
     }
-    
+
     this.learnedSkills.clear()
     this.quickSlots.clear()
-    
+
     // 스킬 포인트 업데이트
     const pointData = await dbHelpers.getSkillPoints(this.userId)
     if (pointData) {
@@ -572,8 +622,10 @@ class SkillManagementService {
   getAvailableSkills(): Skill[] {
     return this.getAllSkills().filter(skill => {
       // 이미 학습한 스킬 제외
-      if (this.learnedSkills.has(skill.id)) return false
-      
+      if (this.learnedSkills.has(skill.id)) {
+        return false
+      }
+
       // 요구사항 충족 확인
       return this.checkSkillRequirements(skill)
     })
@@ -582,10 +634,14 @@ class SkillManagementService {
   // 스킬 경험치 추가
   addSkillExperience(skillId: string, exp: number): void {
     const learned = this.learnedSkills.get(skillId)
-    if (!learned) return
+    if (!learned) {
+      return
+    }
 
     const skill = this.getSkill(skillId)
-    if (!skill) return
+    if (!skill) {
+      return
+    }
 
     const newExp = learned.experience + exp
     const expRequired = this.getExpRequiredForLevel(learned.level)
@@ -617,14 +673,14 @@ class SkillManagementService {
     skillPoints: number
   }): Promise<void> {
     console.time('restoreAllSkills-internal')
-    
+
     // 스킬 초기화
     this.learnedSkills.clear()
     this.quickSlots.clear()
     this.skillPoints = data.skillPoints
 
     console.log(`Restoring ${data.learnedSkills.length} skills to memory...`)
-    
+
     // 학습한 스킬 메모리에 로드 (DB 업데이트 없이)
     for (const learned of data.learnedSkills) {
       this.learnedSkills.set(learned.skillId, learned)
@@ -634,7 +690,7 @@ class SkillManagementService {
     for (const [slot, skillId] of Object.entries(data.quickSlots)) {
       const slotNumber = Number(slot)
       this.quickSlots.set(slotNumber, skillId)
-      
+
       // 해당 스킬의 슬롯 정보도 업데이트
       const learned = this.learnedSkills.get(skillId)
       if (learned) {
@@ -647,7 +703,7 @@ class SkillManagementService {
 
     console.log('Memory restore complete. Starting DB sync...')
     console.time('restoreAllSkills-db')
-    
+
     // 모든 데이터를 한 번에 DB에 저장
     const dbPromises: Promise<unknown>[] = []
 
@@ -693,7 +749,7 @@ class SkillManagementService {
 
     // 모든 DB 작업을 병렬로 실행
     await Promise.all(dbPromises)
-    
+
     console.timeEnd('restoreAllSkills-db')
     console.timeEnd('restoreAllSkills-internal')
     console.log(`Restored ${data.learnedSkills.length} skills successfully`)

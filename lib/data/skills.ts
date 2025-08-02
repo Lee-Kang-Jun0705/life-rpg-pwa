@@ -9,7 +9,7 @@ import { baseSkills } from './base-skills'
 export const allSkills: Record<string, Skill> = {
   // baseSkills의 모든 스킬 포함
   ...baseSkills,
-  
+
   // 기본 스킬 (baseSkills에서 덮어쓰기)
   basic_attack: {
     id: 'basic_attack',

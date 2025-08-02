@@ -11,10 +11,10 @@ interface LoginRewardCalendarProps {
   onClaimReward: (day: number) => void
 }
 
-export function LoginRewardCalendar({ 
-  loginRewards, 
+export function LoginRewardCalendar({
+  loginRewards,
   currentStreak,
-  onClaimReward 
+  onClaimReward
 }: LoginRewardCalendarProps) {
   const currentCycleDay = ((currentStreak - 1) % 28) + 1
 
@@ -46,17 +46,17 @@ export function LoginRewardCalendar({
           return (
             <motion.div
               key={reward.day}
-              data-testid={isToday && !isClaimed ? "attendance-button" : `attendance-day-${reward.day}`}
+              data-testid={isToday && !isClaimed ? 'attendance-button' : `attendance-day-${reward.day}`}
               whileHover={!isLocked ? { scale: 1.05 } : {}}
               whileTap={!isLocked && !isClaimed ? { scale: 0.95 } : {}}
               className={`relative aspect-square rounded-lg border-2 p-2 flex flex-col items-center justify-center cursor-pointer transition-all ${
                 isToday && !isClaimed
                   ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 animate-pulse'
                   : isClaimed
-                  ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                  : isLocked
-                  ? 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/20 opacity-50'
-                  : 'border-gray-300 dark:border-gray-600 hover:border-purple-400'
+                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                    : isLocked
+                      ? 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/20 opacity-50'
+                      : 'border-gray-300 dark:border-gray-600 hover:border-purple-400'
               } ${isSpecial ? 'ring-2 ring-yellow-400' : ''}`}
               onClick={() => {
                 if (isToday && !isClaimed) {

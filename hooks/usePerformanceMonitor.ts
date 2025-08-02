@@ -36,7 +36,7 @@ export function usePerformanceMonitor(componentName: string) {
         const now = Date.now()
         const timeDiff = now - metricsRef.current.lastUpdate
 
-        if (current.timers !== metricsRef.current.activeTimers || 
+        if (current.timers !== metricsRef.current.activeTimers ||
             current.intervals !== metricsRef.current.activeIntervals) {
           console.log(`[${componentName}] Performance update:`, {
             timers: current.timers,
@@ -56,7 +56,7 @@ export function usePerformanceMonitor(componentName: string) {
         PerformanceMonitor.cleanupComponent(componentName)
         VisibilityManager.remove(`${componentName}-pause`)
         VisibilityManager.remove(`${componentName}-resume`)
-        
+
         const finalCount = PerformanceMonitor.getActiveCount()
         console.log(`[${componentName}] Cleanup complete:`, finalCount)
       }
@@ -94,7 +94,7 @@ export function usePerformanceMonitor(componentName: string) {
   }, [componentName])
 
   return {
-    registerTimer: (id: string, callback: () => void, delay: number) => 
+    registerTimer: (id: string, callback: () => void, delay: number) =>
       PerformanceMonitor.registerTimer(`${componentName}-${id}`, callback, delay),
     registerInterval: (id: string, callback: () => void, interval: number) =>
       PerformanceMonitor.registerInterval(`${componentName}-${id}`, callback, interval),

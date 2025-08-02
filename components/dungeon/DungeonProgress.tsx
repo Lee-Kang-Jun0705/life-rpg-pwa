@@ -3,13 +3,13 @@
 import React from 'react'
 import type { DungeonProgress as DungeonProgressType, Dungeon } from '@/lib/types/dungeon'
 import { motion } from 'framer-motion'
-import { 
-  Clock, 
-  Zap, 
-  Star, 
-  Target, 
-  Sword, 
-  Shield, 
+import {
+  Clock,
+  Zap,
+  Star,
+  Target,
+  Sword,
+  Shield,
   Heart,
   Trophy,
   Play,
@@ -28,7 +28,7 @@ interface DungeonProgressProps {
 export function DungeonProgress({ dungeon, progress, onContinue, onPause, onAbandon }: DungeonProgressProps) {
   const progressPercentage = (progress.currentStage / progress.totalStages) * 100
   const monsterProgressPercentage = progress.totalMonsters > 0 ? (progress.defeatedMonsters / progress.totalMonsters) * 100 : 0
-  const elapsedTime = progress.endTime 
+  const elapsedTime = progress.endTime
     ? progress.endTime.getTime() - progress.startTime.getTime()
     : Date.now() - progress.startTime.getTime()
 
@@ -54,22 +54,22 @@ export function DungeonProgress({ dungeon, progress, onContinue, onPause, onAban
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
               <span className={`
                 px-2 py-1 rounded-full text-xs font-medium
-                ${progress.status === 'in_progress' 
-                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                  : progress.status === 'completed'
-                    ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
-                    : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
-                }
+                ${progress.status === 'in_progress'
+      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+      : progress.status === 'completed'
+        ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+        : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
+    }
               `}>
-                {progress.status === 'in_progress' ? '진행 중' : 
-                 progress.status === 'completed' ? '완료' : '실패'}
+                {progress.status === 'in_progress' ? '진행 중' :
+                  progress.status === 'completed' ? '완료' : '실패'}
               </span>
               <span>•</span>
               <span>{formatTime(elapsedTime)} 경과</span>
             </div>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {progress.status === 'in_progress' && onPause && (
             <button
@@ -151,7 +151,7 @@ export function DungeonProgress({ dungeon, progress, onContinue, onPause, onAban
           </div>
           <div className="text-xs text-gray-600 dark:text-gray-400">경험치</div>
         </div>
-        
+
         <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-3 text-center">
           <div className="flex items-center justify-center mb-1">
             <Trophy className="w-4 h-4 text-yellow-500" />
@@ -161,7 +161,7 @@ export function DungeonProgress({ dungeon, progress, onContinue, onPause, onAban
           </div>
           <div className="text-xs text-gray-600 dark:text-gray-400">골드</div>
         </div>
-        
+
         <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 text-center">
           <div className="flex items-center justify-center mb-1">
             <Sword className="w-4 h-4 text-green-500" />
@@ -171,7 +171,7 @@ export function DungeonProgress({ dungeon, progress, onContinue, onPause, onAban
           </div>
           <div className="text-xs text-gray-600 dark:text-gray-400">가한 피해</div>
         </div>
-        
+
         <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-3 text-center">
           <div className="flex items-center justify-center mb-1">
             <Shield className="w-4 h-4 text-red-500" />
@@ -192,7 +192,7 @@ export function DungeonProgress({ dungeon, progress, onContinue, onPause, onAban
           </h4>
           <div className="flex flex-wrap gap-2">
             {progress.earnedItems.map((item, index) => (
-              <div 
+              <div
                 key={index}
                 className="flex items-center gap-1 px-2 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 text-xs rounded"
               >
@@ -211,22 +211,22 @@ export function DungeonProgress({ dungeon, progress, onContinue, onPause, onAban
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className={`
             flex items-center gap-2 p-2 rounded-lg text-sm
-            ${progress.survivedWithFullHP 
-              ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
-              : 'bg-gray-50 dark:bg-gray-900 text-gray-500'
-            }
+            ${progress.survivedWithFullHP
+      ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
+      : 'bg-gray-50 dark:bg-gray-900 text-gray-500'
+    }
           `}>
             <Heart className="w-4 h-4" />
             <span>체력 만땅 유지</span>
             {progress.survivedWithFullHP && <span className="ml-auto">✓</span>}
           </div>
-          
+
           <div className={`
             flex items-center gap-2 p-2 rounded-lg text-sm
-            ${progress.usedNoConsumables 
-              ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
-              : 'bg-gray-50 dark:bg-gray-900 text-gray-500'
-            }
+            ${progress.usedNoConsumables
+      ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
+      : 'bg-gray-50 dark:bg-gray-900 text-gray-500'
+    }
           `}>
             <Zap className="w-4 h-4" />
             <span>소비품 미사용</span>
@@ -245,7 +245,7 @@ export function DungeonProgress({ dungeon, progress, onContinue, onPause, onAban
           계속하기
         </button>
       )}
-      
+
       {progress.status === 'completed' && (
         <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 text-center">
           <div className="text-green-600 dark:text-green-400 font-medium mb-2">
@@ -256,7 +256,7 @@ export function DungeonProgress({ dungeon, progress, onContinue, onPause, onAban
           </div>
         </div>
       )}
-      
+
       {progress.status === 'failed' && (
         <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 text-center">
           <div className="text-red-600 dark:text-red-400 font-medium mb-2">

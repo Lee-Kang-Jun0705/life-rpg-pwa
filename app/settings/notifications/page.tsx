@@ -19,7 +19,7 @@ export default function NotificationSettingsPage() {
     loadSettings()
   }, [loadSettings])
 
-  const loadSettings = useCallback(async () => {
+  const loadSettings = useCallback(async() => {
     setIsLoading(true)
     try {
       // 권한 상태 확인
@@ -37,14 +37,14 @@ export default function NotificationSettingsPage() {
     }
   }, [pushManager])
 
-  const handleRequestPermission = async () => {
+  const handleRequestPermission = async() => {
     const result = await pushManager.requestPermission()
     setPermission(result)
-    
+
     if (result === 'granted') {
       // 푸시 구독
       await pushManager.subscribeToPush()
-      
+
       // 알림 활성화
       if (preferences) {
         const updatedPrefs = { ...preferences, enabled: true }
@@ -54,8 +54,10 @@ export default function NotificationSettingsPage() {
     }
   }
 
-  const handleToggleNotifications = async (enabled: boolean) => {
-    if (!preferences) return
+  const handleToggleNotifications = async(enabled: boolean) => {
+    if (!preferences) {
+      return
+    }
 
     const updatedPrefs = { ...preferences, enabled }
     setPreferences(updatedPrefs)
@@ -67,8 +69,10 @@ export default function NotificationSettingsPage() {
     }
   }
 
-  const handleToggleType = async (type: NotificationType, enabled: boolean) => {
-    if (!preferences) return
+  const handleToggleType = async(type: NotificationType, enabled: boolean) => {
+    if (!preferences) {
+      return
+    }
 
     const updatedPrefs = {
       ...preferences,
@@ -81,15 +85,17 @@ export default function NotificationSettingsPage() {
     await savePreferences(updatedPrefs)
   }
 
-  const handleTimeChange = async (
+  const handleTimeChange = async(
     schedule: 'activityReminder' | 'streakReminder',
     index: number | null,
     time: string
   ) => {
-    if (!preferences) return
+    if (!preferences) {
+      return
+    }
 
     const updatedPrefs = { ...preferences }
-    
+
     if (schedule === 'activityReminder' && index !== null) {
       updatedPrefs.schedule.activityReminder.times[index] = time
     } else if (schedule === 'streakReminder') {
@@ -100,11 +106,11 @@ export default function NotificationSettingsPage() {
     await savePreferences(updatedPrefs)
   }
 
-  const savePreferences = async (prefs: NotificationPreferences) => {
+  const savePreferences = async(prefs: NotificationPreferences) => {
     setIsSaving(true)
     try {
       await pushManager.savePreferences(prefs)
-      
+
       // 알림 재스케줄링
       if (prefs.enabled && permission === 'granted') {
         await pushManager.scheduleActivityReminders()
@@ -116,7 +122,7 @@ export default function NotificationSettingsPage() {
     }
   }
 
-  const testNotification = async () => {
+  const testNotification = async() => {
     await pushManager.showLocalNotification({
       title: '🎯 테스트 알림',
       body: '알림이 정상적으로 작동합니다!',
@@ -131,8 +137,8 @@ export default function NotificationSettingsPage() {
     return (
       <div className="p-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-          <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3" />
+          <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded" />
         </div>
       </div>
     )
@@ -262,7 +268,7 @@ export default function NotificationSettingsPage() {
       {/* 스케줄 설정 */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">알림 시간 설정</h2>
-        
+
         {/* 활동 리마인더 시간 */}
         <div className="mb-6">
           <h3 className="font-medium mb-3">활동 리마인더 시간</h3>

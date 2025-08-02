@@ -48,7 +48,7 @@ describe('AICoachService', () => {
   ]
 
   describe('getGrowthChartData', () => {
-    it('30일간 성장 차트 데이터를 생성해야 함', async () => {
+    it('30일간 성장 차트 데이터를 생성해야 함', async() => {
       mockDbHelpers.getActivitiesByDateRange.mockResolvedValue(mockActivities)
 
       const result = await service.getGrowthChartData(userId, 30)
@@ -61,7 +61,7 @@ describe('AICoachService', () => {
       expect(Array.isArray(result)).toBe(true)
     })
 
-    it('활동이 없을 때 빈 배열을 반환해야 함', async () => {
+    it('활동이 없을 때 빈 배열을 반환해야 함', async() => {
       mockDbHelpers.getActivitiesByDateRange.mockResolvedValue([])
 
       const result = await service.getGrowthChartData(userId, 30)
@@ -71,7 +71,7 @@ describe('AICoachService', () => {
   })
 
   describe('analyzeGrowth', () => {
-    it('스탯별 성장 분석을 수행해야 함', async () => {
+    it('스탯별 성장 분석을 수행해야 함', async() => {
       mockDbHelpers.getActivitiesByDateRange.mockResolvedValue(mockActivities)
 
       const result = await service.analyzeGrowth(userId, mockStats)
@@ -83,7 +83,7 @@ describe('AICoachService', () => {
       expect(result[0]).toHaveProperty('suggestions')
     })
 
-    it('올바른 트렌드를 계산해야 함', async () => {
+    it('올바른 트렌드를 계산해야 함', async() => {
       // 최근 7일에 더 많은 활동이 있는 경우
       const recentActivities: Activity[] = [
         ...mockActivities,
@@ -107,7 +107,7 @@ describe('AICoachService', () => {
   })
 
   describe('analyzeActivityPatterns', () => {
-    it('활동 패턴을 분석해야 함', async () => {
+    it('활동 패턴을 분석해야 함', async() => {
       const activitiesWithTime = mockActivities.map(activity => ({
         ...activity,
         timestamp: new Date(2024, 0, 15, 14, 30) // 14:30
@@ -124,10 +124,10 @@ describe('AICoachService', () => {
       expect(result).toHaveProperty('weakDays')
     })
 
-    it('연속 활동 일수를 올바르게 계산해야 함', async () => {
+    it('연속 활동 일수를 올바르게 계산해야 함', async() => {
       const today = new Date()
       const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
-      
+
       const consecutiveActivities: Activity[] = [
         {
           userId,
@@ -183,7 +183,7 @@ describe('AICoachService', () => {
       weakDays: ['토', '일']
     }
 
-    it('맞춤형 조언을 생성해야 함', async () => {
+    it('맞춤형 조언을 생성해야 함', async() => {
       const result = await service.generatePersonalizedAdvice(
         userId,
         mockStats,
@@ -193,7 +193,7 @@ describe('AICoachService', () => {
 
       expect(Array.isArray(result)).toBe(true)
       expect(result.length).toBeGreaterThan(0)
-      
+
       const advice = result[0]
       expect(advice).toHaveProperty('type')
       expect(advice).toHaveProperty('title')
@@ -202,7 +202,7 @@ describe('AICoachService', () => {
       expect(advice).toHaveProperty('priority')
     })
 
-    it('강점 조언을 포함해야 함', async () => {
+    it('강점 조언을 포함해야 함', async() => {
       const result = await service.generatePersonalizedAdvice(
         userId,
         mockStats,
@@ -215,8 +215,8 @@ describe('AICoachService', () => {
       expect(strengthAdvice?.title).toContain('건강')
     })
 
-    it('약점 개선 조언을 포함해야 함', async () => {
-      const weakStats = mockStats.map(stat => 
+    it('약점 개선 조언을 포함해야 함', async() => {
+      const weakStats = mockStats.map(stat =>
         stat.type === 'relationship' ? { ...stat, level: 1 } : stat
       )
 
@@ -231,7 +231,7 @@ describe('AICoachService', () => {
       expect(weaknessAdvice).toBeDefined()
     })
 
-    it('습관 형성 조언을 포함해야 함', async () => {
+    it('습관 형성 조언을 포함해야 함', async() => {
       const result = await service.generatePersonalizedAdvice(
         userId,
         mockStats,

@@ -37,7 +37,7 @@ const DashboardClient: React.FC = () => {
     handleVoiceInput,
     calculatedStats
   } = useDashboard()
-  
+
   // 레벨업 감지 훅
   const { levelUpData, detectLevelUp, clearLevelUpAnimation } = useLevelUpDetection(stats)
 
@@ -50,8 +50,8 @@ const DashboardClient: React.FC = () => {
 
   // 스탯 액션 핸들러 (레벨업 감지 포함)
   const handleStatActionWithLevelUp = useCallback(
-    async (type: string, action: string) => {
-      const levelUpHandler = detectLevelUp(type, async () => handleStatAction(type, action))
+    async(type: string, action: string) => {
+      const levelUpHandler = detectLevelUp(type, async() => handleStatAction(type, action))
       await levelUpHandler()
     },
     [detectLevelUp, handleStatAction]
@@ -74,8 +74,8 @@ const DashboardClient: React.FC = () => {
   if (loading) {
     return <LoadingState />
   }
-  
-  // 조기 반환 - 에러 상태  
+
+  // 조기 반환 - 에러 상태
   if (error) {
     return <ErrorState error={error} onRetry={loadUserData} />
   }
@@ -88,7 +88,7 @@ const DashboardClient: React.FC = () => {
       <DashboardContent {...contentProps} />
 
       {/* 음성 입력 버튼 */}
-      <EnhancedVoiceInput 
+      <EnhancedVoiceInput
         onTranscript={handleVoiceInput}
         onError={handleVoiceError}
       />

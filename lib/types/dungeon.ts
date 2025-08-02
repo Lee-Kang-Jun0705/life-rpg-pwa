@@ -1,7 +1,7 @@
 'use client'
 
 // 던전 타입
-export type DungeonType = 
+export type DungeonType =
   | 'story'        // 스토리 던전
   | 'daily'        // 일일 던전
   | 'weekly'       // 주간 던전
@@ -25,7 +25,7 @@ export interface Dungeon {
   difficulty: DungeonDifficulty
   icon?: string
   backgroundImage?: string
-  
+
   // 입장 조건
   requirements: {
     level: number
@@ -33,7 +33,7 @@ export interface Dungeon {
     energy: number
     tickets?: number
   }
-  
+
   // 보상
   rewards: {
     gold: number
@@ -43,18 +43,18 @@ export interface Dungeon {
       items: DungeonItem[]
     }
   }
-  
+
   // 던전 정보
   stages: number
   estimatedTime: number // 분
   recommendedCombatPower: number
-  
+
   // 상태
   status: DungeonStatus
   clearedCount: number
   bestTime?: number
   lastClearedAt?: Date
-  
+
   // 제한사항
   dailyLimit?: number
   weeklyLimit?: number
@@ -69,17 +69,17 @@ export interface DungeonStage {
   stageNumber: number
   name: string
   description: string
-  
+
   // 몬스터
   monsters: DungeonMonster[]
   boss?: DungeonBoss
-  
+
   // 보상
   rewards: {
     gold: number
     items: DungeonItem[]
   }
-  
+
   // 완료 상태
   completed: boolean
   stars: number // 0-3
@@ -136,7 +136,7 @@ export interface DungeonProgress {
   status: 'in_progress' | 'completed' | 'failed'
   startTime: Date
   endTime?: Date
-  
+
   // 진행 상황
   currentStage: number
   totalStages: number
@@ -144,18 +144,18 @@ export interface DungeonProgress {
   totalMonsters: number
   clearedStages: number
   isCleared: boolean
-  
+
   // 획득 보상
   earnedExp: number
   earnedGold: number
   earnedItems: DungeonItem[]
-  
+
   // 통계
   damageDealt: number
   damageTaken: number
   criticalHits: number
   skillsUsed: number
-  
+
   // 별점 계산 요소
   completionTime: number
   survivedWithFullHP: boolean
@@ -169,14 +169,14 @@ export interface DungeonClearRecord {
   completionTime: number
   stars: number
   difficulty: DungeonDifficulty
-  
+
   // 파티 정보
   party: {
     level: number
     combatPower: number
     equipment: string[]
   }
-  
+
   // 통계
   statistics: {
     damageDealt: number
@@ -184,7 +184,7 @@ export interface DungeonClearRecord {
     criticalHits: number
     perfectStages: number
   }
-  
+
   // 보상
   rewards: {
     gold: number
@@ -206,19 +206,19 @@ export interface DungeonStats {
   totalStagesCleared: number
   totalTimeSpent: number // 분
   averageStars: number
-  
+
   byType: Record<DungeonType, {
     cleared: number
     totalTime: number
     averageStars: number
   }>
-  
+
   byDifficulty: Record<DungeonDifficulty, {
     cleared: number
     totalTime: number
     averageStars: number
   }>
-  
+
   achievements: {
     perfectRuns: number // 3성 클리어
     speedRuns: number // 빠른 클리어
@@ -234,7 +234,7 @@ export interface InfiniteTowerProgress {
   totalMonstersDefeated: number
   totalTimeSpent: number // 초
   currentRunStartTime: number
-  
+
   // 층별 기록
   floorRecords: Map<number, {
     clearedAt: number
@@ -243,10 +243,10 @@ export interface InfiniteTowerProgress {
     damageDealt: number
     damageTaken: number
   }>
-  
+
   // 버프 상태
   activeBuffs: TowerBuff[]
-  
+
   // 통계
   stats: {
     totalRuns: number
@@ -274,7 +274,7 @@ export interface TowerMonsterModifier {
   defenseMultiplier: number
   speedMultiplier: number
   goldMultiplier: number
-  
+
   // 특수 능력
   specialAbilities: string[]
 }
@@ -284,13 +284,13 @@ export interface TowerFloorReward {
   gold: number
   items?: DungeonItem[]
   towerCurrency: number
-  
+
   // 특별 보상
   firstClearBonus?: {
     gold: number
     items: DungeonItem[]
   }
-  
+
   // 마일스톤 보상 (10층, 25층, 50층 등)
   milestoneReward?: {
     type: 'item' | 'currency' | 'buff'

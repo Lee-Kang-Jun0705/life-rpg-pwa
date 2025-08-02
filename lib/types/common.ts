@@ -77,7 +77,7 @@ export interface PaginatedResponse<T> {
   totalPages: number
 }
 
-export type AsyncState<T> = 
+export type AsyncState<T> =
   | { status: 'idle'; data?: undefined; error?: undefined }
   | { status: 'loading'; data?: undefined; error?: undefined }
   | { status: 'success'; data: T; error?: undefined }

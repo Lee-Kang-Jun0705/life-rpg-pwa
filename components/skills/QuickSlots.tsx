@@ -44,7 +44,7 @@ export function QuickSlots({
         <div className="grid grid-cols-5 gap-2">
           {slots.slice(0, 5).map((slot) => {
             const skill = slot.skillId ? skillManagementService.getSkill(slot.skillId) : null
-            
+
             return (
               <motion.div
                 key={slot.slot}
@@ -81,7 +81,7 @@ export function QuickSlots({
                     <Plus className="w-6 h-6 text-gray-600" />
                   )}
                 </div>
-                
+
                 {/* 슬롯 번호 */}
                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-xs text-gray-500">
                   {slot.slot}
@@ -95,7 +95,7 @@ export function QuickSlots({
         <div className="grid grid-cols-5 gap-2">
           {slots.slice(5, 10).map((slot) => {
             const skill = slot.skillId ? skillManagementService.getSkill(slot.skillId) : null
-            
+
             return (
               <motion.div
                 key={slot.slot}
@@ -131,7 +131,7 @@ export function QuickSlots({
                     <Plus className="w-6 h-6 text-gray-600" />
                   )}
                 </div>
-                
+
                 {/* 슬롯 번호 */}
                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-xs text-gray-500">
                   {slot.slot}

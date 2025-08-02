@@ -1,28 +1,28 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
 import 'fake-indexeddb/auto'
 import { db } from '../db'
-import { 
-  profileRepository, 
-  statRepository, 
+import {
+  profileRepository,
+  statRepository,
   feedPostRepository,
   feedCommentRepository,
-  feedReactionRepository 
+  feedReactionRepository
 } from '../repositories'
 
 // IndexedDB mock 환경에서 문제가 있으므로 스킵
 describe.skip('Repository Tests', () => {
-  beforeEach(async () => {
+  beforeEach(async() => {
     // Clear all data before each test
     await db.delete()
     await db.open()
   })
 
-  afterEach(async () => {
+  afterEach(async() => {
     await db.close()
   })
 
   describe('ProfileRepository', () => {
-    it('should create a new profile', async () => {
+    it('should create a new profile', async() => {
       const profileData = {
         userId: 'user123',
         email: 'test@example.com',
@@ -42,7 +42,7 @@ describe.skip('Repository Tests', () => {
       expect(profile?.updatedAt).toBeInstanceOf(Date)
     })
 
-    it('should find profile by userId', async () => {
+    it('should find profile by userId', async() => {
       const profileData = {
         userId: 'user456',
         email: 'user456@example.com',
@@ -51,12 +51,12 @@ describe.skip('Repository Tests', () => {
 
       await profileRepository.createProfile(profileData)
       const profile = await profileRepository.findByUserId('user456')
-      
+
       expect(profile).toBeDefined()
       expect(profile?.userId).toBe('user456')
     })
 
-    it('should find profile by email', async () => {
+    it('should find profile by email', async() => {
       const profileData = {
         userId: 'user789',
         email: 'unique@example.com',
@@ -65,12 +65,12 @@ describe.skip('Repository Tests', () => {
 
       await profileRepository.createProfile(profileData)
       const profile = await profileRepository.findByEmail('unique@example.com')
-      
+
       expect(profile).toBeDefined()
       expect(profile?.email).toBe('unique@example.com')
     })
 
-    it('should update profile by userId', async () => {
+    it('should update profile by userId', async() => {
       const profileData = {
         userId: 'updateUser',
         email: 'update@example.com',
@@ -78,43 +78,43 @@ describe.skip('Repository Tests', () => {
       }
 
       await profileRepository.createProfile(profileData)
-      
+
       const updated = await profileRepository.updateByUserId('updateUser', {
         displayName: 'Updated Name',
         bio: 'New bio'
       })
-      
+
       expect(updated).toBe(true)
-      
+
       const profile = await profileRepository.findByUserId('updateUser')
       expect(profile?.displayName).toBe('Updated Name')
       expect(profile?.bio).toBe('New bio')
     })
 
-    it('should get profile stats', async () => {
+    it('should get profile stats', async() => {
       const userId = 'statsUser'
-      
+
       // Create profile
       await profileRepository.createProfile({
         userId,
         email: 'stats@example.com',
         displayName: 'Stats User'
       })
-      
+
       // Create some activities
       await db.activities.bulkAdd([
         { userId, statType: 'health', experienceGained: 10, timestamp: new Date(), synced: false },
         { userId, statType: 'learning', experienceGained: 20, timestamp: new Date(), synced: false }
       ])
-      
+
       // Create some missions
       await db.missions.bulkAdd([
         { userId, type: 'daily', title: 'Mission 1', description: '', target: 5, progress: 5, completed: true },
         { userId, type: 'weekly', title: 'Mission 2', description: '', target: 10, progress: 3, completed: false }
       ])
-      
+
       const stats = await profileRepository.getProfileStats(userId)
-      
+
       expect(stats).toBeDefined()
       expect(stats?.totalActivities).toBe(2)
       expect(stats?.totalMissions).toBe(2)
@@ -125,19 +125,19 @@ describe.skip('Repository Tests', () => {
   describe('StatRepository', () => {
     const userId = 'testUser'
 
-    beforeEach(async () => {
+    beforeEach(async() => {
       // Create initial stats for user
       await statRepository.createInitialStats(userId)
     })
 
-    it('should create initial stats for all types', async () => {
+    it('should create initial stats for all types', async() => {
       const stats = await statRepository.findByUserId(userId)
-      
+
       expect(stats).toHaveLength(4)
       expect(stats.map(s => s.type).sort()).toEqual(
         ['achievement', 'health', 'learning', 'relationship']
       )
-      
+
       stats.forEach(stat => {
         expect(stat.level).toBe(1)
         expect(stat.experience).toBe(0)
@@ -145,33 +145,33 @@ describe.skip('Repository Tests', () => {
       })
     })
 
-    it('should find stat by userId and type', async () => {
+    it('should find stat by userId and type', async() => {
       const healthStat = await statRepository.findByUserIdAndType(userId, 'health')
-      
+
       expect(healthStat).toBeDefined()
       expect(healthStat?.type).toBe('health')
       expect(healthStat?.userId).toBe(userId)
     })
 
-    it('should increment experience and level correctly', async () => {
+    it('should increment experience and level correctly', async() => {
       const success = await statRepository.incrementExperience(userId, 'learning', 150)
-      
+
       expect(success).toBe(true)
-      
+
       const stat = await statRepository.findByUserIdAndType(userId, 'learning')
       expect(stat?.experience).toBe(150)
       expect(stat?.level).toBe(2) // 150 / 100 = 1.5, floor + 1 = 2
       expect(stat?.totalActivities).toBe(1)
     })
 
-    it('should calculate stats summary correctly', async () => {
+    it('should calculate stats summary correctly', async() => {
       // Add some experience to different stats
       await statRepository.incrementExperience(userId, 'health', 50)
       await statRepository.incrementExperience(userId, 'learning', 150)
       await statRepository.incrementExperience(userId, 'relationship', 75)
-      
+
       const summary = await statRepository.getStatsSummary(userId)
-      
+
       expect(summary.totalExperience).toBe(275) // 50 + 150 + 75
       expect(summary.totalLevel).toBe(5) // 1 + 2 + 1 + 1
       expect(summary.averageLevel).toBe(1.25) // 5 / 4
@@ -180,7 +180,7 @@ describe.skip('Repository Tests', () => {
   })
 
   describe('FeedPostRepository', () => {
-    it('should create a new post', async () => {
+    it('should create a new post', async() => {
       const postData = {
         userId: 'poster123',
         content: 'This is my first post!',
@@ -199,9 +199,9 @@ describe.skip('Repository Tests', () => {
       expect(post?.comments).toBe(0)
     })
 
-    it('should find posts by userId', async () => {
+    it('should find posts by userId', async() => {
       const userId = 'multiPoster'
-      
+
       // Create multiple posts
       for (let i = 0; i < 5; i++) {
         await feedPostRepository.createPost({
@@ -218,7 +218,7 @@ describe.skip('Repository Tests', () => {
       expect(posts[0].content).toBe('Post 4')
     })
 
-    it('should find recent posts', async () => {
+    it('should find recent posts', async() => {
       // Create posts with delays to ensure order
       for (let i = 0; i < 3; i++) {
         await feedPostRepository.createPost({
@@ -236,7 +236,7 @@ describe.skip('Repository Tests', () => {
       expect(recentPosts[0].content).toBe('Recent post 2')
     })
 
-    it('should increment likes and comments', async () => {
+    it('should increment likes and comments', async() => {
       const postId = await feedPostRepository.createPost({
         userId: 'likeUser',
         content: 'Like this post!',
@@ -257,7 +257,7 @@ describe.skip('Repository Tests', () => {
   describe('FeedCommentRepository', () => {
     let postId: number
 
-    beforeEach(async () => {
+    beforeEach(async() => {
       postId = await feedPostRepository.createPost({
         userId: 'postAuthor',
         content: 'Post for comments',
@@ -266,7 +266,7 @@ describe.skip('Repository Tests', () => {
       })
     })
 
-    it('should create a comment and increment post comment count', async () => {
+    it('should create a comment and increment post comment count', async() => {
       const commentId = await feedCommentRepository.createComment({
         postId,
         userId: 'commenter1',
@@ -284,14 +284,14 @@ describe.skip('Repository Tests', () => {
       expect(post?.comments).toBe(1)
     })
 
-    it('should find comments by postId', async () => {
+    it('should find comments by postId', async() => {
       // Create multiple comments
       await feedCommentRepository.createComment({
         postId,
         userId: 'user1',
         content: 'First comment'
       })
-      
+
       await feedCommentRepository.createComment({
         postId,
         userId: 'user2',
@@ -308,7 +308,7 @@ describe.skip('Repository Tests', () => {
   describe('FeedReactionRepository', () => {
     let postId: number
 
-    beforeEach(async () => {
+    beforeEach(async() => {
       postId = await feedPostRepository.createPost({
         userId: 'postAuthor',
         content: 'React to this!',
@@ -317,7 +317,7 @@ describe.skip('Repository Tests', () => {
       })
     })
 
-    it('should create a reaction', async () => {
+    it('should create a reaction', async() => {
       const reactionId = await feedReactionRepository.createReaction({
         postId,
         userId: 'reactor1',
@@ -330,7 +330,7 @@ describe.skip('Repository Tests', () => {
       expect(reaction?.type).toBe('want')
     })
 
-    it('should prevent duplicate reactions', async () => {
+    it('should prevent duplicate reactions', async() => {
       const reaction1 = await feedReactionRepository.createReaction({
         postId,
         userId: 'duplicateUser',
@@ -346,7 +346,7 @@ describe.skip('Repository Tests', () => {
       expect(reaction1).toBe(reaction2)
     })
 
-    it('should find reactions by postId', async () => {
+    it('should find reactions by postId', async() => {
       await feedReactionRepository.createReaction({
         postId,
         userId: 'user1',
@@ -363,9 +363,9 @@ describe.skip('Repository Tests', () => {
       expect(reactions).toHaveLength(2)
     })
 
-    it('should find reactions by user and post', async () => {
+    it('should find reactions by user and post', async() => {
       const userId = 'multiReactor'
-      
+
       await feedReactionRepository.createReaction({
         postId,
         userId,
@@ -382,9 +382,9 @@ describe.skip('Repository Tests', () => {
       expect(reactions).toHaveLength(2)
     })
 
-    it('should remove a reaction', async () => {
+    it('should remove a reaction', async() => {
       const userId = 'removeUser'
-      
+
       await feedReactionRepository.createReaction({
         postId,
         userId,
@@ -399,7 +399,7 @@ describe.skip('Repository Tests', () => {
   })
 
   describe('BaseRepository', () => {
-    it('should perform batch operations', async () => {
+    it('should perform batch operations', async() => {
       const profiles = [
         { userId: 'batch1', email: 'batch1@example.com', displayName: 'Batch 1' },
         { userId: 'batch2', email: 'batch2@example.com', displayName: 'Batch 2' },
@@ -420,7 +420,7 @@ describe.skip('Repository Tests', () => {
       expect(allProfiles.length).toBeGreaterThanOrEqual(3)
     })
 
-    it('should delete records', async () => {
+    it('should delete records', async() => {
       const id = await profileRepository.createProfile({
         userId: 'deleteMe',
         email: 'delete@example.com',
@@ -433,7 +433,7 @@ describe.skip('Repository Tests', () => {
       expect(profile).toBeUndefined()
     })
 
-    it('should count records', async () => {
+    it('should count records', async() => {
       const initialCount = await profileRepository.count()
 
       await profileRepository.createProfile({
@@ -446,7 +446,7 @@ describe.skip('Repository Tests', () => {
       expect(newCount).toBe(initialCount + 1)
     })
 
-    it('should check existence', async () => {
+    it('should check existence', async() => {
       const id = await profileRepository.createProfile({
         userId: 'existsUser',
         email: 'exists@example.com',
@@ -460,11 +460,11 @@ describe.skip('Repository Tests', () => {
       expect(notExists).toBe(false)
     })
 
-    it('should handle transactions', async () => {
+    it('should handle transactions', async() => {
       let error: Error | null = null
 
       try {
-        await profileRepository.transaction(async () => {
+        await profileRepository.transaction(async() => {
           await profileRepository.createProfile({
             userId: 'tx1',
             email: 'tx1@example.com',
@@ -483,7 +483,7 @@ describe.skip('Repository Tests', () => {
       }
 
       expect(error).toBeDefined()
-      
+
       // Transaction should have rolled back
       const profile = await profileRepository.findByUserId('tx1')
       expect(profile).toBeUndefined()

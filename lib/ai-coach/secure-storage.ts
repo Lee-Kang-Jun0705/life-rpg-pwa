@@ -18,7 +18,9 @@ class CryptoManager {
   }
 
   private async getOrCreateKey(): Promise<CryptoKey> {
-    if (this.cryptoKey) return this.cryptoKey
+    if (this.cryptoKey) {
+      return this.cryptoKey
+    }
 
     // 브라우저 환경 체크
     if (typeof window === 'undefined' || !window.crypto || !window.crypto.subtle) {
@@ -27,7 +29,7 @@ class CryptoManager {
 
     // localStorage에서 키 체크
     const storedKey = localStorage.getItem('life-rpg-crypto-key')
-    
+
     if (storedKey) {
       const keyData = JSON.parse(storedKey)
       const keyBuffer = this.base64ToArrayBuffer(keyData.key)
@@ -45,7 +47,7 @@ class CryptoManager {
         true,
         ['encrypt', 'decrypt']
       )
-      
+
       // 키 저장
       const exportedKey = await crypto.subtle.exportKey('raw', this.cryptoKey)
       const keyData = {
@@ -63,22 +65,22 @@ class CryptoManager {
       const key = await this.getOrCreateKey()
       const encoder = new TextEncoder()
       const data = encoder.encode(text)
-      
+
       // IV 생성
       const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH))
-      
+
       // 암호화
       const encrypted = await crypto.subtle.encrypt(
         { name: ALGORITHM, iv },
         key,
         data
       )
-      
+
       // IV와 암호화된 데이터를 결합
       const combined = new Uint8Array(iv.length + encrypted.byteLength)
       combined.set(iv, 0)
       combined.set(new Uint8Array(encrypted), iv.length)
-      
+
       return this.arrayBufferToBase64(combined.buffer)
     } catch (error) {
       console.error('Encryption error:', error)
@@ -91,18 +93,18 @@ class CryptoManager {
     try {
       const key = await this.getOrCreateKey()
       const combined = this.base64ToArrayBuffer(encryptedText)
-      
+
       // IV와 암호화된 데이터 분리
       const iv = combined.slice(0, IV_LENGTH)
       const encrypted = combined.slice(IV_LENGTH)
-      
+
       // 복호화
       const decrypted = await crypto.subtle.decrypt(
         { name: ALGORITHM, iv },
         key,
         encrypted
       )
-      
+
       const decoder = new TextDecoder()
       return decoder.decode(decrypted)
     } catch (error) {
@@ -149,7 +151,7 @@ export class SecureAIStorage {
     if (!db) {
       throw new Error('Database not initialized')
     }
-    
+
     const encrypted = {
       ...config,
       apiKey: await cryptoManager.encrypt(config.apiKey)
@@ -167,9 +169,11 @@ export class SecureAIStorage {
       if (!db) {
         return null
       }
-      
+
       const setting = await db.settings.where('key').equals('ai_config').first()
-      if (!setting?.value) return null
+      if (!setting?.value) {
+        return null
+      }
 
       const encrypted = JSON.parse(setting.value)
       return {
@@ -185,7 +189,7 @@ export class SecureAIStorage {
     if (!db) {
       throw new Error('Database not initialized')
     }
-    
+
     const setting = await db.settings.where('key').equals('ai_config').first()
     if (setting?.id) {
       await db.settings.delete(setting.id)

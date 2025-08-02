@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { TimeRestrictionService, type TimeActivityState, type TimeActivityStats } from './time-restriction-service'
 import type { StatType } from '@/lib/types/game-common'
 import { db } from '@/lib/database'
+import { STATS_CONFIG } from '@/lib/config/game-config'
 
 interface UseTimeRestrictionsReturn {
   timeState: TimeActivityState | null
@@ -24,7 +25,7 @@ export function useTimeRestrictions(userId: string, statType?: StatType): UseTim
     try {
       setIsLoading(true)
       setError(null)
-      
+
       const state = timeService.getCurrentTimeState(statType)
       setTimeState(state)
     } catch (err) {
@@ -34,20 +35,22 @@ export function useTimeRestrictions(userId: string, statType?: StatType): UseTim
     }
   }, [statType, timeService])
 
-  const getTimeStats = useCallback(async (): Promise<TimeActivityStats | null> => {
-    if (!userId) return null
+  const getTimeStats = useCallback(async(): Promise<TimeActivityStats | null> => {
+    if (!userId) {
+      return null
+    }
 
     try {
-      // 최근 30일 활동 데이터 가져오기
-      const thirtyDaysAgo = new Date()
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-      
+      // 최근 활동 데이터 가져오기
+      const activityHistoryDate = new Date()
+      activityHistoryDate.setDate(activityHistoryDate.getDate() - STATS_CONFIG.ACTIVITY_HISTORY_DAYS)
+
       const activities = await db.activities
         .where('userId')
         .equals(userId)
-        .and(activity => activity.timestamp >= thirtyDaysAgo)
+        .and(activity => activity.timestamp >= activityHistoryDate)
         .toArray()
-      
+
       const stats = await timeService.analyzeTimeActivityPatterns(userId, activities)
       return stats
     } catch (err) {

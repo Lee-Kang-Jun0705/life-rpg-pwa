@@ -29,7 +29,7 @@ export class BackupManager {
   static async createBackup(password?: string): Promise<string> {
     try {
       const db = await waitForDatabase()
-      
+
       const backup: BackupData = {
         metadata: {
           version: this.BACKUP_VERSION,
@@ -65,9 +65,9 @@ export class BackupManager {
   static async restoreBackup(backupData: string, password?: string): Promise<void> {
     try {
       const db = await waitForDatabase()
-      
+
       let backup: BackupData
-      
+
       // 암호화된 경우 복호화
       if (password) {
         const decrypted = await CryptoUtil.decryptObject<BackupData>(backupData, password)
@@ -100,12 +100,24 @@ export class BackupManager {
       await db.investments.clear()
 
       // 백업 데이터 복원
-      if (backup.profiles?.length) await db.profiles.bulkAdd(backup.profiles)
-      if (backup.stats?.length) await db.stats.bulkAdd(backup.stats)
-      if (backup.activities?.length) await db.activities.bulkAdd(backup.activities)
-      if (backup.characters?.length) await db.characters.bulkAdd(backup.characters)
-      if (backup.missions?.length) await db.missions.bulkAdd(backup.missions)
-      if (backup.investments?.length) await db.investments.bulkAdd(backup.investments)
+      if (backup.profiles?.length) {
+        await db.profiles.bulkAdd(backup.profiles)
+      }
+      if (backup.stats?.length) {
+        await db.stats.bulkAdd(backup.stats)
+      }
+      if (backup.activities?.length) {
+        await db.activities.bulkAdd(backup.activities)
+      }
+      if (backup.characters?.length) {
+        await db.characters.bulkAdd(backup.characters)
+      }
+      if (backup.missions?.length) {
+        await db.missions.bulkAdd(backup.missions)
+      }
+      if (backup.investments?.length) {
+        await db.investments.bulkAdd(backup.investments)
+      }
 
       console.log('백업 복원 완료')
     } catch (error) {
@@ -184,7 +196,9 @@ export class BackupManager {
    */
   private static async getDeviceId(): Promise<string> {
     const stored = localStorage.getItem('device-id')
-    if (stored) return stored
+    if (stored) {
+      return stored
+    }
 
     const newId = IdGenerators.device()
     localStorage.setItem('device-id', newId)
@@ -202,7 +216,7 @@ export class BackupManager {
         checksum: undefined
       }
     }
-    
+
     const str = JSON.stringify(dataForChecksum)
     const msgUint8 = new TextEncoder().encode(str)
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8)

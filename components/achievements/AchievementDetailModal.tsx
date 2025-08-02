@@ -14,7 +14,7 @@ interface AchievementDetailModalProps {
 
 const difficultyColors = {
   easy: 'from-orange-400 to-orange-600',
-  normal: 'from-gray-400 to-gray-600', 
+  normal: 'from-gray-400 to-gray-600',
   hard: 'from-yellow-400 to-yellow-600',
   expert: 'from-cyan-400 to-cyan-600',
   legendary: 'from-purple-400 to-purple-600'
@@ -93,7 +93,7 @@ export function AchievementDetailModal({ achievement, progress, onClose }: Achie
                 <Target className="w-4 h-4 text-blue-500" />
                 진행도
               </h3>
-              
+
               <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-600 dark:text-gray-400">현재 진행</span>
@@ -101,7 +101,7 @@ export function AchievementDetailModal({ achievement, progress, onClose }: Achie
                     {isUnlocked ? '완료!' : `${progress.current} / ${progress.target}`}
                   </span>
                 </div>
-                
+
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden mb-2">
                   <motion.div
                     className={`h-full rounded-full bg-gradient-to-r ${difficultyColors[achievement.difficulty]}`}
@@ -110,7 +110,7 @@ export function AchievementDetailModal({ achievement, progress, onClose }: Achie
                     transition={{ duration: 0.8 }}
                   />
                 </div>
-                
+
                 <div className="text-center text-sm text-gray-600 dark:text-gray-400">
                   {Math.floor(progress.percentage)}% 완료
                 </div>
@@ -155,7 +155,7 @@ export function AchievementDetailModal({ achievement, progress, onClose }: Achie
                 <Gift className="w-4 h-4 text-purple-500" />
                 보상
               </h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {achievement.rewards.exp && (
                   <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
@@ -168,7 +168,7 @@ export function AchievementDetailModal({ achievement, progress, onClose }: Achie
                     </div>
                   </div>
                 )}
-                
+
                 {achievement.rewards.gold && (
                   <div className="flex items-center gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
                     <div className="p-2 bg-yellow-500 rounded-lg">
@@ -180,7 +180,7 @@ export function AchievementDetailModal({ achievement, progress, onClose }: Achie
                     </div>
                   </div>
                 )}
-                
+
                 {achievement.rewards.title && (
                   <div className="flex items-center gap-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                     <div className="p-2 bg-purple-500 rounded-lg">
@@ -192,7 +192,7 @@ export function AchievementDetailModal({ achievement, progress, onClose }: Achie
                     </div>
                   </div>
                 )}
-                
+
                 {achievement.rewards.items && achievement.rewards.items.length > 0 && (
                   <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <div className="p-2 bg-green-500 rounded-lg">
@@ -206,7 +206,7 @@ export function AchievementDetailModal({ achievement, progress, onClose }: Achie
                     </div>
                   </div>
                 )}
-                
+
                 {achievement.rewards.stat && (
                   <div className="flex items-center gap-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
                     <div className="p-2 bg-red-500 rounded-lg">

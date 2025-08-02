@@ -13,7 +13,7 @@ export const LoadingState = React.memo(function LoadingState() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4" />
         <p className="text-lg font-semibold">⚔️ 모험 준비 중... ⚔️</p>
         <p className="text-sm text-gray-600 mt-2">데이터를 불러오고 있습니다...</p>
       </div>

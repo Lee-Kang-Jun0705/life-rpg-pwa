@@ -9,36 +9,36 @@ interface LevelUpData {
 }
 
 export function useLevelUpDetection(stats: Stat[]) {
-  const [levelUpData, setLevelUpData] = useState<LevelUpData>({ 
-    show: false, 
+  const [levelUpData, setLevelUpData] = useState<LevelUpData>({
+    show: false,
     level: 1,
     statType: ''
   })
   const { toast } = useToast()
 
   const detectLevelUp = useCallback((
-    statType: string, 
+    statType: string,
     beforeAction: () => Promise<void>
   ) => {
-    return async () => {
+    return async() => {
       const currentStat = stats.find(s => s.type === statType)
       const currentLevel = currentStat?.level || 1
-      
+
       // 원래 액션 실행
       await beforeAction()
-      
+
       // 레벨업 체크 (100 EXP마다 레벨업)
       setTimeout(() => {
         const updatedStat = stats.find(s => s.type === statType)
         const newLevel = updatedStat?.level || 1
-        
+
         if (newLevel > currentLevel) {
           setLevelUpData({
             show: true,
             level: newLevel,
             statType
           })
-          
+
           // Toast 알림
           const statNames = {
             health: '건강',
@@ -46,11 +46,11 @@ export function useLevelUpDetection(stats: Stat[]) {
             relationship: '관계',
             achievement: '성취'
           }
-          
+
           toast(toastHelpers.success(
             '레벨 업!',
             `${statNames[statType as keyof typeof statNames] || statType} 레벨이 ${newLevel}로 상승했습니다!`,
-            { 
+            {
               duration: 5000,
               action: {
                 label: '상세 보기',

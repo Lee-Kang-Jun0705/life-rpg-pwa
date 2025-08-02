@@ -123,7 +123,7 @@ describe('StatCard', () => {
 
     const button = screen.getByRole('button')
     expect(button).toBeDisabled()
-    
+
     fireEvent.click(button)
     expect(mockOnClick).not.toHaveBeenCalled()
   })

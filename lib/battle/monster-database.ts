@@ -1,14 +1,14 @@
-import type { 
-  MonsterData, 
-  MonsterTier, 
-  CharacterStats, 
-  BattleSkill 
+import type {
+  MonsterData,
+  MonsterTier,
+  CharacterStats,
+  BattleSkill
 } from '@/lib/types/battle-extended'
 
 // 기본 몬스터 스탯 계산
 function createMonsterStats(
-  _level: number,
-  _tier: MonsterTier,
+  level: number,
+  tier: MonsterTier,
   statModifiers?: Partial<CharacterStats>
 ): CharacterStats {
   const tierMultiplier = {
@@ -19,7 +19,7 @@ function createMonsterStats(
   }
 
   const mult = tierMultiplier[tier]
-  
+
   return {
     level,
     hp: Math.floor((100 + level * 20) * mult),
@@ -159,7 +159,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     weaknesses: ['fire'],
     resistances: ['water']
   },
-  
+
   slime_blue: {
     id: 'slime_blue',
     name: '파란 슬라임',
@@ -179,7 +179,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     weaknesses: ['electric'],
     resistances: ['fire']
   },
-  
+
   mushroom_red: {
     id: 'mushroom_red',
     name: '붉은 버섯',
@@ -224,7 +224,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     weaknesses: ['fire'],
     resistances: ['earth']
   },
-  
+
   goblin_scout: {
     id: 'goblin_scout',
     name: '고블린 정찰병',
@@ -247,7 +247,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
       }
     ]
   },
-  
+
   wolf_gray: {
     id: 'wolf_gray',
     name: '회색 늑대',
@@ -271,7 +271,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
       }
     ]
   },
-  
+
   bat_cave: {
     id: 'bat_cave',
     name: '동굴 박쥐',
@@ -315,7 +315,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     weaknesses: ['light'],
     resistances: ['dark']
   },
-  
+
   // === 중급 몬스터 (레벨 10-20) ===
   orc_warrior: {
     id: 'orc_warrior',
@@ -340,7 +340,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
       }
     ]
   },
-  
+
   skeleton_warrior: {
     id: 'skeleton_warrior',
     name: '스켈레톤 전사',
@@ -383,7 +383,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     resistances: ['dark', 'poison'],
     weaknesses: ['light', 'fire']
   },
-  
+
   harpy: {
     id: 'harpy',
     name: '하피',
@@ -418,7 +418,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     weaknesses: ['electric'],
     resistances: ['earth']
   },
-  
+
   // === 엘리트 몬스터 ===
   goblin_chief: {
     id: 'goblin_chief',
@@ -470,7 +470,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
       }
     ]
   },
-  
+
   dark_mage: {
     id: 'dark_mage',
     name: '어둠의 마법사',
@@ -512,9 +512,9 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
           id: 'curse',
           name: '저주',
           type: 'debuff',
-          stats: { 
-            attack: -20, 
-            defense: -20, 
+          stats: {
+            attack: -20,
+            defense: -20,
             speed: -10,
             accuracy: -20
           },
@@ -528,7 +528,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     weaknesses: ['light'],
     resistances: ['dark']
   },
-  
+
   // === 보스 몬스터 ===
   dragon_red: {
     id: 'dragon_red',
@@ -596,7 +596,7 @@ export const MONSTER_DATABASE: { [id: string]: MonsterData } = {
     weaknesses: ['ice', 'water'],
     resistances: ['fire']
   },
-  
+
   lich_king: {
     id: 'lich_king',
     name: '리치 킹',
@@ -676,8 +676,8 @@ export function getMonsterById(id: string): MonsterData | undefined {
 }
 
 // 티어별 몬스터 목록
-export function getMonstersByTier(_tier: MonsterTier): MonsterData[] {
-  return Object.values(MONSTER_DATABASE).filter(m => m.tier === tier)
+export function getMonstersByTier(tier: MonsterTier): MonsterData[] {
+  return Object.values(MONSTER_DATABASE).filter(m => m._tier === tier)
 }
 
 // 레벨 범위로 몬스터 목록
@@ -694,18 +694,18 @@ export function getRandomMonster(options?: {
   maxLevel?: number
 }): MonsterData {
   let monsters = Object.values(MONSTER_DATABASE)
-  
+
   if (options?.tier) {
-    monsters = monsters.filter(m => m.tier === options.tier)
+    monsters = monsters.filter(m => m._tier === options.tier)
   }
-  
+
   if (options?.minLevel !== undefined) {
     monsters = monsters.filter(m => m.stats.level >= options.minLevel!)
   }
-  
+
   if (options?.maxLevel !== undefined) {
     monsters = monsters.filter(m => m.stats.level <= options.maxLevel!)
   }
-  
+
   return monsters[Math.floor(Math.random() * monsters.length)]
 }

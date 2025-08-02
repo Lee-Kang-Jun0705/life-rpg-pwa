@@ -1,4 +1,4 @@
-export type NotificationType = 
+export type NotificationType =
   | 'activity_reminder'
   | 'level_up'
   | 'dungeon_reset'

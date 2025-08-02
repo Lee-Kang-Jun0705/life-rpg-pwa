@@ -1,7 +1,7 @@
 // 확장된 전투 시스템 타입
 // 기존 battle.ts를 확장하여 더 상세한 전투 메커니즘 구현
 
-import type { 
+import type {
   CharacterStats as BaseCharacterStats,
   BattleSkill as BaseBattleSkill,
   StatusEffect as BaseStatusEffect,
@@ -23,7 +23,7 @@ export interface CharacterStats extends BaseCharacterStats {
 }
 
 // 속성 타입
-export type ElementType = 
+export type ElementType =
   | 'neutral'
   | 'fire'
   | 'water'
@@ -182,4 +182,4 @@ export const BATTLE_CONSTANTS = {
   COMBO_DAMAGE_BONUS: 0.1,
   MAX_COMBO_COUNT: 10,
   TURN_LIMIT: 100
-} as const;
+} as const

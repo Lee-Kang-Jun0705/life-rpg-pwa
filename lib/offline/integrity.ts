@@ -33,11 +33,11 @@ export class DataIntegrityValidator {
 
     try {
       const db = await waitForDatabase()
-      
+
       // 각 테이블 검증
       report.details.profiles = await this.validateProfiles()
       report.details.stats = await this.validateStats()
-      
+
       // 전체 통계 집계
       for (const tableName in report.details) {
         const validation = report.details[tableName]
@@ -76,9 +76,15 @@ export class DataIntegrityValidator {
         result.warnings.push('No profile found for default user')
       } else {
         // 기본 검증
-        if (!profile.userId) result.errors.push('Profile missing userId')
-        if (!profile.email) result.errors.push('Profile missing email')
-        if (!profile.name) result.errors.push('Profile missing name')
+        if (!profile.userId) {
+          result.errors.push('Profile missing userId')
+        }
+        if (!profile.email) {
+          result.errors.push('Profile missing email')
+        }
+        if (!profile.name) {
+          result.errors.push('Profile missing name')
+        }
       }
     } catch (error) {
       result.errors.push('Failed to validate profiles: ' + error)
@@ -100,11 +106,11 @@ export class DataIntegrityValidator {
 
     try {
       const stats = await dbHelpers.getStats('default-user')
-      
+
       // 스탯 타입 체크
       const expectedTypes = ['health', 'learning', 'relationship', 'achievement']
       const foundTypes = stats.map(s => s.type)
-      
+
       for (const expectedType of expectedTypes) {
         if (!foundTypes.includes(expectedType as typeof foundTypes[number])) {
           result.warnings.push(`Missing stat type: ${expectedType}`)
@@ -119,8 +125,12 @@ export class DataIntegrityValidator {
 
       // 데이터 검증
       for (const stat of stats) {
-        if (stat.level < 1) result.errors.push(`Invalid level for ${stat.type}: ${stat.level}`)
-        if (stat.experience < 0) result.errors.push(`Invalid experience for ${stat.type}: ${stat.experience}`)
+        if (stat.level < 1) {
+          result.errors.push(`Invalid level for ${stat.type}: ${stat.level}`)
+        }
+        if (stat.experience < 0) {
+          result.errors.push(`Invalid experience for ${stat.type}: ${stat.experience}`)
+        }
       }
     } catch (error) {
       result.errors.push('Failed to validate stats: ' + error)
@@ -136,7 +146,7 @@ export class DataIntegrityValidator {
   static async getTotalRecordCount(): Promise<number> {
     try {
       const db = await waitForDatabase()
-      
+
       const counts = await Promise.all([
         db.profiles.count(),
         db.stats.count(),

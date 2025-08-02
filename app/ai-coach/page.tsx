@@ -19,7 +19,7 @@ const ActivityAnalysisTab = lazy(() => import('@/components/ai-coach/ActivityAna
 const TabLoading = () => (
   <div className="flex items-center justify-center py-20">
     <div className="text-center">
-      <div className="animate-spin w-8 h-8 border-4 border-candy-blue border-t-transparent rounded-full mx-auto mb-4"></div>
+      <div className="animate-spin w-8 h-8 border-4 border-candy-blue border-t-transparent rounded-full mx-auto mb-4" />
       <p className="text-gray-600 dark:text-gray-400">로딩 중...</p>
     </div>
   </div>
@@ -96,7 +96,7 @@ export default function AICoachPage() {
           </div>
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+              <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
               <p className="text-gray-600 dark:text-gray-400">AI 코치가 데이터를 분석 중입니다...</p>
             </div>
           </div>
@@ -135,7 +135,7 @@ export default function AICoachPage() {
             />
           </Suspense>
         </SectionErrorBoundary>
-        
+
         <SectionErrorBoundary sectionName="채팅 탭">
           <Suspense fallback={<TabLoading />}>
             <ChatTab
@@ -146,7 +146,7 @@ export default function AICoachPage() {
             />
           </Suspense>
         </SectionErrorBoundary>
-        
+
         <SectionErrorBoundary sectionName="분석 탭">
           <Suspense fallback={<TabLoading />}>
             <AnalysisTab
@@ -155,7 +155,7 @@ export default function AICoachPage() {
             />
           </Suspense>
         </SectionErrorBoundary>
-        
+
         <SectionErrorBoundary sectionName="활동 분석 탭">
           <Suspense fallback={<TabLoading />}>
             <ActivityAnalysisTab
@@ -163,7 +163,7 @@ export default function AICoachPage() {
             />
           </Suspense>
         </SectionErrorBoundary>
-        
+
         <SectionErrorBoundary sectionName="성장 탭">
           <Suspense fallback={<TabLoading />}>
             <GrowthTab
@@ -172,14 +172,14 @@ export default function AICoachPage() {
             />
           </Suspense>
         </SectionErrorBoundary>
-        
+
         <SectionErrorBoundary sectionName="조언 탭">
           <Suspense fallback={<TabLoading />}>
             <AdviceTab personalizedAdvice={personalizedAdvice} />
           </Suspense>
         </SectionErrorBoundary>
       </TabLayout>
-      
+
       {/* 플로팅 AI 어시스턴트 */}
       <FloatingAssistant onQuickAction={handleQuickAction} />
     </>

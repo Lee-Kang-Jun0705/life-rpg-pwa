@@ -3,9 +3,9 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import type { Skill, LearnedSkill } from '@/lib/types/skill-system'
-import { 
-  Zap, 
-  Clock, 
+import {
+  Zap,
+  Clock,
   Target,
   TrendingUp,
   Shield,
@@ -34,8 +34,8 @@ export function SkillDetail({
   onUpgrade,
   onAssignToSlot
 }: SkillDetailProps) {
-  const mpCost = typeof skill.mpCost === 'number' 
-    ? skill.mpCost 
+  const mpCost = typeof skill.mpCost === 'number'
+    ? skill.mpCost
     : skill.mpCost.base + skill.mpCost.perLevel * ((learnedSkill?.level || 1) - 1)
 
   const getEffectIcon = (effectType: string) => {
@@ -89,18 +89,18 @@ export function SkillDetail({
             <span className={`
               px-3 py-1 rounded text-sm
               ${skill.category === 'attack' ? 'bg-red-600' :
-                skill.category === 'defense' ? 'bg-blue-600' :
-                skill.category === 'support' ? 'bg-green-600' :
-                'bg-purple-600'
-              }
+      skill.category === 'defense' ? 'bg-blue-600' :
+        skill.category === 'support' ? 'bg-green-600' :
+          'bg-purple-600'
+    }
             `}>
               {skill.category}
             </span>
             <span className="text-sm text-gray-500">
               {skill.type === 'active' ? '액티브' :
-               skill.type === 'passive' ? '패시브' :
-               skill.type === 'toggle' ? '토글' :
-               '콤보'}
+                skill.type === 'passive' ? '패시브' :
+                  skill.type === 'toggle' ? '토글' :
+                    '콤보'}
             </span>
           </div>
         </div>
@@ -114,7 +114,7 @@ export function SkillDetail({
             {learnedSkill ? `Lv.${learnedSkill.level} / ${skill.maxLevel}` : `최대 Lv.${skill.maxLevel}`}
           </span>
         </div>
-        
+
         {/* 레벨 진행도 */}
         <div className="flex gap-1">
           {Array.from({ length: skill.maxLevel }).map((_, i) => (
@@ -122,10 +122,10 @@ export function SkillDetail({
               key={i}
               className={`
                 flex-1 h-2 rounded
-                ${i < (learnedSkill?.level || 0) 
-                  ? 'bg-purple-500' 
-                  : 'bg-gray-600'
-                }
+                ${i < (learnedSkill?.level || 0)
+              ? 'bg-purple-500'
+              : 'bg-gray-600'
+            }
               `}
             />
           ))}
@@ -139,10 +139,10 @@ export function SkillDetail({
               <span>{learnedSkill.experience} / {learnedSkill.level * 100 * (learnedSkill.level + 1)}</span>
             </div>
             <div className="w-full bg-gray-600 rounded-full h-1">
-              <div 
+              <div
                 className="bg-purple-400 h-1 rounded-full"
-                style={{ 
-                  width: `${(learnedSkill.experience / (learnedSkill.level * 100 * (learnedSkill.level + 1))) * 100}%` 
+                style={{
+                  width: `${(learnedSkill.experience / (learnedSkill.level * 100 * (learnedSkill.level + 1))) * 100}%`
                 }}
               />
             </div>
@@ -276,9 +276,9 @@ export function SkillDetail({
               w-full py-3 rounded-lg font-semibold transition-colors
               flex items-center justify-center gap-2
               ${canLearn
-                ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                : 'bg-gray-700 text-gray-500 cursor-not-allowed'
-              }
+            ? 'bg-purple-600 hover:bg-purple-700 text-white'
+            : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+          }
             `}
             data-testid="learn-skill-detail-btn"
           >
@@ -293,9 +293,9 @@ export function SkillDetail({
               w-full py-3 rounded-lg font-semibold transition-colors
               flex items-center justify-center gap-2
               ${canUpgrade
-                ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                : 'bg-gray-700 text-gray-500 cursor-not-allowed'
-              }
+            ? 'bg-purple-600 hover:bg-purple-700 text-white'
+            : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+          }
             `}
             data-testid="upgrade-skill-detail-btn"
           >
@@ -314,9 +314,9 @@ export function SkillDetail({
                 className={`
                   py-2 rounded text-sm transition-colors
                   ${learnedSkill.slot === i + 1
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-                  }
+                ? 'bg-purple-600 text-white'
+                : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+              }
                 `}
                 data-testid={`assign-slot-${i + 1}`}
               >

@@ -119,11 +119,11 @@ export interface Character {
 }
 
 // 플레이어 데이터 타입들
-export type PlayerDataValue = 
-  | string 
-  | number 
-  | boolean 
-  | Date 
+export type PlayerDataValue =
+  | string
+  | number
+  | boolean
+  | Date
   | { [key: string]: PlayerDataValue }
   | PlayerDataValue[]
 

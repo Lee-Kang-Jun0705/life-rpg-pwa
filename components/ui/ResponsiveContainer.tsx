@@ -18,11 +18,11 @@ const breakpoints = {
   '2xl': 1536
 }
 
-export function ResponsiveContainer({ 
-  children, 
-  className = '', 
+export function ResponsiveContainer({
+  children,
+  className = '',
   breakpoint = 'md',
-  fallback 
+  fallback
 }: ResponsiveContainerProps) {
   const [isMobile, setIsMobile] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -36,7 +36,7 @@ export function ResponsiveContainer({
 
     checkScreenSize()
     window.addEventListener('resize', checkScreenSize)
-    
+
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [breakpoint])
 
@@ -65,7 +65,7 @@ export function useScreenSize() {
     const updateScreenSize = () => {
       const width = window.innerWidth
       const height = window.innerHeight
-      
+
       setScreenSize({
         width,
         height,
@@ -77,7 +77,7 @@ export function useScreenSize() {
 
     updateScreenSize()
     window.addEventListener('resize', updateScreenSize)
-    
+
     return () => window.removeEventListener('resize', updateScreenSize)
   }, [])
 
@@ -95,7 +95,7 @@ export function useIsMobile() {
 
     checkMobile()
     window.addEventListener('resize', checkMobile)
-    
+
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
@@ -109,7 +109,7 @@ export function useDeviceType() {
   useEffect(() => {
     const updateDeviceType = () => {
       const width = window.innerWidth
-      
+
       if (width < 768) {
         setDeviceType('mobile')
       } else if (width < 1024) {
@@ -121,7 +121,7 @@ export function useDeviceType() {
 
     updateDeviceType()
     window.addEventListener('resize', updateDeviceType)
-    
+
     return () => window.removeEventListener('resize', updateDeviceType)
   }, [])
 
@@ -151,7 +151,7 @@ export function useSafeArea() {
   useEffect(() => {
     const updateSafeArea = () => {
       const computedStyle = getComputedStyle(document.documentElement)
-      
+
       setSafeArea({
         top: parseInt(computedStyle.getPropertyValue('env(safe-area-inset-top)')) || 0,
         bottom: parseInt(computedStyle.getPropertyValue('env(safe-area-inset-bottom)')) || 0,
@@ -162,7 +162,7 @@ export function useSafeArea() {
 
     updateSafeArea()
     window.addEventListener('orientationchange', updateSafeArea)
-    
+
     return () => window.removeEventListener('orientationchange', updateSafeArea)
   }, [])
 
@@ -180,7 +180,7 @@ export function useDynamicViewportHeight() {
     updateVH()
     window.addEventListener('resize', updateVH)
     window.addEventListener('orientationchange', updateVH)
-    
+
     return () => {
       window.removeEventListener('resize', updateVH)
       window.removeEventListener('orientationchange', updateVH)

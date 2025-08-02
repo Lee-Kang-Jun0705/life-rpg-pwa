@@ -11,24 +11,24 @@ interface StatActionCardProps {
   onAction: (statType: string, action: string) => void
 }
 
-export const StatActionCard = React.memo(function StatActionCard({ 
-  statType, 
-  stat, 
-  isProcessing, 
-  onAction 
+export const StatActionCard = React.memo(function StatActionCard({
+  statType,
+  stat,
+  isProcessing,
+  onAction
 }: StatActionCardProps) {
   const levelDetails = calculateLevelDetails(stat?.experience || 0)
   const progress = calculateProgress(stat?.experience || 0)
   const [showModal, setShowModal] = useState(false)
   const [isPressed, setIsPressed] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
-  
+
   // 그라데이션 클래스 매핑
   const gradientClasses: Record<string, GradientClass> = {
     health: 'gradient-health',
     learning: 'gradient-learning',
     relationship: 'gradient-relationship',
-    achievement: 'gradient-achievement',
+    achievement: 'gradient-achievement'
   } as const
 
   const handleClick = useCallback(() => {
@@ -39,7 +39,7 @@ export const StatActionCard = React.memo(function StatActionCard({
 
   const handleAction = useCallback((action: string) => {
     onAction(statType.type, action)
-    
+
     // 시각적 피드백
     if (cardRef.current) {
       cardRef.current.classList.add('animate-rubber-band')
@@ -51,7 +51,7 @@ export const StatActionCard = React.memo(function StatActionCard({
 
   return (
     <>
-      <div 
+      <div
         ref={cardRef}
         data-testid="stat-card"
         className={`relative group touch-none select-none transition-transform duration-200 ${isPressed ? 'scale-95' : ''}`}
@@ -74,17 +74,17 @@ export const StatActionCard = React.memo(function StatActionCard({
               <div className="absolute top-2 right-2 md:top-4 md:right-4 text-6xl md:text-8xl rotate-12">✨</div>
               <div className="absolute bottom-2 left-2 md:bottom-4 md:left-4 text-5xl md:text-6xl -rotate-12">⭐</div>
             </div>
-            
-            
+
+
             <div className="relative z-10 flex flex-col items-center justify-center">
               <div className="text-5xl md:text-8xl mb-1 md:mb-3 animate-float">{statType.emoji}</div>
               <div className="text-lg md:text-2xl font-black text-white drop-shadow-lg mb-0.5 md:mb-1">{statType.name}</div>
               <div className="text-xl md:text-3xl font-black text-white drop-shadow-lg">Lv.{levelDetails.level}</div>
               <div className="text-xs md:text-base text-white/90">{levelDetails.currentLevelExp}/{levelDetails.nextLevelExp} EXP</div>
-              
+
               {/* 진행도 바 */}
               <div className="w-full max-w-[120px] md:max-w-[140px] bg-white/20 backdrop-blur-sm rounded-full h-3 md:h-4 mt-2 md:mt-4 overflow-hidden">
-                <div 
+                <div
                   className="bg-white rounded-full h-full transition-all duration-500 relative overflow-hidden"
                   style={{ width: `${progress}%` }}
                 >
@@ -94,7 +94,7 @@ export const StatActionCard = React.memo(function StatActionCard({
             </div>
           </Button>
         </div>
-        
+
         {/* 클릭 힌트 (모바일에서는 보이지 않음) */}
         <div className="absolute inset-0 pointer-events-none hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
           <div className="bg-black/70 text-white text-sm px-3 py-1 rounded-full">

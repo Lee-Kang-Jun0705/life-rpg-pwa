@@ -12,10 +12,10 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-export function ThemeProvider({ 
+export function ThemeProvider({
   children,
   defaultTheme = 'system'
-}: { 
+}: {
   children: React.ReactNode
   defaultTheme?: Theme
 }) {
@@ -32,15 +32,15 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = window.document.documentElement
-    
+
     // 기존 테마 클래스 제거
     root.classList.remove('light', 'dark')
 
     let currentTheme: 'light' | 'dark'
 
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches 
-        ? 'dark' 
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
         : 'light'
       currentTheme = systemTheme
     } else {
@@ -63,10 +63,12 @@ export function ThemeProvider({
 
   // 시스템 테마 변경 감지
   useEffect(() => {
-    if (theme !== 'system') return
+    if (theme !== 'system') {
+      return
+    }
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    
+
     const handleChange = () => {
       const systemTheme = mediaQuery.matches ? 'dark' : 'light'
       const root = window.document.documentElement

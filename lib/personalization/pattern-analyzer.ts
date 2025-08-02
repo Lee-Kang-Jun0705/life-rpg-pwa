@@ -1,10 +1,10 @@
 import { db } from '../database'
-import { 
-  LightModeData, 
-  ProModeData, 
-  LightPatterns, 
+import {
+  LightModeData,
+  ProModeData,
+  LightPatterns,
   ProPatterns,
-  PersonalizationMode 
+  PersonalizationMode
 } from './types'
 import { Activity } from '../types'
 
@@ -28,7 +28,7 @@ export class ModeAwarePatternAnalyzer {
     mode: PersonalizationMode
   ): Promise<LightPatterns | ProPatterns> {
     const activities = await this.getRecentActivities(userId, mode)
-    
+
     if (mode === 'light') {
       return this.analyzeLightMode(activities as LightModeData[])
     } else {
@@ -79,7 +79,7 @@ export class ModeAwarePatternAnalyzer {
   private analyzeProMode(data: ProModeData[]): ProPatterns {
     // 먼저 라이트 모드 분석 수행
     const lightPatterns = this.analyzeLightMode(data)
-    
+
     if (data.length === 0) {
       return this.getEmptyProPatterns(lightPatterns)
     }
@@ -131,22 +131,24 @@ export class ModeAwarePatternAnalyzer {
    * 기본 분석 메서드들
    */
   private calculateDailyAverage(data: LightModeData[]): number {
-    if (data.length === 0) return 0
-    
+    if (data.length === 0) {
+      return 0
+    }
+
     const days = new Set(
       data.map(d => new Date(d.timestamp).toDateString())
     ).size
-    
+
     return Math.round((data.length / days) * 10) / 10
   }
 
   private getTopActivities(data: LightModeData[], limit: number): string[] {
     const counts: Record<string, number> = {}
-    
+
     data.forEach(d => {
       counts[d.type] = (counts[d.type] || 0) + 1
     })
-    
+
     return Object.entries(counts)
       .sort(([,a], [,b]) => b - a)
       .slice(0, limit)
@@ -155,25 +157,33 @@ export class ModeAwarePatternAnalyzer {
 
   private findBestTimeSlot(data: LightModeData[]): string {
     const hourCounts: Record<number, number> = {}
-    
+
     data.forEach(d => {
       const hour = d.context.hour
       hourCounts[hour] = (hourCounts[hour] || 0) + 1
     })
-    
+
     const bestHour = Object.entries(hourCounts)
       .sort(([,a], [,b]) => b - a)[0]?.[0] || '9'
-    
+
     const hour = parseInt(bestHour)
-    if (hour >= 5 && hour < 12) return '아침'
-    if (hour >= 12 && hour < 17) return '오후'
-    if (hour >= 17 && hour < 22) return '저녁'
+    if (hour >= 5 && hour < 12) {
+      return '아침'
+    }
+    if (hour >= 12 && hour < 17) {
+      return '오후'
+    }
+    if (hour >= 17 && hour < 22) {
+      return '저녁'
+    }
     return '밤'
   }
 
   private calculateCompletionRate(data: LightModeData[]): number {
-    if (data.length === 0) return 0
-    
+    if (data.length === 0) {
+      return 0
+    }
+
     const completed = data.filter(d => d.completed).length
     return Math.round((completed / data.length) * 100)
   }
@@ -184,26 +194,28 @@ export class ModeAwarePatternAnalyzer {
   }
 
   private isWeekendWarrior(data: LightModeData[]): boolean {
-    const weekendActivities = data.filter(d => 
+    const weekendActivities = data.filter(d =>
       d.context.dayOfWeek === 0 || d.context.dayOfWeek === 6
     )
     return weekendActivities.length > data.length * 0.4
   }
 
   private calculateConsistency(data: LightModeData[]): number {
-    if (data.length < 7) return 5 // 중간값 반환
-    
+    if (data.length < 7) {
+      return 5
+    } // 중간값 반환
+
     // 최근 7일간 활동 일수 계산
     const last7Days = new Set()
     const now = Date.now()
-    
+
     data.forEach(d => {
       const daysSince = Math.floor((now - d.timestamp.getTime()) / (1000 * 60 * 60 * 24))
       if (daysSince < 7) {
         last7Days.add(new Date(d.timestamp).toDateString())
       }
     })
-    
+
     return Math.round((last7Days.size / 7) * 10)
   }
 
@@ -212,7 +224,7 @@ export class ModeAwarePatternAnalyzer {
    */
   private generateHourlyHeatmap(data: ProModeData[]): Record<number, number> {
     const heatmap: Record<number, number> = {}
-    
+
     for (let hour = 0; hour < 24; hour++) {
       const hourData = data.filter(d => d.context.hour === hour)
       const avgQuality = hourData.length > 0
@@ -220,7 +232,7 @@ export class ModeAwarePatternAnalyzer {
         : 0
       heatmap[hour] = avgQuality
     }
-    
+
     return heatmap
   }
 
@@ -228,38 +240,44 @@ export class ModeAwarePatternAnalyzer {
     // 최근 4주간의 활동 추세
     const trends: number[] = []
     const now = Date.now()
-    
+
     for (let week = 0; week < 4; week++) {
       const weekStart = now - (week + 1) * 7 * 24 * 60 * 60 * 1000
       const weekEnd = now - week * 7 * 24 * 60 * 60 * 1000
-      
+
       const weekData = data.filter(d => {
         const time = d.timestamp.getTime()
         return time >= weekStart && time < weekEnd
       })
-      
+
       trends.push(weekData.length)
     }
-    
+
     return trends.reverse()
   }
 
   private predictBurnout(data: ProModeData[]): number {
     // 번아웃 위험도 예측 (0-100)
     let riskScore = 0
-    
+
     // 최근 활동 빈도 증가
     const recentTrend = this.calculateWeeklyTrends(data)
-    if (recentTrend[3] > recentTrend[0] * 2) riskScore += 30
-    
+    if (recentTrend[3] > recentTrend[0] * 2) {
+      riskScore += 30
+    }
+
     // 휴식 없는 연속 활동
     const consecutiveDays = this.countConsecutiveDays(data)
-    if (consecutiveDays > 14) riskScore += 40
-    
+    if (consecutiveDays > 14) {
+      riskScore += 40
+    }
+
     // 품질 하락 추세
     const qualityTrend = this.analyzeQualityTrend(data)
-    if (qualityTrend < -0.5) riskScore += 30
-    
+    if (qualityTrend < -0.5) {
+      riskScore += 30
+    }
+
     return Math.min(riskScore, 100)
   }
 
@@ -267,22 +285,22 @@ export class ModeAwarePatternAnalyzer {
    * 헬퍼 메서드들
    */
   private async getRecentActivities(
-    userId: string, 
+    userId: string,
     mode: PersonalizationMode
   ): Promise<(LightModeData | ProModeData)[]> {
     const days = mode === 'light' ? 30 : 365
     const since = new Date()
     since.setDate(since.getDate() - days)
-    
+
     const activities = await db.activities
       .where('userId')
       .equals(userId)
       .and(activity => activity.timestamp >= since)
       .toArray()
-    
+
     // Activity를 모드에 맞는 데이터로 변환
-    return activities.map(activity => 
-      mode === 'light' 
+    return activities.map(activity =>
+      mode === 'light'
         ? this.convertToLightData(activity)
         : this.convertToProData(activity)
     )
@@ -303,7 +321,7 @@ export class ModeAwarePatternAnalyzer {
 
   private convertToProData(activity: Activity): ProModeData {
     const lightData = this.convertToLightData(activity)
-    
+
     return {
       ...lightData,
       fullDescription: activity.description || activity.activityName,
@@ -325,7 +343,7 @@ export class ModeAwarePatternAnalyzer {
     const bestHour = parseInt(this.findBestTimeSlot(data))
     const now = new Date()
     const currentHour = now.getHours()
-    
+
     if (currentHour < bestHour) {
       return `오늘 ${bestHour}시`
     } else {
@@ -340,7 +358,7 @@ export class ModeAwarePatternAnalyzer {
 
   private generateSimpleTip(data: LightModeData[]): string {
     const consistency = this.calculateConsistency(data)
-    
+
     if (consistency >= 8) {
       return '훌륭해요! 꾸준함을 유지하고 계시네요.'
     } else if (consistency >= 5) {
@@ -480,15 +498,15 @@ export class ModeAwarePatternAnalyzer {
     const dates = Array.from(new Set(
       data.map(d => new Date(d.timestamp).toDateString())
     )).sort()
-    
+
     let maxConsecutive = 0
     let currentConsecutive = 1
-    
+
     for (let i = 1; i < dates.length; i++) {
       const prev = new Date(dates[i - 1])
       const curr = new Date(dates[i])
       const diffDays = (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24)
-      
+
       if (diffDays === 1) {
         currentConsecutive++
       } else {
@@ -496,20 +514,22 @@ export class ModeAwarePatternAnalyzer {
         currentConsecutive = 1
       }
     }
-    
+
     return Math.max(maxConsecutive, currentConsecutive)
   }
 
   private analyzeQualityTrend(data: ProModeData[]): number {
     // 품질 추세 분석 (-1 ~ 1)
-    if (data.length < 10) return 0
-    
+    if (data.length < 10) {
+      return 0
+    }
+
     const recent = data.slice(-10)
     const older = data.slice(-20, -10)
-    
+
     const recentAvg = recent.reduce((sum, d) => sum + this.qualityToNumber(d.quality), 0) / recent.length
     const olderAvg = older.reduce((sum, d) => sum + this.qualityToNumber(d.quality), 0) / older.length
-    
+
     return (recentAvg - olderAvg) / 5 // 정규화
   }
 }

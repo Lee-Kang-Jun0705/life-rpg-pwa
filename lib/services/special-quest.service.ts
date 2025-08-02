@@ -214,7 +214,7 @@ export class SpecialQuestService {
         quests = quests.filter(q => q.difficulty === filter.difficulty)
       }
       if (filter.hasExclusiveRewards) {
-        quests = quests.filter(q => 
+        quests = quests.filter(q =>
           q.rewards.items.some(item => item.isExclusive) ||
           q.rewards.guaranteedItems?.some(item => item.isExclusive)
         )
@@ -285,33 +285,41 @@ export class SpecialQuestService {
               return false
             }
             break
-          
+
           case 'item':
             // TODO: 인벤토리 서비스와 연동
             const hasItem = await this.checkUserHasItem(userId, req.value as string)
-            if (!hasItem) return false
+            if (!hasItem) {
+              return false
+            }
             break
-          
+
           case 'achievement':
             // TODO: 업적 서비스와 연동
             const hasAchievement = await this.checkUserHasAchievement(userId, req.value as string)
-            if (!hasAchievement) return false
+            if (!hasAchievement) {
+              return false
+            }
             break
-          
+
           case 'collection':
             // TODO: 컬렉션 서비스와 연동
             const collectionCount = await this.getUserCollectionCount(userId, 'ancient_artifacts')
-            if (collectionCount < (req.value as number)) return false
+            if (collectionCount < (req.value as number)) {
+              return false
+            }
             break
-          
+
           case 'quest':
             const records = this.questRecords.get(userId) || []
             const hasCompletedQuest = records.some(r => r.questId === req.value)
-            if (!hasCompletedQuest) return false
+            if (!hasCompletedQuest) {
+              return false
+            }
             break
         }
       }
-      
+
       return true
     } catch (error) {
       console.error('Failed to check requirements:', error)
@@ -407,7 +415,7 @@ export class SpecialQuestService {
           })
         }
         break
-      
+
       case 'event':
         objectives.push({
           id: 'speed_clear',
@@ -457,8 +465,10 @@ export class SpecialQuestService {
   ): Promise<SpecialQuestProgress | null> {
     const userProgressList = this.userProgress.get(userId) || []
     const progress = userProgressList.find(p => p.questId === questId && p.status === 'in_progress')
-    
-    if (!progress) return null
+
+    if (!progress) {
+      return null
+    }
 
     Object.assign(progress, updates)
     return progress
@@ -682,14 +692,18 @@ export class SpecialQuestService {
     const triggeredQuests: HiddenQuest[] = []
 
     for (const [questId, quest] of this.quests) {
-      if (quest.type !== 'hidden') continue
-      
+      if (quest.type !== 'hidden') {
+        continue
+      }
+
       const hiddenQuest = quest as HiddenQuest
-      if (hiddenQuest.discovered) continue
+      if (hiddenQuest.discovered) {
+        continue
+      }
 
       // 트리거 조건 확인
-      const matchingTrigger = hiddenQuest.triggers.find(t => 
-        t.type === trigger.type && 
+      const matchingTrigger = hiddenQuest.triggers.find(t =>
+        t.type === trigger.type &&
         t.condition === trigger.condition &&
         t.value === trigger.value
       )
@@ -745,7 +759,7 @@ export class SpecialQuestService {
     byType: Record<SpecialQuestType, number>
   }> {
     const records = this.questRecords.get(userId) || []
-    
+
     const stats = {
       totalCompleted: records.length,
       perfectClears: records.filter(r => r.perfectClear).length,

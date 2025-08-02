@@ -14,7 +14,7 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const loadActivities = async () => {
+    const loadActivities = async() => {
       try {
         setIsLoading(true)
         const allActivities = await dbHelpers.getActivities(GAME_CONFIG.DEFAULT_USER_ID)
@@ -33,7 +33,7 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
   const todayActivities = useMemo(() => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    
+
     return activities.filter(activity => {
       const activityDate = new Date(activity.timestamp)
       activityDate.setHours(0, 0, 0, 0)
@@ -44,12 +44,12 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
   // 스탯별 최근 활동
   const statRecentActivities = useMemo(() => {
     const recentByType: { [key: string]: Activity | null } = {}
-    
+
     STAT_TYPES.forEach(stat => {
       const statActivities = activities.filter(a => a.statType === stat.type)
       recentByType[stat.type] = statActivities.length > 0 ? statActivities[0] : null
     })
-    
+
     return recentByType
   }, [activities])
 
@@ -64,9 +64,15 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
     const minutes = Math.floor(diff / 60000)
     const hours = Math.floor(diff / 3600000)
 
-    if (minutes < 1) return '방금'
-    if (minutes < 60) return `${minutes}분`
-    if (hours < 24) return `${hours}시간`
+    if (minutes < 1) {
+      return '방금'
+    }
+    if (minutes < 60) {
+      return `${minutes}분`
+    }
+    if (hours < 24) {
+      return `${hours}시간`
+    }
     return '어제'
   }
 
@@ -105,10 +111,10 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
       <div className="mt-6 mb-20">
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-lg p-6">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-40 mb-4"></div>
+            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-40 mb-4" />
             <div className="space-y-3">
-              <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-2xl"></div>
-              <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-2xl"></div>
+              <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-2xl" />
+              <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-2xl" />
             </div>
           </div>
         </div>
@@ -133,7 +139,7 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
         <div className="grid grid-cols-2 gap-2 md:gap-3">
           {STAT_TYPES.map(stat => {
             const recentActivity = statRecentActivities[stat.type]
-            
+
             return (
               <motion.div
                 key={stat.type}
@@ -174,9 +180,9 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
                   transition={{ delay: index * 0.1 }}
                   className={`flex items-center justify-between rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] ${
                     activity.statType === 'health' ? 'bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20' :
-                    activity.statType === 'learning' ? 'bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20' :
-                    activity.statType === 'relationship' ? 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20' :
-                    'bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20'
+                      activity.statType === 'learning' ? 'bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20' :
+                        activity.statType === 'relationship' ? 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20' :
+                          'bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20'
                   }`}
                 >
                   <div className="flex items-center gap-4">
@@ -184,7 +190,7 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
                     <div className="text-5xl">
                       {getActivityEmoji(activity.activityName)}
                     </div>
-                    
+
                     {/* 활동 정보 */}
                     <div>
                       <span className="text-xl font-bold text-gray-800 dark:text-gray-200 block">
@@ -198,7 +204,7 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* 경험치 - 크게 표시 */}
                   <div className="text-right">
                     <span className="text-3xl font-black bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -211,12 +217,12 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
                 </motion.div>
               ))}
             </div>
-            
+
             {/* 더보기 버튼 - 왼쪽 정렬 */}
             {activities.length > 4 && (
               <div className="mt-6">
-                <Link 
-                  href="/activities" 
+                <Link
+                  href="/activities"
                   className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-bold text-lg hover:shadow-lg transition-all hover:scale-105"
                 >
                   <span>모든 활동 보기</span>

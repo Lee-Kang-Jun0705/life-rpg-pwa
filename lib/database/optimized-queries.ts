@@ -9,7 +9,7 @@ import { db } from './client'
 // 사용자 통계 조회 (캐싱 적용)
 export async function getOptimizedUserStats(userId: string) {
   const cacheKey = `user-stats:${userId}`
-  
+
   // 캐시 확인
   const cached = memoryCache.get(cacheKey)
   if (cached) {
@@ -24,18 +24,18 @@ export async function getOptimizedUserStats(userId: string) {
 
   // 캐시 저장 (5분)
   memoryCache.set(cacheKey, stats, 300000)
-  
+
   return stats
 }
 
 // 최근 활동 조회 (페이지네이션 + 캐싱)
 export async function getOptimizedRecentActivities(
-  userId: string, 
-  limit: number = 10,
-  offset: number = 0
+  userId: string,
+  limit = 10,
+  offset = 0
 ) {
   const cacheKey = `activities:${userId}:${limit}:${offset}`
-  
+
   // 캐시 확인
   const cached = memoryCache.get(cacheKey)
   if (cached) {
@@ -53,14 +53,14 @@ export async function getOptimizedRecentActivities(
 
   // 캐시 저장 (2분)
   memoryCache.set(cacheKey, activities, 120000)
-  
+
   return activities
 }
 
 // 캐릭터 정보 조회 (자주 변경되지 않으므로 긴 캐시)
 export async function getOptimizedCharacter(userId: string) {
   const cacheKey = `character:${userId}`
-  
+
   // 캐시 확인
   const cached = memoryCache.get(cacheKey)
   if (cached) {
@@ -77,7 +77,7 @@ export async function getOptimizedCharacter(userId: string) {
     // 캐시 저장 (10분)
     memoryCache.set(cacheKey, character, 600000)
   }
-  
+
   return character
 }
 

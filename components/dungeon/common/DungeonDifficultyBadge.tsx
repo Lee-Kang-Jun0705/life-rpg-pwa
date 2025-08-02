@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { DifficultyLevel } from '@/lib/dungeon/types'
-import { 
+import {
   Star,
   Flame,
   Zap,
@@ -83,10 +83,10 @@ const sizeConfig = {
   }
 }
 
-export function DungeonDifficultyBadge({ 
-  difficulty, 
+export function DungeonDifficultyBadge({
+  difficulty,
   showLabel = true,
-  size = 'md' 
+  size = 'md'
 }: DungeonDifficultyBadgeProps) {
   const config = difficultyConfig[difficulty]
   const sizeClasses = sizeConfig[size]
@@ -99,19 +99,19 @@ export function DungeonDifficultyBadge({
       ${sizeClasses.container}
     `}>
       <Icon className={`${sizeClasses.icon} text-white`} />
-      
+
       {showLabel && (
         <span className={`${sizeClasses.text} font-medium text-white`}>
           {config.label}
         </span>
       )}
-      
+
       {config.stars > 0 && (
         <div className="flex items-center gap-0.5 ml-1">
           {Array.from({ length: config.stars }).map((_, i) => (
-            <Star 
-              key={i} 
-              className={`${sizeClasses.star} text-white fill-white`} 
+            <Star
+              key={i}
+              className={`${sizeClasses.star} text-white fill-white`}
             />
           ))}
         </div>

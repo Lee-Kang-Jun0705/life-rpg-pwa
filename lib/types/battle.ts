@@ -47,12 +47,12 @@ export interface StatusEffect {
   readonly stackable: boolean;
 }
 
-export type StatusEffectType = 
-  | 'stun' 
-  | 'poison' 
-  | 'burn' 
-  | 'freeze' 
-  | 'slow' 
+export type StatusEffectType =
+  | 'stun'
+  | 'poison'
+  | 'burn'
+  | 'freeze'
+  | 'slow'
   | 'weakness'
   | 'strength'
   | 'defense_up'
@@ -131,23 +131,25 @@ export interface CombatLog {
   readonly targetId?: string;
 }
 
-export type LogType = 
-  | 'damage' 
-  | 'heal' 
-  | 'buff' 
-  | 'debuff' 
-  | 'critical' 
-  | 'dodge' 
-  | 'skill' 
-  | 'item' 
+export type LogType =
+  | 'damage'
+  | 'heal'
+  | 'buff'
+  | 'debuff'
+  | 'critical'
+  | 'dodge'
+  | 'skill'
+  | 'item'
   | 'system';
 
 // 타입 가드 함수들
 export function isValidBattleSkill(skill: unknown): skill is BattleSkill {
-  if (typeof skill !== 'object' || skill === null) return false;
-  
-  const s = skill as Record<string, unknown>;
-  
+  if (typeof skill !== 'object' || skill === null) {
+    return false
+  }
+
+  const s = skill as Record<string, unknown>
+
   return (
     typeof s.id === 'string' &&
     typeof s.name === 'string' &&
@@ -158,14 +160,16 @@ export function isValidBattleSkill(skill: unknown): skill is BattleSkill {
     typeof s.currentCooldown === 'number' &&
     typeof s.animation === 'string' &&
     typeof s.range === 'number'
-  );
+  )
 }
 
 export function isValidCharacterStats(stats: unknown): stats is CharacterStats {
-  if (typeof stats !== 'object' || stats === null) return false;
-  
-  const s = stats as Record<string, unknown>;
-  
+  if (typeof stats !== 'object' || stats === null) {
+    return false
+  }
+
+  const s = stats as Record<string, unknown>
+
   return (
     typeof s.hp === 'number' && s.hp >= 0 &&
     typeof s.maxHp === 'number' && s.maxHp > 0 &&
@@ -176,7 +180,7 @@ export function isValidCharacterStats(stats: unknown): stats is CharacterStats {
     typeof s.speed === 'number' && s.speed >= 0 &&
     typeof s.critRate === 'number' && s.critRate >= 0 && s.critRate <= 1 &&
     typeof s.dodgeRate === 'number' && s.dodgeRate >= 0 && s.dodgeRate <= 1
-  );
+  )
 }
 
 // 전투 관련 상수
@@ -189,8 +193,8 @@ export const BATTLE_CONSTANTS = {
   CRIT_CAP: 0.5,
   MIN_DAMAGE: 1,
   STATUS_EFFECT_CAP: 5,
-  SKILL_COOLDOWN_REDUCTION_PER_TURN: 1,
-} as const;
+  SKILL_COOLDOWN_REDUCTION_PER_TURN: 1
+} as const
 
 // 콤보 시스템 타입
 export interface ComboState {
@@ -214,7 +218,7 @@ export interface ActiveStatusEffect extends StatusEffect {
 }
 
 // Result 타입 (에러 처리용)
-export type Result<T, E = Error> = 
+export type Result<T, E = Error> =
   | { success: true; data: T }
   | { success: false; error: E };
 
@@ -225,7 +229,7 @@ export interface BattleEvent {
   readonly data: Record<string, unknown>;
 }
 
-export type BattleEventType = 
+export type BattleEventType =
   | 'battle_start'
   | 'turn_start'
   | 'turn_end'

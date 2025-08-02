@@ -5,11 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import type { CombatState, CombatAction } from '@/lib/types/combat-system'
 import { CombatStats } from '@/lib/types/game-core'
 import { dungeonCombatService } from '@/lib/services/dungeon-combat.service'
-import { 
-  Sword, 
-  Shield, 
-  Zap, 
-  Heart, 
+import {
+  Sword,
+  Shield,
+  Zap,
+  Heart,
   Battery,
   Play,
   Pause,
@@ -38,7 +38,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
       const state = dungeonCombatService.getCombatState(combatId)
       if (state) {
         setCombatState(state)
-        
+
         // 전투 종료 체크
         if (state.phase === 'victory' || state.phase === 'defeat') {
           visibility.clearInterval('combat-update')
@@ -49,7 +49,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
 
     // 초기 로드
     updateCombat()
-    
+
     // visibility manager를 사용하여 업데이트
     visibility.registerInterval('combat-update', updateCombat, 100)
 
@@ -60,7 +60,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4" />
           <p>전투 준비 중...</p>
         </div>
       </div>
@@ -73,7 +73,9 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
 
   // 행동 실행
   const executeAction = (type: CombatAction['type'], targetId?: string) => {
-    if (!player || !isPlayerTurn) return
+    if (!player || !isPlayerTurn) {
+      return
+    }
 
     const action: CombatAction = {
       id: `action_${Date.now()}`,
@@ -86,7 +88,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
     }
 
     dungeonCombatService.executePlayerAction(combatId, action)
-    
+
     // 애니메이션
     setAnimatingActions(new Map([[player.id, type]]))
     setTimeout(() => setAnimatingActions(new Map()), 1000)
@@ -94,7 +96,9 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
 
   // 스킬 사용
   const executeSkill = (skillId: string) => {
-    if (!player || !isPlayerTurn || !selectedTarget) return
+    if (!player || !isPlayerTurn || !selectedTarget) {
+      return
+    }
 
     const action: CombatAction = {
       id: `action_${Date.now()}`,
@@ -108,7 +112,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
     }
 
     dungeonCombatService.executePlayerAction(combatId, action)
-    
+
     // 애니메이션
     setAnimatingActions(new Map([[player.id, 'skill']]))
     setTimeout(() => setAnimatingActions(new Map()), 1500)
@@ -129,7 +133,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
               </span>
             </div>
           </div>
-          
+
           {/* 전투 컨트롤 - 모바일에서 숨김 */}
           <div className="hidden md:flex items-center gap-2">
             <button
@@ -178,7 +182,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
                   </span>
                 )}
               </div>
-              
+
               {/* HP/MP 바 - 크기 축소 */}
               <div className="space-y-1.5 md:space-y-2">
                 <div>
@@ -197,7 +201,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <div className="flex items-center justify-between text-xs mb-0.5 md:mb-1">
                     <span className="flex items-center gap-1">
@@ -244,8 +248,8 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
                   selectedTarget === enemy.id
                     ? 'border-yellow-500'
                     : combatState.currentTurn === enemy.id
-                    ? 'border-red-500'
-                    : 'border-gray-700'
+                      ? 'border-red-500'
+                      : 'border-gray-700'
                 } ${enemy.currentHp <= 0 ? 'opacity-50' : ''}`}
                 onClick={() => enemy.currentHp > 0 && setSelectedTarget(enemy.id)}
                 animate={animatingActions.has(enemy.id) ? {
@@ -260,7 +264,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
                     <p className="text-[10px] md:text-xs text-gray-400">Lv.{enemy.level}</p>
                   </div>
                 </div>
-                
+
                 {/* HP 바 */}
                 <div>
                   <div className="flex items-center justify-between text-[10px] md:text-xs mb-0.5 md:mb-1">
@@ -286,7 +290,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
         <div className="max-w-6xl mx-auto">
           <div className="bg-gray-800 rounded-lg md:rounded-xl p-3 md:p-4">
             <h3 className="text-sm md:text-lg font-semibold mb-2 md:mb-3">행동 선택</h3>
-            
+
             <div className="grid grid-cols-2 gap-2 md:gap-3">
               <button
                 onClick={() => selectedTarget && executeAction('attack', selectedTarget)}
@@ -296,7 +300,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
                 <Sword className="w-5 h-5 md:w-6 md:h-6" />
                 <span className="text-xs md:text-sm">공격</span>
               </button>
-              
+
               <button
                 onClick={() => executeAction('defend')}
                 className="p-2 md:p-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors flex flex-col items-center gap-0.5 md:gap-1"
@@ -304,7 +308,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
                 <Shield className="w-5 h-5 md:w-6 md:h-6" />
                 <span className="text-xs md:text-sm">방어</span>
               </button>
-              
+
               {/* 스킬 버튼들 - 최대 2개만 표시 */}
               {player.skills.slice(0, 2).map(skillId => (
                 <button
@@ -329,7 +333,7 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
           <div className="space-y-0.5 md:space-y-1 text-[10px] md:text-xs text-gray-300">
             {combatState.history.slice(-3).map((action, index) => (
               <div key={index} className="truncate">
-                <span className="text-gray-500">[{action.turn}]</span> 
+                <span className="text-gray-500">[{action.turn}]</span>
                 {' '}
                 <span className="text-yellow-400">{action.actorId}</span>
                 {' → '}
@@ -344,8 +348,10 @@ export function DungeonBattleScreen({ combatId, onBattleEnd }: DungeonBattleScre
       <AnimatePresence>
         {Array.from(animatingActions.entries()).map(([id, action]) => {
           const participant = combatState.participants.find(p => p.id === id)
-          if (!participant) return null
-          
+          if (!participant) {
+            return null
+          }
+
           return (
             <motion.div
               key={`${id}_${Date.now()}`}

@@ -133,11 +133,11 @@ export interface InvestmentSchema extends BaseEntity {
 }
 
 // PlayerData 타입 (재귀적 구조)
-export type PlayerDataValue = 
-  | string 
-  | number 
-  | boolean 
-  | Date 
+export type PlayerDataValue =
+  | string
+  | number
+  | boolean
+  | Date
   | { [key: string]: PlayerDataValue }
   | PlayerDataValue[]
 
@@ -157,7 +157,9 @@ export interface SettingSchema extends BaseEntity {
  * 타입 가드 함수들
  */
 export const isUserProfileSchema = (data: unknown): data is UserProfileSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const profile = data as Record<string, unknown>
   return (
     typeof profile.userId === 'string' &&
@@ -170,7 +172,9 @@ export const isUserProfileSchema = (data: unknown): data is UserProfileSchema =>
 }
 
 export const isStatSchema = (data: unknown): data is StatSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const stat = data as Record<string, unknown>
   return (
     typeof stat.userId === 'string' &&
@@ -182,7 +186,9 @@ export const isStatSchema = (data: unknown): data is StatSchema => {
 }
 
 export const isActivitySchema = (data: unknown): data is ActivitySchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const activity = data as Record<string, unknown>
   return (
     typeof activity.userId === 'string' &&
@@ -194,7 +200,9 @@ export const isActivitySchema = (data: unknown): data is ActivitySchema => {
 }
 
 export const isMissionSchema = (data: unknown): data is MissionSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const mission = data as Record<string, unknown>
   return (
     typeof mission.userId === 'string' &&
@@ -215,7 +223,9 @@ export const isMissionSchema = (data: unknown): data is MissionSchema => {
 }
 
 export const isCharacterSchema = (data: unknown): data is CharacterSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const character = data as Record<string, unknown>
   return (
     typeof character.userId === 'string' &&
@@ -226,7 +236,9 @@ export const isCharacterSchema = (data: unknown): data is CharacterSchema => {
 }
 
 export const isFeedPostSchema = (data: unknown): data is FeedPostSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const post = data as Record<string, unknown>
   return (
     typeof post.userId === 'string' &&
@@ -237,7 +249,9 @@ export const isFeedPostSchema = (data: unknown): data is FeedPostSchema => {
 }
 
 export const isFeedCommentSchema = (data: unknown): data is FeedCommentSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const comment = data as Record<string, unknown>
   return (
     typeof comment.postId === 'number' &&
@@ -248,7 +262,9 @@ export const isFeedCommentSchema = (data: unknown): data is FeedCommentSchema =>
 }
 
 export const isFeedReactionSchema = (data: unknown): data is FeedReactionSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const reaction = data as Record<string, unknown>
   return (
     typeof reaction.postId === 'number' &&
@@ -259,7 +275,9 @@ export const isFeedReactionSchema = (data: unknown): data is FeedReactionSchema 
 }
 
 export const isInvestmentSchema = (data: unknown): data is InvestmentSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const investment = data as Record<string, unknown>
   return (
     typeof investment.investorId === 'string' &&
@@ -272,7 +290,9 @@ export const isInvestmentSchema = (data: unknown): data is InvestmentSchema => {
 }
 
 export const isPlayerDataSchema = (data: unknown): data is PlayerDataSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const playerData = data as Record<string, unknown>
   return (
     typeof playerData.id === 'string' &&
@@ -282,7 +302,9 @@ export const isPlayerDataSchema = (data: unknown): data is PlayerDataSchema => {
 }
 
 export const isSettingSchema = (data: unknown): data is SettingSchema => {
-  if (!data || typeof data !== 'object') return false
+  if (!data || typeof data !== 'object') {
+    return false
+  }
   const setting = data as Record<string, unknown>
   return (
     typeof setting.key === 'string' &&
@@ -446,7 +468,7 @@ export interface Migration {
 /**
  * 데이터베이스 이벤트 타입
  */
-export type DatabaseEvent = 
+export type DatabaseEvent =
   | { type: 'created'; table: string; data: unknown }
   | { type: 'updated'; table: string; id: string | number; changes: Partial<unknown> }
   | { type: 'deleted'; table: string; id: string | number }

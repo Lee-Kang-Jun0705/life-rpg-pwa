@@ -47,14 +47,22 @@ export function RecordsTab() {
 
   // 랭킹 변화 표시
   const getRankChangeIcon = (change: number) => {
-    if (change > 0) return '▲'
-    if (change < 0) return '▼'
+    if (change > 0) {
+      return '▲'
+    }
+    if (change < 0) {
+      return '▼'
+    }
     return '－'
   }
 
   const getRankChangeColor = (change: number) => {
-    if (change > 0) return 'text-green-500'
-    if (change < 0) return 'text-red-500'
+    if (change > 0) {
+      return 'text-green-500'
+    }
+    if (change < 0) {
+      return 'text-red-500'
+    }
     return 'text-gray-500'
   }
 
@@ -108,8 +116,8 @@ export function RecordsTab() {
             <div
               key={player.rank}
               className={`flex items-center justify-between p-3 rounded-lg ${
-                player.isMe 
-                  ? 'bg-purple-100 dark:bg-purple-900/30 border-2 border-purple-500' 
+                player.isMe
+                  ? 'bg-purple-100 dark:bg-purple-900/30 border-2 border-purple-500'
                   : 'bg-gray-50 dark:bg-gray-800'
               }`}
             >
@@ -117,13 +125,13 @@ export function RecordsTab() {
                 {/* 순위 */}
                 <div className={`text-2xl font-bold ${
                   player.rank === 1 ? 'text-yellow-500' :
-                  player.rank === 2 ? 'text-gray-400' :
-                  player.rank === 3 ? 'text-orange-600' :
-                  'text-gray-600'
+                    player.rank === 2 ? 'text-gray-400' :
+                      player.rank === 3 ? 'text-orange-600' :
+                        'text-gray-600'
                 }`}>
                   #{player.rank}
                 </div>
-                
+
                 {/* 플레이어 정보 */}
                 <div>
                   <div className="font-semibold">{player.name}</div>

@@ -2,12 +2,16 @@
 import { dbHelpers } from '@/lib/database/client'
 
 export async function preloadEquipmentData(userId: string) {
-  if (!userId || typeof window === 'undefined') return
+  if (!userId || typeof window === 'undefined') {
+    return
+  }
 
   try {
     // 이미 캐시가 있으면 스킵
     const cached = sessionStorage.getItem(`equipment-${userId}`)
-    if (cached) return
+    if (cached) {
+      return
+    }
 
     // 백그라운드에서 데이터 프리로드
     Promise.all([

@@ -4,7 +4,7 @@
  */
 
 // Result 타입 (에러 처리용)
-export type Result<T, E = Error> = 
+export type Result<T, E = Error> =
   | { success: true; data: T }
   | { success: false; error: E }
 
@@ -13,7 +13,7 @@ export const CoreStats = {
   HEALTH: 'health',
   LEARNING: 'learning',
   RELATIONSHIP: 'relationship',
-  ACHIEVEMENT: 'achievement',
+  ACHIEVEMENT: 'achievement'
 } as const
 
 export type CoreStat = typeof CoreStats[keyof typeof CoreStats]
@@ -29,7 +29,7 @@ export const CombatStats = {
   CRIT_DAMAGE: 'critDamage',
   DODGE: 'dodge',
   ACCURACY: 'accuracy',
-  RESISTANCE: 'resistance',
+  RESISTANCE: 'resistance'
 } as const
 
 export type CombatStat = typeof CombatStats[keyof typeof CombatStats]
@@ -125,7 +125,7 @@ export const AchievementCategory = {
   EXPLORATION: 'exploration',
   SOCIAL: 'social',
   PROGRESSION: 'progression',
-  SPECIAL: 'special',
+  SPECIAL: 'special'
 } as const
 
 export type AchievementCategory = typeof AchievementCategory[keyof typeof AchievementCategory]
@@ -178,7 +178,7 @@ export const ErrorCode = {
   NOT_FOUND: 'NOT_FOUND',
   RATE_LIMITED: 'RATE_LIMITED',
   SERVER_ERROR: 'SERVER_ERROR',
-  MAINTENANCE: 'MAINTENANCE',
+  MAINTENANCE: 'MAINTENANCE'
 } as const
 
 export type ErrorCode = typeof ErrorCode[keyof typeof ErrorCode]
@@ -207,22 +207,22 @@ export function calculateCombatPower(stats: Record<CombatStat, number>): number 
   )
 }
 
-export function calculateExpForLevel(level: number, multiplier: number = 1.2): number {
+export function calculateExpForLevel(level: number, multiplier = 1.2): number {
   const baseExp = 100
   return Math.floor(baseExp * Math.pow(multiplier, level - 1))
 }
 
-export function calculateLevelFromExp(totalExp: number, multiplier: number = 1.2): LevelInfo {
+export function calculateLevelFromExp(totalExp: number, multiplier = 1.2): LevelInfo {
   let level = 1
   let remainingExp = totalExp
-  
+
   while (remainingExp >= calculateExpForLevel(level, multiplier)) {
     remainingExp -= calculateExpForLevel(level, multiplier)
     level++
   }
-  
+
   const required = calculateExpForLevel(level, multiplier)
-  
+
   return {
     current: level,
     experience: remainingExp,
@@ -234,10 +234,12 @@ export function calculateLevelFromExp(totalExp: number, multiplier: number = 1.2
 
 // 타입 가드
 export function isValidCharacter(value: unknown): value is Character {
-  if (typeof value !== 'object' || value === null) return false
-  
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+
   const char = value as Record<string, unknown>
-  
+
   return (
     typeof char.id === 'string' &&
     typeof char.name === 'string' &&
@@ -257,26 +259,26 @@ export function getDailyResetTime(): number {
   const now = new Date()
   const reset = new Date(now)
   reset.setHours(4, 0, 0, 0) // 오전 4시 리셋
-  
+
   if (reset.getTime() < now.getTime()) {
     reset.setDate(reset.getDate() + 1)
   }
-  
+
   return reset.getTime()
 }
 
 export function getWeeklyResetTime(): number {
   const now = new Date()
   const reset = new Date(now)
-  
+
   // 월요일 오전 4시 리셋
   const daysUntilMonday = (8 - reset.getDay()) % 7 || 7
   reset.setDate(reset.getDate() + daysUntilMonday)
   reset.setHours(4, 0, 0, 0)
-  
+
   if (reset.getTime() < now.getTime()) {
     reset.setDate(reset.getDate() + 7)
   }
-  
+
   return reset.getTime()
 }

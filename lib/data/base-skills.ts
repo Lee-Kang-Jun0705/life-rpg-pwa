@@ -53,7 +53,7 @@ export const baseSkills: Record<string, Skill> = {
     animation: 'defend',
     sound: 'defend'
   },
-  
+
   // 기본 공격 스킬
   power_strike: {
     id: 'power_strike',
@@ -529,7 +529,7 @@ export const baseSkills: Record<string, Skill> = {
     effects: [
       {
         type: EffectType.HEAL,
-        value: { base: 100, scaling: 0 }, // 100% 회복
+        value: { base: 100, scaling: 0 } // 100% 회복
       },
       {
         type: EffectType.DISPEL,
@@ -557,9 +557,9 @@ export const baseSkills: Record<string, Skill> = {
     target: TargetType.SELF,
     effects: [{
       type: EffectType.BUFF,
-      value: { base: 5, scaling: 2 }, // 5% + 레벨당 2%
+      value: { base: 5, scaling: 2 } // 5% + 레벨당 2%
     }],
-    icon: '⚔️',
+    icon: '⚔️'
   },
 
   tough_body: {
@@ -576,9 +576,9 @@ export const baseSkills: Record<string, Skill> = {
     target: TargetType.SELF,
     effects: [{
       type: EffectType.BUFF,
-      value: { base: 10, scaling: 5 }, // 10% + 레벨당 5%
+      value: { base: 10, scaling: 5 } // 10% + 레벨당 5%
     }],
-    icon: '💪',
+    icon: '💪'
   },
 
   lucky_charm: {
@@ -595,8 +595,8 @@ export const baseSkills: Record<string, Skill> = {
     target: TargetType.SELF,
     effects: [{
       type: EffectType.BUFF,
-      value: { base: 10, scaling: 3 }, // 10% + 레벨당 3%
+      value: { base: 10, scaling: 3 } // 10% + 레벨당 3%
     }],
-    icon: '🍀',
+    icon: '🍀'
   }
 }

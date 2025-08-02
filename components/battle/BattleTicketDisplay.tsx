@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { BattleTicketService, TicketState } from '@/lib/battle/ticket-service'
 import { Ticket, Clock, Plus } from 'lucide-react'
+import { getButtonStyle, getCardStyle, layoutStyles, textStyles } from '@/lib/utils/style-utils'
 
 interface BattleTicketDisplayProps {
   userId: string
@@ -11,24 +12,24 @@ interface BattleTicketDisplayProps {
   onPurchase?: () => void
 }
 
-export function BattleTicketDisplay({ 
-  userId, 
-  compact = false, 
+export function BattleTicketDisplay({
+  userId,
+  compact = false,
   onTicketChange,
-  onPurchase 
+  onPurchase
 }: BattleTicketDisplayProps) {
   const [ticketState, setTicketState] = useState<TicketState | null>(null)
   const [loading, setLoading] = useState(true)
   const [timeUntilReset, setTimeUntilReset] = useState(0)
-  
+
   const ticketService = BattleTicketService.getInstance()
 
   // 티켓 상태 로드
-  const loadTicketState = async () => {
+  const loadTicketState = async() => {
     try {
       const state = await ticketService.getTicketState(userId)
       setTicketState(state)
-      
+
       if (onTicketChange) {
         onTicketChange(state.count)
       }
@@ -42,18 +43,20 @@ export function BattleTicketDisplay({
   // 초기 로드 및 주기적 업데이트
   useEffect(() => {
     loadTicketState()
-    
+
     // 1분마다 업데이트
     const interval = setInterval(loadTicketState, 60000)
-    
+
     return () => clearInterval(interval)
   }, [userId])
 
   // 리셋 시간 카운트다운
   useEffect(() => {
-    if (!ticketState) return
+    if (!ticketState) {
+      return
+    }
 
-    const updateCountdown = async () => {
+    const updateCountdown = async() => {
       const seconds = await ticketService.getTimeUntilReset(userId)
       setTimeUntilReset(seconds)
     }
@@ -66,12 +69,14 @@ export function BattleTicketDisplay({
 
   // 시간 포맷팅
   const formatTime = (seconds: number): string => {
-    if (seconds <= 0) return '0:00'
-    
+    if (seconds <= 0) {
+      return '0:00'
+    }
+
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
     const secs = Math.floor(seconds % 60)
-    
+
     if (hours > 0) {
       return `${hours}시간 ${minutes}분`
     } else if (minutes > 0) {
@@ -82,7 +87,7 @@ export function BattleTicketDisplay({
   }
 
   if (loading || !ticketState) {
-    return <div className="animate-pulse bg-gray-200 rounded h-8 w-32"></div>
+    return <div className="animate-pulse bg-gray-200 rounded h-8 w-32" />
   }
 
   if (compact) {
@@ -95,26 +100,26 @@ export function BattleTicketDisplay({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-4 space-y-3">
+    <div className={getCardStyle('base', 'medium') + ' space-y-3'}>
       {/* 티켓 정보 */}
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
+        <div className={layoutStyles.flex.between + ' mb-2'}>
+          <div className={layoutStyles.flex.start}>
             <Ticket className="w-5 h-5 text-purple-500" />
-            <span className="font-medium">전투 티켓</span>
+            <span className={textStyles.body.normal + ' font-medium'}>전투 티켓</span>
           </div>
           <span className="text-lg font-bold text-purple-600">
             {ticketState.count}장
           </span>
         </div>
-        
-        <div className="text-sm text-gray-600">
+
+        <div className={textStyles.body.small}>
           매일 10장씩 지급됩니다
         </div>
       </div>
 
       {/* 리셋 타이머 */}
-      <div className="flex items-center gap-2 text-sm text-gray-600">
+      <div className={layoutStyles.flex.start + ' ' + textStyles.body.small}>
         <Clock className="w-4 h-4" />
         <span>
           다음 리셋: {formatTime(timeUntilReset)}
@@ -125,7 +130,7 @@ export function BattleTicketDisplay({
       {onPurchase && ticketState.count < 50 && (
         <button
           onClick={onPurchase}
-          className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors"
+          className={getButtonStyle('purple', 'medium', 'full')}
         >
           <Plus className="w-4 h-4" />
           <span className="text-sm font-medium">티켓 구매 (100 골드)</span>
@@ -134,7 +139,7 @@ export function BattleTicketDisplay({
 
       {/* 최대 보유량 안내 */}
       {ticketState.count >= 50 && (
-        <div className="text-xs text-red-500 text-center">
+        <div className={textStyles.status.error + ' text-xs text-center'}>
           최대 보유량 도달 (50장)
         </div>
       )}

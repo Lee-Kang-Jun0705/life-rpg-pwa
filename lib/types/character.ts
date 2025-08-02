@@ -44,7 +44,7 @@ export interface CharacterAchievement extends BaseEntity {
   maxProgress?: number
 }
 
-export type CharacterAchievementType = 
+export type CharacterAchievementType =
   | 'level'
   | 'quest'
   | 'combat'

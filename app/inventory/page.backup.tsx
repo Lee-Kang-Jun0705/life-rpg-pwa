@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation'
 
 export default function InventoryPage() {
   const router = useRouter()
-  
+
   return (
     <GameLayout>
-      <InventoryScreen 
+      <InventoryScreen
         onClose={() => router.back()}
       />
     </GameLayout>

@@ -14,9 +14,11 @@ export class DungeonRepository {
         .where(['dungeonId', 'userId'])
         .equals([dungeonId, userId])
         .first()
-      
-      if (!progressData) return null
-      
+
+      if (!progressData) {
+        return null
+      }
+
       return this.mapToProgress(progressData)
     } catch (error) {
       console.error('[DungeonRepository] getProgress error:', error)
@@ -33,7 +35,7 @@ export class DungeonRepository {
         .where('userId')
         .equals(userId)
         .toArray()
-      
+
       return progressData.map(this.mapToProgress)
     } catch (error) {
       console.error('[DungeonRepository] getUserProgress error:', error)
@@ -51,7 +53,7 @@ export class DungeonRepository {
         .equals(userId)
         .and(p => p.status === 'in_progress')
         .toArray()
-      
+
       return progressData.map(this.mapToProgress)
     } catch (error) {
       console.error('[DungeonRepository] getActiveProgress error:', error)
@@ -74,7 +76,7 @@ export class DungeonRepository {
         status: progress.status as DungeonProgressData['status'],
         attempts: 1
       }
-      
+
       const id = await db.dungeonProgress.add(data)
       return { ...progress, id: String(id) }
     } catch (error) {
@@ -87,8 +89,8 @@ export class DungeonRepository {
    * 던전 진행 상황 업데이트
    */
   static async updateProgress(
-    dungeonId: string, 
-    userId: string, 
+    dungeonId: string,
+    userId: string,
     updates: Partial<DungeonProgress>
   ): Promise<boolean> {
     try {
@@ -99,7 +101,7 @@ export class DungeonRepository {
           ...updates,
           updatedAt: new Date()
         })
-      
+
       return result > 0
     } catch (error) {
       console.error('[DungeonRepository] updateProgress error:', error)
@@ -116,7 +118,7 @@ export class DungeonRepository {
         .where(['dungeonId', 'userId'])
         .equals([dungeonId, userId])
         .delete()
-      
+
       return true
     } catch (error) {
       console.error('[DungeonRepository] deleteProgress error:', error)

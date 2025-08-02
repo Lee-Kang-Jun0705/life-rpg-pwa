@@ -9,9 +9,9 @@ import { QuickSlots } from './QuickSlots'
 import { skillManagementService } from '@/lib/services/skill-management.service'
 import { persistenceService } from '@/lib/services/persistence.service'
 import type { Skill, LearnedSkill, SkillFilter } from '@/lib/types/skill-system'
-import { 
-  Sparkles, 
-  BookOpen, 
+import {
+  Sparkles,
+  BookOpen,
   Zap,
   Grid3X3,
   ChevronLeft,
@@ -38,7 +38,7 @@ export function SkillScreen({ onClose }: SkillScreenProps) {
   useEffect(() => {
     // 이미 스킬이 로드되어 있는지 확인
     const currentSkills = skillManagementService.getAllLearnedSkills()
-    
+
     if (currentSkills.length === 0) {
       // 스킬이 없을 때만 저장된 데이터 불러오기
       persistenceService.loadSkills('player-1').then(() => {
@@ -57,28 +57,28 @@ export function SkillScreen({ onClose }: SkillScreenProps) {
     setSkillPoints(skillManagementService.getSkillPoints())
   }
 
-  const handleLearnSkill = async (skillId: string) => {
+  const handleLearnSkill = async(skillId: string) => {
     const result = await skillManagementService.learnSkill(skillId)
     if (await result) {
       loadSkills()
     }
   }
 
-  const handleUpgradeSkill = async (skillId: string) => {
+  const handleUpgradeSkill = async(skillId: string) => {
     const result = await skillManagementService.upgradeSkill(skillId)
     if (await result) {
       loadSkills()
     }
   }
 
-  const handleAssignToQuickSlot = async (skillId: string, slot: number) => {
+  const handleAssignToQuickSlot = async(skillId: string, slot: number) => {
     const result = await skillManagementService.assignToQuickSlot(skillId, slot)
     if (await result) {
       loadSkills()
     }
   }
 
-  const handleRemoveFromQuickSlot = async (slot: number) => {
+  const handleRemoveFromQuickSlot = async(slot: number) => {
     const result = await skillManagementService.removeFromQuickSlot(slot)
     if (await result) {
       loadSkills()
@@ -95,14 +95,14 @@ export function SkillScreen({ onClose }: SkillScreenProps) {
   }
 
   const getFilteredSkills = (): Skill[] => {
-    let skills = activeTab === 'learned' 
+    let skills = activeTab === 'learned'
       ? learnedSkills.map(ls => skillManagementService.getSkill(ls.skillId)!).filter(Boolean)
       : allSkills
 
     // 검색어 필터
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
-      skills = skills.filter(skill => 
+      skills = skills.filter(skill =>
         skill.name.toLowerCase().includes(query) ||
         skill.description.toLowerCase().includes(query)
       )
@@ -214,7 +214,7 @@ export function SkillScreen({ onClose }: SkillScreenProps) {
                   />
                 </div>
               )}
-              
+
               {/* 필터 버튼 */}
               {activeTab !== 'tree' && (
                 <button

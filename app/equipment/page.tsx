@@ -23,12 +23,12 @@ export default function EquipmentPage() {
   const [enhancingEquipment, setEnhancingEquipment] = useState<Equipment | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'equipped' | 'inventory'>('equipped')
-  
+
   // 필터 및 정렬
   const [filter, setFilter] = useState<EquipmentFilter>({})
   const [sortBy, setSortBy] = useState<EquipmentSortOption>('power')
   const [showFilter, setShowFilter] = useState(false)
-  
+
   const { coins } = useShop()
   const equipmentService = EquipmentService.getInstance()
 
@@ -37,10 +37,10 @@ export default function EquipmentPage() {
     loadEquipmentData()
   }, [])
 
-  const loadEquipmentData = async () => {
+  const loadEquipmentData = async() => {
     try {
       setIsLoading(true)
-      
+
       // 사용자 데이터 로드
       const user = await dbHelpers.getProfile(GAME_CONFIG.DEFAULT_USER_ID)
       if (user) {
@@ -48,14 +48,14 @@ export default function EquipmentPage() {
         const tempEquipped: EquippedGear = {
           weapon: EQUIPMENT_DATA.find(e => e.id === 'iron-sword'),
           armor: EQUIPMENT_DATA.find(e => e.id === 'leather-armor'),
-          helmet: EQUIPMENT_DATA.find(e => e.id === 'leather-cap'),
+          helmet: EQUIPMENT_DATA.find(e => e.id === 'leather-cap')
         }
         setEquippedGear(tempEquipped)
-        
+
         // 인벤토리 로드 (임시로 일부 장비 추가)
         const tempInventory = [
           ...EQUIPMENT_DATA.slice(0, 20),
-          ...EQUIPMENT_DATA.slice(50, 60),
+          ...EQUIPMENT_DATA.slice(50, 60)
         ]
         setInventory(tempInventory)
       }
@@ -69,7 +69,7 @@ export default function EquipmentPage() {
   // 장비 장착/해제
   const handleEquip = (equipment: Equipment) => {
     const newEquipped = { ...equippedGear }
-    
+
     // 같은 타입의 장비가 이미 장착되어 있으면 교체
     if (equipment.type === 'accessory') {
       // 액세서리는 3개까지 장착 가능
@@ -89,7 +89,7 @@ export default function EquipmentPage() {
       // 다른 장비는 타입별로 1개만
       newEquipped[equipment.type] = equipment
     }
-    
+
     setEquippedGear(newEquipped)
     setSelectedEquipment(null)
   }
@@ -97,18 +97,18 @@ export default function EquipmentPage() {
   // 장비 해제
   const handleUnequip = (type: EquipmentType, slot?: 'accessory1' | 'accessory2' | 'accessory3') => {
     const newEquipped = { ...equippedGear }
-    
+
     if (type === 'accessory' && slot) {
       newEquipped[slot] = undefined
     } else if (type !== 'accessory') {
       (newEquipped as Record<string, Equipment | undefined>)[type] = undefined
     }
-    
+
     setEquippedGear(newEquipped)
   }
 
   // 장비 강화 처리
-  const handleEnhancement = async (
+  const handleEnhancement = async(
     equipment: Equipment,
     material?: EnhancementMaterial,
     useProtection?: boolean
@@ -119,15 +119,15 @@ export default function EquipmentPage() {
       material,
       useProtection
     )
-    
+
     // 인벤토리 업데이트
     if (result.equipment) {
-      setInventory(prev => 
-        prev.map(item => 
+      setInventory(prev =>
+        prev.map(item =>
           item.id === equipment.id ? result.equipment! : item
         )
       )
-      
+
       // 장착된 장비인 경우 업데이트
       const equippedKeys = Object.keys(equippedGear) as Array<keyof EquippedGear>
       for (const key of equippedKeys) {
@@ -142,7 +142,7 @@ export default function EquipmentPage() {
     } else if (result.destroyed) {
       // 장비가 파괴된 경우 제거
       setInventory(prev => prev.filter(item => item.id !== equipment.id))
-      
+
       // 장착된 장비인 경우 제거
       const equippedKeys = Object.keys(equippedGear) as Array<keyof EquippedGear>
       for (const key of equippedKeys) {
@@ -155,20 +155,34 @@ export default function EquipmentPage() {
         }
       }
     }
-    
+
     return result
   }
 
   // 필터링 및 정렬
   const filteredInventory = inventory
     .filter(equipment => {
-      if (filter.type && !filter.type.includes(equipment.type)) return false
-      if (filter.rarity && !filter.rarity.includes(equipment.rarity)) return false
-      if (filter.tier && !filter.tier.includes(equipment.tier)) return false
-      if (filter.minLevel && equipment.level < filter.minLevel) return false
-      if (filter.maxLevel && equipment.level > filter.maxLevel) return false
-      if (filter.hasSetBonus && !equipment.setId) return false
-      if (filter.hasSpecialEffect && (!equipment.specialEffects || equipment.specialEffects.length === 0)) return false
+      if (filter.type && !filter.type.includes(equipment.type)) {
+        return false
+      }
+      if (filter.rarity && !filter.rarity.includes(equipment.rarity)) {
+        return false
+      }
+      if (filter.tier && !filter.tier.includes(equipment.tier)) {
+        return false
+      }
+      if (filter.minLevel && equipment.level < filter.minLevel) {
+        return false
+      }
+      if (filter.maxLevel && equipment.level > filter.maxLevel) {
+        return false
+      }
+      if (filter.hasSetBonus && !equipment.setId) {
+        return false
+      }
+      if (filter.hasSpecialEffect && (!equipment.specialEffects || equipment.specialEffects.length === 0)) {
+        return false
+      }
       return true
     })
     .sort((a, b) => {
@@ -392,7 +406,7 @@ export default function EquipmentPage() {
                   <Filter className="w-4 h-4" />
                   필터
                 </button>
-                
+
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as EquipmentSortOption)}
@@ -405,7 +419,7 @@ export default function EquipmentPage() {
                   <option value="price">가격순</option>
                 </select>
               </div>
-              
+
               <div className="text-sm text-gray-500">
                 {filteredInventory.length} / {inventory.length} 아이템
               </div>
@@ -546,12 +560,12 @@ export default function EquipmentPage() {
             onClose={() => setSelectedEquipment(null)}
           />
         )}
-        
+
         {/* 강화 모달 */}
         {enhancingEquipment && (
           <EnhancementModal
             equipment={enhancingEquipment}
-            onEnhance={(material, useProtection) => 
+            onEnhance={(material, useProtection) =>
               handleEnhancement(enhancingEquipment, material, useProtection)
             }
             onClose={() => setEnhancingEquipment(null)}

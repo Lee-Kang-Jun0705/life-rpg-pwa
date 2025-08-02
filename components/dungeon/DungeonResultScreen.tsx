@@ -6,10 +6,10 @@ import confetti from 'canvas-confetti'
 import type { CombatResult } from '@/lib/types/combat-system'
 import type { GeneratedItem } from '@/lib/types/item-system'
 import type { DungeonProgress } from '@/lib/types/dungeon'
-import { 
-  Trophy, 
-  Star, 
-  Coins, 
+import {
+  Trophy,
+  Star,
+  Coins,
   Sparkles,
   Package,
   ChevronRight,
@@ -50,12 +50,12 @@ export function DungeonResultScreen({
 }: DungeonResultScreenProps) {
   const [showItemDetails, setShowItemDetails] = useState<GeneratedItem | null>(null)
   const [claimedItems, setClaimedItems] = useState<Set<string>>(new Set())
-  
+
   useEffect(() => {
     if (result === 'victory') {
       // 승리 효과음
       playSound('victory_bgm')
-      
+
       // 컨페티 효과
       const duration = 3000
       const animationEnd = Date.now() + duration
@@ -73,7 +73,7 @@ export function DungeonResultScreen({
         }
 
         const particleCount = 50 * (timeLeft / duration)
-        
+
         confetti({
           ...defaults,
           particleCount,
@@ -94,17 +94,23 @@ export function DungeonResultScreen({
   }, [result])
 
   const calculateStars = (): number => {
-    if (result !== 'victory' || !combatResult || !dungeonProgress) return 0
-    
+    if (result !== 'victory' || !combatResult || !dungeonProgress) {
+      return 0
+    }
+
     let stars = 1 // 기본 1성
-    
+
     // 빠른 클리어
-    if (dungeonProgress.completionTime < 300000) stars++ // 5분 이내
-    
+    if (dungeonProgress.completionTime < 300000) {
+      stars++
+    } // 5분 이내
+
     // 무피해 또는 최소 피해
-    if (dungeonProgress.survivedWithFullHP || 
-        combatResult.statistics?.totalDamageTaken < 100) stars++
-    
+    if (dungeonProgress.survivedWithFullHP ||
+        combatResult.statistics?.totalDamageTaken < 100) {
+      stars++
+    }
+
     return Math.min(stars, 3)
   }
 
@@ -127,7 +133,7 @@ export function DungeonResultScreen({
       rewards.items.forEach(item => {
         inventoryService.addItem(item)
       })
-      
+
       setClaimedItems(new Set(rewards.items.map(item => item.uniqueId)))
       playSound('item_pickup')
     }
@@ -135,7 +141,7 @@ export function DungeonResultScreen({
 
   if (result === 'victory') {
     return (
-      <div 
+      <div
         className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-4"
         data-testid="battle-result"
       >
@@ -164,20 +170,20 @@ export function DungeonResultScreen({
               <motion.div
                 key={star}
                 initial={{ scale: 0, rotate: -180 }}
-                animate={{ 
+                animate={{
                   scale: star <= stars ? 1 : 0.8,
                   rotate: 0
                 }}
-                transition={{ 
+                transition={{
                   delay: 0.5 + star * 0.2,
-                  type: "spring",
+                  type: 'spring',
                   stiffness: 200
                 }}
               >
                 <Star
                   className={`w-16 h-16 ${
-                    star <= stars 
-                      ? 'text-yellow-500 fill-yellow-500 star-filled' 
+                    star <= stars
+                      ? 'text-yellow-500 fill-yellow-500 star-filled'
                       : 'text-gray-600'
                   }`}
                 />
@@ -239,10 +245,10 @@ export function DungeonResultScreen({
                 <Sparkles className="w-6 h-6 text-yellow-500" />
                 획득 보상
               </h3>
-              
+
               {/* 경험치와 골드 */}
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div 
+                <div
                   className="bg-gray-700 rounded-lg p-4 flex items-center gap-3"
                   data-testid="reward-exp"
                 >
@@ -256,8 +262,8 @@ export function DungeonResultScreen({
                     </div>
                   </div>
                 </div>
-                
-                <div 
+
+                <div
                   className="bg-gray-700 rounded-lg p-4 flex items-center gap-3"
                   data-testid="reward-gold"
                 >
@@ -286,7 +292,7 @@ export function DungeonResultScreen({
                       모두 획득
                     </button>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {rewards.items.map((item) => (
                       <motion.div
@@ -344,7 +350,7 @@ export function DungeonResultScreen({
                 <ChevronRight className="w-6 h-6" />
               </button>
             )}
-            
+
             {(!dungeonProgress || dungeonProgress.currentStage >= dungeonProgress.totalStages) && (
               <button
                 onClick={onExit}
@@ -389,7 +395,7 @@ export function DungeonResultScreen({
 
   // 패배 화면
   return (
-    <div 
+    <div
       className="min-h-screen bg-gradient-to-b from-gray-900 to-red-950 text-white p-4"
       data-testid="defeat-screen"
     >
@@ -414,7 +420,7 @@ export function DungeonResultScreen({
           <p className="text-center text-gray-300 mb-6">
             더 강해진 후 다시 도전해보세요!
           </p>
-          
+
           <div className="flex gap-4">
             <button
               onClick={onRetry}
@@ -424,7 +430,7 @@ export function DungeonResultScreen({
               <RotateCcw className="w-6 h-6" />
               다시 도전
             </button>
-            
+
             <button
               onClick={onExit}
               className="flex-1 py-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors flex items-center justify-center gap-2"
@@ -441,12 +447,12 @@ export function DungeonResultScreen({
 }
 
 // 아이템 상세 모달 컴포넌트
-function ItemDetailModal({ 
-  item, 
-  onClose 
-}: { 
+function ItemDetailModal({
+  item,
+  onClose
+}: {
   item: GeneratedItem
-  onClose: () => void 
+  onClose: () => void
 }) {
   return (
     <motion.div

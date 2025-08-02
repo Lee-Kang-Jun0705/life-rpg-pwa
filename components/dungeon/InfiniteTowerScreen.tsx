@@ -3,16 +3,16 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { infiniteTowerService } from '@/lib/services/infinite-tower.service'
-import type { 
-  InfiniteTowerProgress, 
+import type {
+  InfiniteTowerProgress,
   TowerBuff,
-  InfiniteTowerRanking 
+  InfiniteTowerRanking
 } from '@/lib/types/dungeon'
-import { 
-  Trophy, 
-  Zap, 
-  Shield, 
-  Heart, 
+import {
+  Trophy,
+  Zap,
+  Shield,
+  Heart,
   ChevronUp,
   Clock,
   Sword,
@@ -40,7 +40,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
     loadTowerData()
   }, [userId])
 
-  const loadTowerData = async () => {
+  const loadTowerData = async() => {
     setLoading(true)
     try {
       // 진행 상황과 랭킹 로드
@@ -56,14 +56,14 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
     }
   }
 
-  const handleStartFromBeginning = async () => {
+  const handleStartFromBeginning = async() => {
     const result = await infiniteTowerService.enterTower(userId, false)
     if (result.success) {
       onEnterFloor(result.floor)
     }
   }
 
-  const handleStartFromCheckpoint = async () => {
+  const handleStartFromCheckpoint = async() => {
     const result = await infiniteTowerService.enterTower(userId, true)
     if (result.success) {
       onEnterFloor(result.floor)
@@ -78,7 +78,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
     }
   }
 
-  const handlePurchaseBuff = async (buffId: string) => {
+  const handlePurchaseBuff = async(buffId: string) => {
     const success = await infiniteTowerService.purchaseBuff(userId, buffId)
     if (success) {
       setShowBuffShop(false)
@@ -90,7 +90,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4" />
           <p>무한의 탑 로딩 중...</p>
         </div>
       </div>
@@ -121,8 +121,8 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                activeTab === tab 
-                  ? 'bg-purple-600 text-white' 
+                activeTab === tab
+                  ? 'bg-purple-600 text-white'
                   : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
               }`}
             >
@@ -148,7 +148,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
               {/* 현재 진행 상황 */}
               <div className="bg-gray-800 rounded-xl p-6">
                 <h2 className="text-2xl font-bold mb-4">현재 진행 상황</h2>
-                
+
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                   <div className="bg-gray-700 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
@@ -157,7 +157,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
                     </div>
                     <p className="text-2xl font-bold">{progress?.currentFloor || 1}층</p>
                   </div>
-                  
+
                   <div className="bg-gray-700 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Trophy className="w-5 h-5 text-yellow-400" />
@@ -165,7 +165,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
                     </div>
                     <p className="text-2xl font-bold">{progress?.highestFloor || 0}층</p>
                   </div>
-                  
+
                   <div className="bg-gray-700 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Flag className="w-5 h-5 text-blue-400" />
@@ -173,7 +173,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
                     </div>
                     <p className="text-2xl font-bold">{progress?.lastCheckpoint || 0}층</p>
                   </div>
-                  
+
                   <div className="bg-gray-700 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Sword className="w-5 h-5 text-red-400" />
@@ -191,7 +191,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
                   >
                     처음부터 시작
                   </button>
-                  
+
                   {(progress?.lastCheckpoint || 0) > 0 && (
                     <button
                       onClick={handleStartFromCheckpoint}
@@ -223,7 +223,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
                       </div>
                     ))}
                   </div>
-                  
+
                   <button
                     onClick={handleOpenBuffShop}
                     className="mt-4 px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
@@ -270,15 +270,15 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
               className="bg-gray-800 rounded-xl p-6"
             >
               <h2 className="text-2xl font-bold mb-6">전체 랭킹</h2>
-              
+
               {rankings.length > 0 ? (
                 <div className="space-y-3">
                   {rankings.map((rank, index) => (
                     <div
                       key={rank.userId}
                       className={`flex items-center justify-between p-4 rounded-lg ${
-                        rank.userId === userId 
-                          ? 'bg-purple-700' 
+                        rank.userId === userId
+                          ? 'bg-purple-700'
                           : 'bg-gray-700'
                       }`}
                     >
@@ -318,7 +318,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
               className="bg-gray-800 rounded-xl p-6"
             >
               <h2 className="text-2xl font-bold mb-6">보상 정보</h2>
-              
+
               <div className="space-y-6">
                 {/* 층별 보상 */}
                 <div>
@@ -386,7 +386,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
             className="bg-gray-800 rounded-xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
           >
             <h2 className="text-2xl font-bold mb-4">버프 상점</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {buffShopItems.map((buff) => (
                 <div key={buff.id} className="bg-gray-700 rounded-lg p-4">
@@ -411,7 +411,7 @@ export function InfiniteTowerScreen({ userId, onEnterFloor, onExit }: InfiniteTo
                 </div>
               ))}
             </div>
-            
+
             <button
               onClick={() => setShowBuffShop(false)}
               className="mt-6 w-full py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"

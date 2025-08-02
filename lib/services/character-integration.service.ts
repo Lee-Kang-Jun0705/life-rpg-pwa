@@ -49,7 +49,7 @@ export class CharacterIntegrationService {
         dbHelpers.getProfile(userId),
         dbHelpers.getStats(userId)
       ])
-      
+
       console.log('[CharacterIntegration] Profile loaded:', profile)
       console.log('[CharacterIntegration] Stats loaded:', stats)
 
@@ -78,7 +78,7 @@ export class CharacterIntegrationService {
         relationship: stats.find(s => s.type === 'relationship')?.level || 1,
         achievement: stats.find(s => s.type === 'achievement')?.level || 1
       }
-      
+
       // 총 레벨은 스탯 레벨의 합계
       const totalLevel = Object.values(coreStats).reduce((sum, level) => sum + level, 0)
 
@@ -103,7 +103,7 @@ export class CharacterIntegrationService {
 
       // 캐시 저장
       this.characterCache.set(userId, character)
-      
+
       return character
     } catch (error) {
       console.error('Failed to get character:', error)
@@ -127,7 +127,7 @@ export class CharacterIntegrationService {
 
       // 캐시 저장
       this.equipmentCache.set(userId, equipment)
-      
+
       return equipment
     } catch (error) {
       console.error('Failed to get equipped items:', error)
@@ -151,7 +151,7 @@ export class CharacterIntegrationService {
 
       // 캐시 저장
       this.skillCache.set(userId, skills)
-      
+
       return skills
     } catch (error) {
       console.error('Failed to get active skills:', error)
@@ -163,13 +163,13 @@ export class CharacterIntegrationService {
    * 전투 스탯 계산
    */
   private calculateCombatStats(
-    coreStats: Record<CoreStat, number>, 
-    equipment: Equipment[], 
+    coreStats: Record<CoreStat, number>,
+    equipment: Equipment[],
     skills: Skill[]
   ) {
     // 기본 스탯 (코어 스탯 기반)
     let hp = 100 + (coreStats.health * 20)
-    let mp = 50 + (coreStats.learning * 10)
+    const mp = 50 + (coreStats.learning * 10)
     let attack = 10 + (coreStats.achievement * 5)
     let defense = 5 + (coreStats.health * 3)
     let speed = 50 + (coreStats.relationship * 2)
@@ -181,13 +181,27 @@ export class CharacterIntegrationService {
 
     // 장비 보너스 적용
     equipment.forEach(item => {
-      if (item.stats.hp) hp += item.stats.hp
-      if (item.stats.attack) attack += item.stats.attack
-      if (item.stats.defense) defense += item.stats.defense
-      if (item.stats.speed) speed += item.stats.speed
-      if (item.stats.critRate) critRate += item.stats.critRate
-      if (item.stats.critDamage) critDamage += item.stats.critDamage
-      if (item.stats.resistance) resistance += item.stats.resistance
+      if (item.stats.hp) {
+        hp += item.stats.hp
+      }
+      if (item.stats.attack) {
+        attack += item.stats.attack
+      }
+      if (item.stats.defense) {
+        defense += item.stats.defense
+      }
+      if (item.stats.speed) {
+        speed += item.stats.speed
+      }
+      if (item.stats.critRate) {
+        critRate += item.stats.critRate
+      }
+      if (item.stats.critDamage) {
+        critDamage += item.stats.critDamage
+      }
+      if (item.stats.resistance) {
+        resistance += item.stats.resistance
+      }
     })
 
     // 패시브 스킬 보너스 적용
@@ -332,10 +346,10 @@ export class CharacterIntegrationService {
 
     const newExperience = character.experience + amount
     const experienceForNextLevel = this.getExperienceForLevel(character.level + 1)
-    
+
     let newLevel = character.level
     let remainingExperience = newExperience
-    
+
     // 레벨업 체크
     while (remainingExperience >= experienceForNextLevel) {
       remainingExperience -= experienceForNextLevel
@@ -379,7 +393,7 @@ export class CharacterIntegrationService {
     this.equipmentCache.delete(userId)
     this.skillCache.delete(userId)
   }
-  
+
   /**
    * 캐시 클리어 (외부에서 호출 가능)
    */

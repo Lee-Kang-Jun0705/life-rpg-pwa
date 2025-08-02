@@ -7,9 +7,9 @@ import type { MonsterData, MonsterTier } from '@/lib/types/battle-extended'
 export const ALL_MONSTERS: { [id: string]: MonsterData } = {
   ...MONSTER_DATABASE,
   ...EXTENDED_MONSTER_DATABASE,
-  
+
   // 추가 몬스터들 (70종 더 추가하여 총 100종 달성)
-  
+
   // === 특수 지역 몬스터 ===
   sandworm: {
     id: 'sandworm',
@@ -716,7 +716,7 @@ export const ALL_MONSTERS: { [id: string]: MonsterData } = {
           id: 'demon_lord_power',
           name: '마왕의 힘',
           type: 'buff',
-          stats: { 
+          stats: {
             attack: 100,
             magicAttack: 100,
             defense: 50,
@@ -777,32 +777,34 @@ export function getRandomMonster(options?: {
   excludeIds?: string[]
 }): MonsterData | null {
   let monsters = Object.values(ALL_MONSTERS)
-  
+
   if (options?.minLevel !== undefined) {
     monsters = monsters.filter(m => m.stats.level >= options.minLevel!)
   }
-  
+
   if (options?.maxLevel !== undefined) {
     monsters = monsters.filter(m => m.stats.level <= options.maxLevel!)
   }
-  
+
   if (options?.tier) {
     monsters = monsters.filter(m => m.tier === options.tier)
   }
-  
+
   if (options?.excludeIds) {
     monsters = monsters.filter(m => !options.excludeIds!.includes(m.id))
   }
-  
-  if (monsters.length === 0) return null
-  
+
+  if (monsters.length === 0) {
+    return null
+  }
+
   return monsters[Math.floor(Math.random() * monsters.length)]
 }
 
 // 몬스터 통계
 export function getMonsterStats() {
   const allMonsters = Object.values(ALL_MONSTERS)
-  
+
   return {
     total: allMonsters.length,
     byTier: {

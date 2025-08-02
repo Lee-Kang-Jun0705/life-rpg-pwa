@@ -30,8 +30,12 @@ export class ExpCalculator {
 
   // 레벨별 필요 경험치 계산
   static calculateRequiredExp(level: number): number {
-    if (level <= 0) return 0
-    if (level === 1) return 100
+    if (level <= 0) {
+      return 0
+    }
+    if (level === 1) {
+      return 100
+    }
 
     // 레벨별 점진적 증가
     if (level <= 10) {
@@ -72,8 +76,8 @@ export class ExpCalculator {
 
     const requiredExpForCurrentLevel = this.calculateRequiredExp(level)
     const requiredExpForNextLevel = this.calculateRequiredExp(level + 1)
-    const progress = requiredExpForCurrentLevel > 0 
-      ? (currentLevelExp / requiredExpForCurrentLevel) * 100 
+    const progress = requiredExpForCurrentLevel > 0
+      ? (currentLevelExp / requiredExpForCurrentLevel) * 100
       : 0
 
     return {
@@ -179,7 +183,7 @@ export class ExpCalculator {
   // 시간대 보너스 계산
   private static calculateTimeBonus(time: Date): AppliedBonus {
     const hour = time.getHours()
-    
+
     if (hour >= 6 && hour < 9) {
       return {
         type: 'time',
@@ -202,7 +206,7 @@ export class ExpCalculator {
         description: '늦은 시간 활동'
       }
     }
-    
+
     return {
       type: 'time',
       name: '일반 시간대',
@@ -286,9 +290,9 @@ export class ExpCalculator {
     previousActivities: ReadonlyArray<Activity>
   ): AppliedPenalty {
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
-    
+
     const recentSameActivities = previousActivities.filter(
-      a => a.activityName === activity.activityName && 
+      a => a.activityName === activity.activityName &&
            new Date(a.timestamp) >= oneHourAgo
     )
 
@@ -389,14 +393,14 @@ export class ExpCalculator {
   }
 
   // 레벨업 필요 경험치 미리보기
-  static getExpPreview(currentLevel: number, levelsAhead: number = 5): LevelExpPreview[] {
+  static getExpPreview(currentLevel: number, levelsAhead = 5): LevelExpPreview[] {
     const preview: LevelExpPreview[] = []
-    
+
     for (let i = 0; i < levelsAhead; i++) {
       const level = currentLevel + i + 1
       const requiredExp = this.calculateRequiredExp(level)
       const totalExpNeeded = this.getTotalExpForLevel(level)
-      
+
       preview.push({
         level,
         requiredExp,
@@ -404,7 +408,7 @@ export class ExpCalculator {
         milestone: this.getLevelMilestone(level)
       })
     }
-    
+
     return preview
   }
 
@@ -419,11 +423,21 @@ export class ExpCalculator {
 
   // 레벨 마일스톤
   private static getLevelMilestone(level: number): string | undefined {
-    if (level === 10) return '초보자 졸업'
-    if (level === 30) return '숙련자 달성'
-    if (level === 50) return '전문가 인정'
-    if (level === 100) return '마스터 등극'
-    if (level % 10 === 0) return `레벨 ${level} 달성`
+    if (level === 10) {
+      return '초보자 졸업'
+    }
+    if (level === 30) {
+      return '숙련자 달성'
+    }
+    if (level === 50) {
+      return '전문가 인정'
+    }
+    if (level === 100) {
+      return '마스터 등극'
+    }
+    if (level % 10 === 0) {
+      return `레벨 ${level} 달성`
+    }
     return undefined
   }
 }

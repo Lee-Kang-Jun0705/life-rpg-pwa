@@ -42,13 +42,15 @@ export function RewardModal({ isOpen, onClose, rewards }: RewardModalProps) {
     }
   }, [isOpen, rewards])
 
-  if (!rewards) return null
+  if (!rewards) {
+    return null
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="text-center space-y-6">
         <div className="text-6xl animate-bounce">🎉</div>
-        
+
         <h2 className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
           던전 클리어!
         </h2>

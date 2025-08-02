@@ -572,7 +572,9 @@ export function getStagesForDungeon(dungeonId: string): Stage[] {
 export function getStageById(stageId: string): Stage | undefined {
   for (const dungeonStages of Object.values(DUNGEON_STAGES_MAP)) {
     const stage = dungeonStages.stages.find(s => s.id === stageId)
-    if (stage) return stage
+    if (stage) {
+      return stage
+    }
   }
   return undefined
 }

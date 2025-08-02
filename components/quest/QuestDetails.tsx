@@ -52,12 +52,12 @@ export function QuestDetails({ quest, onClose, onAccept, onComplete, onClaim }: 
                 <p className="text-gray-400">{quest.description}</p>
               </div>
               <div className={cn(
-                "px-3 py-1 rounded-full text-sm font-medium",
-                quest.type === 'main' && "bg-gradient-to-r from-purple-500 to-pink-500",
-                quest.type === 'daily' && "bg-gradient-to-r from-blue-500 to-cyan-500",
-                quest.type === 'side' && "bg-gradient-to-r from-green-500 to-emerald-500",
-                quest.type === 'event' && "bg-gradient-to-r from-red-500 to-rose-500",
-                "text-white"
+                'px-3 py-1 rounded-full text-sm font-medium',
+                quest.type === 'main' && 'bg-gradient-to-r from-purple-500 to-pink-500',
+                quest.type === 'daily' && 'bg-gradient-to-r from-blue-500 to-cyan-500',
+                quest.type === 'side' && 'bg-gradient-to-r from-green-500 to-emerald-500',
+                quest.type === 'event' && 'bg-gradient-to-r from-red-500 to-rose-500',
+                'text-white'
               )}>
                 {quest.type === 'main' && '메인 퀘스트'}
                 {quest.type === 'daily' && '일일 퀘스트'}
@@ -95,8 +95,8 @@ export function QuestDetails({ quest, onClose, onAccept, onComplete, onClaim }: 
                   <div
                     key={objective.id}
                     className={cn(
-                      "flex items-center gap-3 p-3 rounded-lg",
-                      objective.completed ? "bg-green-900/20" : "bg-gray-800/30"
+                      'flex items-center gap-3 p-3 rounded-lg',
+                      objective.completed ? 'bg-green-900/20' : 'bg-gray-800/30'
                     )}
                   >
                     {objective.completed ? (
@@ -106,8 +106,8 @@ export function QuestDetails({ quest, onClose, onAccept, onComplete, onClaim }: 
                     )}
                     <div className="flex-1">
                       <p className={cn(
-                        "text-sm",
-                        objective.completed ? "text-gray-400 line-through" : "text-white"
+                        'text-sm',
+                        objective.completed ? 'text-gray-400 line-through' : 'text-white'
                       )}>
                         {objective.description}
                       </p>
@@ -147,7 +147,7 @@ export function QuestDetails({ quest, onClose, onAccept, onComplete, onClaim }: 
                     <span className="text-white font-medium">{quest.rewards.gold} Gold</span>
                   </div>
                 </div>
-                
+
                 {quest.rewards.items && quest.rewards.items.length > 0 && (
                   <div>
                     <p className="text-sm text-gray-400 mb-2">아이템 보상:</p>
@@ -160,7 +160,7 @@ export function QuestDetails({ quest, onClose, onAccept, onComplete, onClaim }: 
                     </div>
                   </div>
                 )}
-                
+
                 {quest.rewards.titles && quest.rewards.titles.length > 0 && (
                   <div>
                     <p className="text-sm text-gray-400 mb-2">칭호 보상:</p>
@@ -220,7 +220,7 @@ export function QuestDetails({ quest, onClose, onAccept, onComplete, onClaim }: 
               >
                 닫기
               </button>
-              
+
               {canAccept && onAccept && (
                 <button
                   onClick={onAccept}
@@ -229,7 +229,7 @@ export function QuestDetails({ quest, onClose, onAccept, onComplete, onClaim }: 
                   퀘스트 수락
                 </button>
               )}
-              
+
               {canComplete && onComplete && (
                 <button
                   onClick={onComplete}
@@ -238,7 +238,7 @@ export function QuestDetails({ quest, onClose, onAccept, onComplete, onClaim }: 
                   퀘스트 완료
                 </button>
               )}
-              
+
               {canClaim && onClaim && (
                 <button
                   onClick={onClaim}

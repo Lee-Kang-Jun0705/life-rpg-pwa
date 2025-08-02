@@ -18,5 +18,5 @@ export {
   getItemsByType,
   getItemsByRarity,
   getItemsByLevelRange,
-  searchItemsByName,
+  searchItemsByName
 } from './all-items'

@@ -18,13 +18,15 @@ export function VoiceInputFallback({
 }: VoiceInputFallbackProps) {
   const [input, setInput] = useState('')
 
-  if (!show) return null
+  if (!show) {
+    return null
+  }
 
-  const positionClass = position === 'bottom-center' 
-    ? 'bottom-28 left-1/2 -translate-x-1/2' 
-    : position === 'bottom-right' 
-    ? 'bottom-28 right-6' 
-    : 'bottom-28 left-6'
+  const positionClass = position === 'bottom-center'
+    ? 'bottom-28 left-1/2 -translate-x-1/2'
+    : position === 'bottom-right'
+      ? 'bottom-28 right-6'
+      : 'bottom-28 left-6'
 
   const handleSubmit = (_e: React.FormEvent) => {
     e.preventDefault()
@@ -53,7 +55,7 @@ export function VoiceInputFallback({
             ✕
           </button>
         </div>
-        
+
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -67,7 +69,7 @@ export function VoiceInputFallback({
           rows={3}
           autoFocus
         />
-        
+
         <div className="flex gap-2">
           <button
             type="submit"

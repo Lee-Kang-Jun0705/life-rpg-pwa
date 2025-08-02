@@ -17,7 +17,7 @@ const statIcons = {
   critRate: Target,
   critDamage: Sparkles,
   expBonus: TrendingUp,
-  goldBonus: Coins,
+  goldBonus: Coins
 }
 
 const statNames = {
@@ -28,7 +28,7 @@ const statNames = {
   critRate: '치명타 확률',
   critDamage: '치명타 피해',
   expBonus: '경험치 보너스',
-  goldBonus: '골드 보너스',
+  goldBonus: '골드 보너스'
 }
 
 const statColors = {
@@ -39,7 +39,7 @@ const statColors = {
   critRate: 'text-purple-500',
   critDamage: 'text-pink-500',
   expBonus: 'text-indigo-500',
-  goldBonus: 'text-amber-500',
+  goldBonus: 'text-amber-500'
 }
 
 export function EquipmentStats({ stats }: EquipmentStatsProps) {
@@ -52,7 +52,7 @@ export function EquipmentStats({ stats }: EquipmentStatsProps) {
       critRate: 3,
       critDamage: 2,
       expBonus: 1,
-      goldBonus: 0.5,
+      goldBonus: 0.5
     }
     return sum + (value || 0) * (weights[stat as keyof typeof weights] || 1)
   }, 0)
@@ -76,12 +76,14 @@ export function EquipmentStats({ stats }: EquipmentStatsProps) {
         {/* 개별 스탯 */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Object.entries(stats).map(([stat, value], index) => {
-            if (!value || value === 0) return null
-            
+            if (!value || value === 0) {
+              return null
+            }
+
             const Icon = statIcons[stat as keyof typeof statIcons]
             const name = statNames[stat as keyof typeof statNames]
             const color = statColors[stat as keyof typeof statColors]
-            
+
             return (
               <motion.div
                 key={stat}
@@ -95,8 +97,8 @@ export function EquipmentStats({ stats }: EquipmentStatsProps) {
                   <span className="text-sm text-gray-600 dark:text-gray-400">{name}</span>
                 </div>
                 <div className={`text-xl font-bold ${color}`}>
-                  {stat === 'critRate' || stat === 'critDamage' || stat === 'expBonus' || stat === 'goldBonus' 
-                    ? `+${value}%` 
+                  {stat === 'critRate' || stat === 'critDamage' || stat === 'expBonus' || stat === 'goldBonus'
+                    ? `+${value}%`
                     : `+${value}`
                   }
                 </div>

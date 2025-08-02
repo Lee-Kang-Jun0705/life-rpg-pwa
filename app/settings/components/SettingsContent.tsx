@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { BackupManager } from '@/lib/offline/backup'
 import { AISettings } from './AISettings'
-import { 
-  AICoachModel, 
-  AICoachTone, 
-  Language 
+import {
+  AICoachModel,
+  AICoachTone,
+  Language
 } from '@/lib/settings/types'
 
 export default function SettingsPage() {
@@ -35,7 +35,7 @@ export default function SettingsPage() {
     { id: 'about', name: '정보', emoji: 'ℹ️' }
   ]
 
-  const handleBackup = async () => {
+  const handleBackup = async() => {
     try {
       const backupData = await BackupManager.createBackup(backupPassword || undefined)
       BackupManager.downloadBackup(backupData)
@@ -47,7 +47,7 @@ export default function SettingsPage() {
     }
   }
 
-  const handleRestore = async (file: File) => {
+  const handleRestore = async(file: File) => {
     try {
       const text = await file.text()
       await BackupManager.restoreBackup(text, backupPassword || undefined)
@@ -173,7 +173,7 @@ export default function SettingsPage() {
                   // 설정 저장 후 리프레시
                   window.location.reload()
                 }} />
-                
+
                 {/* AI 코치 기본 설정 */}
                 <Card>
                   <CardHeader>
@@ -310,14 +310,14 @@ export default function SettingsPage() {
 
                   {/* 수동 백업/복원 */}
                   <div className="space-y-4">
-                    <Button 
+                    <Button
                       onClick={() => setIsBackupModalOpen(true)}
                       className="w-full"
                     >
                       💾 지금 백업하기
                     </Button>
 
-                    <Button 
+                    <Button
                       onClick={() => setIsRestoreModalOpen(true)}
                       variant="outline"
                       className="w-full"
@@ -339,8 +339,8 @@ export default function SettingsPage() {
                   <p className="text-gray-600 dark:text-gray-400">
                     푸시 알림을 설정하여 중요한 알림을 받아보세요.
                   </p>
-                  
-                  <Button 
+
+                  <Button
                     onClick={() => router.push('/settings/notifications')}
                     className="w-full"
                   >
@@ -365,7 +365,7 @@ export default function SettingsPage() {
                     <span className="text-muted-foreground">마지막 업데이트</span>
                     <span>{new Date(settings.lastUpdated).toLocaleDateString()}</span>
                   </div>
-                  
+
                   <div className="pt-4 space-y-2">
                     <Button variant="outline" className="w-full">
                       📖 사용 가이드
@@ -373,13 +373,13 @@ export default function SettingsPage() {
                     <Button variant="outline" className="w-full">
                       💬 피드백 보내기
                     </Button>
-                    <Button 
+                    <Button
                       onClick={() => {
                         if (confirm('모든 설정을 초기화하시겠습니까?')) {
                           resetSettings()
                         }
                       }}
-                      variant="outline" 
+                      variant="outline"
                       className="w-full text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
                       🔄 설정 초기화
@@ -396,7 +396,7 @@ export default function SettingsPage() {
       <Modal isOpen={isBackupModalOpen} onClose={() => setIsBackupModalOpen(false)}>
         <div className="p-6">
           <h3 className="text-xl font-bold mb-4">데이터 백업</h3>
-          
+
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">
@@ -417,11 +417,11 @@ export default function SettingsPage() {
               <Button onClick={handleBackup} className="flex-1">
                 백업 다운로드
               </Button>
-              <Button 
+              <Button
                 onClick={() => {
                   setIsBackupModalOpen(false)
                   setBackupPassword('')
-                }} 
+                }}
                 variant="outline"
                 className="flex-1"
               >
@@ -436,7 +436,7 @@ export default function SettingsPage() {
       <Modal isOpen={isRestoreModalOpen} onClose={() => setIsRestoreModalOpen(false)}>
         <div className="p-6">
           <h3 className="text-xl font-bold mb-4">백업 복원</h3>
-          
+
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">
@@ -472,11 +472,11 @@ export default function SettingsPage() {
               </div>
             )}
 
-            <Button 
+            <Button
               onClick={() => {
                 setIsRestoreModalOpen(false)
                 setBackupPassword('')
-              }} 
+              }}
               variant="outline"
               className="w-full"
             >

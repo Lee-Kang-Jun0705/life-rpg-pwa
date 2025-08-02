@@ -4,9 +4,9 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import type { LearnedSkill, Skill } from '@/lib/types/skill-system'
 import { skillManagementService } from '@/lib/services/skill-management.service'
-import { 
-  TrendingUp, 
-  Zap, 
+import {
+  TrendingUp,
+  Zap,
   Clock,
   Target,
   ChevronUp
@@ -46,7 +46,9 @@ export function LearnedSkills({
   }
 
   const canUpgradeSkill = (skill: Skill, learned: LearnedSkill): boolean => {
-    if (learned.level >= skill.maxLevel) return false
+    if (learned.level >= skill.maxLevel) {
+      return false
+    }
     const pointsRequired = learned.level + 1
     return skillPoints >= pointsRequired
   }
@@ -65,11 +67,13 @@ export function LearnedSkills({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {learnedSkills.map((learned, index) => {
         const skill = skillManagementService.getSkill(learned.skillId)
-        if (!skill) return null
+        if (!skill) {
+          return null
+        }
 
         const canUpgrade = canUpgradeSkill(skill, learned)
-        const mpCost = typeof skill.mpCost === 'number' 
-          ? skill.mpCost 
+        const mpCost = typeof skill.mpCost === 'number'
+          ? skill.mpCost
           : skill.mpCost.base + skill.mpCost.perLevel * (learned.level - 1)
 
         return (
@@ -114,7 +118,7 @@ export function LearnedSkills({
                       {skill.description}
                     </p>
                   </div>
-                  
+
                   {/* 스킬 타입 아이콘 */}
                   <div className="text-gray-500">
                     {getTypeIcon(skill.type)}
@@ -165,10 +169,10 @@ export function LearnedSkills({
                       </span>
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div 
+                      <div
                         className="bg-purple-500 h-2 rounded-full transition-all"
-                        style={{ 
-                          width: `${(learned.experience / (learned.level * 100 * (learned.level + 1))) * 100}%` 
+                        style={{
+                          width: `${(learned.experience / (learned.level * 100 * (learned.level + 1))) * 100}%`
                         }}
                       />
                     </div>
@@ -189,9 +193,9 @@ export function LearnedSkills({
                       mt-3 px-3 py-1 rounded text-sm transition-colors
                       flex items-center gap-1
                       ${canUpgrade
-                        ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                        : 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                      }
+                    ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                    : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                  }
                     `}
                     data-testid="upgrade-skill-btn"
                   >
@@ -205,10 +209,10 @@ export function LearnedSkills({
                   <div className="mt-2">
                     <span className={`
                       px-2 py-1 rounded text-xs
-                      ${learned.isActive 
-                        ? 'bg-green-600 text-white' 
-                        : 'bg-gray-700 text-gray-400'
-                      }
+                      ${learned.isActive
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-700 text-gray-400'
+                  }
                     `}>
                       {learned.isActive ? '활성화됨' : '비활성화됨'}
                     </span>

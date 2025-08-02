@@ -28,7 +28,7 @@ export default function NotFound() {
             </Link>
           </div>
         </div>
-        
+
         <div className="mt-12 text-6xl animate-bounce">
           💀
         </div>

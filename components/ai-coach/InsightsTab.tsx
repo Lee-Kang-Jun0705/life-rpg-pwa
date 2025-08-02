@@ -28,21 +28,26 @@ export function InsightsTab({ userStats, growthAnalyses, activityPattern, person
   // 시간대 감지 및 감정 체크인 확인
   useEffect(() => {
     const hour = new Date().getHours()
-    if (hour >= 5 && hour < 12) setTimeOfDay('morning')
-    else if (hour >= 12 && hour < 18) setTimeOfDay('afternoon')
-    else if (hour >= 18 && hour < 22) setTimeOfDay('evening')
-    else setTimeOfDay('night')
-    
+    if (hour >= 5 && hour < 12) {
+      setTimeOfDay('morning')
+    } else if (hour >= 12 && hour < 18) {
+      setTimeOfDay('afternoon')
+    } else if (hour >= 18 && hour < 22) {
+      setTimeOfDay('evening')
+    } else {
+      setTimeOfDay('night')
+    }
+
     // 진행률 애니메이션 트리거
     setAnimateProgress(true)
-    
+
     // 감정 체크인 필요 여부 확인
     const lastCheckIn = localStorage.getItem('lastEmotionCheckIn')
     if (lastCheckIn) {
       const lastCheckInDate = new Date(lastCheckIn)
       const now = new Date()
       const hoursDiff = (now.getTime() - lastCheckInDate.getTime()) / (1000 * 60 * 60)
-      
+
       // 4시간이 지났거나 날짜가 바뀌었으면 다시 표시
       if (hoursDiff >= 4 || now.toDateString() !== lastCheckInDate.toDateString()) {
         setShowEmotionCheckIn(true)
@@ -56,17 +61,17 @@ export function InsightsTab({ userStats, growthAnalyses, activityPattern, person
   // 총 레벨과 경험치 계산
   const totalLevel = userStats.reduce((sum, stat) => sum + (stat.level || 0), 0)
   const totalExp = userStats.reduce((sum, stat) => sum + (stat.experience || 0), 0)
-  
+
   // 다음 레벨까지 필요한 경험치 (레벨당 100 exp 기준)
   const currentLevelExp = totalExp % 100
   const nextLevelExp = 100
   const progressPercentage = (currentLevelExp / nextLevelExp) * 100
-  
+
   // 가장 높은/낮은 스탯 찾기
-  const highestStat = userStats.reduce((max, stat) => 
+  const highestStat = userStats.reduce((max, stat) =>
     (stat.level || 0) > (max.level || 0) ? stat : max
   )
-  const lowestStat = userStats.reduce((min, stat) => 
+  const lowestStat = userStats.reduce((min, stat) =>
     (stat.level || 0) < (min.level || 0) ? stat : min
   )
 
@@ -109,10 +114,18 @@ export function InsightsTab({ userStats, growthAnalyses, activityPattern, person
 
   // 연속 일수에 따른 특별 효과
   const getStreakEffect = (days: number): StreakEffect => {
-    if (days >= 30) return { emoji: '👑', title: '레전드', color: 'text-yellow-500' }
-    if (days >= 14) return { emoji: '💎', title: '다이아몬드', color: 'text-cyan-500' }
-    if (days >= 7) return { emoji: '🔥', title: '불타는', color: 'text-orange-500' }
-    if (days >= 3) return { emoji: '🌿', title: '성장하는', color: 'text-green-500' }
+    if (days >= 30) {
+      return { emoji: '👑', title: '레전드', color: 'text-yellow-500' }
+    }
+    if (days >= 14) {
+      return { emoji: '💎', title: '다이아몬드', color: 'text-cyan-500' }
+    }
+    if (days >= 7) {
+      return { emoji: '🔥', title: '불타는', color: 'text-orange-500' }
+    }
+    if (days >= 3) {
+      return { emoji: '🌿', title: '성장하는', color: 'text-green-500' }
+    }
     return { emoji: '🌱', title: '새싹', color: 'text-gray-500' }
   }
 
@@ -167,8 +180,8 @@ export function InsightsTab({ userStats, growthAnalyses, activityPattern, person
       emoji: '⚖️',
       title: '균형 상태',
       mainValue: highestStat.level === lowestStat.level ? '완벽한 균형!' : '불균형',
-      subValue: highestStat.level === lowestStat.level 
-        ? '모든 스탯이 동일해요' 
+      subValue: highestStat.level === lowestStat.level
+        ? '모든 스탯이 동일해요'
         : `${getStatName(highestStat.type)} Lv.${highestStat.level} vs ${getStatName(lowestStat.type)} Lv.${lowestStat.level}`,
       color: 'from-candy-blue to-candy-purple',
       details: `레벨 차이: ${(highestStat.level || 0) - (lowestStat.level || 0)}`
@@ -180,7 +193,7 @@ export function InsightsTab({ userStats, growthAnalyses, activityPattern, person
       mainValue: activityPattern?.mostActiveTime || '데이터 부족',
       subValue: '가장 활발한 시간',
       color: 'from-candy-green to-candy-mint',
-      details: activityPattern?.mostFrequentActivity 
+      details: activityPattern?.mostFrequentActivity
         ? `주요 활동: ${activityPattern.mostFrequentActivity}`
         : '더 많은 활동이 필요해요'
     },
@@ -260,7 +273,7 @@ export function InsightsTab({ userStats, growthAnalyses, activityPattern, person
       </div>
 
       {/* 과거-현재-미래 분석 */}
-      <TimelineAnalysis 
+      <TimelineAnalysis
         userStats={userStats}
         growthAnalyses={growthAnalyses}
         activityPattern={activityPattern}

@@ -56,7 +56,7 @@ export class VerificationService {
         .reverse()
         .limit(20)
         .toArray()
-      
+
       const sameTypeActivities = recentActivities.filter(
         activity => activity.statType === activityType
       )
@@ -91,7 +91,7 @@ export class VerificationService {
     userId: string,
     activityType: string,
     activityData: Record<string, unknown>,
-    timeWindow: number = 300 // 5분
+    timeWindow = 300 // 5분
   ): Promise<VerificationResult> {
     try {
       const currentTime = Date.now()
@@ -101,18 +101,22 @@ export class VerificationService {
         .reverse()
         .limit(20)
         .toArray()
-      
+
       // 최근 timeWindow 내의 동일 타입 활동들 확인
       const duplicates = recentActivities.filter(activity => {
-        if (activity.statType !== activityType) return false
-        if ((currentTime - activity.timestamp.getTime()) / 1000 > timeWindow) return false
-        
+        if (activity.statType !== activityType) {
+          return false
+        }
+        if ((currentTime - activity.timestamp.getTime()) / 1000 > timeWindow) {
+          return false
+        }
+
         // 활동 데이터 비교 (경험치, 설명 등)
         if (activity.experience === activityData.experience &&
             activity.activityName === activityData.description) {
           return true
         }
-        
+
         return false
       })
 
@@ -143,7 +147,7 @@ export class VerificationService {
     // 2. 파일 타입 체크 (이미지인지)
     // 3. EXIF 데이터 확인 (촬영 시간 등)
     // 4. 로컬 스토리지에 저장
-    
+
     return {
       isValid: true,
       warnings: ['사진 검증 기능은 곧 추가될 예정입니다']

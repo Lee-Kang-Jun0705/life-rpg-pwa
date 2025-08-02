@@ -14,7 +14,7 @@ class VisibilityManager {
   private static instance: VisibilityManager
   private activeTimers: Map<string, TimerInfo> = new Map()
   private pausedTimers: Map<string, TimerInfo> = new Map()
-  private isPageVisible: boolean = true
+  private isPageVisible = true
   private listeners: Set<(visible: boolean) => void> = new Set()
 
   private constructor() {
@@ -69,7 +69,7 @@ class VisibilityManager {
 
   private pauseAllTimers() {
     console.log('[VisibilityManager] 페이지 비활성화 - 타이머 일시정지')
-    
+
     this.activeTimers.forEach((timer, key) => {
       if (timer.type === 'interval') {
         clearInterval(timer.id)
@@ -79,16 +79,16 @@ class VisibilityManager {
         timer.remainingTime = Math.max(0, timer.delay - elapsed)
         clearTimeout(timer.id)
       }
-      
+
       this.pausedTimers.set(key, timer)
     })
-    
+
     this.activeTimers.clear()
   }
 
   private resumeAllTimers() {
     console.log('[VisibilityManager] 페이지 활성화 - 타이머 재시작')
-    
+
     this.pausedTimers.forEach((timer, key) => {
       if (timer.type === 'interval') {
         // 인터벌은 즉시 재시작
@@ -97,14 +97,14 @@ class VisibilityManager {
       } else if (timer.remainingTime && timer.remainingTime > 0) {
         // 타임아웃은 남은 시간만큼 재설정
         const newId = setTimeout(timer.callback, timer.remainingTime)
-        this.activeTimers.set(key, { 
-          ...timer, 
-          id: newId, 
-          createdAt: Date.now() 
+        this.activeTimers.set(key, {
+          ...timer,
+          id: newId,
+          createdAt: Date.now()
         })
       }
     })
-    
+
     this.pausedTimers.clear()
   }
 
@@ -140,7 +140,7 @@ class VisibilityManager {
       delay,
       createdAt: Date.now()
     })
-    
+
     return id
   }
 
@@ -166,7 +166,7 @@ class VisibilityManager {
       delay,
       createdAt: Date.now()
     })
-    
+
     return id
   }
 
@@ -229,25 +229,25 @@ class VisibilityManager {
 }
 
 // SSR 안전한 export
-export const visibilityManager = typeof window !== 'undefined' 
-  ? VisibilityManager.getInstance() 
+export const visibilityManager = typeof window !== 'undefined'
+  ? VisibilityManager.getInstance()
   : null as unknown as VisibilityManager
 
 // React Hook
 export function useVisibilityManager() {
   const manager = VisibilityManager.getInstance()
-  
+
   return {
-    registerInterval: (key: string, callback: () => void, delay: number) => 
+    registerInterval: (key: string, callback: () => void, delay: number) =>
       manager.registerInterval(key, callback, delay),
-    registerTimeout: (key: string, callback: () => void, delay: number) => 
+    registerTimeout: (key: string, callback: () => void, delay: number) =>
       manager.registerTimeout(key, callback, delay),
     clearInterval: (key: string) => manager.clearInterval(key),
     clearTimeout: (key: string) => manager.clearTimeout(key),
     isVisible: manager.isVisible,
-    addListener: (listener: (visible: boolean) => void) => 
+    addListener: (listener: (visible: boolean) => void) =>
       manager.addVisibilityListener(listener),
-    removeListener: (listener: (visible: boolean) => void) => 
+    removeListener: (listener: (visible: boolean) => void) =>
       manager.removeVisibilityListener(listener)
   }
 }

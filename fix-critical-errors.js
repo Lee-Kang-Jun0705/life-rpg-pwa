@@ -5,8 +5,8 @@
  * prefer-const 및 no-unused-expressions 오류 수정
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const fs = require('fs').promises
+const path = require('path')
 
 const criticalFixes = [
   {
@@ -49,41 +49,41 @@ const criticalFixes = [
       { from: 'let accuracy = 0.9 + (coreStats.learning * 0.01)', to: 'const accuracy = 0.9 + (coreStats.learning * 0.01)' }
     ]
   }
-];
+]
 
 async function fixCriticalErrors() {
-  console.log('🔧 Critical Error 수정 시작...\n');
-  
+  console.log('🔧 Critical Error 수정 시작...\n')
+
   for (const fileConfig of criticalFixes) {
-    const filePath = path.join(process.cwd(), fileConfig.file);
-    
+    const filePath = path.join(process.cwd(), fileConfig.file)
+
     try {
-      let content = await fs.readFile(filePath, 'utf8');
-      let modified = false;
-      
+      let content = await fs.readFile(filePath, 'utf8')
+      let modified = false
+
       for (const fix of fileConfig.fixes) {
         if (content.includes(fix.from)) {
-          content = content.replace(fix.from, fix.to);
-          modified = true;
-          console.log(`✅ ${fileConfig.file}: "${fix.from.substring(0, 30)}..." 수정됨`);
+          content = content.replace(fix.from, fix.to)
+          modified = true
+          console.log(`✅ ${fileConfig.file}: "${fix.from.substring(0, 30)}..." 수정됨`)
         }
       }
-      
+
       if (modified) {
-        await fs.writeFile(filePath, content, 'utf8');
+        await fs.writeFile(filePath, content, 'utf8')
       }
     } catch (error) {
-      console.error(`❌ ${fileConfig.file} 수정 실패:`, error.message);
+      console.error(`❌ ${fileConfig.file} 수정 실패:`, error.message)
     }
   }
-  
-  console.log('\n✨ Critical Error 수정 완료!');
+
+  console.log('\n✨ Critical Error 수정 완료!')
 }
 
 // no-unused-expressions 수정
 async function fixUnusedExpressions() {
-  console.log('\n🔧 no-unused-expressions 오류 수정 시작...\n');
-  
+  console.log('\n🔧 no-unused-expressions 오류 수정 시작...\n')
+
   const patterns = [
     {
       // 조건부 표현식을 if문으로 변환
@@ -95,48 +95,48 @@ async function fixUnusedExpressions() {
       pattern: /^(\s*)([^=\s]+)\s*\?\s*([^:]+)\s*:\s*([^;]+);?$/gm,
       replacement: '$1if ($2) {\n$1  $3;\n$1} else {\n$1  $4;\n$1}'
     }
-  ];
-  
+  ]
+
   const filesToCheck = [
     'lib/services/skill-management.service.ts',
     'components/dashboard/StatCard.tsx',
     'lib/verification/verification-service.ts'
-  ];
-  
+  ]
+
   for (const file of filesToCheck) {
-    const filePath = path.join(process.cwd(), file);
-    
+    const filePath = path.join(process.cwd(), file)
+
     try {
-      let content = await fs.readFile(filePath, 'utf8');
-      let modified = false;
-      
+      let content = await fs.readFile(filePath, 'utf8')
+      let modified = false
+
       for (const { pattern, replacement } of patterns) {
-        const newContent = content.replace(pattern, replacement);
+        const newContent = content.replace(pattern, replacement)
         if (newContent !== content) {
-          content = newContent;
-          modified = true;
+          content = newContent
+          modified = true
         }
       }
-      
+
       if (modified) {
-        await fs.writeFile(filePath, content, 'utf8');
-        console.log(`✅ ${file}: no-unused-expressions 패턴 수정됨`);
+        await fs.writeFile(filePath, content, 'utf8')
+        console.log(`✅ ${file}: no-unused-expressions 패턴 수정됨`)
       }
     } catch (error) {
-      console.error(`❌ ${file} 수정 실패:`, error.message);
+      console.error(`❌ ${file} 수정 실패:`, error.message)
     }
   }
 }
 
 // 메인 실행
 async function main() {
-  console.log('🚀 Life RPG PWA Critical Error 자동 수정 도구\n');
-  
-  await fixCriticalErrors();
-  await fixUnusedExpressions();
-  
-  console.log('\n✅ 모든 Critical Error 수정 완료!');
-  console.log('📌 다음 명령어로 빌드를 다시 시도하세요: npm run build');
+  console.log('🚀 Life RPG PWA Critical Error 자동 수정 도구\n')
+
+  await fixCriticalErrors()
+  await fixUnusedExpressions()
+
+  console.log('\n✅ 모든 Critical Error 수정 완료!')
+  console.log('📌 다음 명령어로 빌드를 다시 시도하세요: npm run build')
 }
 
-main().catch(console.error);
+main().catch(console.error)

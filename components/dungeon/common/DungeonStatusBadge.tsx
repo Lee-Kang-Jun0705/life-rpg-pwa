@@ -2,9 +2,9 @@
 
 import React from 'react'
 import { DungeonStatus } from '@/lib/dungeon/types'
-import { 
-  Lock, 
-  CheckCircle, 
+import {
+  Lock,
+  CheckCircle,
   PlayCircle,
   XCircle,
   Clock,

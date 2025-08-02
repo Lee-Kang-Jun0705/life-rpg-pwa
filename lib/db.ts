@@ -80,22 +80,22 @@ class LifeRPGSimpleDB extends Dexie {
 
   constructor() {
     super('LifeRPGSimpleDB')
-    
+
     this.version(1).stores({
       playerData: 'id, lastUpdated'
     })
-    
+
     this.version(2).stores({
       playerData: 'id, lastUpdated',
       dungeonProgress: '++id, [dungeonId+userId], userId, dungeonId, status, completedAt'
     })
-    
+
     this.version(3).stores({
       playerData: 'id, lastUpdated',
       dungeonProgress: '++id, [dungeonId+userId], userId, dungeonId, status, completedAt',
       syncQueue: '++id, type, timestamp, retryCount'
     })
-    
+
     this.version(4).stores({
       playerData: 'id, lastUpdated',
       characters: 'id, lastUpdated',

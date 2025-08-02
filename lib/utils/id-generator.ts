@@ -32,27 +32,27 @@ export const IdGenerators = {
   // 게임 관련
   activity: () => generatePrefixedId('act'),
   achievement: () => generatePrefixedId('ach'),
-  
+
   // 전투 관련
   combat: () => generatePrefixedId('combat'),
   combatAction: () => generatePrefixedId('action'),
   battleSession: () => generatePrefixedId('battle'),
-  
+
   // 아이템 관련
   item: () => generatePrefixedId('item'),
   equipment: () => generatePrefixedId('eq'),
-  
+
   // 던전 관련
   dungeonSession: () => generatePrefixedId('dungeon'),
-  
+
   // UI 관련
   toast: () => generateShortId(),
   modal: () => generateShortId(),
-  
+
   // 백업/동기화 관련
   backup: () => generateTimestampId('backup'),
   device: () => generateTimestampId('device'),
-  
+
   // 기타
   generic: () => generateId(),
   short: () => generateShortId(),

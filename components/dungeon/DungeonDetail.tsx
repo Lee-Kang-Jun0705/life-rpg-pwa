@@ -30,9 +30,11 @@ export function DungeonDetail({
   const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null)
   const [isProgressModalOpen, setIsProgressModalOpen] = useState(false)
 
-  if (!dungeon) return null
+  if (!dungeon) {
+    return null
+  }
 
-  const handleCompleteChallenge = async (challengeId: string) => {
+  const handleCompleteChallenge = async(challengeId: string) => {
     setCompletingChallenge(challengeId)
     try {
       await onCompleteChallenge(challengeId)
@@ -149,12 +151,12 @@ export function DungeonDetail({
           setIsProgressModalOpen(false)
           setSelectedChallenge(null)
         }}
-        onUpdateProgress={async (value) => {
+        onUpdateProgress={async(value) => {
           if (selectedChallenge && onUpdateChallengeProgress) {
             await onUpdateChallengeProgress(selectedChallenge.id, value)
           }
         }}
-        onComplete={async () => {
+        onComplete={async() => {
           if (selectedChallenge) {
             await handleCompleteChallenge(selectedChallenge.id)
           }
@@ -173,7 +175,7 @@ interface ChallengeCardProps {
 
 function ChallengeCard({ challenge, onComplete, onClick, isCompleting }: ChallengeCardProps) {
   return (
-    <Card 
+    <Card
       className={`p-4 cursor-pointer hover:shadow-md transition-shadow ${challenge.completed ? 'opacity-60' : ''}`}
       onClick={onClick}
     >

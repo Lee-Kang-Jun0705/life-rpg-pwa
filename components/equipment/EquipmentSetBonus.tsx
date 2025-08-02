@@ -21,7 +21,7 @@ export function EquipmentSetBonus({ set, activeBonuses }: EquipmentSetBonusProps
         <div className="p-2 bg-purple-500 rounded-lg">
           <Crown className="w-5 h-5 text-white" />
         </div>
-        
+
         <div className="flex-1">
           <h4 className="font-semibold text-purple-700 dark:text-purple-300">
             {set.name}
@@ -29,18 +29,18 @@ export function EquipmentSetBonus({ set, activeBonuses }: EquipmentSetBonusProps
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             {set.description}
           </p>
-          
+
           {/* 세트 보너스 목록 */}
           <div className="mt-3 space-y-2">
             {set.setBonuses.map((bonus, index) => {
               const isActive = activeBonuses.includes(bonus)
-              
+
               return (
                 <div
                   key={index}
                   className={`flex items-start gap-2 text-sm p-2 rounded-lg transition-all ${
-                    isActive 
-                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' 
+                    isActive
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
                       : 'bg-gray-100 dark:bg-gray-800 text-gray-500'
                   }`}
                 >
@@ -51,7 +51,7 @@ export function EquipmentSetBonus({ set, activeBonuses }: EquipmentSetBonusProps
                       <span className="block w-4 h-4 rounded-full border-2 border-current" />
                     )}
                   </div>
-                  
+
                   <div className="flex-1">
                     <div className="font-medium">
                       {bonus.requiredPieces}세트 효과
@@ -59,7 +59,7 @@ export function EquipmentSetBonus({ set, activeBonuses }: EquipmentSetBonusProps
                     <div className="text-xs opacity-90">
                       {bonus.description}
                     </div>
-                    
+
                     {/* 스탯 보너스 표시 */}
                     {bonus.stats && isActive && (
                       <div className="mt-1 flex flex-wrap gap-2">

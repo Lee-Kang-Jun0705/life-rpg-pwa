@@ -25,32 +25,32 @@ export function DungeonProvider({ children }: { children: React.ReactNode }) {
   const [dungeonStats, setDungeonStats] = useState<DungeonStats | null>(null)
   const [isLoading, setIsLoading] = useState(false) // 초기값을 false로 변경하여 빠른 렌더링
   const [error, setError] = useState<string | null>(null)
-  
+
   // 임시로 하드코딩된 사용자 정보 사용
   const userId = 'local-user'
   const userLevel = 10 // 임시 레벨
   const dungeonService = DungeonService.getInstance()
 
-  const refreshDungeons = useCallback(async (forceReload = false) => {
+  const refreshDungeons = useCallback(async(forceReload = false) => {
     // 이미 로딩 중인 경우 중복 호출 방지
     if (isLoading && !forceReload) {
       return
     }
-    
+
     try {
       setIsLoading(true)
       setError(null)
-      
+
       // 던전 리셋 체크
       await dungeonService.resetDungeons()
-      
+
       // 사용 가능한 던전 목록 가져오기
       const availableDungeons = await dungeonService.getAvailableDungeons(
         userId,
         userLevel
       )
       setDungeons(availableDungeons)
-      
+
       // 던전 통계 가져오기
       const stats = await dungeonService.getDungeonStats(userId)
       setDungeonStats(stats)
@@ -65,7 +65,7 @@ export function DungeonProvider({ children }: { children: React.ReactNode }) {
     }
   }, [userId, userLevel, dungeonService])
 
-  const enterDungeon = useCallback(async (dungeonId: string): Promise<boolean> => {
+  const enterDungeon = useCallback(async(dungeonId: string): Promise<boolean> => {
     try {
       const progress = await dungeonService.enterDungeon(dungeonId, userId)
       if (progress) {
@@ -78,18 +78,18 @@ export function DungeonProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : '던전 입장에 실패했습니다'
       setError(errorMessage)
-      
+
       // 에너지 부족 오류는 즉시 던전 목록 새로고침
       if (errorMessage.includes('에너지')) {
         refreshDungeons(true)
       }
-      
+
       return false
     }
   }, [userId, dungeonService, refreshDungeons])
 
-  const completeChallenge = useCallback(async (
-    dungeonId: string, 
+  const completeChallenge = useCallback(async(
+    dungeonId: string,
     challengeId: string
   ): Promise<{ success: boolean; completed?: boolean; rewards?: DungeonReward }> => {
     try {
@@ -98,19 +98,19 @@ export function DungeonProvider({ children }: { children: React.ReactNode }) {
         challengeId,
         userId
       )
-      
+
       if (result.success) {
         // 던전 목록 새로고침 (강제 리로드) - 완료 후에만
         setTimeout(() => refreshDungeons(true), 100)
-        
+
         // 현재 진행 상황 업데이트
         if (currentProgress?.dungeonId === dungeonId) {
           const updatedProgress = { ...currentProgress }
           updatedProgress.completedChallenges.push(challengeId)
-          updatedProgress.totalProgress = 
-            (updatedProgress.completedChallenges.length / 
+          updatedProgress.totalProgress =
+            (updatedProgress.completedChallenges.length /
             (dungeons.find(d => d.id === dungeonId)?.challenges.length || 1)) * 100
-          
+
           if (updatedProgress.totalProgress >= 100) {
             updatedProgress.status = 'completed'
             setCurrentProgress(null) // 던전 완료 시 진행 상황 초기화
@@ -119,7 +119,7 @@ export function DungeonProvider({ children }: { children: React.ReactNode }) {
           }
         }
       }
-      
+
       return result
     } catch (err) {
       setError(err instanceof Error ? err.message : '도전 과제 완료에 실패했습니다')
@@ -127,7 +127,7 @@ export function DungeonProvider({ children }: { children: React.ReactNode }) {
     }
   }, [userId, dungeonService, currentProgress, dungeons, refreshDungeons])
 
-  const updateChallengeProgress = useCallback(async (
+  const updateChallengeProgress = useCallback(async(
     dungeonId: string,
     challengeId: string,
     value: number
@@ -139,12 +139,12 @@ export function DungeonProvider({ children }: { children: React.ReactNode }) {
         userId,
         value
       )
-      
+
       if (success) {
         // 던전 목록 새로고침 - 지연 실행으로 무한 루프 방지
         setTimeout(() => refreshDungeons(), 100)
       }
-      
+
       return success
     } catch (err) {
       setError(err instanceof Error ? err.message : '진행 상황 업데이트에 실패했습니다')
@@ -159,15 +159,15 @@ export function DungeonProvider({ children }: { children: React.ReactNode }) {
   // 초기 로드 (한 번만)
   useEffect(() => {
     let mounted = true
-    
-    const loadInitialData = async () => {
+
+    const loadInitialData = async() => {
       if (mounted) {
         await refreshDungeons()
       }
     }
-    
+
     loadInitialData()
-    
+
     return () => {
       mounted = false
     }
@@ -176,23 +176,23 @@ export function DungeonProvider({ children }: { children: React.ReactNode }) {
   // 일일 리셋을 위한 타이머 (한 번만 설정)
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | null = null
-    
+
     const checkReset = () => {
       const now = new Date()
       const tomorrow = new Date(now)
       tomorrow.setDate(tomorrow.getDate() + 1)
       tomorrow.setHours(0, 0, 0, 0)
-      
+
       const timeUntilReset = tomorrow.getTime() - now.getTime()
-      
+
       timeoutId = setTimeout(() => {
         refreshDungeons(true) // 강제 리로드
         checkReset() // 다음 리셋 예약
       }, timeUntilReset)
     }
-    
+
     checkReset()
-    
+
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId)

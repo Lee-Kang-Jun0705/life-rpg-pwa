@@ -42,14 +42,16 @@ class MockTable {
   where(field) {
     return {
       equals: (value) => ({
-        first: async () => this.data.find(item => item[field] === value),
-        toArray: async () => this.data.filter(item => item[field] === value),
-        count: async () => this.data.filter(item => item[field] === value).length,
-        delete: async () => {
+        first: async() => this.data.find(item => item[field] === value),
+        toArray: async() => this.data.filter(item => item[field] === value),
+        count: async() => this.data.filter(item => item[field] === value).length,
+        delete: async() => {
           const toDelete = this.data.filter(item => item[field] === value)
           toDelete.forEach(item => {
             const index = this.data.indexOf(item)
-            if (index > -1) this.data.splice(index, 1)
+            if (index > -1) {
+              this.data.splice(index, 1)
+            }
           })
           return toDelete.length
         }

@@ -34,13 +34,19 @@ export function ImprovedCollectionScreen() {
     { id: 'armor', name: '방어구', icon: '🛡️', count: 6, total: 40, color: 'from-blue-500 to-cyan-500' },
     { id: 'accessory', name: '액세서리', icon: '💎', count: 4, total: 30, color: 'from-green-500 to-emerald-500' },
     { id: 'consumable', name: '소모품', icon: '🧪', count: 12, total: 25, color: 'from-yellow-500 to-amber-500' },
-    { id: 'special', name: '특별', icon: '⭐', count: 2, total: 15, color: 'from-purple-500 to-indigo-500' },
+    { id: 'special', name: '특별', icon: '⭐', count: 2, total: 15, color: 'from-purple-500 to-indigo-500' }
   ]
 
   const filteredItems = EQUIPMENT_DATA.filter(item => {
-    if (selectedCategory !== 'all' && item.type !== selectedCategory) return false
-    if (searchQuery && !item.name.toLowerCase().includes(searchQuery.toLowerCase())) return false
-    if (showOnlyCollected && !collectedItems.has(item.id)) return false
+    if (selectedCategory !== 'all' && item.type !== selectedCategory) {
+      return false
+    }
+    if (searchQuery && !item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false
+    }
+    if (showOnlyCollected && !collectedItems.has(item.id)) {
+      return false
+    }
     return true
   })
 
@@ -62,7 +68,7 @@ export function ImprovedCollectionScreen() {
 
   return (
     <div className="min-h-screen p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-7xl mx-auto"
@@ -76,7 +82,7 @@ export function ImprovedCollectionScreen() {
             <h1 className="text-3xl font-bold text-white">컬렉션</h1>
             <p className="text-gray-400">수집한 아이템과 업적을 확인하세요</p>
           </div>
-          
+
           {/* 전체 진행도 */}
           <div className="text-right">
             <div className="text-2xl font-bold text-white">{collectedItems.size} / {EQUIPMENT_DATA.length}</div>
@@ -93,8 +99,8 @@ export function ImprovedCollectionScreen() {
               whileTap={{ scale: 0.95 }}
               onClick={() => setSelectedCategory(category.id)}
               className={`relative overflow-hidden rounded-xl p-4 transition-all ${
-                selectedCategory === category.id 
-                  ? 'ring-2 ring-purple-500 shadow-lg' 
+                selectedCategory === category.id
+                  ? 'ring-2 ring-purple-500 shadow-lg'
                   : ''
               }`}
             >
@@ -103,14 +109,14 @@ export function ImprovedCollectionScreen() {
                 <div className="text-3xl mb-2">{category.icon}</div>
                 <div className="font-medium text-white">{category.name}</div>
                 <div className="text-xs text-gray-400 mt-1">{category.count}/{category.total}</div>
-                
+
                 {/* 진행도 바 */}
                 <div className="mt-2 h-1 bg-gray-700 rounded-full overflow-hidden">
-                  <motion.div 
+                  <motion.div
                     className={`h-full bg-gradient-to-r ${category.color}`}
                     initial={{ width: 0 }}
                     animate={{ width: `${getCompletionPercentage(category)}%` }}
-                    transition={{ duration: 1, ease: "easeOut" }}
+                    transition={{ duration: 1, ease: 'easeOut' }}
                   />
                 </div>
               </div>
@@ -130,7 +136,7 @@ export function ImprovedCollectionScreen() {
               className="w-full pl-10 pr-4 py-3 bg-gray-800/50 rounded-xl border border-gray-700/50 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 transition-colors"
             />
           </div>
-          
+
           <div className="flex gap-2">
             <button
               onClick={() => setShowOnlyCollected(!showOnlyCollected)}
@@ -143,7 +149,7 @@ export function ImprovedCollectionScreen() {
               <Trophy className="w-5 h-5 inline mr-2" />
               수집한 것만
             </button>
-            
+
             <button
               onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
               className="px-4 py-3 bg-gray-800/50 rounded-xl hover:bg-gray-700/50 transition-colors"
@@ -174,13 +180,13 @@ export function ImprovedCollectionScreen() {
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${rarityGradient} opacity-20`} />
                   <div className="absolute inset-0 bg-gray-800/50" />
-                  
+
                   {/* 아이템 아이콘 */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className={`text-4xl ${isCollected ? '' : 'grayscale opacity-50'}`}>
                       {item.icon || '❓'}
                     </span>
-                    
+
                     {!isCollected && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                         <Lock className="w-6 h-6 text-gray-500" />
@@ -193,13 +199,13 @@ export function ImprovedCollectionScreen() {
                     <div className="text-xs text-white font-medium truncate">{item.name}</div>
                     <div className="flex items-center gap-1 mt-0.5">
                       {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
+                        <Star
+                          key={i}
                           className={`w-2 h-2 ${
-                            i < (item.tier || 1) 
-                              ? 'text-yellow-500 fill-yellow-500' 
+                            i < (item.tier || 1)
+                              ? 'text-yellow-500 fill-yellow-500'
                               : 'text-gray-600'
-                          }`} 
+                          }`}
                         />
                       ))}
                     </div>
@@ -261,7 +267,7 @@ export function ImprovedCollectionScreen() {
         )}
 
         {/* 컬렉션 보상 */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
@@ -271,7 +277,7 @@ export function ImprovedCollectionScreen() {
             <Sparkles className="w-6 h-6 text-yellow-500" />
             컬렉션 보상
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-gray-800/50 rounded-xl p-4">
               <div className="flex items-center justify-between mb-2">
@@ -281,7 +287,7 @@ export function ImprovedCollectionScreen() {
               <div className="text-sm text-gray-300">아이템 10개 수집</div>
               <div className="text-xs text-purple-400 mt-1">보상: 1000 골드</div>
             </div>
-            
+
             <div className="bg-gray-800/50 rounded-xl p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-gray-400">중급 수집가</span>
@@ -290,7 +296,7 @@ export function ImprovedCollectionScreen() {
               <div className="text-sm text-gray-300">아이템 50개 수집</div>
               <div className="text-xs text-purple-400 mt-1">보상: 전설 상자</div>
             </div>
-            
+
             <div className="bg-gray-800/50 rounded-xl p-4 opacity-50">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-gray-400">전설 수집가</span>
@@ -330,7 +336,7 @@ export function ImprovedCollectionScreen() {
                 </span>
               </div>
               <p className="text-gray-400 mb-4">{selectedItem.description}</p>
-              
+
               {selectedItem.stats && (
                 <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
                   <h4 className="text-sm font-medium text-gray-400 mb-2">스탯</h4>

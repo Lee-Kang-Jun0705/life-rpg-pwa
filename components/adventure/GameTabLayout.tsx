@@ -55,13 +55,13 @@ export function GameTabLayout({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className={cn(
-                      "relative px-6 py-3 rounded-xl transition-all duration-300",
-                      "bg-gradient-to-br",
+                      'relative px-6 py-3 rounded-xl transition-all duration-300',
+                      'bg-gradient-to-br',
                       activeTab === tab.id
-                        ? "from-purple-600/30 to-pink-600/30 text-white shadow-lg shadow-purple-500/25"
-                        : "from-gray-800/50 to-gray-700/50 text-gray-400 hover:text-white",
-                      "border border-gray-700/50 hover:border-purple-500/50",
-                      "backdrop-blur-sm"
+                        ? 'from-purple-600/30 to-pink-600/30 text-white shadow-lg shadow-purple-500/25'
+                        : 'from-gray-800/50 to-gray-700/50 text-gray-400 hover:text-white',
+                      'border border-gray-700/50 hover:border-purple-500/50',
+                      'backdrop-blur-sm'
                     )}
                   >
                     {/* 활성 탭 배경 효과 */}
@@ -69,15 +69,15 @@ export function GameTabLayout({
                       <motion.div
                         layoutId="activeTabBg"
                         className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl"
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                       />
                     )}
 
                     {/* 탭 콘텐츠 */}
                     <div className="relative z-10 flex flex-col items-center gap-1">
-                      <motion.span 
+                      <motion.span
                         className="text-2xl"
-                        animate={{ 
+                        animate={{
                           rotate: activeTab === tab.id ? [0, -10, 10, -10, 0] : 0,
                           scale: activeTab === tab.id ? 1.1 : 1
                         }}
@@ -93,7 +93,7 @@ export function GameTabLayout({
                       <motion.div
                         layoutId="activeTabGlow"
                         className="absolute -bottom-px left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500"
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                       />
                     )}
                   </motion.button>
@@ -149,10 +149,10 @@ export function GameTabLayout({
               onClick={() => handleTabChange(tab.id)}
               whileTap={{ scale: 0.9 }}
               className={cn(
-                "flex-1 py-2 flex flex-col items-center gap-1 transition-all",
+                'flex-1 py-2 flex flex-col items-center gap-1 transition-all',
                 activeTab === tab.id
-                  ? "text-purple-400"
-                  : "text-gray-500"
+                  ? 'text-purple-400'
+                  : 'text-gray-500'
               )}
             >
               <span className="text-xl">{tab.emoji}</span>

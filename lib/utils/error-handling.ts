@@ -7,7 +7,7 @@ export class AppError extends Error {
 
   constructor(
     message: string,
-    code: string = 'UNKNOWN_ERROR',
+    code = 'UNKNOWN_ERROR',
     details?: unknown
   ) {
     super(message)
@@ -41,14 +41,14 @@ export class NetworkError extends AppError {
 }
 
 export class AuthenticationError extends AppError {
-  constructor(message: string = '인증이 필요합니다') {
+  constructor(message = '인증이 필요합니다') {
     super(message, 'AUTHENTICATION_ERROR')
     this.name = 'AuthenticationError'
   }
 }
 
 export class PermissionError extends AppError {
-  constructor(message: string = '권한이 없습니다') {
+  constructor(message = '권한이 없습니다') {
     super(message, 'PERMISSION_ERROR')
     this.name = 'PermissionError'
   }
@@ -117,8 +117,8 @@ export function logError(_error: AppError | Error, context?: string) {
 // 재시도 로직
 export async function withRetry<T>(
   _fn: () => Promise<T>,
-  maxRetries: number = 3,
-  delay: number = 1000
+  maxRetries = 3,
+  delay = 1000
 ): Promise<T> {
   let lastError: Error
 
@@ -127,7 +127,7 @@ export async function withRetry<T>(
       return await fn()
     } catch (error) {
       lastError = error instanceof Error ? _error : new Error(String(error))
-      
+
       if (attempt === maxRetries) {
         throw new AppError(
           `${maxRetries}번 시도 후 실패: ${lastError.message}`,
@@ -163,7 +163,7 @@ export async function safeAsync<T>(
 // 경계 조건 검사
 export function assertNonNull<T>(
   value: T | null | undefined,
-  message: string = '값이 null 또는 undefined입니다'
+  message = '값이 null 또는 undefined입니다'
 ): T {
   if (value == null) {
     throw new ValidationError(message)
@@ -173,7 +173,7 @@ export function assertNonNull<T>(
 
 export function assertIsNumber(
   value: unknown,
-  message: string = '숫자가 아닙니다'
+  message = '숫자가 아닙니다'
 ): number {
   if (typeof value !== 'number' || isNaN(value)) {
     throw new ValidationError(message)
@@ -183,7 +183,7 @@ export function assertIsNumber(
 
 export function assertIsString(
   value: unknown,
-  message: string = '문자열이 아닙니다'
+  message = '문자열이 아닙니다'
 ): string {
   if (typeof value !== 'string') {
     throw new ValidationError(message)
@@ -193,7 +193,7 @@ export function assertIsString(
 
 export function assertIsArray<T>(
   value: unknown,
-  message: string = '배열이 아닙니다'
+  message = '배열이 아닙니다'
 ): T[] {
   if (!Array.isArray(value)) {
     throw new ValidationError(message)
@@ -206,7 +206,7 @@ export function getErrorMessage(_error: Error): string {
   if (isAppError(error)) {
     return error.message
   }
-  
+
   switch (error.name) {
     case 'ChunkLoadError':
       return '페이지를 불러오는 중 오류가 발생했습니다. 페이지를 새로고침해주세요.'
@@ -217,9 +217,9 @@ export function getErrorMessage(_error: Error): string {
   }
 }
 
-export function getErrorRecoveryAction(_error: Error): { 
-  label: string; 
-  action: () => void 
+export function getErrorRecoveryAction(_error: Error): {
+  label: string;
+  action: () => void
 } | null {
   if (error.name === 'ChunkLoadError') {
     return {
@@ -227,7 +227,7 @@ export function getErrorRecoveryAction(_error: Error): {
       action: () => window.location.reload()
     }
   }
-  
+
   return {
     label: '다시 시도',
     action: () => window.location.reload()

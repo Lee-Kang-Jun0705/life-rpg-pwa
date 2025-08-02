@@ -36,9 +36,9 @@ export function BattleEffects({ effects }: BattleEffectsProps) {
           key={effect.id}
           className={`absolute text-4xl ${
             effect.type === 'damage' ? 'animate-damage' :
-            effect.type === 'heal' ? 'animate-bounce' :
-            effect.type === 'buff' ? 'animate-slide-up' :
-            'animate-fade-in'
+              effect.type === 'heal' ? 'animate-bounce' :
+                effect.type === 'buff' ? 'animate-slide-up' :
+                  'animate-fade-in'
           }`}
           style={{
             left: `${effect.x}%`,
@@ -56,12 +56,12 @@ export function BattleEffects({ effects }: BattleEffectsProps) {
 /**
  * 데미지 숫자 표시 컴포넌트
  */
-export function DamageNumber({ 
-  value, 
-  x, 
-  y, 
-  type = 'normal' 
-}: { 
+export function DamageNumber({
+  value,
+  x,
+  y,
+  type = 'normal'
+}: {
   value: number
   x: number
   y: number
@@ -77,7 +77,9 @@ export function DamageNumber({
     return () => clearTimeout(timer)
   }, [])
 
-  if (!visible) return null
+  if (!visible) {
+    return null
+  }
 
   const colorClass = {
     normal: 'text-red-500',
@@ -110,21 +112,21 @@ export const SKILL_EFFECT_EMOJIS: Record<string, string> = {
   'double_strike': '⚔️⚔️',
   'whirlwind': '🌪️⚔️',
   'power_strike': '💪⚔️',
-  
+
   // 마법 스킬
   'fireball': '🔥',
   'ice_shard': '❄️',
   'lightning_bolt': '⚡',
   'heal': '💚',
   'shield': '🛡️',
-  
+
   // 버프/디버프
   'attack_up': '⬆️⚔️',
   'defense_up': '⬆️🛡️',
   'speed_up': '⬆️💨',
   'poison': '☠️',
   'stun': '💫',
-  
+
   // 특수
   'critical': '💥',
   'dodge': '💨',

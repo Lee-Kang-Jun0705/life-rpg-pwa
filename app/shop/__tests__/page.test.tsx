@@ -121,7 +121,7 @@ describe('ShopPage', () => {
     expect(screen.queryByText('체력 포션')).not.toBeInTheDocument()
   })
 
-  it('should handle item purchase', async () => {
+  it('should handle item purchase', async() => {
     const mockPurchaseItem = jest.fn().mockResolvedValue({ success: true })
     mockUseShop.mockReturnValue({
       items: mockShopItems,
@@ -177,10 +177,10 @@ describe('ShopPage', () => {
     expect(screen.getByText('장착하기')).toBeInTheDocument()
   })
 
-  it('should handle item equip/unequip', async () => {
+  it('should handle item equip/unequip', async() => {
     const mockEquipItem = jest.fn()
     const mockUnequipItem = jest.fn()
-    
+
     mockUseShop.mockReturnValue({
       items: mockShopItems,
       inventory: mockInventory,
@@ -209,10 +209,10 @@ describe('ShopPage', () => {
     render(<ShopPage />)
 
     const itemCard = screen.getByText('철검').closest('div')
-    
+
     if (itemCard) {
       fireEvent.mouseEnter(itemCard)
-      
+
       // Check if stats are displayed
       expect(screen.getByText('공격력: +10')).toBeInTheDocument()
       expect(screen.getByText('필요 레벨: 1')).toBeInTheDocument()

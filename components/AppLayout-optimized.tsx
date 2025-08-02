@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { 
+import {
   Home, Activity, Trophy, Settings, Swords, Package,
   ChartBar, Target, Gift, Brain, Users, Sparkles,
   User, Menu, X
@@ -37,15 +37,19 @@ export function AppLayout({ children }: AppLayoutProps) {
   useEffect(() => {
     // 현재 페이지 인덱스 찾기
     const currentIndex = navItems.findIndex(item => item.href === pathname)
-    
+
     if (currentIndex !== -1) {
       // 다음 페이지와 이전 페이지 프리페치
       const nextItem = navItems[currentIndex + 1]
       const prevItem = navItems[currentIndex - 1]
-      
-      if (nextItem) router.prefetch(nextItem.href)
-      if (prevItem) router.prefetch(prevItem.href)
-      
+
+      if (nextItem) {
+        router.prefetch(nextItem.href)
+      }
+      if (prevItem) {
+        router.prefetch(prevItem.href)
+      }
+
       // 인기 페이지들 프리페치
       const popularPages = ['/dashboard', '/adventure', '/activities']
       popularPages.forEach(page => {
@@ -91,17 +95,17 @@ export function AppLayout({ children }: AppLayoutProps) {
               {navItems.map((item) => {
                 const Icon = item.icon
                 const isActive = pathname === item.href
-                
+
                 return (
                   <li key={item.href}>
                     <Link
                       href={item.href}
                       className={`
                         flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
-                        ${isActive 
-                          ? 'bg-primary text-white' 
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                        }
+                        ${isActive
+                    ? 'bg-primary text-white'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }
                       `}
                       onClick={() => setIsMenuOpen(false)}
                     >

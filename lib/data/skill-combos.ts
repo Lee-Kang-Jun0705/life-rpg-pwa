@@ -15,7 +15,7 @@ export const skillCombos: Record<string, SkillCombo> = {
     timeWindow: 3000,
     bonusEffect: {
       type: 'damage',
-      value: 50, // 50% 추가 피해
+      value: 50 // 50% 추가 피해
     },
     replaceWithSkill: 'triple_strike_finisher'
   },
@@ -81,7 +81,7 @@ export const skillCombos: Record<string, SkillCombo> = {
     timeWindow: 3000,
     bonusEffect: {
       type: 'damage',
-      value: 100, // 100% 추가 피해
+      value: 100 // 100% 추가 피해
     }
   },
 
@@ -139,7 +139,7 @@ export const skillCombos: Record<string, SkillCombo> = {
     timeWindow: 8000,
     bonusEffect: {
       type: 'heal',
-      value: { base: 50, scaling: 0 }, // 50% 추가 회복
+      value: { base: 50, scaling: 0 } // 50% 추가 회복
     }
   },
 
@@ -216,22 +216,22 @@ export function checkComboActivation(
   combos: SkillCombo[]
 ): SkillCombo | null {
   const now = Date.now()
-  
+
   for (const combo of combos) {
     // 시간 범위 내의 스킬만 필터링
     const validSkills = recentSkills
       .filter(s => now - s.timestamp <= combo.timeWindow)
       .map(s => s.skillId)
-    
+
     // 콤보 시퀀스와 비교
     if (validSkills.length >= combo.sequence.length) {
       const recentSequence = validSkills.slice(-combo.sequence.length)
-      
+
       if (JSON.stringify(recentSequence) === JSON.stringify(combo.sequence)) {
         return combo
       }
     }
   }
-  
+
   return null
 }

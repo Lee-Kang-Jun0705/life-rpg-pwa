@@ -45,7 +45,7 @@ export const DUNGEON_ITEMS: Record<string, DungeonItem> = {
     dropRate: 1,
     description: '전설 속에만 존재한다는 강력한 검'
   },
-  
+
   // 소비품
   'health-potion': {
     id: 'health-potion',
@@ -67,7 +67,7 @@ export const DUNGEON_ITEMS: Record<string, DungeonItem> = {
     dropRate: 20,
     description: 'MP를 즉시 회복하는 물약'
   },
-  
+
   // 재료
   'monster-core': {
     id: 'monster-core',
@@ -142,7 +142,7 @@ export const DUNGEON_MONSTERS: Record<string, DungeonMonster> = {
     dropRate: 80,
     drops: [DUNGEON_ITEMS['health-potion'], DUNGEON_ITEMS['steel-armor']]
   },
-  
+
   'goblin': {
     id: 'goblin',
     name: '고블린',
@@ -228,7 +228,7 @@ export const DUNGEON_BOSSES: Record<string, DungeonBoss> = {
     enrageTimer: 180,
     specialMechanics: ['분열', '치유']
   },
-  
+
   'goblin-king': {
     id: 'goblin-king',
     name: '고블린 킹',
@@ -399,7 +399,7 @@ export const DUNGEONS: Dungeon[] = [
     status: 'locked',
     clearedCount: 0
   },
-  
+
   // 무한의 탑
   {
     id: 'infinite-tower',
@@ -430,7 +430,7 @@ export const DUNGEONS: Dungeon[] = [
     status: 'available',
     clearedCount: 0
   },
-  
+
   // 스토리 던전
   {
     id: 'story-01',

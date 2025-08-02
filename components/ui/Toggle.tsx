@@ -23,8 +23,10 @@ export function Toggle({
   }, [checked])
 
   const handleToggle = () => {
-    if (disabled) return
-    
+    if (disabled) {
+      return
+    }
+
     const newChecked = !isChecked
     setIsChecked(newChecked)
     onChange?.(newChecked)

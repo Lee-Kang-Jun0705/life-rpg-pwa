@@ -25,11 +25,11 @@ export function CharacterProvider({ children }: { children: React.ReactNode }) {
     // Load character appearance from localStorage
     const savedAppearance = safeLocalStorage.getItem('characterAppearance')
     const parsed = safeJSONParse<CharacterAppearance | null>(savedAppearance, null)
-    
+
     if (parsed) {
       setCurrentAppearance(parsed)
     }
-    
+
     setIsLoading(false)
   }, [])
 

@@ -4,7 +4,7 @@ import { db } from '../db'
 export class PushNotificationManager {
   private static instance: PushNotificationManager
   private swRegistration: ServiceWorkerRegistration | null = null
-  
+
   static getInstance(): PushNotificationManager {
     if (!PushNotificationManager.instance) {
       PushNotificationManager.instance = new PushNotificationManager()
@@ -17,7 +17,7 @@ export class PushNotificationManager {
     if (typeof window === 'undefined') {
       return false
     }
-    
+
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
       console.log('푸시 알림이 지원되지 않는 브라우저입니다.')
       return false
@@ -92,7 +92,7 @@ export class PushNotificationManager {
     if (typeof window === 'undefined') {
       return
     }
-    
+
     if (!this.swRegistration) {
       await this.initialize()
     }
@@ -111,12 +111,12 @@ export class PushNotificationManager {
         data: payload.data,
         requireInteraction: payload.requireInteraction || false
       }
-      
+
       // actions는 Service Worker 환경에서만 지원됨
       if (payload.actions) {
         options.actions = payload.actions
       }
-      
+
       await this.swRegistration!.showNotification(payload.title, options)
     } catch (error) {
       console.error('알림 표시 실패:', error)
@@ -139,7 +139,7 @@ export class PushNotificationManager {
     }
 
     // 타이머로 스케줄링 (실제 서비스에서는 서버 스케줄러 사용 권장)
-    setTimeout(async () => {
+    setTimeout(async() => {
       const preferences = await this.getPreferences()
       if (preferences.enabled && preferences.types[type]) {
         await this.showLocalNotification(payload)
@@ -150,10 +150,12 @@ export class PushNotificationManager {
   // 활동 리마인더 스케줄링
   async scheduleActivityReminders(): Promise<void> {
     const preferences = await this.getPreferences()
-    if (!preferences.schedule.activityReminder.enabled) return
+    if (!preferences.schedule.activityReminder.enabled) {
+      return
+    }
 
     const now = new Date()
-    
+
     for (const timeStr of preferences.schedule.activityReminder.times) {
       const [hours, minutes] = timeStr.split(':').map(Number)
       const scheduledTime = new Date()
@@ -183,7 +185,9 @@ export class PushNotificationManager {
   // 연속 출석 리마인더
   async scheduleStreakReminder(currentStreak: number): Promise<void> {
     const preferences = await this.getPreferences()
-    if (!preferences.schedule.streakReminder.enabled) return
+    if (!preferences.schedule.streakReminder.enabled) {
+      return
+    }
 
     const [hours, minutes] = preferences.schedule.streakReminder.time.split(':').map(Number)
     const scheduledTime = new Date()
@@ -229,7 +233,7 @@ export class PushNotificationManager {
   // 알림 설정 가져오기
   async getPreferences(): Promise<NotificationPreferences> {
     const stored = await db.playerData.get('notification-preferences')
-    
+
     if (stored?.data) {
       return stored.data
     }
@@ -293,19 +297,19 @@ export class PushNotificationManager {
     const base64 = (base64String + padding)
       .replace(/\-/g, '+')
       .replace(/_/g, '/')
-    
+
     if (typeof window === 'undefined' || !window.atob) {
       // Node.js 환경 또는 atob이 없는 경우
       return new Uint8Array(0)
     }
-    
+
     const rawData = window.atob(base64)
     const outputArray = new Uint8Array(rawData.length)
-    
+
     for (let i = 0; i < rawData.length; ++i) {
       outputArray[i] = rawData.charCodeAt(i)
     }
-    
+
     return outputArray
   }
 

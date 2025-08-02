@@ -28,7 +28,7 @@ export default function DataSyncDebugPage() {
   const [gameStoreState, setGameStoreState] = useState(gameStore.getAllState())
 
   // 데이터 스냅샷 가져오기
-  const fetchSnapshot = async () => {
+  const fetchSnapshot = async() => {
     try {
       const snapshot: DataSnapshot = {
         profiles: await db.profiles.toArray(),
@@ -45,7 +45,7 @@ export default function DataSyncDebugPage() {
   }
 
   // 데이터 무결성 검사
-  const checkIntegrity = async () => {
+  const checkIntegrity = async() => {
     setIsChecking(true)
     try {
       const issues = await dataIntegrityChecker.checkAll(GAME_CONFIG.DEFAULT_USER_ID)
@@ -74,22 +74,22 @@ export default function DataSyncDebugPage() {
         receivedAt: new Date()
       }, ...prev].slice(0, 20))
     })
-    
+
     return unsubscribe
   }, [])
 
   // 이슈 자동 수정
-  const autoFixIssues = async () => {
+  const autoFixIssues = async() => {
     const criticalIssues = syncIssues.filter(issue => issue.severity === 'critical')
     const result = await dataIntegrityChecker.autoFix(criticalIssues)
-    
+
     alert(`수정됨: ${result.fixed}, 실패: ${result.failed}`)
     await checkIntegrity()
     await fetchSnapshot()
   }
 
   // 테스트 데이터 생성
-  const generateTestData = async () => {
+  const generateTestData = async() => {
     try {
       await gameStore.updateExperience('health', 50, '테스트 활동')
       alert('테스트 데이터 생성됨')
@@ -102,7 +102,7 @@ export default function DataSyncDebugPage() {
     <div className="min-h-screen bg-gray-900 text-white p-4">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">데이터 동기화 디버그 도구</h1>
-        
+
         {/* 컨트롤 패널 */}
         <div className="bg-gray-800 rounded-lg p-4 mb-6">
           <div className="flex items-center gap-4 mb-4">
@@ -115,7 +115,7 @@ export default function DataSyncDebugPage() {
               />
               자동 새로고침
             </label>
-            
+
             <label className="flex items-center gap-2">
               간격:
               <select
@@ -129,14 +129,14 @@ export default function DataSyncDebugPage() {
                 <option value={10000}>10초</option>
               </select>
             </label>
-            
+
             <button
               onClick={fetchSnapshot}
               className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
             >
               수동 새로고침
             </button>
-            
+
             <button
               onClick={checkIntegrity}
               disabled={isChecking}
@@ -144,7 +144,7 @@ export default function DataSyncDebugPage() {
             >
               {isChecking ? '검사 중...' : '무결성 검사'}
             </button>
-            
+
             <button
               onClick={generateTestData}
               className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
@@ -190,11 +190,11 @@ export default function DataSyncDebugPage() {
                 <div
                   key={index}
                   className={`p-3 rounded ${
-                    issue.severity === 'critical' 
-                      ? 'bg-red-900/50' 
+                    issue.severity === 'critical'
+                      ? 'bg-red-900/50'
                       : issue.severity === 'warning'
-                      ? 'bg-yellow-900/50'
-                      : 'bg-blue-900/50'
+                        ? 'bg-yellow-900/50'
+                        : 'bg-blue-900/50'
                   }`}
                 >
                   <div className="flex items-start justify-between">
@@ -203,11 +203,11 @@ export default function DataSyncDebugPage() {
                       <span className="text-sm ml-2 opacity-75">({issue.table})</span>
                     </div>
                     <span className={`text-xs px-2 py-1 rounded ${
-                      issue.severity === 'critical' 
-                        ? 'bg-red-600' 
+                      issue.severity === 'critical'
+                        ? 'bg-red-600'
                         : issue.severity === 'warning'
-                        ? 'bg-yellow-600'
-                        : 'bg-blue-600'
+                          ? 'bg-yellow-600'
+                          : 'bg-blue-600'
                     }`}>
                       {issue.severity}
                     </span>
@@ -243,8 +243,8 @@ export default function DataSyncDebugPage() {
                   <div key={index} className="mb-2">
                     <div className="font-semibold">{profile.name}</div>
                     <div className="text-sm opacity-75">
-                      레벨: {profile.level} | 
-                      총 경험치: {profile.totalExperience || 'N/A'} | 
+                      레벨: {profile.level} |
+                      총 경험치: {profile.totalExperience || 'N/A'} |
                       현재 경험치: {profile.currentExperience || 'N/A'}
                     </div>
                   </div>

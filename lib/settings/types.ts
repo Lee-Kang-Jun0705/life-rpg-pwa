@@ -75,35 +75,35 @@ export interface Settings {
     photoURL?: string
     bio?: string
   }
-  
+
   // AI 코치
   aiCoach: AICoachSettings
-  
+
   // 스탯 커스터마이징
   statCustomizations: StatCustomization[]
-  
+
   // 일반 설정
   general: {
     language: Language
     soundEffects: boolean
   }
-  
+
   // 알림
   notifications: NotificationSettings
-  
+
   // 백업
   backup: BackupSettings
-  
+
   // 접근성
   accessibility: AccessibilitySettings
-  
+
   // 개인정보
   privacy: {
     shareProgress: boolean
     publicProfile: boolean
     analyticsEnabled: boolean
   }
-  
+
   // 버전 정보
   version: string
   lastUpdated: Date

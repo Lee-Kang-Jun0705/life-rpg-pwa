@@ -45,8 +45,10 @@ export function TabLayout({ tabs, children, className }: TabLayoutProps) {
       <div className="w-full">
         {childrenArray.map((child, index) => {
           const tabId = tabs[index]?.id
-          if (!tabId || activeTab !== tabId) return null
-          
+          if (!tabId || activeTab !== tabId) {
+            return null
+          }
+
           return (
             <div
               key={tabId}

@@ -12,10 +12,14 @@ export function FocusTrap({ children, active = true, onEscape }: FocusTrapProps)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!active) return
+    if (!active) {
+      return
+    }
 
     const container = containerRef.current
-    if (!container) return
+    if (!container) {
+      return
+    }
 
     // 포커스 가능한 요소들 찾기
     const getFocusableElements = () => {
@@ -37,10 +41,14 @@ export function FocusTrap({ children, active = true, onEscape }: FocusTrapProps)
         return
       }
 
-      if (e.key !== 'Tab') return
+      if (e.key !== 'Tab') {
+        return
+      }
 
       const focusableElements = getFocusableElements()
-      if (focusableElements.length === 0) return
+      if (focusableElements.length === 0) {
+        return
+      }
 
       const firstElement = focusableElements[0]
       const lastElement = focusableElements[focusableElements.length - 1]

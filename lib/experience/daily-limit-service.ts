@@ -1,4 +1,4 @@
-import type { 
+import type {
   BonusLimits,
   Result
 } from '@/lib/types/experience'
@@ -7,7 +7,7 @@ import { GameError, StatType } from '@/lib/types/game-common'
 
 export class DailyLimitService {
   private static instance: DailyLimitService | null = null
-  
+
   // 기본 일일 제한
   private readonly BASE_LIMITS: Record<StatType, number> = {
     health: 600,
@@ -15,7 +15,7 @@ export class DailyLimitService {
     relationship: 400,
     achievement: 500
   }
-  
+
   // 보너스 제한 설정
   private readonly BONUS_CONFIG: BonusLimits = {
     weekend: 200,      // 주말 보너스
@@ -38,12 +38,12 @@ export class DailyLimitService {
 
   // 오늘의 일일 제한 가져오기
   async getDailyLimit(
-    userId: string, 
+    userId: string,
     statType: StatType
   ): Promise<Result<DailyExpLimit>> {
     try {
       const today = this.getToday()
-      
+
       let limit = await db.dailyExpLimits
         .where('[userId+statType+date]')
         .equals([userId, statType, today])
@@ -97,13 +97,13 @@ export class DailyLimitService {
     date: string
   ): Promise<number> {
     let bonus = 0
-    
+
     // 주말 보너스
     const dayOfWeek = new Date(date).getDay()
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       bonus += this.BONUS_CONFIG.weekend
     }
-    
+
     // 연속 활동 보너스
     const streakDays = await this.calculateStreakDays(userId)
     for (const streakBonus of this.BONUS_CONFIG.streak) {
@@ -111,7 +111,7 @@ export class DailyLimitService {
         bonus = Math.max(bonus, streakBonus.bonusLimit)
       }
     }
-    
+
     return bonus
   }
 
@@ -122,21 +122,23 @@ export class DailyLimitService {
       .equals(userId)
       .reverse()
       .sortBy('date')
-    
-    if (limits.length === 0) return 0
-    
+
+    if (limits.length === 0) {
+      return 0
+    }
+
     let streak = 0
     const currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
-    
+
     for (const limit of limits) {
       const limitDate = new Date(limit.date)
       limitDate.setHours(0, 0, 0, 0)
-      
+
       const diffDays = Math.floor(
         (currentDate.getTime() - limitDate.getTime()) / (1000 * 60 * 60 * 24)
       )
-      
+
       if (diffDays === streak && limit.activityCount > 0) {
         streak++
         currentDate.setDate(currentDate.getDate() - 1)
@@ -144,7 +146,7 @@ export class DailyLimitService {
         break
       }
     }
-    
+
     return streak
   }
 
@@ -157,7 +159,7 @@ export class DailyLimitService {
     try {
       const today = this.getToday()
       const limit = await this.getDailyLimit(userId, statType)
-      
+
       if (!limit.success) {
         return { success: false, error: limit.error }
       }
@@ -193,13 +195,13 @@ export class DailyLimitService {
       const yesterday = new Date()
       yesterday.setDate(yesterday.getDate() - 1)
       const yesterdayStr = yesterday.toISOString().split('T')[0]
-      
+
       // 어제 날짜 이전의 모든 제한 삭제
       await db.dailyExpLimits
         .where('date')
         .below(yesterdayStr)
         .delete()
-      
+
       return { success: true, data: undefined }
     } catch (error) {
       return {
@@ -217,7 +219,7 @@ export class DailyLimitService {
   ): Promise<Result<void>> {
     try {
       const today = this.getToday()
-      
+
       await db.dailyExpLimits
         .where('[userId+statType+date]')
         .equals([userId, statType, today])
@@ -226,7 +228,7 @@ export class DailyLimitService {
         })
 
       console.warn(`Violation recorded for user ${userId}: ${reason}`)
-      
+
       return { success: true, data: undefined }
     } catch (error) {
       return {
@@ -239,19 +241,19 @@ export class DailyLimitService {
   // 통계 조회
   async getStatistics(
     userId: string,
-    days: number = 7
+    days = 7
   ): Promise<Result<DailyLimitStatistics>> {
     try {
       const startDate = new Date()
       startDate.setDate(startDate.getDate() - days)
       const startDateStr = startDate.toISOString().split('T')[0]
-      
+
       const limits = await db.dailyExpLimits
         .where('userId')
         .equals(userId)
         .and(limit => limit.date >= startDateStr)
         .toArray()
-      
+
       const stats: DailyLimitStatistics = {
         totalDays: days,
         activeDays: new Set(limits.map(l => l.date)).size,
@@ -266,9 +268,9 @@ export class DailyLimitService {
         violationCount: limits.reduce((sum, l) => sum + l.violations, 0),
         currentStreak: await this.calculateStreakDays(userId)
       }
-      
+
       stats.averageDaily = stats.activeDays > 0 ? stats.totalExp / stats.activeDays : 0
-      
+
       // 스탯별 분석
       for (const limit of limits) {
         if (!stats.statBreakdown[limit.statType]) {
@@ -278,16 +280,16 @@ export class DailyLimitService {
             averageDaily: 0
           }
         }
-        
+
         stats.statBreakdown[limit.statType].totalExp += limit.currentExp
         stats.statBreakdown[limit.statType].days++
       }
-      
+
       // 평균 계산
       for (const stat of Object.values(stats.statBreakdown)) {
         stat.averageDaily = stat.days > 0 ? stat.totalExp / stat.days : 0
       }
-      
+
       return { success: true, data: stats }
     } catch (error) {
       return {

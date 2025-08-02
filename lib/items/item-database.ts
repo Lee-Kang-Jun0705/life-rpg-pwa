@@ -1,4 +1,4 @@
-import type { 
+import type {
   ItemRarity
 } from '@/lib/types/inventory'
 
@@ -3104,7 +3104,7 @@ export const SET_BONUSES: { [setId: string]: SetBonus } = {
       }
     ]
   },
-  
+
   holy_set: {
     id: 'holy_set',
     name: '신성 세트',
@@ -3152,8 +3152,8 @@ export function getItemsByRarity(rarity: ItemRarity): Item[] {
 export function getItemsByLevel(minLevel: number, maxLevel: number): Item[] {
   return Object.values(ALL_ITEMS).filter(
     item => {
-      const itemLevel = (item as unknown).level;
-      return itemLevel !== undefined && itemLevel >= minLevel && itemLevel <= maxLevel;
+      const itemLevel = (item as unknown).level
+      return itemLevel !== undefined && itemLevel >= minLevel && itemLevel <= maxLevel
     }
   )
 }
@@ -3164,10 +3164,10 @@ export function getSetBonus(setId: string): SetBonus | undefined {
 
 export function getItemValue(item: Item, enchantLevel?: number): number {
   let baseValue = (item as unknown).value || 0
-  
+
   if (enchantLevel && enchantLevel > 0) {
     baseValue *= (1 + enchantLevel * 0.2)
   }
-  
+
   return Math.floor(baseValue)
 }

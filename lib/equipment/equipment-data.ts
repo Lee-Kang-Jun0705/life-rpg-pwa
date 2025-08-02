@@ -55,7 +55,7 @@ export const SPECIAL_EFFECTS: Record<string, SpecialEffect> = {
     trigger: 'onSkill',
     value: 50
   },
-  
+
   // 방어 관련
   thorns: {
     id: 'thorns',
@@ -81,7 +81,7 @@ export const SPECIAL_EFFECTS: Record<string, SpecialEffect> = {
     trigger: 'onLowHp',
     value: 50
   },
-  
+
   // 유틸리티
   expBooster: {
     id: 'expBooster',
@@ -145,7 +145,7 @@ export const WEAPONS: Equipment[] = [
     stats: { attack: 18, critRate: 5 },
     price: 800
   },
-  
+
   // Tier 2 (레벨 11-20)
   {
     id: 'silver-blade',
@@ -170,7 +170,7 @@ export const WEAPONS: Equipment[] = [
     specialEffects: [SPECIAL_EFFECTS.critBoost],
     price: 3000
   },
-  
+
   // Tier 3 (레벨 21-30)
   {
     id: 'flameblade',
@@ -208,7 +208,7 @@ export const WEAPONS: Equipment[] = [
     setId: 'storm-set',
     price: 8000
   },
-  
+
   // Tier 4 (레벨 31-40)
   {
     id: 'vampire-fang',
@@ -234,7 +234,7 @@ export const WEAPONS: Equipment[] = [
     setId: 'dragon-hunter-set',
     price: 18000
   },
-  
+
   // Tier 5+ (레벨 41+)
   {
     id: 'excalibur',
@@ -272,7 +272,7 @@ export const WEAPONS: Equipment[] = [
     specialEffects: [SPECIAL_EFFECTS.critBoost, SPECIAL_EFFECTS.doubleStrike, SPECIAL_EFFECTS.vampiric],
     price: 1000000
   },
-  
+
   // 추가 무기들
   {
     id: 'battle-axe',
@@ -1088,7 +1088,7 @@ export const ACCESSORIES: Equipment[] = [
     specialEffects: [SPECIAL_EFFECTS.goldMagnet],
     price: 15000
   },
-  
+
   // 목걸이류
   {
     id: 'leather-necklace',
@@ -1137,7 +1137,7 @@ export const ACCESSORIES: Equipment[] = [
     specialEffects: [SPECIAL_EFFECTS.vampiric],
     price: 14000
   },
-  
+
   // 귀걸이류
   {
     id: 'crystal-earring',
@@ -1161,7 +1161,7 @@ export const ACCESSORIES: Equipment[] = [
     stats: { speed: 25, critRate: 20 },
     price: 5000
   },
-  
+
   // 특수 악세서리
   {
     id: 'champions-belt',
@@ -1296,7 +1296,7 @@ export const ALL_EQUIPMENT: Equipment[] = [
 function calculateEquipmentPower(equipment: Equipment): number {
   const stats = equipment.stats
   let power = 0
-  
+
   // 기본 스탯 계산
   power += (stats.attack || 0) * 2
   power += (stats.defense || 0) * 1.5
@@ -1309,7 +1309,7 @@ function calculateEquipmentPower(equipment: Equipment): number {
   power += (stats.luck || 0) * 1
   power += (stats.expBonus || 0) * 0.8
   power += (stats.goldBonus || 0) * 0.6
-  
+
   // 희귀도 보너스
   const rarityMultiplier = {
     common: 1,
@@ -1320,17 +1320,17 @@ function calculateEquipmentPower(equipment: Equipment): number {
     mythic: 5
   }
   power *= rarityMultiplier[equipment.rarity]
-  
+
   // 강화 레벨 보너스
   if (equipment.enhancementLevel) {
     power *= (1 + equipment.enhancementLevel * 0.1)
   }
-  
+
   // 특수 효과 보너스
   if (equipment.specialEffects && equipment.specialEffects.length > 0) {
     power *= (1 + equipment.specialEffects.length * 0.2)
   }
-  
+
   return Math.floor(power)
 }
 
@@ -1340,36 +1340,36 @@ export function searchEquipment(
   sortBy: EquipmentSortOption = 'level'
 ): Equipment[] {
   let filtered = [...ALL_EQUIPMENT]
-  
+
   // 필터링
   if (filter.type && filter.type.length > 0) {
     filtered = filtered.filter(eq => filter.type!.includes(eq.type))
   }
-  
+
   if (filter.rarity && filter.rarity.length > 0) {
     filtered = filtered.filter(eq => filter.rarity!.includes(eq.rarity))
   }
-  
+
   if (filter.tier && filter.tier.length > 0) {
     filtered = filtered.filter(eq => filter.tier!.includes(eq.tier))
   }
-  
+
   if (filter.minLevel) {
     filtered = filtered.filter(eq => eq.level >= filter.minLevel!)
   }
-  
+
   if (filter.maxLevel) {
     filtered = filtered.filter(eq => eq.level <= filter.maxLevel!)
   }
-  
+
   if (filter.hasSetBonus) {
     filtered = filtered.filter(eq => eq.setId !== undefined)
   }
-  
+
   if (filter.hasSpecialEffect) {
     filtered = filtered.filter(eq => eq.specialEffects && eq.specialEffects.length > 0)
   }
-  
+
   // 정렬
   filtered.sort((a, b) => {
     switch (sortBy) {
@@ -1392,7 +1392,7 @@ export function searchEquipment(
         return 0
     }
   })
-  
+
   return filtered
 }
 

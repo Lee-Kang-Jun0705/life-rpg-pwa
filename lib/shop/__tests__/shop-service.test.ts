@@ -1,10 +1,10 @@
 import { db } from '@/lib/database/client'
-import { 
-  ShopItem, 
-  InventoryItem, 
-  PlayerInventory, 
+import {
+  ShopItem,
+  InventoryItem,
+  PlayerInventory,
   PurchaseRecord,
-  DEFAULT_SHOP_ITEMS 
+  DEFAULT_SHOP_ITEMS
 } from '../types'
 
 // 상점 비즈니스 로직을 순수 함수로 분리하여 테스트
@@ -12,7 +12,7 @@ export class ShopService {
   async purchaseItem(
     inventory: PlayerInventory,
     item: ShopItem,
-    quantity: number = 1
+    quantity = 1
   ): Promise<{ success: boolean; newInventory?: PlayerInventory; error?: string }> {
     const totalCost = item.price * quantity
 
@@ -25,7 +25,7 @@ export class ShopService {
 
     // 기존 아이템이 있는지 확인
     const existingItemIndex = newInventory.items.findIndex(invItem => invItem.id === item.id)
-    
+
     if (existingItemIndex >= 0) {
       // 기존 아이템 수량 증가
       newInventory.items[existingItemIndex].quantity += quantity
@@ -92,7 +92,7 @@ export class ShopService {
 
     if (itemCategory === 'weapon' || itemCategory === 'armor' || itemCategory === 'accessory') {
       delete newInventory.equippedItems[itemCategory]
-      
+
       const inventoryItem = newInventory.items.find(item => item.id === itemId)
       if (inventoryItem) {
         inventoryItem.isEquipped = false
@@ -115,10 +115,10 @@ export class ShopService {
 
     const newInventory = { ...inventory }
     const itemIndex = newInventory.items.findIndex(item => item.id === itemId)
-    
+
     if (itemIndex >= 0) {
       newInventory.items[itemIndex].quantity -= 1
-      
+
       // 수량이 0이 되면 아이템 제거
       if (newInventory.items[itemIndex].quantity <= 0) {
         newInventory.items.splice(itemIndex, 1)
@@ -144,7 +144,7 @@ export class ShopService {
     if (inventory.coins < amount) {
       return { success: false, error: '코인이 부족합니다' }
     }
-    
+
     return {
       success: true,
       newInventory: {
@@ -201,7 +201,7 @@ describe('ShopService', () => {
 
   beforeEach(() => {
     shopService = new ShopService()
-    
+
     mockInventory = {
       items: [],
       equippedItems: {},
@@ -212,7 +212,7 @@ describe('ShopService', () => {
   })
 
   describe('purchaseItem', () => {
-    it('충분한 코인이 있을 때 아이템을 구매할 수 있어야 함', async () => {
+    it('충분한 코인이 있을 때 아이템을 구매할 수 있어야 함', async() => {
       const result = await shopService.purchaseItem(mockInventory, mockItem, 1)
 
       expect(result.success).toBe(true)
@@ -222,7 +222,7 @@ describe('ShopService', () => {
       expect(result.newInventory?.items[0].quantity).toBe(1)
     })
 
-    it('코인이 부족할 때 구매에 실패해야 함', async () => {
+    it('코인이 부족할 때 구매에 실패해야 함', async() => {
       mockInventory.coins = 30 // 50 코인 아이템을 살 수 없는 금액
 
       const result = await shopService.purchaseItem(mockInventory, mockItem, 1)
@@ -231,23 +231,23 @@ describe('ShopService', () => {
       expect(result.error).toBe('코인이 부족합니다')
     })
 
-    it('같은 아이템을 다시 구매하면 수량이 증가해야 함', async () => {
+    it('같은 아이템을 다시 구매하면 수량이 증가해야 함', async() => {
       // 첫 번째 구매
       const firstResult = await shopService.purchaseItem(mockInventory, mockItem, 1)
       expect(firstResult.success).toBe(true)
 
       // 두 번째 구매
       const secondResult = await shopService.purchaseItem(firstResult.newInventory!, mockItem, 1)
-      
+
       expect(secondResult.success).toBe(true)
       expect(secondResult.newInventory?.coins).toBe(0) // 100 - 50 - 50
       expect(secondResult.newInventory?.items).toHaveLength(1)
       expect(secondResult.newInventory?.items[0].quantity).toBe(2)
     })
 
-    it('여러 개 수량을 한 번에 구매할 수 있어야 함', async () => {
+    it('여러 개 수량을 한 번에 구매할 수 있어야 함', async() => {
       mockInventory.coins = 200
-      
+
       const result = await shopService.purchaseItem(mockInventory, mockItem, 3)
 
       expect(result.success).toBe(true)
@@ -399,7 +399,7 @@ describe('ShopService', () => {
     it('장착된 아이템들의 스탯 보너스를 합산해야 함', () => {
       const weapon = DEFAULT_SHOP_ITEMS.find(item => item.id === 'sword_basic')!
       const armor = DEFAULT_SHOP_ITEMS.find(item => item.id === 'armor_leather')!
-      
+
       mockInventory.items = [
         { ...weapon, quantity: 1, purchaseDate: new Date(), isEquipped: true },
         { ...armor, quantity: 1, purchaseDate: new Date(), isEquipped: true }

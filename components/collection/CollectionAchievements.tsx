@@ -87,7 +87,7 @@ export function CollectionAchievements({ achievements }: CollectionAchievementsP
             <Check className="w-5 h-5 text-green-500" />
             달성한 업적 ({unlockedAchievements.length})
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {unlockedAchievements.map((achievement, index) => (
               <motion.div
@@ -104,18 +104,18 @@ export function CollectionAchievements({ achievements }: CollectionAchievementsP
                       <h4 className="font-semibold">{achievement.name}</h4>
                       <Check className="w-4 h-4 text-green-500" />
                     </div>
-                    
+
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                       {achievement.description}
                     </p>
-                    
+
                     {achievement.unlockedAt && (
                       <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
                         <Calendar className="w-3 h-3" />
                         <span>{new Date(achievement.unlockedAt).toLocaleDateString()}</span>
                       </div>
                     )}
-                    
+
                     {/* 보상 */}
                     <div className="flex flex-wrap gap-2 text-xs">
                       {achievement.rewards.exp && (
@@ -124,14 +124,14 @@ export function CollectionAchievements({ achievements }: CollectionAchievementsP
                           <span>{achievement.rewards.exp} EXP</span>
                         </div>
                       )}
-                      
+
                       {achievement.rewards.gold && (
                         <div className="flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 rounded">
                           <Coins className="w-3 h-3" />
                           <span>{achievement.rewards.gold} 골드</span>
                         </div>
                       )}
-                      
+
                       {achievement.rewards.title && (
                         <div className="flex items-center gap-1 px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded">
                           <Crown className="w-3 h-3" />
@@ -154,7 +154,7 @@ export function CollectionAchievements({ achievements }: CollectionAchievementsP
             <Lock className="w-5 h-5 text-gray-500" />
             미달성 업적 ({lockedAchievements.length})
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {lockedAchievements.map((achievement, index) => (
               <motion.div
@@ -173,11 +173,11 @@ export function CollectionAchievements({ achievements }: CollectionAchievementsP
                       </h4>
                       <Lock className="w-4 h-4 text-gray-400" />
                     </div>
-                    
+
                     <p className="text-sm text-gray-500 dark:text-gray-500 mb-2">
                       {achievement.description}
                     </p>
-                    
+
                     {/* 달성 조건 */}
                     <div className="text-xs text-gray-500 mb-2">
                       {achievement.condition.type === 'discover' && (
@@ -193,7 +193,7 @@ export function CollectionAchievements({ achievements }: CollectionAchievementsP
                         <span>조건: 카테고리 완료</span>
                       )}
                     </div>
-                    
+
                     {/* 보상 (회색조) */}
                     <div className="flex flex-wrap gap-2 text-xs">
                       {achievement.rewards.exp && (
@@ -202,14 +202,14 @@ export function CollectionAchievements({ achievements }: CollectionAchievementsP
                           <span>{achievement.rewards.exp} EXP</span>
                         </div>
                       )}
-                      
+
                       {achievement.rewards.gold && (
                         <div className="flex items-center gap-1 px-2 py-1 bg-gray-200 dark:bg-gray-800 text-gray-500 rounded">
                           <Coins className="w-3 h-3" />
                           <span>{achievement.rewards.gold} 골드</span>
                         </div>
                       )}
-                      
+
                       {achievement.rewards.title && (
                         <div className="flex items-center gap-1 px-2 py-1 bg-gray-200 dark:bg-gray-800 text-gray-500 rounded">
                           <Crown className="w-3 h-3" />

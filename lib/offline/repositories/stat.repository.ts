@@ -30,8 +30,8 @@ export class StatRepository {
   }
 
   async incrementExperience(
-    userId: string, 
-    type: Stat['type'], 
+    userId: string,
+    type: Stat['type'],
     experience: number
   ): Promise<boolean> {
     const result = await dbHelpers.updateStat(userId, type, experience)
@@ -48,7 +48,7 @@ export class StatRepository {
 
   async getStatsSummary(userId: string) {
     const stats = await this.findByUserId(userId)
-    
+
     const totalExperience = stats.reduce((sum, stat) => sum + stat.experience, 0)
     const totalLevel = stats.reduce((sum, stat) => sum + stat.level, 0)
     const totalActivities = stats.reduce((sum, stat) => sum + stat.totalActivities, 0)

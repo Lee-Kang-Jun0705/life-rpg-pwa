@@ -9,9 +9,9 @@ import type { GeneratedItem, RandomStat } from '@/lib/types/item-system'
 class ItemGeneratorService {
   private static instance: ItemGeneratorService
   private itemCounter = 0
-  
+
   private constructor() {}
-  
+
   static getInstance(): ItemGeneratorService {
     if (!ItemGeneratorService.instance) {
       ItemGeneratorService.instance = new ItemGeneratorService()
@@ -24,13 +24,13 @@ class ItemGeneratorService {
    */
   generateItem(baseItem: Item): GeneratedItem {
     const uniqueId = this.generateUniqueId()
-    
+
     // 랜덤 스탯 생성 (장비 아이템만)
     const randomStats: RandomStat[] = []
     if (baseItem.type === 'weapon' || baseItem.type === 'armor' || baseItem.type === 'accessory') {
       randomStats.push(...this.generateRandomStats(baseItem))
     }
-    
+
     return {
       uniqueId,
       id: baseItem.id,
@@ -70,28 +70,28 @@ class ItemGeneratorService {
    */
   private generateRandomStats(item: Item): RandomStat[] {
     const stats: RandomStat[] = []
-    
+
     // 희귀도에 따른 랜덤 스탯 개수
     const statCount = this.getRandomStatCount(item.rarity)
-    
+
     // 가능한 스탯 풀
     const possibleStats = this.getPossibleStats(item.type)
-    
+
     // 랜덤하게 스탯 선택
     const selectedStats = this.selectRandomStats(possibleStats, statCount)
-    
+
     // 각 스탯에 대해 값 생성
     selectedStats.forEach(stat => {
       const tier = this.getRandomTier(item.rarity)
       const value = this.getStatValue(stat, tier, item.level)
-      
+
       stats.push({
         type: stat,
         value,
         tier
       })
     })
-    
+
     return stats
   }
 
@@ -138,7 +138,7 @@ class ItemGeneratorService {
    */
   private getRandomTier(rarity: string): number {
     const rand = Math.random()
-    
+
     switch (rarity) {
       case 'common':
         return rand < 0.8 ? 1 : 2
@@ -175,12 +175,12 @@ class ItemGeneratorService {
       luck: 5,
       cooldownReduction: 0.02
     }
-    
+
     const base = baseValues[stat] || 1
     const tierMultiplier = 1 + (tier - 1) * 0.5
     const levelMultiplier = 1 + (level / 50)
     const variance = 0.8 + Math.random() * 0.4 // 80% ~ 120%
-    
+
     return Math.round(base * tierMultiplier * levelMultiplier * variance)
   }
 
@@ -189,12 +189,12 @@ class ItemGeneratorService {
    */
   private calculateValue(item: Item, randomStats: RandomStat[]): number {
     let value = item.value
-    
+
     // 랜덤 스탯에 따른 가치 증가
     randomStats.forEach(stat => {
       value += stat.value * stat.tier * 10
     })
-    
+
     return Math.round(value)
   }
 

@@ -38,9 +38,9 @@ export function DungeonFilters({ filter, onFilterChange }: DungeonFiltersProps) 
             className={`
               flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-medium transition-all border
               ${!filter.type
-                ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
-              }
+      ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
+      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
+    }
             `}
           >
             <span>전체</span>
@@ -52,9 +52,9 @@ export function DungeonFilters({ filter, onFilterChange }: DungeonFiltersProps) 
               className={`
                 flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-medium transition-all border
                 ${filter.type === key
-                  ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
-                }
+              ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
+              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
+            }
               `}
             >
               <span>{typeInfo.icon}</span>
@@ -79,9 +79,9 @@ export function DungeonFilters({ filter, onFilterChange }: DungeonFiltersProps) 
             className={`
               flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-medium transition-all border
               ${!filter.difficulty
-                ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
-              }
+      ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
+      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
+    }
             `}
           >
             <span>전체</span>
@@ -93,9 +93,9 @@ export function DungeonFilters({ filter, onFilterChange }: DungeonFiltersProps) 
               className={`
                 flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-medium transition-all border
                 ${filter.difficulty === key
-                  ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
-                }
+              ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
+              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
+            }
               `}
             >
               <span>{diffInfo.name}</span>
@@ -119,9 +119,9 @@ export function DungeonFilters({ filter, onFilterChange }: DungeonFiltersProps) 
             className={`
               flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-medium transition-all border
               ${!filter.status
-                ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
-              }
+      ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
+      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
+    }
             `}
           >
             <span>전체</span>
@@ -135,9 +135,9 @@ export function DungeonFilters({ filter, onFilterChange }: DungeonFiltersProps) 
                 className={`
                   flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-medium transition-all border
                   ${filter.status === key
-                    ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
-                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
-                  }
+                ? 'bg-purple-500 text-white border-purple-500 shadow-lg'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
+              }
                 `}
               >
                 <IconComponent className="w-4 h-4" />

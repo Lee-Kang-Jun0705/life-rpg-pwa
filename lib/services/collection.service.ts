@@ -3,7 +3,7 @@
  * 몬스터 도감 관리 및 보상 처리
  */
 
-import type { 
+import type {
   MonsterCollectionEntry,
   CollectionReward,
   CollectionCategory,
@@ -136,8 +136,8 @@ class CollectionService {
     achievements: COLLECTION_ACHIEVEMENTS,
     lastUpdated: new Date()
   }
-  private userId: string = 'current-user'
-  private initialized: boolean = false
+  private userId = 'current-user'
+  private initialized = false
 
   static getInstance(): CollectionService {
     if (!this.instance) {
@@ -149,8 +149,10 @@ class CollectionService {
   /**
    * 서비스 초기화
    */
-  async initialize(userId: string = 'current-user'): Promise<void> {
-    if (this.initialized && this.userId === userId) return
+  async initialize(userId = 'current-user'): Promise<void> {
+    if (this.initialized && this.userId === userId) {
+      return
+    }
 
     this.userId = userId
     await this.loadFromDB()
@@ -202,7 +204,7 @@ class CollectionService {
     if (!entry.isDiscovered) {
       entry.isDiscovered = true
       entry.firstEncounteredAt = new Date()
-      
+
       // Toast.show({
       //   message: `새로운 몬스터 발견! ${MONSTER_TEMPLATES[monsterId]?.name || monsterId}`,
       //   type: 'success'
@@ -232,7 +234,7 @@ class CollectionService {
     if (!entry.isDefeated) {
       entry.isDefeated = true
       entry.firstDefeatedAt = new Date()
-      
+
       // Toast.show({
       //   message: `첫 처치! ${MONSTER_TEMPLATES[monsterId]?.name || monsterId}`,
       //   type: 'success'
@@ -245,10 +247,10 @@ class CollectionService {
 
     // 카테고리 보상 체크
     await this.checkCategoryRewards()
-    
+
     // 업적 체크
     await this.checkAchievements()
-    
+
     await this.saveToDB()
   }
 
@@ -258,7 +260,7 @@ class CollectionService {
   private async checkCategoryRewards(): Promise<void> {
     for (const category of this.state.categories) {
       const progress = this.getCategoryProgress(category.id)
-      
+
       for (const reward of category.rewards) {
         if (!reward.isClaimed && progress.defeated >= reward.requiredCount) {
           await this.claimReward(category.id, reward.id)
@@ -272,12 +274,14 @@ class CollectionService {
    */
   private async checkAchievements(): Promise<void> {
     const stats = this.getCollectionStats()
-    
+
     for (const achievement of this.state.achievements) {
-      if (achievement.isUnlocked) continue
-      
+      if (achievement.isUnlocked) {
+        continue
+      }
+
       let isAchieved = false
-      
+
       switch (achievement.condition.type) {
         case 'discover':
           isAchieved = stats.discoveredMonsters >= (achievement.condition.count || 0)
@@ -295,11 +299,11 @@ class CollectionService {
           isAchieved = completedCategories >= (achievement.condition.count || 0)
           break
       }
-      
+
       if (isAchieved) {
         achievement.isUnlocked = true
         achievement.unlockedAt = new Date()
-        
+
         // 보상 지급
         if (achievement.rewards.exp) {
           await characterIntegrationService.addExperience(this.userId, achievement.rewards.exp)
@@ -307,7 +311,7 @@ class CollectionService {
         if (achievement.rewards.gold) {
           await characterIntegrationService.addGold(this.userId, achievement.rewards.gold)
         }
-        
+
         // Toast.show({
         //   message: `업적 달성! ${achievement.name}`,
         //   type: 'success'
@@ -321,11 +325,15 @@ class CollectionService {
    */
   async claimReward(categoryId: string, rewardId: string): Promise<boolean> {
     const category = this.state.categories.find(c => c.id === categoryId)
-    if (!category) return false
-    
+    if (!category) {
+      return false
+    }
+
     const reward = category.rewards.find(r => r.id === rewardId)
-    if (!reward || reward.isClaimed) return false
-    
+    if (!reward || reward.isClaimed) {
+      return false
+    }
+
     // 보상 지급
     if (reward.rewards.exp) {
       await characterIntegrationService.addExperience(this.userId, reward.rewards.exp)
@@ -336,15 +344,15 @@ class CollectionService {
     if (reward.rewards.stat) {
       // TODO: 스탯 보상 적용
     }
-    
+
     reward.isClaimed = true
     await this.saveToDB()
-    
+
     // Toast.show({
     //   message: `보상 획득! ${reward.name}`,
     //   type: 'success'
     // })
-    
+
     return true
   }
 
@@ -354,7 +362,7 @@ class CollectionService {
   getCollectionStats(): CollectionStats {
     const entries = Object.values(this.state.entries)
     const totalMonsters = Object.keys(MONSTER_TEMPLATES).length
-    
+
     const stats: CollectionStats = {
       totalMonsters,
       discoveredMonsters: entries.filter(e => e.isDiscovered).length,
@@ -363,9 +371,9 @@ class CollectionService {
       completionRate: 0,
       categoryProgress: []
     }
-    
+
     stats.completionRate = (stats.defeatedMonsters / totalMonsters) * 100
-    
+
     // 카테고리별 진행도
     for (const category of this.state.categories) {
       const progress = this.getCategoryProgress(category.id)
@@ -375,7 +383,7 @@ class CollectionService {
         total: category.monsterIds.length
       })
     }
-    
+
     return stats
   }
 
@@ -384,17 +392,23 @@ class CollectionService {
    */
   getCategoryProgress(categoryId: string): { discovered: number; defeated: number; total: number } {
     const category = this.state.categories.find(c => c.id === categoryId)
-    if (!category) return { discovered: 0, defeated: 0, total: 0 }
-    
+    if (!category) {
+      return { discovered: 0, defeated: 0, total: 0 }
+    }
+
     let discovered = 0
     let defeated = 0
-    
+
     for (const monsterId of category.monsterIds) {
       const entry = this.state.entries[monsterId]
-      if (entry?.isDiscovered) discovered++
-      if (entry?.isDefeated) defeated++
+      if (entry?.isDiscovered) {
+        discovered++
+      }
+      if (entry?.isDefeated) {
+        defeated++
+      }
     }
-    
+
     return { discovered, defeated, total: category.monsterIds.length }
   }
 
@@ -404,26 +418,26 @@ class CollectionService {
   getFilteredMonsters(
     filter: CollectionFilter,
     sortBy: CollectionSortOption = 'id',
-    ascending: boolean = true
+    ascending = true
   ): Array<{ monster: MonsterData; entry?: MonsterCollectionEntry }> {
     let monsters = Object.entries(MONSTER_TEMPLATES).map(([id, template]) => ({
       monster: getMonsterData(id, 1), // 레벨 1 기준
       entry: this.state.entries[id]
     }))
-    
+
     // 필터링
     if (filter.discovered !== undefined) {
-      monsters = monsters.filter(m => 
+      monsters = monsters.filter(m =>
         filter.discovered ? m.entry?.isDiscovered : !m.entry?.isDiscovered
       )
     }
-    
+
     if (filter.defeated !== undefined) {
-      monsters = monsters.filter(m => 
+      monsters = monsters.filter(m =>
         filter.defeated ? m.entry?.isDefeated : !m.entry?.isDefeated
       )
     }
-    
+
     if (filter.category && filter.category.length > 0) {
       const categoryMonsterIds = new Set<string>()
       for (const categoryId of filter.category) {
@@ -434,19 +448,19 @@ class CollectionService {
       }
       monsters = monsters.filter(m => categoryMonsterIds.has(m.monster.id))
     }
-    
+
     if (filter.searchQuery) {
       const query = filter.searchQuery.toLowerCase()
-      monsters = monsters.filter(m => 
+      monsters = monsters.filter(m =>
         m.monster.name.toLowerCase().includes(query) ||
         (m.monster.description?.toLowerCase().includes(query) ?? false)
       )
     }
-    
+
     // 정렬
     monsters.sort((a, b) => {
       let compareValue = 0
-      
+
       switch (sortBy) {
         case 'name':
           compareValue = a.monster.name.localeCompare(b.monster.name)
@@ -464,10 +478,10 @@ class CollectionService {
         default:
           compareValue = a.monster.id.localeCompare(b.monster.id)
       }
-      
+
       return ascending ? compareValue : -compareValue
     })
-    
+
     return monsters
   }
 

@@ -30,7 +30,7 @@ export function AISettings({ onSave }: AISettingsProps) {
 
   // 기존 설정 불러오기
   useEffect(() => {
-    const loadConfig = async () => {
+    const loadConfig = async() => {
       const config = await SecureAIStorage.getConfig()
       if (config) {
         setProvider(config.provider)
@@ -42,7 +42,7 @@ export function AISettings({ onSave }: AISettingsProps) {
     loadConfig()
   }, [])
 
-  const handleSave = async () => {
+  const handleSave = async() => {
     // 암호화된 저장소에 저장
     const config: AIConfig = {
       provider,
@@ -50,14 +50,14 @@ export function AISettings({ onSave }: AISettingsProps) {
       model,
       endpoint: customEndpoint || undefined
     }
-    
+
     await SecureAIStorage.saveConfig(config)
-    
+
     alert('AI 설정이 안전하게 저장되었습니다.')
     onSave?.()
   }
 
-  const handleTest = async () => {
+  const handleTest = async() => {
     if (!apiKey || provider === 'none') {
       setTestResult({ success: false, message: 'API 키를 입력해주세요.' })
       return
@@ -88,20 +88,20 @@ export function AISettings({ onSave }: AISettingsProps) {
       const data = await response.json()
 
       if (response.ok && data.response) {
-        setTestResult({ 
-          success: true, 
-          message: `연결 성공! ${data.provider} (${data.model})` 
+        setTestResult({
+          success: true,
+          message: `연결 성공! ${data.provider} (${data.model})`
         })
       } else {
-        setTestResult({ 
-          success: false, 
-          message: data.error || 'API 연결 실패' 
+        setTestResult({
+          success: false,
+          message: data.error || 'API 연결 실패'
         })
       }
     } catch (error) {
-      setTestResult({ 
-        success: false, 
-        message: '네트워크 오류가 발생했습니다.' 
+      setTestResult({
+        success: false,
+        message: '네트워크 오류가 발생했습니다.'
       })
     } finally {
       setIsTesting(false)
@@ -207,7 +207,7 @@ export function AISettings({ onSave }: AISettingsProps) {
         {/* 테스트 결과 */}
         {testResult && (
           <div className={`p-3 rounded-lg text-sm ${
-            testResult.success 
+            testResult.success
               ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
               : 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400'
           }`}>

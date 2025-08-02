@@ -2,20 +2,23 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Scroll, Star, Sparkles, Calendar, Zap } from 'lucide-react'
+import { Scroll, Star, Sparkles, Calendar, Zap, Wand2 } from 'lucide-react'
 import { QuestList } from '@/components/quest/QuestList'
 import { useQuests } from '@/hooks/useQuests'
+import { DynamicQuestGenerator } from '@/components/quest/DynamicQuestGenerator'
+import { DynamicQuest } from '@/lib/types/dynamic-quest'
 
 export function QuestTab() {
   const { mainQuests, dailyQuests, sideQuests, eventQuests, activeQuests } = useQuests()
-  const [activeSection, setActiveSection] = useState<'active' | 'main' | 'daily' | 'side' | 'event'>('active')
+  const [activeSection, setActiveSection] = useState<'active' | 'main' | 'daily' | 'side' | 'event' | 'dynamic'>('main')
 
   const sections = [
     { id: 'active' as const, label: '진행 중', icon: Zap, count: activeQuests.length },
     { id: 'main' as const, label: '메인', icon: Star, count: mainQuests.length },
     { id: 'daily' as const, label: '일일', icon: Calendar, count: dailyQuests.length },
     { id: 'side' as const, label: '사이드', icon: Scroll, count: sideQuests.length },
-    { id: 'event' as const, label: '이벤트', icon: Sparkles, count: eventQuests.length }
+    { id: 'event' as const, label: '이벤트', icon: Sparkles, count: eventQuests.length },
+    { id: 'dynamic' as const, label: '맞춤형', icon: Wand2, count: 0 }
   ]
 
   const getQuestsBySection = () => {
@@ -108,22 +111,33 @@ export function QuestTab() {
         })}
       </div>
 
-      {/* 퀘스트 목록 */}
+      {/* 퀘스트 목록 또는 동적 퀘스트 생성기 */}
       <motion.div
         key={activeSection}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <QuestList
-          quests={getQuestsBySection()}
-          title={sections.find(s => s.id === activeSection)?.label || '퀘스트'}
-          emptyMessage={
-            activeSection === 'active' 
-              ? "진행 중인 퀘스트가 없습니다"
-              : `${sections.find(s => s.id === activeSection)?.label} 퀘스트가 없습니다`
-          }
-        />
+        {activeSection === 'dynamic' ? (
+          <DynamicQuestGenerator
+            userId="current-user"
+            onQuestAccept={(quest: DynamicQuest) => {
+              // 퀘스트 수락 시 진행 중 목록에 추가
+              console.log('동적 퀘스트 수락:', quest)
+              // TODO: 실제 퀘스트 시스템과 연동
+            }}
+          />
+        ) : (
+          <QuestList
+            quests={getQuestsBySection()}
+            title={sections.find(s => s.id === activeSection)?.label || '퀘스트'}
+            emptyMessage={
+              activeSection === 'active'
+                ? '진행 중인 퀘스트가 없습니다'
+                : `${sections.find(s => s.id === activeSection)?.label} 퀘스트가 없습니다`
+            }
+          />
+        )}
       </motion.div>
     </div>
   )

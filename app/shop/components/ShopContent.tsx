@@ -33,7 +33,7 @@ export default function ShopContent() {
 
   // 플레이어 골드 불러오기
   useEffect(() => {
-    const loadPlayerData = async () => {
+    const loadPlayerData = async() => {
       const player = await playerService.getPlayer('current-user')
       if (player) {
         setPlayerGold(player.gold)
@@ -48,11 +48,11 @@ export default function ShopContent() {
       <div className="min-h-screen p-4">
         <div className="max-w-6xl mx-auto">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-300 rounded mb-4 w-48"></div>
-            <div className="h-4 bg-gray-300 rounded mb-8 w-96"></div>
+            <div className="h-8 bg-gray-300 rounded mb-4 w-48" />
+            <div className="h-4 bg-gray-300 rounded mb-8 w-96" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-64 bg-gray-300 rounded-lg"></div>
+                <div key={i} className="h-64 bg-gray-300 rounded-lg" />
               ))}
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function ShopContent() {
     setSelectedCategory(category)
   }
 
-  const handlePurchase = async (item: ShopItem) => {
+  const handlePurchase = async(item: ShopItem) => {
     const success = await purchaseItem(item, purchaseQuantity)
     if (success) {
       setSelectedItem(null)
@@ -87,7 +87,7 @@ export default function ShopContent() {
     }
   }
 
-  const handleEquip = async (itemId: string) => {
+  const handleEquip = async(itemId: string) => {
     const success = await equipItem(itemId)
     if (success) {
       const item = getInventoryItems().find(i => i.id === itemId)
@@ -105,7 +105,7 @@ export default function ShopContent() {
     }
   }
 
-  const handleUnequip = async (itemId: string) => {
+  const handleUnequip = async(itemId: string) => {
     const success = await unequipItem(itemId)
     if (success) {
       const item = getInventoryItems().find(i => i.id === itemId)
@@ -123,7 +123,7 @@ export default function ShopContent() {
     }
   }
 
-  const handleUseConsumable = async (itemId: string) => {
+  const handleUseConsumable = async(itemId: string) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const success = await useConsumableItem(itemId)
     if (success) {
@@ -158,19 +158,19 @@ export default function ShopContent() {
     </div>
   )
 
-  const ItemCard = ({ 
-    item, 
-    isInventoryItem = false 
-  }: { 
+  const ItemCard = ({
+    item,
+    isInventoryItem = false
+  }: {
     item: ShopItem | InventoryItem
-    isInventoryItem?: boolean 
+    isInventoryItem?: boolean
   }) => {
     const inventoryItem = isInventoryItem ? item as InventoryItem : null
     const isEquipped = inventoryItem?.isEquipped || false
     const quantity = inventoryItem?.quantity || 0
 
     return (
-      <Card 
+      <Card
         className={`cursor-pointer transition-all hover:shadow-md ${
           selectedItem?.id === item.id ? 'ring-2 ring-primary' : ''
         }`}
@@ -197,7 +197,7 @@ export default function ShopContent() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-gray-600 mb-3">{item.description}</p>
-          
+
           {item.effects && (
             <div className="mb-3">
               {item.effects.map((effect, index) => (
@@ -211,7 +211,7 @@ export default function ShopContent() {
           {!isInventoryItem && (
             <div className="flex items-center justify-between">
               <span className="text-lg font-bold text-yellow-600">💰 {item.price}</span>
-              <Button 
+              <Button
                 size="sm"
                 onClick={(e) => {
                   e.stopPropagation()
@@ -238,7 +238,7 @@ export default function ShopContent() {
                   {isEquipped ? '해제' : '장착'}
                 </Button>
               )}
-              
+
               {item.category === 'consumable' && quantity > 0 && (
                 <Button
                   size="sm"
@@ -291,7 +291,7 @@ export default function ShopContent() {
                 </div>
               )}
             </div>
-            
+
             <div className="text-center">
               <div className="text-sm text-gray-500 mb-2">갑옷</div>
               {equippedItems.armor ? (
@@ -305,7 +305,7 @@ export default function ShopContent() {
                 </div>
               )}
             </div>
-            
+
             <div className="text-center">
               <div className="text-sm text-gray-500 mb-2">액세서리</div>
               {equippedItems.accessory ? (

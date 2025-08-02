@@ -11,43 +11,43 @@ export const logger = {
       console.log(...args)
     }
   },
-  
+
   error: (...args: unknown[]) => {
     if (isDevelopment) {
       console.error(...args)
     }
   },
-  
+
   warn: (...args: unknown[]) => {
     if (isDevelopment) {
       console.warn(...args)
     }
   },
-  
+
   info: (...args: unknown[]) => {
     if (isDevelopment) {
       console.info(...args)
     }
   },
-  
+
   debug: (...args: unknown[]) => {
     if (isDevelopment) {
       console.debug(...args)
     }
   },
-  
+
   table: (data: unknown) => {
     if (isDevelopment) {
       console.table(data)
     }
   },
-  
+
   time: (label: string) => {
     if (isDevelopment) {
       console.time(label)
     }
   },
-  
+
   timeEnd: (label: string) => {
     if (isDevelopment) {
       console.timeEnd(label)

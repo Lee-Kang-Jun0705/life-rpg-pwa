@@ -102,9 +102,9 @@ describe('Profile Page', () => {
   it('편집 모드로 전환할 수 있어야 함', () => {
     render(<Profile />)
     const editButton = screen.getByRole('button', { name: /편집/i })
-    
+
     fireEvent.click(editButton)
-    
+
     // 편집 모드에서는 저장/취소 버튼이 나타남
     expect(screen.getByRole('button', { name: /저장/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /취소/i })).toBeInTheDocument()
@@ -133,15 +133,15 @@ describe('Profile Page', () => {
 
   it('편집 취소가 작동해야 함', () => {
     render(<Profile />)
-    
+
     // 편집 모드로 전환
     const editButton = screen.getByRole('button', { name: /편집/i })
     fireEvent.click(editButton)
-    
+
     // 취소 클릭
     const cancelButton = screen.getByRole('button', { name: /취소/i })
     fireEvent.click(cancelButton)
-    
+
     // 다시 편집 버튼이 보여야 함
     expect(screen.getByRole('button', { name: /편집/i })).toBeInTheDocument()
   })

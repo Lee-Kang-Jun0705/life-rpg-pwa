@@ -28,8 +28,10 @@ export const StatActionModal = React.memo(function StatActionModal({
   const [editingAction, setEditingAction] = useState<EditingAction | null>(null)
   const [newAction, setNewAction] = useState({ action: '', emoji: '' })
   const [showAddForm, setShowAddForm] = useState(false)
-  
-  if (!statType) return null
+
+  if (!statType) {
+    return null
+  }
 
   const actions = statActions[statType.type as keyof typeof statActions] || []
 
@@ -43,8 +45,8 @@ export const StatActionModal = React.memo(function StatActionModal({
   const handleSaveEdit = () => {
     if (editingAction && editingAction.action.trim() && editingAction.emoji.trim()) {
       updateAction(
-        statType.type as keyof typeof statActions, 
-        editingAction.index, 
+        statType.type as keyof typeof statActions,
+        editingAction.index,
         { action: editingAction.action, emoji: editingAction.emoji }
       )
       setEditingAction(null)
@@ -93,7 +95,7 @@ export const StatActionModal = React.memo(function StatActionModal({
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className="relative max-w-sm w-full"
           >
             {/* 모달 컨텐츠 */}
@@ -190,7 +192,7 @@ export const StatActionModal = React.memo(function StatActionModal({
                     </motion.div>
                   )
                 ))}
-                
+
                 {/* 추가 버튼 */}
                 {isEditMode && actions.length < 9 && (
                   showAddForm ? (

@@ -89,7 +89,7 @@ export function EmotionCheckIn({ onComplete, onSkip }: EmotionCheckInProps) {
             얼마나 강하게 느끼시나요?
           </p>
         </div>
-        
+
         <div className="space-y-6">
           <div>
             <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
