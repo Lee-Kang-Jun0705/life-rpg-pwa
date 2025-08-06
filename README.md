@@ -1,6 +1,6 @@
 # Life RPG PWA - 오프라인 개인용 자기계발 앱
 
-[![Deployed on Vercel](https://vercel.com/button)](https://life-rpg-pwa-250731.vercel.app)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FLee-Kang-Jun0705%2Flife-rpg-pwa&project-name=life-rpg-pwa&repository-name=life-rpg-pwa)
 
 > 🚀 최신 버전 배포됨!
 
