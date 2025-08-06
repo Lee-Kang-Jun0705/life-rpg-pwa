@@ -2,20 +2,16 @@
 
 import React, { useCallback, useMemo } from 'react'
 import dynamic from 'next/dynamic'
-import { useDashboard } from '@/hooks/useDashboard'
+import { DashboardProvider, useDashboardContext } from '@/contexts/DashboardContext'
 import { LoadingState } from '@/components/dashboard/LoadingState'
 import { ErrorState } from '@/components/dashboard/ErrorState'
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
 import { DashboardContent } from '@/components/dashboard/DashboardContent'
 import { useLevelUpDetection } from '@/hooks/useLevelUpDetection'
 
-// 동적 임포트 - 테스트 환경을 위해 fallback 추가
+// 동적 임포트 - 간단한 wrapper 사용
 const EnhancedVoiceInput = dynamic(
-  () => import('@/components/voice/EnhancedVoiceInput').then(mod => ({ default: mod.EnhancedVoiceInput })).catch(() => {
-    // 로드 실패 시 빈 컴포넌트 반환
-    console.warn('EnhancedVoiceInput failed to load')
-    return { default: () => null }
-  }),
+  () => import('@/components/voice/EnhancedVoiceInputWrapper'),
   {
     loading: () => (
       <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-40">
@@ -26,7 +22,20 @@ const EnhancedVoiceInput = dynamic(
   }
 )
 
-const DashboardClient: React.FC = () => {
+// 개선된 음성 입력 컴포넌트
+const ImprovedVoiceInput = dynamic(
+  () => import('@/components/voice/ImprovedVoiceInput').then(mod => ({ default: mod.ImprovedVoiceInput })),
+  {
+    loading: () => (
+      <div className="fixed bottom-24 right-6">
+        <div className="w-14 h-14 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full animate-pulse" />
+      </div>
+    ),
+    ssr: false
+  }
+)
+
+const DashboardClientInner: React.FC = () => {
   const {
     stats,
     loading,
@@ -36,7 +45,7 @@ const DashboardClient: React.FC = () => {
     handleStatAction,
     handleVoiceInput,
     calculatedStats
-  } = useDashboard()
+  } = useDashboardContext()
 
   // 레벨업 감지 훅
   const { levelUpData, detectLevelUp, clearLevelUpAnimation } = useLevelUpDetection(stats)
@@ -61,6 +70,17 @@ const DashboardClient: React.FC = () => {
   const handleVoiceError = useCallback((error: Error) => {
     console.error('[Voice Input] Error:', error)
   }, [])
+  
+  // 디버깅을 위한 전역 함수 설정
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as unknown as { testVoiceInput: (text: string, statType?: string) => void }).testVoiceInput = (text: string, statType?: string) => {
+        console.log('🧪 테스트 음성 입력 시작:', { text, statType })
+        handleVoiceInput(text, statType || null)
+      }
+      console.log('💡 음성 입력 테스트: window.testVoiceInput("오늘 30분 운동했어요", "health")')
+    }
+  }, [handleVoiceInput])
 
   // 메모이제이션된 content props
   const contentProps = useMemo(() => ({
@@ -82,7 +102,7 @@ const DashboardClient: React.FC = () => {
 
   return (
     <DashboardLayout
-      levelUpData={levelUpData}
+      _levelUpData={levelUpData}
       onLevelUpComplete={clearLevelUpAnimation}
     >
       <DashboardContent {...contentProps} />
@@ -93,6 +113,14 @@ const DashboardClient: React.FC = () => {
         onError={handleVoiceError}
       />
     </DashboardLayout>
+  )
+}
+
+const DashboardClient: React.FC = () => {
+  return (
+    <DashboardProvider>
+      <DashboardClientInner />
+    </DashboardProvider>
   )
 }
 

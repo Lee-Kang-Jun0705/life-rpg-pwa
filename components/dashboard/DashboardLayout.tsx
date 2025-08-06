@@ -3,17 +3,17 @@ import { LevelUpCelebration } from '@/components/ui/LevelUpCelebration'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
-  _levelUpData: {
+  _levelUpData?: {
     show: boolean
     level: number
     statType: string
-  }
+  } | null
   onLevelUpComplete: () => void
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
-  levelUpData,
+  _levelUpData,
   onLevelUpComplete
 }) => {
   return (
@@ -23,12 +23,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       </div>
 
       {/* 레벨업 축하 애니메이션 */}
-      <LevelUpCelebration
-        show={levelUpData.show}
-        level={levelUpData.level}
-        statType={levelUpData.statType}
-        onComplete={onLevelUpComplete}
-      />
+      {_levelUpData && (
+        <LevelUpCelebration
+          show={_levelUpData.show}
+          level={_levelUpData.level}
+          statType={_levelUpData.statType}
+          onComplete={onLevelUpComplete}
+        />
+      )}
     </div>
   )
 }

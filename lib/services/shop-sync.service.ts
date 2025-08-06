@@ -9,6 +9,7 @@ import { itemGeneratorService } from './item-generator.service'
 import { ALL_ITEMS } from '@/lib/data/items'
 import type { Item } from '@/lib/types/item-system'
 import type { ShopItem } from '@/lib/shop/types'
+import { dbHelpers } from '@/lib/database'
 
 class ShopSyncService {
   private static instance: ShopSyncService
@@ -25,7 +26,7 @@ class ShopSyncService {
   /**
    * 상점에서 아이템 구매 처리
    */
-  async purchaseItem(_userId: string, _shopItem: ShopItem, _quantity = 1): Promise<{
+  async purchaseItem(userId: string, shopItem: ShopItem, quantity = 1): Promise<{
     success: boolean
     message: string
     goldSpent?: number
@@ -175,7 +176,7 @@ class ShopSyncService {
    * 플레이어 인벤토리 동기화
    * DB와 메모리 인벤토리 서비스 간 동기화
    */
-  async syncInventory(_userId: string): Promise<void> {
+  async syncInventory(userId: string): Promise<void> {
     try {
       const player = await playerService.getPlayer(userId)
       if (!player) {
@@ -183,6 +184,7 @@ class ShopSyncService {
       }
 
       // 인벤토리 서비스 초기화
+      await inventoryService.initialize()
       inventoryService.clearInventory()
 
       // DB 인벤토리 데이터를 인벤토리 서비스로 로드
@@ -201,7 +203,7 @@ class ShopSyncService {
 
         // 장착된 아이템 처리
         if (invItem.equipped && invItem.slot) {
-          inventoryService.equipItem(generatedItem.uniqueId, invItem.slot as unknown)
+          inventoryService.equipItem(generatedItem.uniqueId, invItem.slot as any)
         }
       }
 
@@ -214,22 +216,40 @@ class ShopSyncService {
   /**
    * 아이템 장착 동기화
    */
-  async syncEquipItem(_userId: string, itemUniqueId: string, slot: string): Promise<boolean> {
+  async syncEquipItem(userId: string, itemUniqueId: string, slot: string): Promise<boolean> {
     try {
+      // inventoryService 초기화 확인
+      await inventoryService.initialize()
+      
+      // 아이템 정보로 GeneratedItem 생성
+      const baseItem = ALL_ITEMS[itemUniqueId]
+      if (!baseItem) {
+        console.error('Item not found for equipping:', itemUniqueId)
+        return false
+      }
+      
+      // 생성된 아이템을 인벤토리에 추가 (아직 없는 경우)
+      const existingItem = inventoryService.getItem(itemUniqueId)
+      if (!existingItem) {
+        const generatedItem = itemGeneratorService.generateItem({
+          ...baseItem,
+          stackable: false
+        })
+        
+        inventoryService.addItem(generatedItem, 1)
+      }
+      
       // 메모리에서 장착
-      const equipped = inventoryService.equipItem(itemUniqueId, slot as unknown)
+      const equipped = inventoryService.equipItem(itemUniqueId, slot as any)
       if (!equipped) {
+        console.error('Failed to equip in inventory service')
         return false
       }
 
       // DB 업데이트
-      const item = inventoryService.getItem(itemUniqueId)
-      if (!item) {
-        return false
-      }
+      await playerService.equipItem(userId, itemUniqueId, slot)
 
-      await playerService.equipItem(userId, item.id, slot)
-
+      console.log(`✅ Item equipped and synced: ${itemUniqueId} to ${slot}`)
       return true
     } catch (error) {
       console.error('Equip sync error:', error)
@@ -240,16 +260,30 @@ class ShopSyncService {
   /**
    * 아이템 장착 해제 동기화
    */
-  async syncUnequipItem(_userId: string, slot: string): Promise<boolean> {
+  async syncUnequipItem(userId: string, slot: string): Promise<boolean> {
     try {
+      // inventoryService 초기화 확인
+      await inventoryService.initialize()
+      
       // 메모리에서 장착 해제
-      const unequipped = inventoryService.unequipItem(slot as unknown)
+      const unequipped = inventoryService.unequipItem(slot as any)
       if (!unequipped) {
         return false
       }
 
-      // TODO: DB 업데이트 구현
+      // DB 업데이트 - 현재 장착된 아이템 찾아서 해제
+      const equipment = await dbHelpers.getEquipmentInventory(userId)
+      if (equipment) {
+        const equippedItem = equipment.items.find(item => 
+          item.isEquipped && item.equippedSlot === slot
+        )
+        
+        if (equippedItem && equippedItem.id) {
+          await playerService.unequipItem(userId, equippedItem.id)
+        }
+      }
 
+      console.log(`✅ Item unequipped and synced from ${slot}`)
       return true
     } catch (error) {
       console.error('Unequip sync error:', error)

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { persistenceService } from '@/lib/services/persistence.service'
-import { inventoryService } from '@/lib/services/inventory.service'
-import { skillManagementService } from '@/lib/services/skill-management.service'
+// import { inventoryService } from '@/lib/services/inventory.service' // 미구현
+// import { skillManagementService } from '@/lib/services/skill-management.service' // 미구현
 
 interface GameInitStatus {
   isLoading: boolean
@@ -45,24 +45,24 @@ export function useGameInit(characterId = 'player-1') {
           // 저장된 데이터가 없으면 기본값으로 시작
           console.log('No saved data found, starting with defaults')
 
-          // 기본 아이템 생성 (테스트용)
-          const { itemGenerationService } = await import('@/lib/services/item-generation.service')
+          // 미구현 - 기본 아이템 생성 (테스트용)
+          // const { itemGenerationService } = await import('@/lib/services/item-generation.service')
 
-          // 몇 개의 시작 아이템 생성
-          const startingItems = ['rusty_sword', 'wooden_staff', 'iron_sword']
-          for (const itemId of startingItems) {
-            const result = itemGenerationService.generateItem({
-              baseItemId: itemId,
-              level: 1,
-              rarity: 'common'
-            })
-            if (result.success) {
-              inventoryService.addItem(result.item)
-            }
-          }
+          // 미구현 - 몇 개의 시작 아이템 생성
+          // const startingItems = ['rusty_sword', 'wooden_staff', 'iron_sword']
+          // for (const itemId of startingItems) {
+          //   const result = itemGenerationService.generateItem({
+          //     baseItemId: itemId,
+          //     level: 1,
+          //     rarity: 'common'
+          //   })
+          //   if (result.success) {
+          //     inventoryService.addItem(result.item)
+          //   }
+          // }
 
-          // 시작 스킬 포인트
-          skillManagementService.addSkillPoints(5)
+          // 미구현 - 시작 스킬 포인트
+          // skillManagementService.addSkillPoints(5)
 
           // 초기 데이터 저장
           await persistenceService.saveAll(characterId)

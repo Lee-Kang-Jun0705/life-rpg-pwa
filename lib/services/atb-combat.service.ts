@@ -24,6 +24,7 @@ import type { GeneratedItem } from '@/lib/types/item-system'
 import { ATB_CONSTANTS, BATTLE_SPEED_CONFIGS } from '@/lib/types/atb-combat'
 import { itemGenerationService } from './item-generation.service'
 import { soundService } from './sound.service'
+import { playerStatsService } from './player-stats.service'
 import { EventEmitter } from 'events'
 import { IdGenerators } from '@/lib/utils/id-generator'
 
@@ -43,16 +44,16 @@ export class ATBCombatService extends EventEmitter {
   /**
    * 전투 시작
    */
-  startCombat(
+  async startCombat(
     player: Character,
     monsters: Monster[],
     battleSpeed: keyof typeof BATTLE_SPEED_CONFIGS = 'normal'
-  ): string {
+  ): Promise<string> {
     const combatId = this.generateCombatId()
     const speedConfig = BATTLE_SPEED_CONFIGS[battleSpeed]
 
     // 플레이어 전투원 생성
-    const playerCombatant = this.createPlayerCombatant(player)
+    const playerCombatant = await this.createPlayerCombatant(player)
 
     // 몬스터 전투원 생성
     const enemyCombatants = monsters.map((monster, index) =>
@@ -99,27 +100,52 @@ export class ATBCombatService extends EventEmitter {
   /**
    * 플레이어 전투원 생성
    */
-  private createPlayerCombatant(player: Character): ATBCombatant {
+  private async createPlayerCombatant(player: Character): Promise<ATBCombatant> {
+    // 플레이어 종합 스탯 계산 (기본 스탯 + 장비 + 패시브 스킬)
+    const calculatedStats = await playerStatsService.calculateTotalStats({
+      level: player.level,
+      currentHP: player.combatStats.hp,
+      maxHP: player.combatStats.hp,
+      currentMP: player.combatStats.mp,
+      maxMP: player.combatStats.mp,
+      attack: player.combatStats.attack,
+      defense: player.combatStats.defense,
+      speed: player.combatStats.speed,
+      critRate: player.combatStats.critRate,
+      critDamage: player.combatStats.critDamage,
+      accuracy: player.combatStats.accuracy,
+      dodge: player.combatStats.dodge
+    })
+
+    // 전투 중 조건부 효과 적용
+    const combatStats = playerStatsService.calculateCombatStats(calculatedStats, {
+      inCombat: true,
+      hpPercent: 100
+    })
+
     return {
       id: `player_${player.id}`,
       name: player.name,
       team: 'player',
       stats: {
-        maxHp: player.combatStats.hp,
-        currentHp: player.combatStats.hp,
-        maxMp: player.combatStats.mp,
-        currentMp: player.combatStats.mp,
-        attack: player.combatStats.attack,
-        defense: player.combatStats.defense,
-        speed: player.combatStats.speed,
-        critRate: player.combatStats.critRate,
-        critDamage: player.combatStats.critDamage,
-        dodge: player.combatStats.dodge,
-        accuracy: player.combatStats.accuracy
+        maxHp: combatStats.maxHP,
+        currentHp: combatStats.currentHP,
+        maxMp: combatStats.maxMP,
+        currentMp: combatStats.currentMP,
+        attack: combatStats.attack,
+        defense: combatStats.defense,
+        speed: combatStats.speed,
+        critRate: combatStats.critRate,
+        critDamage: combatStats.critDamage,
+        dodge: combatStats.dodge,
+        accuracy: combatStats.accuracy,
+        // 추가 스탯 저장
+        lifeSteal: combatStats.lifeSteal,
+        resistances: combatStats.resistances
       },
       atb: {
         current: 0,
-        speed: this.calculateATBSpeed(player.combatStats.speed),
+        speed: this.calculateATBSpeed(combatStats.speed),
         paused: false,
         boost: 1.0
       },
@@ -127,6 +153,58 @@ export class ATBCombatService extends EventEmitter {
       buffs: [],
       skills: this.getPlayerSkills(player),
       availableItems: this.getPlayerItems()
+    }
+  }
+
+  /**
+   * 공격 실행 시 아이템 특수 효과 처리
+   */
+  private async processItemSpecialEffects(
+    attacker: ATBCombatant,
+    target: ATBCombatant,
+    damage: number
+  ): Promise<void> {
+    // 장비된 아이템의 특수 효과 확인
+    const equipment = await inventoryService.getEquipment()
+    
+    for (const slot in equipment) {
+      const item = equipment[slot as keyof typeof equipment]
+      if (!item || !item.specialEffects) continue
+      
+      for (const effect of item.specialEffects) {
+        // onAttack 트리거 효과만 처리
+        if (effect.trigger.type !== 'onAttack') continue
+        
+        // 발동 확률 체크
+        if (Math.random() * 100 > effect.trigger.chance) continue
+        
+        // 효과 적용
+        switch (effect.effect.type) {
+          case 'damage':
+            // 추가 데미지
+            const extraDamage = Math.floor(damage * (effect.effect.value as number))
+            target.stats.currentHp = Math.max(0, target.stats.currentHp - extraDamage)
+            break
+            
+          case 'heal':
+            // 회복 (이미 흡혈로 처리됨)
+            break
+            
+          case 'debuff':
+            // 디버프 적용
+            if (effect.effect.debuff) {
+              this.applyStatusEffect(target, effect.effect.debuff.type, effect.effect.debuff.duration || 3)
+            }
+            break
+            
+          case 'buff':
+            // 버프 적용
+            if (effect.effect.buff) {
+              this.applyBuff(attacker, effect.effect.buff.type, effect.effect.buff.value || 0.2, effect.effect.buff.duration || 3)
+            }
+            break
+        }
+      }
     }
   }
 
@@ -502,7 +580,7 @@ export class ATBCombatService extends EventEmitter {
   /**
    * 기본 공격 행동 생성
    */
-  private createAttackAction(actor: ATBCombatant, targets: string[]): CombatAction {
+  private async createAttackAction(actor: ATBCombatant, targets: string[]): Promise<CombatAction> {
     const results: ActionResult[] = []
 
     for (const targetId of targets) {
@@ -513,6 +591,11 @@ export class ATBCombatService extends EventEmitter {
 
       const result = this.calculateDamage(actor, target)
       results.push(result)
+      
+      // 플레이어의 공격인 경우 아이템 특수 효과 처리
+      if (actor.team === 'player' && result.damage && result.damage > 0) {
+        await this.processItemSpecialEffects(actor, target, result.damage)
+      }
     }
 
     return {
@@ -678,11 +761,43 @@ export class ATBCombatService extends EventEmitter {
     // 버프/디버프 적용
     damage = this.applyBuffsToValue(damage, attacker, 'attack')
     damage = damage / this.applyBuffsToValue(1, defender, 'defense')
+    
+    // 속성 저항 적용 (나중에 스킬에 element 속성 추가 시 사용)
+    if ((attacker as any).currentElement && (defender.stats as any).resistances) {
+      const element = (attacker as any).currentElement
+      const resistances = (defender.stats as any).resistances
+      let resistance = 0
+      
+      // 특정 속성 저항
+      if (resistances[element]) {
+        resistance = resistances[element]
+      }
+      // 모든 속성 저항
+      if (resistances.all) {
+        resistance = Math.max(resistance, resistances.all)
+      }
+      
+      // 저항 적용 (최대 90%)
+      damage *= (1 - Math.min(90, resistance) / 100)
+    }
 
     // 랜덤 편차 (±10%)
     damage *= (0.9 + Math.random() * 0.2)
 
     result.damage = Math.floor(damage)
+    
+    // 흡혈 효과 적용
+    if ((attacker.stats as any).lifeSteal && result.damage > 0) {
+      const healAmount = Math.floor(result.damage * ((attacker.stats as any).lifeSteal / 100))
+      if (healAmount > 0) {
+        attacker.stats.currentHp = Math.min(
+          attacker.stats.maxHp,
+          attacker.stats.currentHp + healAmount
+        )
+        result.lifeSteal = healAmount
+      }
+    }
+    
     return result
   }
 

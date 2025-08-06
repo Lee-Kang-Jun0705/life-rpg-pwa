@@ -1,7 +1,6 @@
 'use client'
 
 import React, { memo, Suspense } from 'react'
-import dynamic from 'next/dynamic'
 
 // Core Providers - 앱 전체에서 필수적인 Provider들
 import { ThemeProvider } from '@/contexts/ThemeContext'
@@ -14,21 +13,10 @@ import { CharacterProvider } from '@/lib/character/character-context'
 import { EmotionProvider } from '@/contexts/EmotionContext'
 import { StatActionsProvider } from '@/contexts/StatActionsContext'
 
-// Feature Providers - 동적으로 로드 가능한 기능들
-const ShopProvider = dynamic(
-  () => import('@/lib/shop/shop-context').then(mod => ({ default: mod.ShopProvider })),
-  { ssr: false }
-)
-
-const DungeonProvider = dynamic(
-  () => import('@/lib/dungeon/dungeon-context').then(mod => ({ default: mod.DungeonProvider })),
-  { ssr: false }
-)
-
-const LeaderboardProvider = dynamic(
-  () => import('@/lib/leaderboard/leaderboard-context').then(mod => ({ default: mod.LeaderboardProvider })),
-  { ssr: false }
-)
+// Feature Providers - 임시로 빈 프로바이더 사용
+const ShopProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>
+const DungeonProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>
+const LeaderboardProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
 interface AppProvidersProps {
   children: React.ReactNode

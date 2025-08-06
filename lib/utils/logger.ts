@@ -62,3 +62,18 @@ if (!isDevelopment && typeof window !== 'undefined') {
   window.console.info = () => {}
   window.console.warn = () => {}
 }
+
+// 전문 로거 생성 함수
+const createPrefixedLogger = (prefix: string) => ({
+  log: (...args: unknown[]) => logger.log(`[${prefix}]`, ...args),
+  error: (...args: unknown[]) => logger.error(`[${prefix}]`, ...args),
+  warn: (...args: unknown[]) => logger.warn(`[${prefix}]`, ...args),
+  info: (...args: unknown[]) => logger.info(`[${prefix}]`, ...args),
+  debug: (...args: unknown[]) => logger.debug(`[${prefix}]`, ...args)
+})
+
+// 던전 전용 로거
+export const dungeonLogger = createPrefixedLogger('Dungeon')
+
+// 전투 전용 로거
+export const battleLogger = createPrefixedLogger('Battle')

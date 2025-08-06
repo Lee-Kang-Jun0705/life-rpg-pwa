@@ -113,7 +113,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
 
             return (
               <motion.div
-                key={stat.type}
+                key={`bar-${stat.type}-${index}`}
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -203,7 +203,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
                   {userStats.map((stat, i) => {
                     const config = STAT_CONFIG[stat.type as keyof typeof STAT_CONFIG]
                     return (
-                      <linearGradient key={i} id={`donutGrad${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                      <linearGradient key={`grad-${stat.type}-${i}`} id={`donutGrad${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor={config.lightColor} />
                         <stop offset="100%" stopColor={config.darkColor} />
                       </linearGradient>
@@ -233,7 +233,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
 
                   return (
                     <motion.circle
-                      key={index}
+                      key={`circle-${stat.type}-${index}`}
                       cx="200"
                       cy="200"
                       r="140"
@@ -271,7 +271,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
 
                   return (
                     <line
-                      key={`line-${index}`}
+                      key={`divider-${stat.type}-${index}`}
                       x1={x1}
                       y1={y1}
                       x2={x2}
@@ -320,7 +320,7 @@ export function SimpleStatDisplay({ userStats }: SimpleStatDisplayProps) {
 
                 return (
                   <motion.div
-                    key={i}
+                    key={`legend-${stat.type}-${i}`}
                     initial={{ x: i % 2 === 0 ? -50 : 50, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.8 + i * 0.1 }}

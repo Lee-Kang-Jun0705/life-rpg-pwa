@@ -4,7 +4,13 @@
  */
 
 import { CombatStats, CombatStat } from '@/lib/types/game-core'
-import { BATTLE_CONSTANTS } from '@/lib/types/battle-extended'
+// import { BATTLE_CONSTANTS } from '@/lib/types/battle-extended' // 미구현
+
+// 임시 상수 정의
+const BATTLE_CONSTANTS = {
+  CRITICAL_RATE_MULTIPLIER: 0.5,
+  SPEED_MULTIPLIER: 0.8
+}
 
 export interface StatFormulas {
   hp: (level: number) => number

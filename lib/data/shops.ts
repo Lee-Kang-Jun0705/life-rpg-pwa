@@ -20,7 +20,7 @@ export const shops: Record<string, ShopData> = {
         category: 'weapon',
         stock: -1,
         itemData: {
-          id: 'wooden_sword',
+          id: 'wooden-sword',
           name: '나무 검',
           type: 'weapon',
           rarity: 'common',
@@ -49,7 +49,7 @@ export const shops: Record<string, ShopData> = {
         },
         stock: -1,
         itemData: {
-          id: 'iron_sword',
+          id: 'iron-sword',
           name: '철 검',
           type: 'weapon',
           rarity: 'uncommon',
@@ -76,7 +76,7 @@ export const shops: Record<string, ShopData> = {
         category: 'armor',
         stock: -1,
         itemData: {
-          id: 'leather_armor',
+          id: 'leather-armor',
           name: '가죽 갑옷',
           type: 'armor',
           rarity: 'common',
@@ -105,7 +105,7 @@ export const shops: Record<string, ShopData> = {
         },
         stock: -1,
         itemData: {
-          id: 'iron_armor',
+          id: 'iron-armor',
           name: '철 갑옷',
           type: 'armor',
           rarity: 'uncommon',
@@ -132,7 +132,7 @@ export const shops: Record<string, ShopData> = {
         category: 'accessory',
         stock: -1,
         itemData: {
-          id: 'wooden_ring',
+          id: 'simple-ring',
           name: '나무 반지',
           type: 'accessory',
           rarity: 'common',
@@ -192,9 +192,9 @@ export const shops: Record<string, ShopData> = {
     },
     items: [
       {
-        id: 'shop_skill_double_strike',
-        name: '더블 스트라이크 스킬북',
-        description: '더블 스트라이크 스킬을 배울 수 있습니다',
+        id: 'shop_skill_power_strike',
+        name: '파워 스트라이크 스킬북',
+        description: '파워 스트라이크 스킬을 배울 수 있습니다',
         price: 1000,
         type: 'skill',
         icon: '📖',
@@ -204,7 +204,7 @@ export const shops: Record<string, ShopData> = {
         },
         stock: 1,
         itemData: {
-          skillId: 'double_strike',
+          skillId: 'power_strike',
           learnOnPurchase: true
         }
       },
@@ -226,9 +226,9 @@ export const shops: Record<string, ShopData> = {
         }
       },
       {
-        id: 'shop_skill_power_boost',
-        name: '파워 부스트 스킬북',
-        description: '파워 부스트 스킬을 배울 수 있습니다',
+        id: 'shop_skill_whirlwind',
+        name: '회전베기 스킬북',
+        description: '회전베기 스킬을 배울 수 있습니다',
         price: 2000,
         type: 'skill',
         icon: '📕',
@@ -238,7 +238,7 @@ export const shops: Record<string, ShopData> = {
         },
         stock: 1,
         itemData: {
-          skillId: 'power_boost',
+          skillId: 'whirlwind',
           learnOnPurchase: true
         }
       }

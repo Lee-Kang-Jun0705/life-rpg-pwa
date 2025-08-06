@@ -3,13 +3,14 @@
  * 랜덤 스탯, 세트 효과, 조합 시스템 포함
  */
 
-// 아이템 희귀도
+// 아이템 희귀도 - 6단계 시스템
 export const ItemRarity = {
-  COMMON: 'common',
-  UNCOMMON: 'uncommon',
-  RARE: 'rare',
-  EPIC: 'epic',
-  LEGENDARY: 'legendary'
+  COMMON: 'common',      // 일반 (회색) - 기본 스탯
+  MAGIC: 'magic',        // 매직 (파란색) - 추가 스탯 1-2개
+  RARE: 'rare',          // 레어 (노란색) - 추가 스탯 2-3개 + 특수 효과
+  EPIC: 'epic',          // 에픽 (보라색) - 추가 스탯 3-4개 + 강력한 효과
+  LEGENDARY: 'legendary', // 전설 (주황색) - 추가 스탯 4-5개 + 고유 효과
+  MYTHIC: 'mythic'       // 신화 (빨간색) - 추가 스탯 5-6개 + 세트 효과
 } as const
 
 export type ItemRarity = typeof ItemRarity[keyof typeof ItemRarity]

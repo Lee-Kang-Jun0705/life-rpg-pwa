@@ -28,7 +28,7 @@ export function VoiceInputFallback({
       ? 'bottom-28 right-6'
       : 'bottom-28 left-6'
 
-  const handleSubmit = (_e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (input.trim()) {
       onSubmit(input.trim())
@@ -55,6 +55,10 @@ export function VoiceInputFallback({
             ✕
           </button>
         </div>
+
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          음성 인식이 작동하지 않아 텍스트로 입력해주세요.
+        </p>
 
         <textarea
           value={input}

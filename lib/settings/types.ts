@@ -3,7 +3,20 @@
  */
 
 // AI 코치 모델 타입
-export type AICoachModel = 'gpt-4' | 'gpt-3.5-turbo' | 'claude-3' | 'gemini-pro' | 'custom'
+export type AICoachModel = 
+  | 'gpt-4o' 
+  | 'gpt-4-turbo' 
+  | 'gpt-3.5-turbo' 
+  | 'claude-3-5-sonnet'
+  | 'claude-3-opus'
+  | 'claude-3-sonnet'
+  | 'claude-3-haiku'
+  | 'claude-opus-4'
+  | 'claude-sonnet-4'
+  | 'gemini-2.0-flash'
+  | 'gemini-1.5-pro'
+  | 'gemini-1.5-flash'
+  | 'custom'
 
 // AI 코치 톤/스타일
 export type AICoachTone = 'friendly' | 'strict' | 'humorous' | 'mentor' | 'cheerleader'

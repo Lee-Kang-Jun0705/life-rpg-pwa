@@ -13,10 +13,20 @@ interface AIConfig {
   endpoint?: string
 }
 
-// 환경변수에서 API 설정 읽기
-function getAIConfig(): AIConfig | null {
-  const provider = process.env.NEXT_PUBLIC_AI_PROVIDER as AIProvider
-  const apiKey = process.env.NEXT_PUBLIC_AI_API_KEY
+// API 설정 읽기 (사용자 설정 우선, 환경변수 폴백)
+function getAIConfig(userSettings?: unknown): AIConfig | null {
+  // 사용자가 설정한 API 키 우선 사용
+  const settings = userSettings as { provider?: AIProvider; apiKey?: string; model?: string } | undefined
+  let provider = settings?.provider
+  let apiKey = settings?.apiKey
+  let model = settings?.model
+  
+  // 사용자 설정이 없으면 환경변수 사용
+  if (!provider || !apiKey) {
+    provider = process.env.NEXT_PUBLIC_AI_PROVIDER as AIProvider
+    apiKey = process.env.NEXT_PUBLIC_AI_API_KEY
+    model = process.env.NEXT_PUBLIC_AI_MODEL
+  }
 
   if (!provider || !apiKey) {
     return null
@@ -24,23 +34,23 @@ function getAIConfig(): AIConfig | null {
 
   const configs: Record<AIProvider, Partial<AIConfig>> = {
     openai: {
-      model: process.env.NEXT_PUBLIC_AI_MODEL || 'gpt-3.5-turbo',
+      model: model || 'gpt-3.5-turbo',
       endpoint: 'https://api.openai.com/v1/chat/completions'
     },
     anthropic: {
-      model: process.env.NEXT_PUBLIC_AI_MODEL || 'claude-3-sonnet-20240229',
+      model: model || 'claude-3-sonnet-20240229',
       endpoint: 'https://api.anthropic.com/v1/messages'
     },
     google: {
-      model: process.env.NEXT_PUBLIC_AI_MODEL || 'gemini-pro',
+      model: model || 'gemini-pro',
       endpoint: 'https://generativelanguage.googleapis.com/v1beta/models'
     },
     groq: {
-      model: process.env.NEXT_PUBLIC_AI_MODEL || 'mixtral-8x7b-32768',
+      model: model || 'mixtral-8x7b-32768',
       endpoint: 'https://api.groq.com/openai/v1/chat/completions'
     },
     custom: {
-      model: process.env.NEXT_PUBLIC_AI_MODEL || '',
+      model: model || '',
       endpoint: process.env.NEXT_PUBLIC_AI_ENDPOINT || ''
     }
   }
@@ -54,14 +64,15 @@ function getAIConfig(): AIConfig | null {
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, stats, growthAnalyses, activityPattern } = await request.json() as {
+    const { message, stats, growthAnalyses, activityPattern, userApiSettings } = await request.json() as {
       message: string
       stats: Stat[]
       growthAnalyses: GrowthAnalysis[]
       activityPattern: ActivityPattern
+      userApiSettings?: unknown
     }
 
-    const config = getAIConfig()
+    const config = getAIConfig(userApiSettings)
 
     // API 설정이 없으면 규칙 기반 응답
     if (!config) {

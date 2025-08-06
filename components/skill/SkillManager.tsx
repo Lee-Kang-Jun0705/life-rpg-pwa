@@ -1,183 +1,67 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Button } from '@/components/ui/Button'
-import { skillService } from '@/lib/services/skill-service'
-import { allSkills } from '@/lib/data/skills'
-import type { Skill, LearnedSkill } from '@/lib/types/skill-system'
-import { Book, Zap, Shield, Heart, Sparkles, Lock, CheckCircle, Plus } from 'lucide-react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Book, Zap, Shield, Heart, Sparkles, Lock, CheckCircle, Plus, Droplet, Clock, ToggleLeft, ToggleRight } from 'lucide-react'
+import { jrpgDbHelpers } from '@/lib/jrpg/database-helpers'
+import { SKILL_DATABASE } from '@/lib/jrpg/skills-database'
+import { JRPGSkillCard } from './JRPGSkillCard'
+import type { SkillInstance } from '@/lib/jrpg/types'
 import { calculateCharacterLevel } from '@/lib/utils/level-calculator'
 import { dbHelpers } from '@/lib/database/client'
 import { GAME_CONFIG } from '@/lib/config/game-config'
+import { cn } from '@/lib/utils'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
 
 interface SkillManagerProps {
   userId: string
   onClose?: () => void
 }
 
-// 스킬 아이콘 가져오기
-function getSkillCategoryIcon(category: string) {
-  switch (category) {
-    case 'attack': return <Zap className="w-4 h-4" />
-    case 'defense': return <Shield className="w-4 h-4" />
-    case 'support': return <Heart className="w-4 h-4" />
-    case 'special': return <Sparkles className="w-4 h-4" />
-    default: return <Book className="w-4 h-4" />
-  }
-}
-
-// 스킬 카드 컴포넌트
-function SkillCard({ 
-  skill, 
-  learned, 
-  equipped,
-  slotNumber,
-  onLearn, 
-  onUpgrade, 
-  onEquip,
-  canLearn,
-  skillPoints 
-}: { 
-  skill: Skill
-  learned?: LearnedSkill
-  equipped: boolean
-  slotNumber?: number
-  onLearn: () => void
-  onUpgrade: () => void
-  onEquip: () => void
-  canLearn: boolean
-  skillPoints: number
-}) {
-  const isMaxLevel = learned && learned.level >= skill.maxLevel
-  const canUpgrade = learned && !isMaxLevel && skillPoints > 0
-
-  return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      className={`
-        relative p-4 rounded-lg border-2 transition-all cursor-pointer
-        ${learned 
-          ? equipped 
-            ? 'border-yellow-500 bg-yellow-500/10' 
-            : 'border-green-500 bg-green-500/10'
-          : canLearn 
-            ? 'border-gray-600 bg-gray-800/50 hover:border-gray-500'
-            : 'border-gray-700 bg-gray-900/50 opacity-50'
-        }
-      `}
-      onClick={learned && !equipped ? onEquip : undefined}
-    >
-      {/* 장착 슬롯 표시 */}
-      {equipped && slotNumber && (
-        <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-xs font-bold text-black">
-          {slotNumber}
-        </div>
-      )}
-
-      <div className="flex items-start gap-3">
-        {/* 스킬 아이콘 */}
-        <div className="text-3xl">{skill.icon}</div>
-        
-        {/* 스킬 정보 */}
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold text-white">{skill.name}</h3>
-            {getSkillCategoryIcon(skill.category)}
-            {learned && (
-              <span className="text-xs px-1.5 py-0.5 bg-green-500/20 text-green-400 rounded">
-                Lv.{learned.level}/{skill.maxLevel}
-              </span>
-            )}
-          </div>
-          
-          <p className="text-sm text-gray-400 mb-2">{skill.description}</p>
-          
-          {/* 스킬 효과 */}
-          <div className="text-xs text-gray-500 space-y-1">
-            {skill.mpCost && (
-              <div>MP 소모: {typeof skill.mpCost === 'number' ? skill.mpCost : skill.mpCost.base}</div>
-            )}
-            {skill.cooldown > 0 && <div>쿨다운: {skill.cooldown}턴</div>}
-            {skill.requirements?.level && !learned && (
-              <div className="text-red-400">레벨 {skill.requirements.level} 필요</div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* 액션 버튼 */}
-      <div className="mt-3 flex gap-2">
-        {!learned && canLearn && (
-          <Button
-            size="sm"
-            variant="primary"
-            onClick={(e) => {
-              e.stopPropagation()
-              onLearn()
-            }}
-            disabled={skillPoints <= 0}
-          >
-            <Plus className="w-3 h-3 mr-1" />
-            학습 (1 SP)
-          </Button>
-        )}
-        
-        {learned && canUpgrade && (
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={(e) => {
-              e.stopPropagation()
-              onUpgrade()
-            }}
-          >
-            레벨업 (1 SP)
-          </Button>
-        )}
-        
-        {learned && equipped && (
-          <div className="text-xs text-yellow-400 flex items-center gap-1">
-            <CheckCircle className="w-3 h-3" />
-            장착됨
-          </div>
-        )}
-      </div>
-    </motion.div>
-  )
+// MP 계산 헬퍼
+function calculateMaxMp(level: number): number {
+  return 100 + level * 10
 }
 
 // 스킬 슬롯 컴포넌트
 function SkillSlot({ 
   skill, 
   slotNumber,
-  onClick 
+  onClick,
+  isJRPG = true
 }: { 
-  skill: Skill | null
+  skill: SkillInstance | null
   slotNumber: number
   onClick: () => void
+  isJRPG?: boolean
 }) {
+  const skillDef = skill ? SKILL_DATABASE[skill.skillId] : null
+  
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className={`
-        relative w-16 h-16 rounded-lg border-2 transition-all
-        ${skill 
+      className={cn(
+        "relative w-16 h-16 rounded-lg border-2 transition-all",
+        skill 
           ? 'border-yellow-500 bg-yellow-500/20' 
-          : 'border-gray-600 bg-gray-800/50 border-dashed'
-        }
-        flex items-center justify-center
-      `}
+          : 'border-gray-600 bg-gray-800/50 border-dashed',
+        "flex items-center justify-center"
+      )}
     >
-      {skill ? (
+      {skillDef ? (
         <>
-          <span className="text-2xl">{skill.icon}</span>
+          <span className="text-2xl">{skillDef.icon}</span>
           <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center text-xs font-bold text-black">
             {slotNumber}
           </div>
+          {skill.cooldownRemaining > 0 && (
+            <div className="absolute inset-0 bg-gray-900/70 rounded-lg flex items-center justify-center">
+              <span className="text-sm font-bold text-white">{skill.cooldownRemaining}</span>
+            </div>
+          )}
         </>
       ) : (
         <span className="text-gray-500 text-xs">슬롯 {slotNumber}</span>
@@ -187,95 +71,171 @@ function SkillSlot({
 }
 
 export function SkillManager({ userId, onClose }: SkillManagerProps) {
-  const [playerSkills, setPlayerSkills] = useState(skillService.getPlayerSkills(userId))
+  // JRPG 스킬 시스템 상태
   const [characterLevel, setCharacterLevel] = useState(1)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null)
+  const [jrpgSkills, setJrpgSkills] = useState<SkillInstance[]>([])
+  const [equippedJRPGSkills, setEquippedJRPGSkills] = useState<(SkillInstance | null)[]>([null, null, null, null, null, null, null, null])
+  const [currentMp, setCurrentMp] = useState(100)
+  const [maxMp, setMaxMp] = useState(100)
+  const [skillPoints, setSkillPoints] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
 
-  // 캐릭터 레벨 로드
+  // 캐릭터 레벨 및 MP 로드
   useEffect(() => {
-    const loadCharacterLevel = async () => {
+    const loadCharacterData = async () => {
       try {
-        const stats = await dbHelpers.getStats(GAME_CONFIG.DEFAULT_USER_ID)
+        const stats = await dbHelpers.getStats(userId)
         if (stats && stats.length > 0) {
           const level = calculateCharacterLevel(stats)
           setCharacterLevel(level)
+          const mp = calculateMaxMp(level)
+          setMaxMp(mp)
+          setCurrentMp(mp)
+          
+          // 스킬 포인트 = 레벨 - 1 (1레벨 때는 0 SP)
+          setSkillPoints(Math.max(0, level - 1))
         }
       } catch (error) {
-        console.error('Failed to load character level:', error)
+        console.error('Failed to load character data:', error)
       }
     }
-    loadCharacterLevel()
-  }, [])
-
-  // 스킬 데이터 새로고침
-  const refreshSkills = () => {
-    setPlayerSkills(skillService.getPlayerSkills(userId))
-  }
-
-  // 스킬 변경 감지
-  useEffect(() => {
-    const handleSkillsChange = () => {
-      refreshSkills()
-    }
-
-    window.addEventListener('skills-changed', handleSkillsChange)
-    return () => {
-      window.removeEventListener('skills-changed', handleSkillsChange)
-    }
+    loadCharacterData()
   }, [userId])
 
-  // 스킬 학습
-  const handleLearnSkill = (skillId: string) => {
-    if (skillService.learnSkill(userId, skillId)) {
-      refreshSkills()
+  // JRPG 스킬 데이터 로드
+  const loadJRPGSkills = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const skillData = await jrpgDbHelpers.getJRPGSkills(userId)
+      if (skillData && skillData.skills && Array.isArray(skillData.skills)) {
+        setJrpgSkills(skillData.skills)
+        
+        // 장착된 스킬 매핑
+        const equipped = new Array(8).fill(null)
+        skillData.skills.forEach(skill => {
+          if (skill.equippedSlot !== undefined && skill.equippedSlot >= 0 && skill.equippedSlot < 8) {
+            equipped[skill.equippedSlot] = skill
+          }
+        })
+        setEquippedJRPGSkills(equipped)
+      } else {
+        setJrpgSkills([])
+        setEquippedJRPGSkills(new Array(8).fill(null))
+      }
+        
+      // 사용한 스킬 포인트 계산
+      if (skillData && skillData.skills && Array.isArray(skillData.skills)) {
+        const usedSP = skillData.skills.reduce((sum, skill) => sum + skill.level - 1, 0) // 레벨 1은 무료
+        setSkillPoints(Math.max(0, characterLevel - 1 - usedSP))
+      } else {
+        setSkillPoints(Math.max(0, characterLevel - 1))
+      }
+    } catch (error) {
+      console.error('Failed to load JRPG skills:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [userId, characterLevel])
+
+  useEffect(() => {
+    loadJRPGSkills()
+  }, [loadJRPGSkills])
+
+
+  // JRPG 스킬 학습
+  const handleLearnJRPGSkill = async (skillId: string) => {
+    if (skillPoints <= 0) return
+    
+    const success = await jrpgDbHelpers.learnSkill(userId, skillId)
+    if (success) {
+      loadJRPGSkills()
+      
+      // 스킬 학습 이벤트 발송
+      const totalSkills = jrpgSkills?.length || 0
+      window.dispatchEvent(new CustomEvent('skill-learned', { 
+        detail: { 
+          skillId: skillId,
+          totalSkills: totalSkills + 1
+        } 
+      }))
     }
   }
 
-  // 스킬 업그레이드
-  const handleUpgradeSkill = (skillId: string) => {
-    if (skillService.upgradeSkill(userId, skillId)) {
-      refreshSkills()
+  // JRPG 스킬 업그레이드
+  const handleUpgradeJRPGSkill = async (skill: SkillInstance) => {
+    if (skillPoints <= 0 || skill.level >= SKILL_DATABASE[skill.skillId].maxLevel) return
+    
+    const success = await jrpgDbHelpers.upgradeSkill(userId, skill.skillId)
+    if (success) {
+      loadJRPGSkills()
     }
   }
 
-  // 스킬 장착
-  const handleEquipSkill = (skillId: string) => {
-    if (selectedSlot !== null) {
-      if (skillService.equipSkill(userId, skillId, selectedSlot)) {
-        setSelectedSlot(null)
-        refreshSkills()
+  // JRPG 스킬 장착
+  const handleEquipJRPGSkill = async (skill: SkillInstance) => {
+    console.log('[SkillManager] handleEquipJRPGSkill called', { skill, selectedSlot })
+    
+    if (selectedSlot === null) {
+      // 빈 슬롯 찾기
+      const emptySlotIndex = equippedJRPGSkills.findIndex(s => s === null)
+      console.log('[SkillManager] 빈 슬롯 찾기:', { emptySlotIndex, equippedJRPGSkills })
+      
+      if (emptySlotIndex !== -1) {
+        const success = await jrpgDbHelpers.equipSkill(userId, skill.skillId, emptySlotIndex)
+        console.log('[SkillManager] 스킬 장착 결과:', success)
+        if (success) {
+          loadJRPGSkills()
+        }
+      } else {
+        console.log('[SkillManager] 빈 슬롯이 없습니다')
       }
     } else {
-      // 빈 슬롯 찾아서 장착
-      const emptySlotIndex = playerSkills.equippedSkills.findIndex(s => s === null)
-      if (emptySlotIndex !== -1) {
-        if (skillService.equipSkill(userId, skillId, emptySlotIndex + 1)) {
-          refreshSkills()
-        }
+      const success = await jrpgDbHelpers.equipSkill(userId, skill.skillId, selectedSlot - 1)
+      console.log('[SkillManager] 특정 슬롯에 장착 결과:', success)
+      if (success) {
+        setSelectedSlot(null)
+        loadJRPGSkills()
       }
     }
   }
 
-  // 장착된 스킬 가져오기
-  const equippedSkills = skillService.getEquippedSkills(userId)
+  // JRPG 스킬 장착 해제
+  const handleUnequipJRPGSkill = async (slotIndex: number) => {
+    const skill = equippedJRPGSkills[slotIndex]
+    if (!skill) return
+    
+    const success = await jrpgDbHelpers.unequipSkill(userId, skill.skillId)
+    if (success) {
+      loadJRPGSkills()
+    }
+  }
+
+  // MP 회복 (턴마다 5% 회복)
+  const recoverMp = () => {
+    const recovery = Math.floor(maxMp * 0.05)
+    setCurrentMp(prev => Math.min(maxMp, prev + recovery))
+  }
 
   // 학습한 스킬 맵
-  const learnedSkillsMap = new Map(
-    playerSkills.learnedSkills.map(ls => [ls.skillId, ls])
-  )
+  const learnedJRPGSkillsMap = useMemo(() => {
+    if (!jrpgSkills || !Array.isArray(jrpgSkills)) {
+      return new Map()
+    }
+    return new Map(jrpgSkills.map(skill => [skill.skillId, skill]))
+  }, [jrpgSkills])
 
-  // 장착된 스킬 맵
-  const equippedSkillsSet = new Set(playerSkills.equippedSkills.filter(Boolean))
+  // 필터링된 JRPG 스킬
+  const filteredJRPGSkills = useMemo(() => {
+    if (selectedCategory === 'all') {
+      return Object.values(SKILL_DATABASE)
+    }
+    return Object.values(SKILL_DATABASE).filter(skill => skill.category === selectedCategory)
+  }, [selectedCategory])
 
-  // 학습 가능한 스킬
-  const availableSkills = skillService.getAvailableSkills(userId, characterLevel)
 
-  // 카테고리별 스킬 필터링
-  const filteredSkills = selectedCategory === 'all' 
-    ? [...Object.values(allSkills)]
-    : Object.values(allSkills).filter(skill => skill.category === selectedCategory)
-
+  // JRPG 스킬 시스템 렌더링
   return (
     <div className="space-y-6">
       {/* 헤더 */}
@@ -291,8 +251,35 @@ export function SkillManager({ userId, onClose }: SkillManagerProps) {
         )}
       </div>
 
-      {/* 스킬 포인트 & 장착 슬롯 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {/* MP & SP 정보 */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* MP 바 */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Droplet className="w-5 h-5 text-blue-400" />
+              마나 포인트
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>MP</span>
+                <span className="text-blue-400">{currentMp} / {maxMp}</span>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-blue-500 to-blue-400"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(currentMp / maxMp) * 100}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+              <p className="text-xs text-gray-400">턴마다 5% 회복</p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* 스킬 포인트 */}
         <Card>
           <CardHeader>
@@ -300,7 +287,7 @@ export function SkillManager({ userId, onClose }: SkillManagerProps) {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-yellow-400">
-              {playerSkills.skillPoints} SP
+              {skillPoints} SP
             </div>
             <p className="text-sm text-gray-400 mt-2">
               레벨업 시 1 포인트씩 획득
@@ -308,59 +295,80 @@ export function SkillManager({ userId, onClose }: SkillManagerProps) {
           </CardContent>
         </Card>
 
-        {/* 장착 슬롯 */}
+        {/* 캐릭터 레벨 */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">장착된 스킬</CardTitle>
+            <CardTitle className="text-lg">캐릭터 레벨</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-4 gap-2">
-              {equippedSkills.map((skill, index) => (
-                <SkillSlot
-                  key={index}
-                  skill={skill}
-                  slotNumber={index + 1}
-                  onClick={() => setSelectedSlot(selectedSlot === index + 1 ? null : index + 1)}
-                />
-              ))}
+            <div className="text-3xl font-bold text-purple-400">
+              Lv.{characterLevel}
             </div>
-            {selectedSlot && (
-              <p className="text-sm text-yellow-400 mt-2">
-                슬롯 {selectedSlot}에 장착할 스킬을 선택하세요
-              </p>
-            )}
+            <p className="text-sm text-gray-400 mt-2">
+              대시보드 스탯 레벨의 합
+            </p>
           </CardContent>
         </Card>
       </div>
+
+      {/* 장착 슬롯 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">장착된 스킬 (8슬롯)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-8 gap-2">
+            {equippedJRPGSkills.map((skill, index) => (
+              <SkillSlot
+                key={index}
+                skill={skill}
+                slotNumber={index + 1}
+                onClick={() => {
+                  if (skill) {
+                    handleUnequipJRPGSkill(index)
+                  } else {
+                    setSelectedSlot(selectedSlot === index + 1 ? null : index + 1)
+                  }
+                }}
+              />
+            ))}
+          </div>
+          {selectedSlot && (
+            <p className="text-sm text-yellow-400 mt-2">
+              슬롯 {selectedSlot}에 장착할 스킬을 선택하세요
+            </p>
+          )}
+        </CardContent>
+      </Card>
 
       {/* 카테고리 필터 */}
       <div className="flex gap-2">
         <Button
           size="sm"
-          variant={selectedCategory === 'all' ? 'primary' : 'outline'}
+          variant={selectedCategory === 'all' ? 'default' : 'outline'}
           onClick={() => setSelectedCategory('all')}
         >
           전체
         </Button>
         <Button
           size="sm"
-          variant={selectedCategory === 'attack' ? 'primary' : 'outline'}
-          onClick={() => setSelectedCategory('attack')}
+          variant={selectedCategory === 'physical' ? 'default' : 'outline'}
+          onClick={() => setSelectedCategory('physical')}
         >
           <Zap className="w-3 h-3 mr-1" />
-          공격
+          물리
         </Button>
         <Button
           size="sm"
-          variant={selectedCategory === 'defense' ? 'primary' : 'outline'}
-          onClick={() => setSelectedCategory('defense')}
+          variant={selectedCategory === 'magic' ? 'default' : 'outline'}
+          onClick={() => setSelectedCategory('magic')}
         >
-          <Shield className="w-3 h-3 mr-1" />
-          방어
+          <Sparkles className="w-3 h-3 mr-1" />
+          마법
         </Button>
         <Button
           size="sm"
-          variant={selectedCategory === 'support' ? 'primary' : 'outline'}
+          variant={selectedCategory === 'support' ? 'default' : 'outline'}
           onClick={() => setSelectedCategory('support')}
         >
           <Heart className="w-3 h-3 mr-1" />
@@ -368,38 +376,46 @@ export function SkillManager({ userId, onClose }: SkillManagerProps) {
         </Button>
         <Button
           size="sm"
-          variant={selectedCategory === 'special' ? 'primary' : 'outline'}
-          onClick={() => setSelectedCategory('special')}
+          variant={selectedCategory === 'ultimate' ? 'default' : 'outline'}
+          onClick={() => setSelectedCategory('ultimate')}
         >
-          <Sparkles className="w-3 h-3 mr-1" />
-          특수
+          <Shield className="w-3 h-3 mr-1" />
+          궁극기
         </Button>
       </div>
 
       {/* 스킬 목록 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {filteredSkills.map(skill => {
-          const learned = learnedSkillsMap.get(skill.id)
-          const equipped = equippedSkillsSet.has(skill.id)
-          const slotNumber = equipped ? playerSkills.equippedSkills.indexOf(skill.id) + 1 : undefined
-          const canLearn = availableSkills.some(s => s.id === skill.id)
-
-          return (
-            <SkillCard
-              key={skill.id}
-              skill={skill}
-              learned={learned}
-              equipped={equipped}
-              slotNumber={slotNumber}
-              onLearn={() => handleLearnSkill(skill.id)}
-              onUpgrade={() => handleUpgradeSkill(skill.id)}
-              onEquip={() => handleEquipSkill(skill.id)}
-              canLearn={canLearn}
-              skillPoints={playerSkills.skillPoints}
-            />
-          )
-        })}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="h-48 bg-gray-800 rounded-lg animate-pulse" />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {filteredJRPGSkills.map(skill => {
+            const learned = learnedJRPGSkillsMap.get(skill.id)
+            const isEquipped = learned && equippedJRPGSkills.some(s => s?.skillId === learned.skillId)
+            const slotNumber = isEquipped ? equippedJRPGSkills.findIndex(s => s?.skillId === learned?.skillId) + 1 : undefined
+            
+            return (
+              <JRPGSkillCard
+                key={skill.id}
+                skill={skill}
+                learned={learned}
+                isEquipped={isEquipped}
+                slotNumber={slotNumber}
+                characterLevel={characterLevel}
+                currentMp={currentMp}
+                onClick={() => learned && handleEquipJRPGSkill(learned)}
+                onLearn={() => handleLearnJRPGSkill(skill.id)}
+                onUpgrade={() => learned && handleUpgradeJRPGSkill(learned)}
+                disabled={false}
+              />
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

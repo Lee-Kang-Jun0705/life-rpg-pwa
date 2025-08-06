@@ -10,7 +10,8 @@ import type {
   PlayerDataValue,
   PlayerData,
   DungeonProgress,
-  EquipmentInventory
+  EquipmentInventory,
+  UserResources
 } from './types'
 import { calculateLevelFromExperience } from '../utils/stat-calculator'
 import { DatabaseLock } from './db-lock'
@@ -22,6 +23,11 @@ export const clientDbHelpers = {
   async getProfile(userId: string): Promise<UserProfile | null> {
     const db = await waitForDatabase()
     return await db.profiles.where('userId').equals(userId).first() || null
+  },
+
+  async createProfile(profile: Omit<UserProfile, 'id'>): Promise<number> {
+    const db = await waitForDatabase()
+    return await db.profiles.add(profile)
   },
 
   async updateProfile(userId: string, updates: Partial<UserProfile>) {
@@ -99,26 +105,42 @@ export const clientDbHelpers = {
     return stats
   },
 
+  async createStat(stat: Omit<Stat, 'id'>): Promise<number> {
+    const db = await waitForDatabase()
+    return await db.stats.add(stat)
+  },
+
   async saveStat(stat: Stat) {
     const db = await waitForDatabase()
+    
+    // calculateLevelFromExperience를 사용하여 레벨 계산
+    const { calculateLevelFromExperience } = await import('@/lib/utils/stat-calculator')
+    const { level } = calculateLevelFromExperience(stat.experience || 0)
+    
     // userId와 type으로 기존 스탯 찾기
     const userStats = await db.stats.where('userId').equals(stat.userId).toArray()
     const existing = userStats.find((s) => s.type === stat.type)
 
+    const statWithCalculatedLevel = {
+      ...stat,
+      level, // 계산된 레벨로 업데이트
+      updatedAt: new Date()
+    }
+
     if (existing && existing.id) {
       // 기존 스탯 업데이트
       return await db.stats.update(existing.id, {
-        ...stat,
-        id: existing.id,
-        updatedAt: new Date()
+        ...statWithCalculatedLevel,
+        id: existing.id
       })
     } else {
       // 새 스탯 추가
-      return await db.stats.add(stat)
+      return await db.stats.add(statWithCalculatedLevel)
     }
   },
 
   async updateStat(userId: string, type: Stat['type'], experience: number) {
+    console.log('📊 updateStat called with:', { userId, type, experience })
     const db = await waitForDatabase()
 
     // 해당 사용자의 모든 스탯 가져와서 필터링
@@ -128,10 +150,18 @@ export const clientDbHelpers = {
     if (stat && stat.id) {
       const newExperience = stat.experience + experience
       const { level: newLevel } = calculateLevelFromExperience(newExperience)
+      const newTotalActivities = stat.totalActivities + 1
+      console.log('📊 Updating stat in DB:', {
+        statId: stat.id,
+        oldTotalActivities: stat.totalActivities,
+        newTotalActivities,
+        newExperience,
+        newLevel
+      })
       return await db.stats.update(stat.id, {
         experience: newExperience,
         level: newLevel,
-        totalActivities: stat.totalActivities + 1,
+        totalActivities: newTotalActivities,
         updatedAt: new Date()
       })
     } else {
@@ -151,10 +181,13 @@ export const clientDbHelpers = {
 
   // 활동 관련
   async addActivity(activity: Omit<Activity, 'id'>): Promise<Activity | null> {
+    console.log('📝 addActivity called with:', activity)
     const db = await waitForDatabase()
     const id = await db.activities.add(activity)
-    // 스탯 업데이트
-    await this.updateStat(activity.userId, activity.statType, activity.experience)
+    console.log('📝 Activity added with ID:', id)
+    
+    // 스탯 업데이트는 여기서 하지 않음 (useStatUpdater에서 이미 처리됨)
+    // 중복 호출 방지를 위해 제거
 
     // 일일 경험치 기록 업데이트
     const today = new Date()
@@ -191,17 +224,32 @@ export const clientDbHelpers = {
   },
 
   async getActivities(userId: string, limit?: number): Promise<Activity[]> {
+    console.log('📋 getActivities called with:', { userId, limit })
     const db = await waitForDatabase()
-    const query = db.activities
+    
+    // timestamp로 정렬하여 최신 활동이 먼저 오도록 함
+    let activities = await db.activities
       .where('userId')
       .equals(userId)
-      .reverse()
-
+      .toArray()
+    
+    // 최신순으로 정렬
+    activities = activities.sort((a, b) => {
+      const timeA = new Date(a.timestamp).getTime()
+      const timeB = new Date(b.timestamp).getTime()
+      return timeB - timeA // 내림차순 (최신이 먼저)
+    })
+    
     if (limit) {
-      return await query.limit(limit).toArray()
+      activities = activities.slice(0, limit)
     }
-
-    return await query.toArray()
+    
+    console.log('📋 getActivities returning:', activities.length, 'activities')
+    if (activities.length > 0) {
+      console.log('📋 Latest activity:', activities[0])
+    }
+    
+    return activities
   },
 
   async deleteActivity(id: number) {
@@ -488,6 +536,37 @@ export const clientDbHelpers = {
     })
   },
 
+  // 리소스 관련
+  async getUserResources(userId: string): Promise<UserResources | null> {
+    const db = await getClientDatabase()
+    
+    let resources = await db.userResources
+      .where('userId')
+      .equals(userId)
+      .first()
+    
+    if (!resources) {
+      // 기본 리소스 생성
+      const defaultResources = {
+        userId,
+        gold: 1000,
+        energy: 100,
+        maxEnergy: 100,
+        lastEnergyUpdate: new Date(),
+        premiumCurrency: 0,
+        updatedAt: new Date()
+      }
+      
+      await db.userResources.add(defaultResources)
+      resources = await db.userResources
+        .where('userId')
+        .equals(userId)
+        .first()
+    }
+    
+    return resources || null
+  },
+
   // 장비 인벤토리 관련
   async getEquipmentInventory(userId: string): Promise<EquipmentInventory | null> {
     const db = await getClientDatabase()
@@ -582,5 +661,47 @@ export const clientDbHelpers = {
   async createDungeonProgress(progress: DungeonProgress): Promise<void> {
     const db = await getClientDatabase()
     await db.dungeonProgress.add(progress)
+  },
+
+  // 골드 추가
+  async addGold(userId: string, amount: number): Promise<boolean> {
+    const db = await getClientDatabase()
+    try {
+      const resources = await this.getUserResources(userId)
+      if (!resources) {
+        console.error('User resources not found')
+        return false
+      }
+      
+      await db.userResources.where('userId').equals(userId).modify({
+        gold: resources.gold + amount,
+        updatedAt: new Date()
+      })
+      
+      console.log(`Added ${amount} gold to user ${userId}. New total: ${resources.gold + amount}`)
+      return true
+    } catch (error) {
+      console.error('Failed to add gold:', error)
+      return false
+    }
+  },
+
+  // 유저 리소스 업데이트
+  async updateUserResources(userId: string, updates: Partial<UserResources>): Promise<boolean> {
+    const db = await getClientDatabase()
+    try {
+      const result = await db.userResources.where('userId').equals(userId).modify({
+        ...updates,
+        updatedAt: new Date()
+      })
+      
+      return result > 0
+    } catch (error) {
+      console.error('Failed to update user resources:', error)
+      return false
+    }
   }
 }
+
+// dbHelpers alias for backward compatibility
+export const dbHelpers = clientDbHelpers

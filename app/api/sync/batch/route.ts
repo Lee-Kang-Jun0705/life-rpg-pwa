@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         switch (req.endpoint) {
           case 'energy/state': {
             const energyService = EnergyService.getInstance()
-            const energyState = await energyService.getEnergy(userId)
+            const energyState = await (energyService as any).getEnergyState(userId)
             results['energy/state'] = energyState
             break
           }
@@ -77,13 +77,39 @@ export async function POST(request: NextRequest) {
           case 'tickets/state': {
             const ticketService = BattleTicketService.getInstance()
             const ticketState = await ticketService.getTicketState(userId)
-            results['tickets/state'] = ticketState
+            results['tickets/state'] = ticketState as any
             break
           }
 
           case 'player/stats': {
             const playerStats = await dbHelpers.getStats(userId)
-            results['player/stats'] = playerStats
+            // Stat[] 타입을 PlayerStats 타입으로 변환
+            const formattedStats: PlayerStats = {
+              level: 1,
+              experience: 0,
+              health: 0,
+              learning: 0,
+              relationship: 0,
+              achievement: 0
+            }
+            
+            // 각 스탯 타입별로 레벨 매핑
+            playerStats.forEach(stat => {
+              if (stat.type === 'health') formattedStats.health = stat.level
+              else if (stat.type === 'learning') formattedStats.learning = stat.level
+              else if (stat.type === 'relationship') formattedStats.relationship = stat.level
+              else if (stat.type === 'achievement') formattedStats.achievement = stat.level
+              
+              // 총 경험치 계산
+              formattedStats.experience += stat.experience
+            })
+            
+            // 평균 레벨 계산
+            const totalLevels = formattedStats.health + formattedStats.learning + 
+                              formattedStats.relationship + formattedStats.achievement
+            formattedStats.level = Math.floor(totalLevels / 4) || 1
+            
+            results['player/stats'] = formattedStats
             break
           }
 

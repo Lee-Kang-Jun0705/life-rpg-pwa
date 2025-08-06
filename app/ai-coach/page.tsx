@@ -10,6 +10,7 @@ import { SectionErrorBoundary } from '@/components/ErrorBoundary'
 // Lazy loading으로 성능 최적화
 const InsightsTab = lazy(() => import('@/components/ai-coach/InsightsTab').then(m => ({ default: m.InsightsTab })).catch(() => ({ default: () => <div>인사이트 탭을 로드할 수 없습니다.</div> })))
 const ChatTab = lazy(() => import('@/components/ai-coach/ChatTab').then(m => ({ default: m.ChatTab })).catch(() => ({ default: () => <div>채팅 탭을 로드할 수 없습니다.</div> })))
+const GoalsTab = lazy(() => import('@/components/ai-coach/GoalsTab').then(m => ({ default: m.GoalsTab })).catch(() => ({ default: () => <div>목표 탭을 로드할 수 없습니다.</div> })))
 const AnalysisTab = lazy(() => import('@/components/ai-coach/AnalysisTab').then(m => ({ default: m.AnalysisTab })).catch(() => ({ default: () => <div>분석 탭을 로드할 수 없습니다.</div> })))
 const GrowthTab = lazy(() => import('@/components/ai-coach/GrowthTab').then(m => ({ default: m.GrowthTab })).catch(() => ({ default: () => <div>성장 탭을 로드할 수 없습니다.</div> })))
 const AdviceTab = lazy(() => import('@/components/ai-coach/AdviceTab').then(m => ({ default: m.AdviceTab })).catch(() => ({ default: () => <div>조언 탭을 로드할 수 없습니다.</div> })))
@@ -41,6 +42,7 @@ export default function AICoachPage() {
   // 탭 정의
   const tabs = [
     { id: 'insights', label: '한눈에 보기', emoji: '✨' },
+    { id: 'goals', label: '목표 설정', emoji: '🎯' },
     { id: 'chat', label: 'AI 대화', emoji: '💬' },
     { id: 'analysis', label: '상세 분석', emoji: '📊' },
     { id: 'activity', label: '활동 분석', emoji: '📅' },
@@ -133,6 +135,12 @@ export default function AICoachPage() {
               activityPattern={activityPattern}
               personalizedAdvice={personalizedAdvice}
             />
+          </Suspense>
+        </SectionErrorBoundary>
+
+        <SectionErrorBoundary sectionName="목표 탭">
+          <Suspense fallback={<TabLoading />}>
+            <GoalsTab />
           </Suspense>
         </SectionErrorBoundary>
 

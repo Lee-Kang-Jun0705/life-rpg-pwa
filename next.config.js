@@ -166,12 +166,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   reactStrictMode: true,
   
-  // 빌드 시 린트 경고 무시 (Vercel 배포를 위해)
+  // ESLint 활성화
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   
-  // 타입 체크 비활성화 (Vercel 배포를 위해)
+  // TypeScript 타입 체크 활성화
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -241,7 +241,7 @@ const nextConfig = {
       }
     });
     
-    // 프로덕션에서 console 제거
+    // 프로덕션에서 console 제거 (console.error는 유지)
     if (!dev && !isServer) {
       config.optimization.minimizer = config.optimization.minimizer || [];
       const TerserPlugin = require('terser-webpack-plugin');
@@ -249,7 +249,7 @@ const nextConfig = {
         new TerserPlugin({
           terserOptions: {
             compress: {
-              drop_console: true,
+              drop_console: false,
               drop_debugger: true,
               pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn'],
             },

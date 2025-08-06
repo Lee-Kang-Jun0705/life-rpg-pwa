@@ -24,6 +24,7 @@ export interface Stat {
   experience: number
   totalActivities: number
   updatedAt: Date
+  createdAt?: Date  // 누락된 속성 추가 (옵셔널)
 }
 
 export interface Activity {
@@ -168,6 +169,58 @@ export interface UserResources {
   updatedAt: Date
 }
 
+// JRPG 시스템 타입 임포트
+import type { ItemInstance, SkillInstance } from '../jrpg/types'
+
+// JRPG 아이템 인벤토리
+export interface JRPGInventory {
+  id?: number
+  userId: string
+  items: ItemInstance[]
+  maxSlots: number
+  updatedAt: Date
+}
+
+// JRPG 스킬 목록
+export interface JRPGSkills {
+  id?: number
+  userId: string
+  skills: SkillInstance[]
+  skillPoints: number
+  updatedAt: Date
+}
+
+// JRPG 전투 기록
+export interface JRPGBattleLog {
+  id?: number
+  userId: string
+  dungeonId: string
+  difficulty: 'easy' | 'normal' | 'hard' | 'nightmare'
+  result: 'victory' | 'defeat' | 'retreat'
+  turns: number
+  damageDealt: number
+  damageTaken: number
+  expGained: number
+  goldGained: number
+  itemsGained: string[]
+  timestamp: Date
+}
+
+// JRPG 진행 상황
+export interface JRPGProgress {
+  id?: number
+  userId: string
+  highestDungeonCleared: number
+  totalBattlesWon: number
+  totalBattlesLost: number
+  totalDamageDealt: number
+  totalGoldEarned: number
+  unlockedDungeons: string[]
+  completedQuests: string[]
+  achievements: string[]
+  updatedAt: Date
+}
+
 // Dexie 데이터베이스 타입 정의
 import type { Table } from 'dexie'
 
@@ -185,6 +238,11 @@ export interface LifeRPGDatabase {
   settings: Table<Setting>
   userEquipments: Table<UserEquipment>
   userResources: Table<UserResources>
+  // JRPG 테이블들
+  jrpgInventory: Table<JRPGInventory>
+  jrpgSkills: Table<JRPGSkills>
+  jrpgBattleLogs: Table<JRPGBattleLog>
+  jrpgProgress: Table<JRPGProgress>
   transaction<T>(_mode: string, _table: Table<unknown>, _callback: () => Promise<T>): Promise<T>
 }
 

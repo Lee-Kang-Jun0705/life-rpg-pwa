@@ -35,6 +35,15 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
   // API 키 확인
   useEffect(() => {
     const checkApiKey = async() => {
+      // 먼저 localStorage 확인
+      const savedApiSettings = localStorage.getItem('ai_api_settings')
+      if (savedApiSettings) {
+        const settings = JSON.parse(savedApiSettings)
+        setHasApiKey(!!settings?.key)
+        return
+      }
+      
+      // SecureAIStorage 확인 (폴백)
       const config = await SecureAIStorage.getConfig()
       setHasApiKey(!!config?.apiKey)
     }
@@ -54,6 +63,10 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
 
     // AI API 호출 시도
     try {
+      // localStorage에서 사용자 API 설정 가져오기
+      const savedApiSettings = localStorage.getItem('ai_api_settings')
+      const userApiSettings = savedApiSettings ? JSON.parse(savedApiSettings) : null
+      
       const response = await fetch('/api/ai-coach', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -61,7 +74,8 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
           message: userMessage,
           stats: userStats,
           growthAnalyses,
-          activityPattern
+          activityPattern,
+          userApiSettings // 사용자가 설정한 API 키 전송
         })
       })
 
@@ -206,7 +220,7 @@ export function ChatTab({ userStats, growthAnalyses, activityPattern, personaliz
             설정 페이지에서 API 키를 입력해주세요.
           </p>
           <Button
-            onClick={() => router.push('/settings')}
+            onClick={() => router.push('/settings/personalization')}
             className="bg-gradient-to-r from-candy-blue to-candy-purple"
           >
             <LockClosed className="w-4 h-4 mr-2" />

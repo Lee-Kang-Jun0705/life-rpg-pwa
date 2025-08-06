@@ -3,8 +3,8 @@
 
 import { calculateCharacterLevel } from '@/lib/utils/level-calculator'
 import { dbHelpers } from '@/lib/database/client'
-import { skillService } from './skill-service'
-import { SKILL_CONSTANTS } from '@/lib/types/skill.types'
+// import { skillService } from './skill-service' // 미구현
+// import { SKILL_CONSTANTS } from '@/lib/types/skill.types' // 미구현
 
 const LEVEL_STORAGE_KEY = 'life-rpg-character-level'
 
@@ -89,9 +89,9 @@ class LevelTrackingService {
 
   // 레벨업 보상 지급
   private grantLevelUpRewards(userId: string, levelUps: number): void {
-    // 스킬 포인트 지급 (레벨당 1포인트)
-    const skillPoints = levelUps * SKILL_CONSTANTS.SKILL_POINT_PER_LEVEL
-    skillService.addSkillPoints(userId, skillPoints)
+    // 스킬 포인트 지급 (레벨당 1포인트) - 현재 미구현
+    const skillPoints = levelUps * 1 // SKILL_CONSTANTS.SKILL_POINT_PER_LEVEL
+    // skillService.addSkillPoints(userId, skillPoints) // 미구현
     
     console.log(`🎉 레벨업! ${levelUps}레벨 상승, ${skillPoints} 스킬 포인트 획득!`)
     

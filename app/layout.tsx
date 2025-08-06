@@ -6,6 +6,7 @@ import { AppLayout } from '@/components/AppLayout'
 import { SkipLink } from '@/components/accessibility'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import { ToastProvider } from '@/components/ui/Toast'
+import { QueryProvider } from '@/providers/QueryProvider'
 import './globals.css'
 import '@/styles/animations.css'
 
@@ -45,16 +46,18 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <body className={`${inter.variable} ${notoSansKR.variable} font-sans`}>
         <ErrorBoundary>
-          <SystemProviders>
-            <ToastProvider>
-              <AppProviders>
-                <SkipLink />
-                <AppLayout>
-                  {children}
-                </AppLayout>
-              </AppProviders>
-            </ToastProvider>
-          </SystemProviders>
+          <QueryProvider>
+            <SystemProviders>
+              <ToastProvider>
+                <AppProviders>
+                  <SkipLink />
+                  <AppLayout>
+                    {children}
+                  </AppLayout>
+                </AppProviders>
+              </ToastProvider>
+            </SystemProviders>
+          </QueryProvider>
         </ErrorBoundary>
       </body>
     </html>

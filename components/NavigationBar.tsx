@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { NAV_ITEMS, NAV_CONFIG } from '@/lib/constants/navigation.constants'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { useBattleStore } from '@/lib/stores/battleStore'
+// import { useBattleStore } from '@/lib/stores/battleStore' // 현재 미구현
 
 interface NavigationBarProps {
   defaultVisible?: boolean
@@ -17,7 +17,7 @@ export function NavigationBar({ defaultVisible = false }: NavigationBarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [isVisible, setIsVisible] = useState(defaultVisible)
-  const isInBattle = useBattleStore((state) => state.isInBattle)
+  const isInBattle = false // 전투 시스템 미구현
 
   // ESC 키로 닫기
   useEffect(() => {

@@ -4,6 +4,7 @@ import { inventoryService } from './inventory-service'
 import { skillService } from './skill-service'
 import { Equipment } from '../types/equipment.types'
 import { useUserStore } from '../stores/userStore'
+import { safeLocalStorage } from '@/lib/utils/storage'
 
 const SHOP_STORAGE_KEY = 'life-rpg-shop-state'
 
@@ -21,7 +22,7 @@ class ShopService {
 
   private loadState(): void {
     try {
-      const saved = localStorage.getItem(SHOP_STORAGE_KEY)
+      const saved = safeLocalStorage.getItem(SHOP_STORAGE_KEY)
       if (saved) {
         const parsed = JSON.parse(saved)
         this.state = {
@@ -36,7 +37,7 @@ class ShopService {
 
   private saveState(): void {
     try {
-      localStorage.setItem(SHOP_STORAGE_KEY, JSON.stringify(this.state))
+      safeLocalStorage.setItem(SHOP_STORAGE_KEY, JSON.stringify(this.state))
     } catch (error) {
       console.error('Failed to save shop state:', error)
     }
@@ -223,24 +224,31 @@ class ShopService {
       case 'equipment':
         // 장비 아이템 추가
         for (let i = 0; i < quantity; i++) {
-          const equipment: Equipment = {
-            ...item.itemData,
-            id: `${item.itemData.id}_${Date.now()}_${i}` // 유니크 ID 생성
+          // itemData가 있으면 itemData.id 사용, 없으면 item.id 사용
+          const itemIdToAdd = item.itemData?.id || item.id
+          const success = inventoryService.addItem(userId, itemIdToAdd, 1)
+          if (!success) {
+            console.error('Failed to add equipment to inventory')
+            return false
           }
-          inventoryService.addItem(userId, equipment)
         }
         break
         
       case 'skill':
         // 스킬 학습
-        if (item.itemData?.skillId && item.itemData?.learnOnPurchase) {
+        if (item.itemData?.skillId) {
           skillService.learnSkill(userId, item.itemData.skillId)
         }
         break
         
       case 'consumable':
-        // 소모품은 나중에 구현
-        console.log('소모품 구매:', item, quantity)
+        // 소모품 추가
+        const consumableId = item.itemData?.id || item.id
+        const success = inventoryService.addItem(userId, consumableId, quantity)
+        if (!success) {
+          console.error('Failed to add consumable to inventory')
+          return false
+        }
         break
         
       case 'special':
@@ -265,6 +273,19 @@ class ShopService {
     this.state.purchaseHistory.push(purchaseRecord)
     
     this.saveState()
+    
+    // 인벤토리 업데이트 이벤트 발생
+    const eventItemId = item.itemData?.id || item.id
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('inventory-updated', {
+        detail: { 
+          userId, 
+          itemId: eventItemId, 
+          quantity 
+        }
+      }))
+    }
+    
     return true
   }
 

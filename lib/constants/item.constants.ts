@@ -3,7 +3,7 @@
  * 하드코딩 제거, 모든 값을 상수로 관리
  */
 
-// 아이템 희귀도별 설정
+// 아이템 희귀도별 설정 - 6단계 시스템
 export const ITEM_RARITY_CONFIG = {
   common: {
     name: '일반',
@@ -12,43 +12,58 @@ export const ITEM_RARITY_CONFIG = {
     maxRandomStats: 0,
     dropRate: 0.6,
     sellPriceMultiplier: 1,
-    enhanceSuccessBonus: 0
+    enhanceSuccessBonus: 0,
+    specialEffectChance: 0
   },
-  uncommon: {
-    name: '고급',
-    color: 'green',
-    statMultiplier: { min: 1.0, max: 1.2 },
-    maxRandomStats: 1,
+  magic: {
+    name: '매직',
+    color: 'blue',
+    statMultiplier: { min: 1.0, max: 1.3 },
+    maxRandomStats: 2,
     dropRate: 0.25,
     sellPriceMultiplier: 1.5,
-    enhanceSuccessBonus: 5
+    enhanceSuccessBonus: 5,
+    specialEffectChance: 0.1
   },
   rare: {
-    name: '희귀',
-    color: 'blue',
-    statMultiplier: { min: 1.2, max: 1.5 },
-    maxRandomStats: 2,
+    name: '레어',
+    color: 'yellow',
+    statMultiplier: { min: 1.3, max: 1.6 },
+    maxRandomStats: 3,
     dropRate: 0.1,
     sellPriceMultiplier: 2,
-    enhanceSuccessBonus: 10
+    enhanceSuccessBonus: 10,
+    specialEffectChance: 0.3
   },
   epic: {
-    name: '영웅',
+    name: '에픽',
     color: 'purple',
-    statMultiplier: { min: 1.5, max: 1.8 },
-    maxRandomStats: 3,
+    statMultiplier: { min: 1.6, max: 2.0 },
+    maxRandomStats: 4,
     dropRate: 0.04,
     sellPriceMultiplier: 3,
-    enhanceSuccessBonus: 15
+    enhanceSuccessBonus: 15,
+    specialEffectChance: 0.5
   },
   legendary: {
     name: '전설',
     color: 'orange',
-    statMultiplier: { min: 1.8, max: 2.2 },
-    maxRandomStats: 4,
-    dropRate: 0.01,
+    statMultiplier: { min: 2.0, max: 2.5 },
+    maxRandomStats: 5,
+    dropRate: 0.009,
     sellPriceMultiplier: 5,
-    enhanceSuccessBonus: 20
+    enhanceSuccessBonus: 20,
+    specialEffectChance: 0.8
+  },
+  mythic: {
+    name: '신화',
+    color: 'red',
+    statMultiplier: { min: 2.5, max: 3.0 },
+    maxRandomStats: 6,
+    dropRate: 0.001,
+    sellPriceMultiplier: 10,
+    enhanceSuccessBonus: 25,
+    specialEffectChance: 1.0 // 100% 특수 효과
   }
 } as const
 

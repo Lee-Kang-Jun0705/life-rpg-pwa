@@ -18,6 +18,7 @@ import { getRandomMonsters, EnhancedMonster } from '@/lib/data/monsters-enhanced
 import { BOSS_MONSTERS, DUNGEON_BOSSES } from '@/lib/data/boss-monsters'
 import { BossBattleService } from '@/lib/services/boss-battle.service'
 import { BossBattleUI } from '@/components/dungeon/boss/BossBattleUI'
+import type { DungeonProgress } from '@/lib/types/dungeon-progress'
 import { BossRewardScreen } from '@/components/dungeon/boss/BossRewardScreen'
 import type { BossData, BossBattleResult } from '@/lib/types/boss-system'
 import { DifficultySelector } from '@/components/dungeon/DifficultySelector'
@@ -413,7 +414,7 @@ export function SimpleDungeonTab() {
   const [bossBattleResult, setBossBattleResult] = useState<BossBattleResult | null>(null)
   const [dungeonComplete, setDungeonComplete] = useState(false)
   const [playerHpRatio, setPlayerHpRatio] = useState(1) // 플레이어 HP 비율 저장
-  const [dungeonProgress, setDungeonProgress] = useState<Record<number, any>>({})
+  const [dungeonProgress, setDungeonProgress] = useState<Record<number, DungeonProgress>>({})
   const [hasSavedState, setHasSavedState] = useState(false)
   const [dungeonStartTime, setDungeonStartTime] = useState<number>(0)
   const [milestoneRewards, setMilestoneRewards] = useState<{ milestones: Array<{ threshold: number; title: string; goldReward: number }>, totalGold: number } | null>(null)

@@ -12,7 +12,7 @@ export interface NavItem {
 // 테스트에서 사용하는 주요 네비게이션 항목
 export const MAIN_NAV_ITEMS: NavItem[] = [
   { id: 'nav-dashboard', label: '대시보드', emoji: '🏠', href: '/dashboard' },
-  { id: 'nav-adventure', label: '모험', emoji: '⚔️', href: '/adventure' },
+  { id: 'nav-dungeon', label: '던전', emoji: '🏰', href: '/dungeon' },
   { id: 'nav-ai-coach', label: 'AI코치', emoji: '🤖', href: '/ai-coach' },
   { id: 'nav-profile', label: '프로필', emoji: '👤', href: '/profile' }
 ] as const
@@ -20,7 +20,7 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
 // 전체 네비게이션 항목
 export const NAV_ITEMS: NavItem[] = [
   { id: 'nav-dashboard', label: '대시보드', emoji: '🏠', href: '/dashboard' },
-  { id: 'nav-adventure', label: '모험', emoji: '⚔️', href: '/adventure' },
+  { id: 'nav-dungeon', label: '던전', emoji: '🏰', href: '/dungeon' },
   { id: 'nav-ai-coach', label: 'AI코치', emoji: '🤖', href: '/ai-coach' },
   { id: 'nav-profile', label: '프로필', emoji: '👤', href: '/profile' }
 ] as const

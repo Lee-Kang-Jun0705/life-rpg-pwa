@@ -5,7 +5,7 @@
 
 import { db } from '@/lib/database/client'
 import { dbHelpers } from '@/lib/database'
-import { ALL_ITEMS } from '@/lib/data/items'
+import { ALL_ITEMS, getItemById } from '@/lib/data/items'
 import type { Item } from '@/lib/types/item-system'
 import type { UserResources, EquipmentInventory } from '@/lib/database/types'
 import { soundService } from './sound.service'
@@ -63,7 +63,7 @@ class PlayerService {
   /**
    * 플레이어 전체 데이터 가져오기
    */
-  async getPlayer(_userId: string): Promise<PlayerData | null> {
+  async getPlayer(userId: string): Promise<PlayerData | null> {
     try {
       const [profile, resources, equipment, inventory] = await Promise.all([
         dbHelpers.getProfile(userId),
@@ -94,7 +94,7 @@ class PlayerService {
   /**
    * 골드 업데이트 (증가/감소)
    */
-  async updateGold(_userId: string, amount: number): Promise<boolean> {
+  async updateGold(userId: string, amount: number): Promise<boolean> {
     try {
       if (amount < 0) {
         // 골드 감소 (구매 등)
@@ -113,7 +113,7 @@ class PlayerService {
   /**
    * 아이템을 인벤토리에 추가
    */
-  async addItemToInventory(_userId: string, _options: AddItemOptions): Promise<boolean> {
+  async addItemToInventory(userId: string, options: AddItemOptions): Promise<boolean> {
     try {
       const { itemId, type, quantity = 1 } = options
 
@@ -151,32 +151,63 @@ class PlayerService {
   /**
    * 아이템 장착
    */
-  async equipItem(_userId: string, itemId: string, _slot: string): Promise<boolean> {
+  async equipItem(userId: string, itemId: string, slot: string): Promise<boolean> {
     try {
+      // 장비 인벤토리 확인 또는 생성
+      let equipmentDbId: number | undefined
       const equipment = await dbHelpers.getEquipmentInventory(userId)
-      const item = equipment?.items.find(i => i.itemId === itemId)
-
-      if (!item) {
-        console.error('Item not found in equipment inventory')
-        return false
+      
+      // 이미 장비 인벤토리에 있는지 확인
+      const existingItem = equipment?.items.find(i => i.itemId === itemId)
+      
+      if (existingItem) {
+        equipmentDbId = existingItem.id
+      } else {
+        // 장비 인벤토리에 없으면 추가
+        const itemData = getItemById(itemId)
+        if (!itemData || itemData.type !== 'equipment') {
+          console.error('Invalid equipment item:', itemId)
+          return false
+        }
+        
+        // slot 타입 확인 및 변환
+        let dbSlot: 'weapon' | 'armor' | 'accessory' | 'helmet' = 'accessory'
+        if (slot === 'weapon') dbSlot = 'weapon'
+        else if (slot === 'armor') dbSlot = 'armor'
+        else if (slot === 'helmet') dbSlot = 'helmet'
+        else if (slot === 'accessory') dbSlot = 'accessory'
+        
+        equipmentDbId = await dbHelpers.addEquipmentToInventory(
+          userId,
+          itemId,
+          dbSlot,
+          itemData.rarity || 'common'
+        )
       }
 
       // 기존 장착 해제
-      const currentEquipped = equipment.items.find(i => i.equippedSlot === slot)
+      const currentEquippedItems = equipment?.items || []
+      const currentEquipped = currentEquippedItems.find(i => i.equippedSlot === slot && i.isEquipped)
       if (currentEquipped) {
         await this.unequipItem(userId, currentEquipped.id)
       }
 
-      // 새 아이템 장착
-      await db.equipmentInventory.update({
-        where: { id: item.id },
-        data: {
+      // 새 아이템 장착 - DB 업데이트
+      if (equipmentDbId) {
+        // Dexie의 update 메서드 사용
+        await db.userEquipments.update(equipmentDbId, {
           isEquipped: true,
           equippedSlot: slot
-        }
-      })
-
-      console.log(`✅ Equipped ${item.itemId} to ${slot}`)
+        })
+      }
+      
+      console.log(`✅ Equipped ${itemId} to ${slot}`)
+      
+      // 장비 변경 이벤트 발생
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('equipment-changed'))
+      }
+      
       return true
     } catch (error) {
       console.error('Failed to equip item:', error)
@@ -187,14 +218,12 @@ class PlayerService {
   /**
    * 아이템 장착 해제
    */
-  async unequipItem(_userId: string, itemDbId: number): Promise<boolean> {
+  async unequipItem(userId: string, itemDbId: number): Promise<boolean> {
     try {
-      await db.equipmentInventory.update({
-        where: { id: itemDbId },
-        data: {
-          isEquipped: false,
-          equippedSlot: null
-        }
+      // Dexie의 update 메서드 사용
+      await db.userEquipments.update(itemDbId, {
+        isEquipped: false,
+        equippedSlot: null
       })
 
       console.log(`✅ Unequipped item`)
@@ -208,7 +237,7 @@ class PlayerService {
   /**
    * 전체 인벤토리 가져오기 (장비 + 소모품/재료)
    */
-  private async getFullInventory(_userId: string): Promise<PlayerInventoryItem[]> {
+  private async getFullInventory(userId: string): Promise<PlayerInventoryItem[]> {
     try {
       const items: PlayerInventoryItem[] = []
 
@@ -221,7 +250,7 @@ class PlayerService {
             type: item.type,
             quantity: 1,
             equipped: item.isEquipped,
-            _slot: item.equippedSlot || undefined,
+            slot: item.equippedSlot || undefined,
             obtainedAt: item.obtainedAt,
             locked: false
           })
@@ -274,7 +303,7 @@ class PlayerService {
   /**
    * 아이템 판매
    */
-  async sellItems(_userId: string, itemIds: string[]): Promise<number> {
+  async sellItems(userId: string, itemIds: string[]): Promise<number> {
     try {
       let totalGold = 0
 

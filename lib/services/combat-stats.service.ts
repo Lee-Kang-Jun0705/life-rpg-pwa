@@ -120,26 +120,29 @@ class CombatStatsService {
     relationshipLevel: number,
     achievementLevel: number
   ): CombatStats {
+    // 총 레벨 (캐릭터 레벨) - 스탯 레벨의 합
+    const totalLevel = healthLevel + learningLevel + relationshipLevel + achievementLevel
+    
     return {
-      // 건강: 체력과 물리 공격력에 영향
-      hp: BATTLE_CONSTANTS.BASE_HP + healthLevel * 20,
-      attack: BATTLE_CONSTANTS.BASE_ATTACK + healthLevel * 5,
+      // 건강: 체력과 물리 공격력에 영향 (증가율 상향)
+      hp: BATTLE_CONSTANTS.BASE_HP + healthLevel * 50 + totalLevel * 30,
+      attack: BATTLE_CONSTANTS.BASE_ATTACK + healthLevel * 10 + totalLevel * 5,
 
-      // 학습: 마나와 마법 공격력에 영향
-      mp: BATTLE_CONSTANTS.BASE_MP + learningLevel * 10,
+      // 학습: 마나와 마법 공격력에 영향 (증가율 상향)
+      mp: BATTLE_CONSTANTS.BASE_MP + learningLevel * 20 + totalLevel * 10,
 
-      // 관계: 방어력에 영향
-      defense: BATTLE_CONSTANTS.BASE_DEFENSE + relationshipLevel * 3,
+      // 관계: 방어력에 영향 (증가율 상향)
+      defense: BATTLE_CONSTANTS.BASE_DEFENSE + relationshipLevel * 6 + totalLevel * 3,
 
-      // 성취: 속도와 치명타에 영향
-      speed: BATTLE_CONSTANTS.BASE_SPEED + achievementLevel * 2,
-      critRate: BATTLE_CONSTANTS.BASE_CRITICAL + achievementLevel * 0.02,
-      dodge: BATTLE_CONSTANTS.BASE_EVASION + achievementLevel * 0.02,
+      // 성취: 속도와 치명타에 영향 (증가율 상향)
+      speed: BATTLE_CONSTANTS.BASE_SPEED + achievementLevel * 3 + totalLevel * 2,
+      critRate: BATTLE_CONSTANTS.BASE_CRITICAL + achievementLevel * 0.03 + totalLevel * 0.01,
+      dodge: BATTLE_CONSTANTS.BASE_EVASION + achievementLevel * 0.03 + totalLevel * 0.01,
 
       // 기본값
-      critDamage: BATTLE_CONSTANTS.BASE_CRITICAL_DAMAGE,
-      accuracy: BATTLE_CONSTANTS.BASE_ACCURACY,
-      resistance: 0,
+      critDamage: BATTLE_CONSTANTS.BASE_CRITICAL_DAMAGE + totalLevel * 0.02,
+      accuracy: BATTLE_CONSTANTS.BASE_ACCURACY + totalLevel * 0.01,
+      resistance: totalLevel * 2,
       combatPower: 0
     }
   }

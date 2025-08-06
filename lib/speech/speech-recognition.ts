@@ -112,6 +112,7 @@ export class SpeechRecognitionService {
   private onResultCallback?: (result: CustomSpeechRecognitionResult) => void
   private onErrorCallback?: (error: SpeechRecognitionError) => void
   private onStatusChangeCallback?: (status: SpeechRecognitionStatus) => void
+  private debugMode = true // 디버그 모드 활성화
 
   constructor(config: SpeechRecognitionConfig = {}) {
     this.config = {
@@ -185,30 +186,81 @@ export class SpeechRecognitionService {
 
     // 음성 인식 시작
     this.recognition.onstart = () => {
+      if (this.debugMode) console.log('🎤 Speech Recognition: onstart - 음성 인식 시작됨')
       this.isListening = true
       this.updateStatus('listening')
     }
 
     // 음성 인식 종료
     this.recognition.onend = () => {
+      if (this.debugMode) console.log('🛑 Speech Recognition: onend - 음성 인식 종료됨')
       this.isListening = false
       this.updateStatus('idle')
     }
 
-    // 음성 감지 시작 - SpeechRecognition 타입에 없으므로 주석 처리
-    // this.recognition.onspeechstart = () => {
-    //   this.updateStatus('processing')
-    // }
+    // 오디오 캡처 시작
+    ;(this.recognition as any).onaudiostart = () => {
+      if (this.debugMode) console.log('🎙️ Speech Recognition: onaudiostart - 오디오 캡처 시작')
+    }
+
+    // 오디오 캡처 종료
+    ;(this.recognition as any).onaudioend = () => {
+      if (this.debugMode) console.log('🔇 Speech Recognition: onaudioend - 오디오 캡처 종료')
+    }
+
+    // 소리 감지 시작
+    ;(this.recognition as any).onsoundstart = () => {
+      if (this.debugMode) console.log('🔊 Speech Recognition: onsoundstart - 소리 감지됨')
+    }
+
+    // 소리 감지 종료
+    ;(this.recognition as any).onsoundend = () => {
+      if (this.debugMode) console.log('🔈 Speech Recognition: onsoundend - 소리 감지 종료')
+    }
+
+    // 음성 감지 시작
+    ;(this.recognition as any).onspeechstart = () => {
+      if (this.debugMode) console.log('💬 Speech Recognition: onspeechstart - 음성 감지 시작')
+      this.updateStatus('processing')
+    }
+
+    // 음성 감지 종료
+    ;(this.recognition as any).onspeechend = () => {
+      if (this.debugMode) console.log('🤐 Speech Recognition: onspeechend - 음성 감지 종료')
+    }
 
     // 결과 처리
     this.recognition.onresult = (event: SpeechRecognitionEvent) => {
       const results = event.results
       const resultIndex = event.resultIndex
 
+      if (this.debugMode) {
+        console.log('🎙️ Speech Recognition: onresult - 결과 이벤트 발생', {
+          resultIndex,
+          resultsLength: results.length,
+          results: Array.from(results).map((r, idx) => ({
+            index: idx,
+            isFinal: r.isFinal,
+            length: r.length,
+            transcript: r[0]?.transcript || '(없음)',
+            confidence: r[0]?.confidence || 0
+          }))
+        })
+      }
+
       if (results[resultIndex]) {
         const result = results[resultIndex]
         const transcript = result[0].transcript
         const confidence = result[0].confidence || 0
+
+        if (this.debugMode) {
+          console.log('📝 Speech Recognition: 인식된 텍스트', {
+            transcript,
+            confidence,
+            isFinal: result.isFinal,
+            transcriptLength: transcript.length
+          })
+        }
 
         // 대체 결과들
         const alternatives: Array<{ transcript: string; confidence: number }> = []
@@ -232,6 +284,14 @@ export class SpeechRecognitionService {
 
     // 에러 처리
     this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      if (this.debugMode) {
+        console.error('❌ Speech Recognition: onerror - 에러 발생', {
+          error: event.error,
+          message: event.message,
+          type: event.type
+        })
+      }
+
       let error: SpeechRecognitionError
 
       switch (event.error) {
@@ -284,15 +344,16 @@ export class SpeechRecognitionService {
       this.isListening = false
     }
 
-    // 음성 감지 없음 - SpeechRecognition 타입에 없으므로 주석 처리
-    // this.recognition.onnomatch = () => {
-    //   const error: SpeechRecognitionError = {
-    //     name: 'SpeechRecognitionError',
-    //     code: 'NO_MATCH',
-    //     message: '인식할 수 없는 음성입니다. 다시 시도해주세요.'
-    //   }
-    //   this.onErrorCallback?.(error)
-    // }
+    // 음성 매칭 실패
+    ;(this.recognition as any).onnomatch = () => {
+      if (this.debugMode) console.log('🚫 Speech Recognition: onnomatch - 음성 매칭 실패')
+      const error: SpeechRecognitionError = {
+        name: 'SpeechRecognitionError',
+        code: 'NO_MATCH',
+        message: '인식할 수 없는 음성입니다. 다시 시도해주세요.'
+      }
+      this.onErrorCallback?.(error)
+    }
   }
 
   /**
@@ -309,12 +370,22 @@ export class SpeechRecognitionService {
     }
 
     if (this.isListening) {
+      if (this.debugMode) console.log('⚠️ Speech Recognition: 이미 듣고 있는 중입니다')
       return
     }
 
     try {
+      if (this.debugMode) {
+        console.log('🚀 Speech Recognition: start() 호출됨', {
+          lang: this.recognition.lang,
+          continuous: this.recognition.continuous,
+          interimResults: this.recognition.interimResults,
+          maxAlternatives: this.recognition.maxAlternatives
+        })
+      }
       this.recognition.start()
     } catch (error) {
+      if (this.debugMode) console.error('💥 Speech Recognition: start() 실패', error)
       this.onErrorCallback?.({
         name: 'SpeechRecognitionError',
         code: 'START_ERROR',

@@ -9,6 +9,8 @@ export type ItemCategory =
   | 'accessory'   // 액세서리
   | 'consumable'  // 소비아이템
   | 'cosmetic'    // 코스메틱
+  | 'skill'       // 스킬북
+  | 'misc'        // 기타
 
 export type ItemRarity = 'common' | 'rare' | 'epic' | 'legendary'
 

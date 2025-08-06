@@ -244,15 +244,21 @@ export class ItemGenerationService {
     itemType: string,
     rng: () => number
   ): ReadonlyArray<SpecialEffect> | undefined {
-    // 에픽 이상만 특수 효과
-    if (rarity !== 'epic' && rarity !== 'legendary') {
+    // 레어 이상만 특수 효과 (6단계 시스템)
+    const rarityConfig = ITEM_RARITY_CONFIG[rarity]
+    if (rarityConfig.specialEffectChance === 0) {
+      return undefined
+    }
+
+    // 특수 효과 확률 체크
+    if (rng() > rarityConfig.specialEffectChance) {
       return undefined
     }
 
     const effects: SpecialEffect[] = []
 
     // 희귀도별 효과 개수
-    const effectCount = rarity === 'legendary' ? 2 : 1
+    const effectCount = rarity === 'mythic' ? 3 : rarity === 'legendary' ? 2 : 1
 
     // TODO: 특수 효과 풀에서 랜덤 선택
     // 현재는 간단한 예시만
@@ -347,10 +353,10 @@ export class ItemGenerationService {
     rng: () => number
   ): ItemRarity {
     const weights = {
-      common: { common: 0.7, uncommon: 0.25, rare: 0.04, epic: 0.009, legendary: 0.001 },
-      elite: { common: 0.5, uncommon: 0.35, rare: 0.1, epic: 0.04, legendary: 0.01 },
-      boss: { common: 0.3, uncommon: 0.35, rare: 0.2, epic: 0.1, legendary: 0.05 },
-      legendary: { common: 0.1, uncommon: 0.3, rare: 0.3, epic: 0.2, legendary: 0.1 }
+      common: { common: 0.7, magic: 0.25, rare: 0.04, epic: 0.009, legendary: 0.0009, mythic: 0.0001 },
+      elite: { common: 0.5, magic: 0.35, rare: 0.1, epic: 0.04, legendary: 0.009, mythic: 0.001 },
+      boss: { common: 0.3, magic: 0.35, rare: 0.2, epic: 0.1, legendary: 0.049, mythic: 0.001 },
+      legendary: { common: 0.1, magic: 0.3, rare: 0.3, epic: 0.2, legendary: 0.09, mythic: 0.01 }
     }
 
     const roll = rng()
@@ -401,38 +407,43 @@ export class ItemGenerationService {
     const icons = {
       weapon: {
         common: '⚔️',
-        uncommon: '🗡️',
+        magic: '🗡️',
         rare: '🔱',
         epic: '⚡',
-        legendary: '🌟'
+        legendary: '🌟',
+        mythic: '💫'
       },
       armor: {
         common: '🛡️',
-        uncommon: '🏽',
+        magic: '🏽',
         rare: '🦺',
         epic: '⛑️',
-        legendary: '💎'
+        legendary: '💎',
+        mythic: '🔮'
       },
       accessory: {
         common: '💍',
-        uncommon: '🔿',
+        magic: '🔿',
         rare: '💎',
         epic: '🔮',
-        legendary: '👑'
+        legendary: '👑',
+        mythic: '✨'
       },
       consumable: {
         common: '🧪',
-        uncommon: '⚗️',
+        magic: '⚗️',
         rare: '🍷',
         epic: '🏺',
-        legendary: '🌟'
+        legendary: '🌟',
+        mythic: '💊'
       },
       material: {
         common: '📦',
-        uncommon: '🎁',
+        magic: '🎁',
         rare: '💼',
         epic: '🗳️',
-        legendary: '🏆'
+        legendary: '🏆',
+        mythic: '🌈'
       }
     }
 

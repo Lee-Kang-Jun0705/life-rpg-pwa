@@ -2,7 +2,7 @@
 // 페이지가 비활성 상태일 때 타이머/인터벌을 자동으로 일시정지
 
 type TimerInfo = {
-  id: number
+  id: ReturnType<typeof setTimeout> | ReturnType<typeof setInterval>
   type: 'interval' | 'timeout'
   callback: () => void
   delay: number
@@ -16,6 +16,8 @@ class VisibilityManager {
   private pausedTimers: Map<string, TimerInfo> = new Map()
   private isPageVisible = true
   private listeners: Set<(visible: boolean) => void> = new Set()
+
+  private isInitialized = false
 
   private constructor() {
     if (typeof window !== 'undefined') {
@@ -35,6 +37,12 @@ class VisibilityManager {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
       return
     }
+    
+    // 이미 초기화되었으면 스킵
+    if (this.isInitialized) {
+      return
+    }
+    this.isInitialized = true
 
     // Page Visibility API 사용
     document.addEventListener('visibilitychange', () => {
@@ -119,17 +127,17 @@ class VisibilityManager {
   }
 
   // 타이머 등록
-  registerInterval(key: string, callback: () => void, delay: number): number {
+  registerInterval(key: string, callback: () => void, delay: number): ReturnType<typeof setInterval> {
     if (!this.isPageVisible) {
       // 페이지가 비활성 상태면 일시정지 목록에 추가
       this.pausedTimers.set(key, {
-        id: -1,
+        id: -1 as unknown as ReturnType<typeof setInterval>,
         type: 'interval',
         callback,
         delay,
         createdAt: Date.now()
       })
-      return -1
+      return -1 as unknown as ReturnType<typeof setInterval>
     }
 
     const id = setInterval(callback, delay)
@@ -144,18 +152,18 @@ class VisibilityManager {
     return id
   }
 
-  registerTimeout(key: string, callback: () => void, delay: number): number {
+  registerTimeout(key: string, callback: () => void, delay: number): ReturnType<typeof setTimeout> {
     if (!this.isPageVisible) {
       // 페이지가 비활성 상태면 일시정지 목록에 추가
       this.pausedTimers.set(key, {
-        id: -1,
+        id: -1 as unknown as ReturnType<typeof setTimeout>,
         type: 'timeout',
         callback,
         delay,
         createdAt: Date.now(),
         remainingTime: delay
       })
-      return -1
+      return -1 as unknown as ReturnType<typeof setTimeout>
     }
 
     const id = setTimeout(callback, delay)

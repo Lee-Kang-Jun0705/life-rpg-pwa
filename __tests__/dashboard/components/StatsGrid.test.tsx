@@ -151,7 +151,7 @@ describe('StatsGrid 컴포넌트', () => {
 
   test('에러 경계가 올바르게 작동한다', () => {
     // 에러를 발생시키는 잘못된 데이터
-    const invalidStatTypes = null as any
+    const invalidStatTypes = null as unknown as string[]
 
     // 에러 경계가 에러를 잡아서 fallback UI를 표시하는지 확인
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()

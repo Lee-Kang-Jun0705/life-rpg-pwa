@@ -95,7 +95,7 @@ export function StatLevelDisplay({ userStats }: StatLevelDisplayProps) {
 
           return (
             <motion.div
-              key={stat.type}
+              key={`stat-card-${stat.type}-${index}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -177,7 +177,7 @@ export function StatLevelDisplay({ userStats }: StatLevelDisplayProps) {
 
             return (
               <motion.div
-                key={stat.type}
+                key={`stat-bar-${stat.type}-${index}`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}

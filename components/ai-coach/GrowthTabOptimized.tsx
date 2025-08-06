@@ -49,16 +49,16 @@ export function GrowthTab({ growthData, growthAnalyses }: GrowthTabProps) {
             <div className="space-y-4">
               {growthAnalyses.map((analysis, index) => (
                 <div key={index} className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-semibold text-lg mb-2">{analysis.category}</h4>
+                  <h4 className="font-semibold text-lg mb-2">{(analysis as any).category}</h4>
                   <div className="space-y-2">
                     <p className="text-sm text-gray-600">
-                      <span className="font-medium">트렌드:</span> {analysis.trend}
+                      <span className="font-medium">트렌드:</span> {(analysis as any).trend}
                     </p>
                     <p className="text-sm text-gray-600">
-                      <span className="font-medium">패턴:</span> {analysis.patterns.join(', ')}
+                      <span className="font-medium">패턴:</span> {(analysis as any).patterns?.join(', ')}
                     </p>
                     <p className="text-sm text-gray-600">
-                      <span className="font-medium">추천:</span> {analysis.recommendation}
+                      <span className="font-medium">추천:</span> {(analysis as any).recommendation}
                     </p>
                   </div>
                 </div>

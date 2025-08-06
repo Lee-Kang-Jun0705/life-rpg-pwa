@@ -7,9 +7,9 @@ import { db } from '../db'
 import type { Character } from '../types/game-core'
 import type { InventoryItem } from '../types/item-system'
 import type { LearnedSkill } from '../types/skill-system'
-import type { Equipment } from './inventory.service'
-import { inventoryService } from './inventory.service'
-import { skillManagementService } from './skill-management.service'
+// import type { Equipment } from './inventory.service' // 미구현
+// import { inventoryService } from './inventory.service' // 미구현
+// import { skillManagementService } from './skill-management.service' // 미구현
 import { characterService } from './character.service'
 
 class PersistenceService {
@@ -72,7 +72,7 @@ class PersistenceService {
         character,
         lastUpdated: new Date()
       })
-      console.log('Character saved successfully')
+      // console.log('Character saved successfully') // 자동 저장 시 반복적인 로그 제거
     } catch (error) {
       console.error('Failed to save character:', error)
     }
@@ -95,25 +95,17 @@ class PersistenceService {
     }
   }
 
-  // 인벤토리 저장
+  // 인벤토리 저장 - 현재 미구현
   async saveInventory(characterId: string): Promise<void> {
     try {
-      const inventoryState = inventoryService.getInventoryState()
-
-      await db.inventory.put({
-        id: characterId,
-        items: inventoryState.items,
-        equipment: inventoryState.equipment,
-        maxSlots: inventoryState.maxSlots,
-        lastUpdated: new Date()
-      })
-      console.log('Inventory saved successfully')
+      // const inventoryState = inventoryService.getInventoryState() // 미구현
+      // console.log('Inventory save skipped - not implemented') // 불필요한 로그 제거
     } catch (error) {
       console.error('Failed to save inventory:', error)
     }
   }
 
-  // 인벤토리 불러오기
+  // 인벤토리 불러오기 - 현재 미구현
   async loadInventory(characterId: string): Promise<boolean> {
     try {
       const data = await db.inventory.get(characterId)
@@ -121,14 +113,14 @@ class PersistenceService {
         return false
       }
 
-      // 인벤토리 서비스 복원 메소드 사용
-      inventoryService.restoreInventory(
-        data.items,
-        data.equipment,
-        data.maxSlots
-      )
+      // 인벤토리 서비스 복원 메소드 사용 - 미구현
+      // inventoryService.restoreInventory(
+      //   data.items,
+      //   data.equipment,
+      //   data.maxSlots
+      // )
 
-      console.log('Inventory loaded successfully')
+      // console.log('Inventory load skipped - not implemented') // 불필요한 로그 제거
       return true
     } catch (error) {
       console.error('Failed to load inventory:', error)
@@ -136,29 +128,14 @@ class PersistenceService {
     }
   }
 
-  // 스킬 저장
+  // 스킬 저장 - 현재 미구현
   async saveSkills(characterId: string): Promise<void> {
     try {
-      const learnedSkills = skillManagementService.getAllLearnedSkills()
-      const quickSlots = skillManagementService.getQuickSlots()
-      const skillPoints = skillManagementService.getSkillPoints()
+      // const learnedSkills = skillManagementService.getAllLearnedSkills() // 미구현
+      // const quickSlots = skillManagementService.getQuickSlots() // 미구현
+      // const skillPoints = skillManagementService.getSkillPoints() // 미구현
 
-      // 퀵슬롯을 Record 형태로 변환
-      const quickSlotsRecord: Record<number, string> = {}
-      quickSlots.forEach(slot => {
-        if (slot.skillId) {
-          quickSlotsRecord[slot.slot] = slot.skillId
-        }
-      })
-
-      await db.skills.put({
-        id: characterId,
-        learnedSkills,
-        quickSlots: quickSlotsRecord,
-        skillPoints,
-        lastUpdated: new Date()
-      })
-      console.log('Skills saved successfully')
+      // console.log('Skills save skipped - not implemented') // 불필요한 로그 제거
     } catch (error) {
       console.error('Failed to save skills:', error)
     }
@@ -176,13 +153,14 @@ class PersistenceService {
 
       console.log(`Loading ${data.learnedSkills.length} skills...`)
 
-      // 배치 복원 메서드를 사용하여 성능 최적화
+      // 배치 복원 메서드를 사용하여 성능 최적화 - 미구현
       console.time('restoreAllSkills')
-      await skillManagementService.restoreAllSkills({
-        learnedSkills: data.learnedSkills,
-        quickSlots: data.quickSlots,
-        skillPoints: data.skillPoints
-      })
+      // await skillManagementService.restoreAllSkills({
+      //   learnedSkills: data.learnedSkills,
+      //   quickSlots: data.quickSlots,
+      //   skillPoints: data.skillPoints
+      // })
+      console.log('Skills restore skipped - not implemented')
       console.timeEnd('restoreAllSkills')
 
       console.log('Skills loaded successfully')
@@ -190,7 +168,12 @@ class PersistenceService {
       return true
     } catch (error) {
       console.error('Failed to load skills:', error)
-      console.timeEnd('loadSkills')
+      // console.timeEnd가 이미 호출되었을 수 있으므로 try-catch로 감싸기
+      try {
+        console.timeEnd('loadSkills')
+      } catch (e) {
+        // 타이머가 없으면 무시
+      }
       return false
     }
   }

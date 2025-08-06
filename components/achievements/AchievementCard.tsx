@@ -210,7 +210,7 @@ export function AchievementCard({ achievement, progress }: AchievementCardProps)
       {showDetail && !isHidden && (
         <AchievementDetailModal
           achievement={achievement}
-          progress={actualProgress}
+          progress={actualProgress as any}
           onClose={() => setShowDetail(false)}
         />
       )}

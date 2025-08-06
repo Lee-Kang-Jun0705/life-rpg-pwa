@@ -12,22 +12,37 @@ export const ActivityFeed = React.memo(function ActivityFeed({ totalActivities }
   const [activities, setActivities] = useState<Activity[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    const loadActivities = async() => {
-      try {
-        setIsLoading(true)
-        const allActivities = await dbHelpers.getActivities(GAME_CONFIG.DEFAULT_USER_ID, 10)
-
-        setActivities(allActivities)
-      } catch (error) {
-        console.error('Failed to load activities:', error)
-      } finally {
-        setIsLoading(false)
-      }
+  const loadActivities = async() => {
+    console.log('🔄 ActivityFeed - Loading activities...')
+    try {
+      setIsLoading(true)
+      const allActivities = await dbHelpers.getActivities(GAME_CONFIG.DEFAULT_USER_ID, 10)
+      console.log('🔄 ActivityFeed - Loaded activities:', allActivities.length)
+      setActivities(allActivities)
+    } catch (error) {
+      console.error('Failed to load activities:', error)
+    } finally {
+      setIsLoading(false)
     }
+  }
 
+  useEffect(() => {
     loadActivities()
   }, [totalActivities])
+
+  // activity-added 이벤트 리스너 추가
+  useEffect(() => {
+    const handleActivityAdded = () => {
+      console.log('📢 ActivityFeed - activity-added event received')
+      loadActivities()
+    }
+
+    window.addEventListener('activity-added', handleActivityAdded)
+    
+    return () => {
+      window.removeEventListener('activity-added', handleActivityAdded)
+    }
+  }, [])
 
   const getStatEmoji = (statType: string) => {
     const stat = STAT_TYPES.find(s => s.type === statType)

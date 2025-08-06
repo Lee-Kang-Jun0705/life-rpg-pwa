@@ -47,6 +47,14 @@ const npcMerchants = [
     color: 'from-green-500 to-emerald-500'
   },
   {
+    id: 'skill',
+    name: '스킬 마스터 카인',
+    avatar: '📚',
+    greeting: '강력한 스킬들을 배우실 준비가 되셨나요? 당신의 잠재력을 깨워드리겠습니다!',
+    category: 'skill',
+    color: 'from-indigo-500 to-purple-500'
+  },
+  {
     id: 'special',
     name: '신비한 상인 루나',
     avatar: '🌙',
@@ -125,8 +133,11 @@ export function ImprovedShopScreen({ shopItems, onPurchase }: ImprovedShopScreen
     if (selectedMerchant.category === 'equipment') {
       return item.category === 'weapon' || item.category === 'armor' || item.category === 'accessory'
     }
+    if (selectedMerchant.category === 'skill') {
+      return item.category === 'skill'
+    }
     if (selectedMerchant.category === 'special') {
-      return item.category === 'cosmetic'
+      return item.category === 'cosmetic' || item.category === 'special'
     }
     return item.category === selectedMerchant.category
   })

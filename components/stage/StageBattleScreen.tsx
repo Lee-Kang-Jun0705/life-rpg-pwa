@@ -10,11 +10,22 @@ import { EnergyService } from '@/lib/energy/energy-service'
 import { StageService } from '@/lib/dungeon/stage-service'
 import type { Stage, StageResult, StageObjective } from '@/lib/types/stage'
 import type { BattleState, BattleAction } from '@/lib/types/battle-extended'
-import { Sword, Shield, Zap, Target, Clock, Trophy } from 'lucide-react'
+import { Sword, Shield, Zap, Target, Clock, Trophy, Layers, Users } from 'lucide-react'
+import { PokemonStyleBattle } from '@/components/battle/PokemonStyleBattle'
+import { MultiBattleScreen } from '@/components/battle/MultiBattleScreen'
+import { MultiBattleManager, createMultiBattle } from '@/lib/battle/multi-battle-manager'
+import { 
+  getDungeonFloorData, 
+  generateFloorMonsters, 
+  determineBattleType,
+  isFloorBossBattle 
+} from '@/lib/dungeon/floor-system'
+import { createScaledMonster } from '@/lib/battle/extended-monster-database'
 
 interface StageBattleScreenProps {
   dungeonId: string
   stageId: string
+  floorNumber?: number // 던전 플로어 번호 추가
   onStageComplete: (result: StageResult) => void
   onExit: () => void
 }
@@ -22,15 +33,19 @@ interface StageBattleScreenProps {
 export function StageBattleScreen({
   dungeonId,
   stageId,
+  floorNumber,
   onStageComplete,
   onExit
 }: StageBattleScreenProps) {
   const [stage, setStage] = useState<Stage | null>(null)
   const [currentWave, setCurrentWave] = useState(0)
-  const [battleManager, setBattleManager] = useState<AutoBattleManager | null>(null)
+  const [battleManager, setBattleManager] = useState<AutoBattleManager | MultiBattleManager | null>(null)
   const [battleState, setBattleState] = useState<BattleState | null>(null)
+  const [multiBattleState, setMultiBattleState] = useState<any>(null)
+  const [battleType, setBattleType] = useState<'single' | 'double' | 'triple'>('single')
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [currentFloor, setCurrentFloor] = useState(floorNumber || 1)
 
   // 전투 통계
   const [statistics, setStatistics] = useState({
@@ -90,96 +105,174 @@ export function StageBattleScreen({
   // 웨이브 시작
   const startWave = async(waveIndex: number, stageData: Stage) => {
     try {
-      const battleConfig = getBattleConfig(stageId)
-      if (!battleConfig) {
-        return
-      }
+      // 플로어 시스템 사용 여부 확인
+      const floorData = floorNumber ? getDungeonFloorData(dungeonId, floorNumber) : null
+      
+      if (floorData) {
+        // 플로어 시스템으로 전투 설정
+        const isBossFloor = isFloorBossBattle(floorData)
+        let monsterConfigs: { monsterId: string; level: number }[] = []
+        
+        if (isBossFloor && floorData.bossMonster) {
+          // 보스 전투
+          monsterConfigs = [floorData.bossMonster]
+          setBattleType('single')
+        } else {
+          // 일반 전투 - 전투 타입 결정
+          const type = determineBattleType(floorData)
+          setBattleType(type)
+          
+          const monsterCount = type === 'single' ? 1 : type === 'double' ? 2 : 3
+          monsterConfigs = generateFloorMonsters(floorData, monsterCount)
+        }
 
-      if (waveIndex >= battleConfig.waveCount) {
-        // 모든 웨이브 완료
-        await completeStage()
-        return
-      }
+        // 플레이어 캐릭터 생성
+        const playerCharacter = await AutoBattleManager.createPlayerCharacter(
+          GAME_CONFIG.DEFAULT_USER_ID
+        )
 
-      setCurrentWave(waveIndex + 1)
+        if (monsterConfigs.length === 1) {
+          // 1:1 전투
+          const monsterData = createScaledMonster(
+            monsterConfigs[0].monsterId, 
+            monsterConfigs[0].level
+          ) || getMonsterById(monsterConfigs[0].monsterId)
+          
+          if (!monsterData) return
 
-      // 이 웨이브의 몬스터 생성
-      const monsterCount = battleConfig.monstersPerWave[waveIndex] || 3
-      const monsterIds = []
+          const enemyCharacter = AutoBattleManager.createEnemyCharacter(monsterData)
+          const manager = new AutoBattleManager(playerCharacter, enemyCharacter, 2000)
+          
+          setBattleManager(manager)
+          setBattleState(manager.getState())
+          setMultiBattleState(null)
 
-      // 보스 웨이브인지 확인
-      const isBossWave = waveIndex === battleConfig.waveCount - 1 && stageData.bossId
+          const result = await manager.startBattle(
+            (action) => {
+              updateStatistics(action)
+              updateObjectives(action, stageData)
+            },
+            (state) => setBattleState({ ...state })
+          )
 
-      if (isBossWave && stageData.bossId) {
-        monsterIds.push(stageData.bossId)
+          if (result.winner === 'player') {
+            setTimeout(() => onFloorComplete(), 2000)
+          } else {
+            await failStage()
+          }
+        } else {
+          // 다중 전투 (1:2, 1:3)
+          const monsterIds = monsterConfigs.map(c => c.monsterId)
+          const levels = monsterConfigs.map(c => c.level)
+          
+          const manager = await createMultiBattle(
+            GAME_CONFIG.DEFAULT_USER_ID,
+            monsterIds,
+            levels
+          )
+          
+          setBattleManager(manager)
+          setBattleState(null)
+          setMultiBattleState(manager.getState())
+
+          const result = await manager.startBattle(
+            (action) => {
+              updateStatistics(action)
+              updateObjectives(action, stageData)
+            },
+            (state) => setMultiBattleState({ ...state })
+          )
+
+          if (result.winner === 'player') {
+            setTimeout(() => onFloorComplete(), 2000)
+          } else {
+            await failStage()
+          }
+        }
       } else {
-        // 일반 몬스터 랜덤 선택
-        for (let i = 0; i < monsterCount; i++) {
-          const randomIndex = Math.floor(Math.random() * stageData.monsterIds.length)
-          monsterIds.push(stageData.monsterIds[randomIndex])
+        // 기존 로직 (플로어 시스템 미사용)
+        const battleConfig = getBattleConfig(stageId)
+        if (!battleConfig) return
+
+        if (waveIndex >= battleConfig.waveCount) {
+          await completeStage()
+          return
         }
-      }
 
-      // TODO: 다중 몬스터 전투 구현
-      // 임시로 첫 번째 몬스터와만 전투
-      const monsterId = monsterIds[0]
-      const monsterData = getMonsterById(monsterId)
-      if (!monsterData) {
-        return
-      }
+        setCurrentWave(waveIndex + 1)
 
-      // 플레이어 캐릭터 생성
-      const playerCharacter = await AutoBattleManager.createPlayerCharacter(
-        GAME_CONFIG.DEFAULT_USER_ID
-      )
+        const monsterCount = battleConfig.monstersPerWave[waveIndex] || 3
+        const monsterIds = []
+        const isBossWave = waveIndex === battleConfig.waveCount - 1 && stageData.bossId
 
-      // 몬스터 캐릭터 생성 (난이도 배수 적용)
-      const baseEnemyCharacter = AutoBattleManager.createEnemyCharacter(monsterData)
-      const enemyCharacter = {
-        ...baseEnemyCharacter,
-        stats: {
-          ...baseEnemyCharacter.stats,
-          hp: baseEnemyCharacter.stats.hp * battleConfig.difficultyMultiplier,
-          maxHp: baseEnemyCharacter.stats.maxHp * battleConfig.difficultyMultiplier,
-          attack: baseEnemyCharacter.stats.attack * battleConfig.difficultyMultiplier
+        if (isBossWave && stageData.bossId) {
+          monsterIds.push(stageData.bossId)
+        } else {
+          for (let i = 0; i < monsterCount; i++) {
+            const randomIndex = Math.floor(Math.random() * stageData.monsterIds.length)
+            monsterIds.push(stageData.monsterIds[randomIndex])
+          }
         }
-      }
 
-      // 전투 매니저 생성
-      const manager = new AutoBattleManager(
-        playerCharacter,
-        enemyCharacter,
-        1000
-      )
+        const monsterId = monsterIds[0]
+        const monsterData = getMonsterById(monsterId)
+        if (!monsterData) return
 
-      setBattleManager(manager)
-      setBattleState(manager.getState())
+        const playerCharacter = await AutoBattleManager.createPlayerCharacter(
+          GAME_CONFIG.DEFAULT_USER_ID
+        )
 
-      // 전투 시작
-      const result = await manager.startBattle(
-        (action) => {
-          // 전투 액션 처리
-          updateStatistics(action)
-          updateObjectives(action, stageData)
-        },
-        (state) => {
-          setBattleState({ ...state })
+        const baseEnemyCharacter = AutoBattleManager.createEnemyCharacter(monsterData)
+        const enemyCharacter = {
+          ...baseEnemyCharacter,
+          stats: {
+            ...baseEnemyCharacter.stats,
+            hp: baseEnemyCharacter.stats.hp * battleConfig.difficultyMultiplier,
+            maxHp: baseEnemyCharacter.stats.maxHp * battleConfig.difficultyMultiplier,
+            attack: baseEnemyCharacter.stats.attack * battleConfig.difficultyMultiplier
+          }
         }
-      )
 
-      // 웨이브 완료
-      if (result.winner === 'player') {
-        // 다음 웨이브
-        setTimeout(() => {
-          startWave(waveIndex + 1, stageData)
-        }, 2000)
-      } else {
-        // 스테이지 실패
-        await failStage()
+        const manager = new AutoBattleManager(playerCharacter, enemyCharacter, 2000)
+        setBattleManager(manager)
+        setBattleState(manager.getState())
+
+        const result = await manager.startBattle(
+          (action) => {
+            updateStatistics(action)
+            updateObjectives(action, stageData)
+          },
+          (state) => setBattleState({ ...state })
+        )
+
+        if (result.winner === 'player') {
+          setTimeout(() => startWave(waveIndex + 1, stageData), 2000)
+        } else {
+          await failStage()
+        }
       }
     } catch (error) {
       console.error('Failed to start wave:', error)
       setError('웨이브 시작 실패')
+    }
+  }
+
+  // 플로어 완료 처리
+  const onFloorComplete = async() => {
+    // 다음 플로어가 있는지 확인
+    const dungeonSystem = floorNumber ? 
+      (await import('@/lib/dungeon/floor-system')).DUNGEON_FLOOR_SYSTEMS[dungeonId] : null
+    
+    if (dungeonSystem && currentFloor < dungeonSystem.totalFloors) {
+      // 다음 플로어로
+      setCurrentFloor(currentFloor + 1)
+      const nextFloorData = getDungeonFloorData(dungeonId, currentFloor + 1)
+      if (nextFloorData && stage) {
+        setTimeout(() => startWave(0, stage), 2000)
+      }
+    } else {
+      // 모든 플로어 완료
+      await completeStage()
     }
   }
 
@@ -211,8 +304,8 @@ export function StageBattleScreen({
   // 목표 진행도 업데이트
   const updateObjectives = (action: BattleAction, stageData: Stage) => {
     setObjectives(prev => {
-      // 몬스터 처치 목표 - 적이 공격받고 데미지가 있을 때
-      if (action.target === 'enemy' && action.damage && battleState?.enemy.stats.hp === 0) {
+      // 단일 전투에서 몬스터 처치 확인
+      if (battleState && action.target === 'enemy' && action.damage && battleState.enemy.stats.hp === 0) {
         const updated = prev.map(obj => {
           if (obj.type === 'defeat_monsters' && !obj.completed) {
             const newCurrent = (obj.current || 0) + 1
@@ -225,11 +318,49 @@ export function StageBattleScreen({
 
           // 보스 처치 목표
           if (obj.type === 'defeat_boss' && !obj.completed &&
-              stageData.bossId && battleState?.enemy.id === stageData.bossId) {
+              stageData.bossId && battleState.enemy.id === stageData.bossId) {
             return {
               ...obj,
               current: 1,
               completed: true
+            }
+          }
+
+          return obj
+        })
+
+        setStatistics(prev => ({
+          ...prev,
+          monstersDefeated: prev.monstersDefeated + 1
+        }))
+
+        return updated
+      }
+
+      // 다중 전투에서 몬스터 처치 확인
+      if (multiBattleState && action.target !== GAME_CONFIG.DEFAULT_USER_ID && 
+          !action.target.includes('player') && action.targetHp === 0) {
+        const updated = prev.map(obj => {
+          if (obj.type === 'defeat_monsters' && !obj.completed) {
+            const newCurrent = (obj.current || 0) + 1
+            return {
+              ...obj,
+              current: newCurrent,
+              completed: newCurrent >= obj.target
+            }
+          }
+
+          // 보스 처치 목표 (다중 전투)
+          if (obj.type === 'defeat_boss' && !obj.completed && stageData.bossId) {
+            const defeatedBoss = multiBattleState.enemies.find(
+              e => e.id === stageData.bossId && e.stats.hp === 0
+            )
+            if (defeatedBoss) {
+              return {
+                ...obj,
+                current: 1,
+                completed: true
+              }
             }
           }
 
@@ -332,8 +463,10 @@ export function StageBattleScreen({
     )
   }
 
-  const playerHpPercent = (battleState.player.stats.hp / battleState.player.stats.maxHp) * 100
-  const enemyHpPercent = (battleState.enemy.stats.hp / battleState.enemy.stats.maxHp) * 100
+  // HP 계산 (battleState 또는 multiBattleState에서)
+  const playerHp = battleState?.player.stats.hp || multiBattleState?.player.stats.hp || 0
+  const playerMaxHp = battleState?.player.stats.maxHp || multiBattleState?.player.stats.maxHp || 1
+  const playerHpPercent = (playerHp / playerMaxHp) * 100
   const clearTime = Math.floor((Date.now() - statistics.startTime) / 1000)
 
   return (
@@ -347,6 +480,28 @@ export function StageBattleScreen({
               <p className="text-gray-300">{stage.description}</p>
             </div>
             <div className="flex items-center gap-6">
+              {floorNumber && (
+                <div className="text-center">
+                  <div className="text-sm text-gray-400 flex items-center gap-1">
+                    <Layers className="w-3 h-3" />
+                    플로어
+                  </div>
+                  <div className="text-xl font-bold text-white">
+                    {currentFloor}층
+                  </div>
+                </div>
+              )}
+              {battleType !== 'single' && (
+                <div className="text-center">
+                  <div className="text-sm text-gray-400 flex items-center gap-1">
+                    <Users className="w-3 h-3" />
+                    전투
+                  </div>
+                  <div className="text-xl font-bold text-white">
+                    1 vs {battleType === 'double' ? '2' : '3'}
+                  </div>
+                </div>
+              )}
               <div className="text-center">
                 <div className="text-sm text-gray-400">웨이브</div>
                 <div className="text-xl font-bold text-white">
@@ -402,60 +557,23 @@ export function StageBattleScreen({
 
       {/* 전투 화면 */}
       <div className="flex-1 relative overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-between px-20">
-          {/* 플레이어 */}
-          <div className="text-center">
-            <div className="text-8xl mb-4">🦸</div>
-            <div className="bg-black/50 rounded-lg p-3 backdrop-blur">
-              <h3 className="text-white font-bold mb-2">플레이어</h3>
-              <div className="w-40 mb-2">
-                <div className="bg-gray-700 rounded-full h-4 overflow-hidden">
-                  <motion.div
-                    className="bg-gradient-to-r from-green-500 to-emerald-500 h-full"
-                    animate={{ width: `${playerHpPercent}%` }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </div>
-                <p className="text-xs text-gray-300 mt-1">
-                  HP: {battleState.player.stats.hp} / {battleState.player.stats.maxHp}
-                </p>
-              </div>
-            </div>
+        {multiBattleState ? (
+          <MultiBattleScreen 
+            battleState={multiBattleState} 
+            autoMode={true}
+            onTargetChange={(index) => {
+              if (battleManager instanceof MultiBattleManager) {
+                battleManager.changePlayerTarget(index)
+              }
+            }}
+          />
+        ) : battleState ? (
+          <PokemonStyleBattle battleState={battleState} autoMode={true} />
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-white text-2xl">전투 준비 중...</div>
           </div>
-
-          {/* VS */}
-          {battleState.phase === 'preparing' && (
-            <motion.div
-              initial={{ scale: 0, rotate: 0 }}
-              animate={{ scale: 1, rotate: 360 }}
-              className="text-6xl font-bold text-yellow-400 drop-shadow-lg"
-            >
-              VS
-            </motion.div>
-          )}
-
-          {/* 적 */}
-          <div className="text-center">
-            <div className="text-8xl mb-4">
-              {battleState.enemy.emoji || '👾'}
-            </div>
-            <div className="bg-black/50 rounded-lg p-3 backdrop-blur">
-              <h3 className="text-white font-bold mb-2">{battleState.enemy.name}</h3>
-              <div className="w-40 mb-2">
-                <div className="bg-gray-700 rounded-full h-4 overflow-hidden">
-                  <motion.div
-                    className="bg-gradient-to-r from-red-500 to-pink-500 h-full"
-                    animate={{ width: `${enemyHpPercent}%` }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </div>
-                <p className="text-xs text-gray-300 mt-1">
-                  HP: {battleState.enemy.stats.hp} / {battleState.enemy.stats.maxHp}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* 하단 통계 */}

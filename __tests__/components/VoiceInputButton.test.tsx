@@ -4,6 +4,7 @@ import { VoiceInputButton } from '@/components/VoiceInputButton'
 import { useVoiceInputTrigger } from '@/hooks/useVoiceInputTrigger'
 import { useSpeechRecognition } from '@/lib/speech/use-speech-recognition'
 import { vi } from 'vitest'
+import type { Mock } from 'vitest'
 
 // Mock hooks
 vi.mock('@/hooks/useVoiceInputTrigger')
@@ -17,11 +18,11 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
-    ;(useVoiceInputTrigger as any).mockReturnValue({
+    ;(useVoiceInputTrigger as Mock).mockReturnValue({
       isVisible: true
     })
 
-    ;(useSpeechRecognition as any).mockReturnValue({
+    ;(useSpeechRecognition as Mock).mockReturnValue({
       transcript: '',
       isListening: false,
       startListening: mockStartListening,
@@ -40,7 +41,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
     })
 
     it('음성 인식이 지원되지 않으면 폴백 UI를 표시해야 함', () => {
-      ;(useSpeechRecognition as any).mockReturnValue({
+      ;(useSpeechRecognition as Mock).mockReturnValue({
         hasRecognitionSupport: false,
         isOnline: true
       })
@@ -53,7 +54,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
 
   describe('오프라인 상태 처리', () => {
     it('오프라인 상태에서도 음성 입력이 가능해야 함', () => {
-      ;(useSpeechRecognition as any).mockReturnValue({
+      ;(useSpeechRecognition as Mock).mockReturnValue({
         transcript: '',
         isListening: false,
         startListening: mockStartListening,
@@ -74,7 +75,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
     })
 
     it('오프라인 상태를 사용자에게 알려야 함', () => {
-      ;(useSpeechRecognition as any).mockReturnValue({
+      ;(useSpeechRecognition as Mock).mockReturnValue({
         transcript: '',
         isListening: false,
         startListening: mockStartListening,
@@ -100,7 +101,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       expect(mockStartListening).toHaveBeenCalled()
 
       // 리스닝 상태로 변경
-      ;(useSpeechRecognition as any).mockReturnValue({
+      ;(useSpeechRecognition as Mock).mockReturnValue({
         transcript: '',
         isListening: true,
         startListening: mockStartListening,
@@ -123,7 +124,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       fireEvent.click(button)
 
       // 음성 인식 결과 시뮬레이션
-      ;(useSpeechRecognition as any).mockReturnValue({
+      ;(useSpeechRecognition as Mock).mockReturnValue({
         transcript: '30분 운동했어요',
         isListening: false,
         startListening: mockStartListening,
@@ -146,7 +147,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
     })
 
     it('오프라인 상태에서 저장된 활동은 synced가 false여야 함', async() => {
-      ;(useSpeechRecognition as any).mockReturnValue({
+      ;(useSpeechRecognition as Mock).mockReturnValue({
         transcript: '',
         isListening: false,
         startListening: mockStartListening,
@@ -161,7 +162,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       fireEvent.click(button)
 
       // 음성 인식 결과
-      ;(useSpeechRecognition as any).mockReturnValue({
+      ;(useSpeechRecognition as Mock).mockReturnValue({
         transcript: '책 읽기 완료',
         isListening: false,
         startListening: mockStartListening,
@@ -199,7 +200,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
         const button = screen.getByRole('button', { name: /음성.*입력/i })
         fireEvent.click(button)
 
-        ;(useSpeechRecognition as any).mockReturnValue({
+        ;(useSpeechRecognition as Mock).mockReturnValue({
           transcript,
           isListening: false,
           startListening: mockStartListening,
@@ -224,7 +225,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
 
   describe('에러 처리', () => {
     it('음성 인식 에러를 표시해야 함', () => {
-      ;(useSpeechRecognition as any).mockReturnValue({
+      ;(useSpeechRecognition as Mock).mockReturnValue({
         transcript: '',
         isListening: false,
         startListening: mockStartListening,
@@ -246,7 +247,7 @@ describe('VoiceInputButton - 오프라인 음성 입력', () => {
       fireEvent.click(button)
 
       // 빈 transcript
-      ;(useSpeechRecognition as any).mockReturnValue({
+      ;(useSpeechRecognition as Mock).mockReturnValue({
         transcript: '',
         isListening: false,
         startListening: mockStartListening,

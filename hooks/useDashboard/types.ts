@@ -14,7 +14,7 @@ export interface DashboardState {
 export interface DashboardActions {
   loadUserData: () => Promise<void>
   handleStatClick: (statType: string) => Promise<void>
-  handleVoiceInput: (transcript: string) => Promise<void>
+  handleVoiceInput: (transcript: string, activityType?: string | null) => Promise<void>
   handleStatAction: (statType: string, action: string) => Promise<void>
   retry: () => Promise<void>
   updateStat: (statType: string, experience: number, activityName?: string) => Promise<boolean | undefined>
@@ -37,7 +37,7 @@ export type UseDashboardReturn = DashboardState & DashboardActions & {
 export type StatActionHandler = (statType: string, action: string) => Promise<void>
 
 // 음성 입력 핸들러 타입
-export type VoiceInputHandler = (transcript: string) => Promise<void>
+export type VoiceInputHandler = (transcript: string, activityType?: string | null) => Promise<void>
 
 // 에러 핸들러 타입
 export type ErrorHandler = (error: Error) => void

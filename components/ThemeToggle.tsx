@@ -2,12 +2,12 @@
 
 import { useTheme } from '@/contexts/ThemeContext'
 import { useEffect, useState } from 'react'
-import { useBattleStore } from '@/lib/stores/battleStore'
+// import { useBattleStore } from '@/lib/stores/battleStore' // 미구현
 
 export function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  const isInBattle = useBattleStore((state) => state.isInBattle)
+  const isInBattle = false // 전투 시스템 미구현
 
   useEffect(() => {
     setMounted(true)

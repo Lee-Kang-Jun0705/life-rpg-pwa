@@ -14,7 +14,7 @@ import { GAME_CONFIG } from '@/lib/types/dashboard'
 import { Stat } from '@/lib/types/dashboard'
 import type { Activity } from '@/lib/database/types'
 import { Calendar, TrendingUp, Award, Target, Clock, Flame, Star, Trophy, BookOpen, Swords } from 'lucide-react'
-import { dungeonProgressService } from '@/lib/services/dungeon-progress-service'
+// import { dungeonProgressService } from '@/lib/services/dungeon-progress-service' // 미구현
 
 export default function ProfilePage() {
   const { settings, updateSettings, isLoading } = useSettings()
@@ -28,7 +28,7 @@ export default function ProfilePage() {
   const [userStats, setUserStats] = useState<Stat[]>([])
   const [statsLoading, setStatsLoading] = useState(false)
   const [activities, setActivities] = useState<Activity[]>([])
-  const [joinDate] = useState(new Date('2024-01-01')) // 가입일 (실제로는 DB에서 가져와야 함)
+  const [joinDate, setJoinDate] = useState<Date | null>(null) // 서비스 시작일
   const [dungeonStats, setDungeonStats] = useState<{ totalClears: number; totalGold: number; unlockedTitles: string[] }>({
     totalClears: 0,
     totalGold: 0,
@@ -46,21 +46,43 @@ export default function ProfilePage() {
         setUserStats(stats)
         setActivities(recentActivities)
 
-        // 던전 통계 로드
-        const allDungeonProgress = dungeonProgressService.getAllDungeonProgress(GAME_CONFIG.DEFAULT_USER_ID)
-        const dungeonStatistics = dungeonProgressService.getStatistics(GAME_CONFIG.DEFAULT_USER_ID)
-
-        let totalClears = 0
-        let totalGold = 0
-        Object.values(allDungeonProgress).forEach(progress => {
-          totalClears += progress.totalClears
-          totalGold += progress.totalGoldEarned
+        // 서비스 시작일 계산 (첫 활동일 또는 첫 스탯 생성일)
+        let earliestDate: Date | null = null
+        
+        // 가장 오래된 활동 찾기
+        if (recentActivities.length > 0) {
+          const allActivities = await dbHelpers.getActivities(GAME_CONFIG.DEFAULT_USER_ID, 1000) // 더 많은 활동 가져오기
+          if (allActivities.length > 0) {
+            const oldestActivity = allActivities[allActivities.length - 1]
+            earliestDate = new Date(oldestActivity.timestamp)
+          }
+        }
+        
+        // 스탯 생성일 확인
+        stats.forEach(stat => {
+          if (stat.createdAt) {
+            const statDate = new Date(stat.createdAt)
+            if (!earliestDate || statDate < earliestDate) {
+              earliestDate = statDate
+            }
+          }
         })
+        
+        // 기본값: 현재 날짜 (첫 사용자)
+        setJoinDate(earliestDate || new Date())
+
+        // 던전 통계 로드 - 미구현
+        // const allDungeonProgress = dungeonProgressService.getAllDungeonProgress(GAME_CONFIG.DEFAULT_USER_ID)
+        // const dungeonStatistics = dungeonProgressService.getStatistics(GAME_CONFIG.DEFAULT_USER_ID)
+
+        // 임시 데이터
+        const totalClears = 0
+        const totalGold = 0
 
         setDungeonStats({
           totalClears,
           totalGold,
-          unlockedTitles: dungeonStatistics.unlockedTitles || []
+          unlockedTitles: []
         })
       } catch (error) {
         console.error('Failed to load data:', error)
@@ -72,7 +94,7 @@ export default function ProfilePage() {
   }, [])
 
   // 계산된 값들
-  const totalDays = Math.floor((new Date().getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24))
+  const totalDays = joinDate ? Math.floor((new Date().getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24)) : 0
   const totalLevel = userStats.reduce((sum, stat) => sum + (stat.level || 0), 0)
   const totalExp = userStats.reduce((sum, stat) => sum + (stat.experience || 0), 0)
   const totalActivities = userStats.reduce((sum, stat) => sum + (stat.totalActivities || 0), 0)
@@ -107,17 +129,19 @@ export default function ProfilePage() {
     return streak
   }
 
-  function generateMilestones(stats: Stat[], activities: Activity[], joinDate: Date) {
+  function generateMilestones(stats: Stat[], activities: Activity[], joinDate: Date | null) {
     const milestones = []
 
-    // 가입일
-    milestones.push({
-      date: joinDate,
-      title: 'Life RPG 여정 시작! 🎮',
-      description: '새로운 자기계발 여정을 시작했어요',
-      type: 'start',
-      icon: '🚀'
-    })
+    // 서비스 시작일
+    if (joinDate) {
+      milestones.push({
+        date: joinDate,
+        title: 'Life RPG 여정 시작! 🎮',
+        description: '새로운 자기계발 여정을 시작했어요',
+        type: 'start',
+        icon: '🚀'
+      })
+    }
 
     // 첫 활동
     if (activities.length > 0) {
@@ -198,11 +222,13 @@ export default function ProfilePage() {
           </div>
           <Button
             onClick={() => window.location.href = '/settings'}
-            variant="ghost"
-            size="icon"
+            variant="outline"
+            size="lg"
+            className="px-6 py-3 text-lg bg-gradient-to-r from-gray-700 to-gray-800 text-white hover:from-gray-800 hover:to-gray-900 border-0 shadow-lg flex items-center gap-2"
             aria-label="설정"
           >
-            ⚙️
+            <span className="text-2xl">⚙️</span>
+            <span className="font-semibold">설정</span>
           </Button>
         </motion.div>
 
@@ -234,9 +260,20 @@ export default function ProfilePage() {
                     <h2 className="text-xl font-bold mb-1">
                       {settings.profile.displayName || '이름 없음'}
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                       {settings.profile.email}
                     </p>
+                    
+                    {/* 서비스 시작일 표시 */}
+                    {joinDate && (
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mb-3">
+                        {joinDate.toLocaleDateString('ko-KR', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })} 시작
+                      </p>
+                    )}
 
                     {settings.profile.bio && (
                       <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
@@ -258,10 +295,10 @@ export default function ProfilePage() {
                     <Button
                       onClick={() => setIsEditModalOpen(true)}
                       variant="outline"
-                      size="sm"
-                      className="mt-4 w-full"
+                      size="lg"
+                      className="mt-6 w-full text-lg py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 border-0 shadow-lg"
                     >
-                      프로필 편집
+                      ⚙️ 프로필 편집
                     </Button>
                   </div>
                 </CardContent>

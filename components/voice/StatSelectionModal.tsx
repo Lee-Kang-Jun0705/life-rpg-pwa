@@ -5,7 +5,7 @@ import { StatType, STAT_TYPES } from '@/lib/types/dashboard'
 interface StatSelectionModalProps {
   isOpen: boolean
   onClose: () => void
-  onSelectStat: (statType: StatType) => void
+  onSelectStat: (statType: { type: string; name: string; emoji: string }) => void
 }
 
 export const StatSelectionModal = React.memo(function StatSelectionModal({
@@ -19,7 +19,7 @@ export const StatSelectionModal = React.memo(function StatSelectionModal({
     }
   }
 
-  const handleStatSelect = (statType: StatType) => {
+  const handleStatSelect = (statType: { type: string; name: string; emoji: string }) => {
     onSelectStat(statType)
     onClose()
   }

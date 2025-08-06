@@ -2,6 +2,8 @@
 
 import React, { useEffect } from 'react'
 import { visibilityManager } from '@/lib/utils/visibility-manager'
+import { FeatureFlagsProvider } from '@/lib/feature-flags'
+import { FeatureFlagPanel } from '@/components/debug/FeatureFlagPanel'
 
 // 통합 시스템 Provider
 interface SystemProvidersProps {
@@ -39,8 +41,10 @@ export function SystemProviders({ children }: SystemProvidersProps) {
   }, [])
 
   return (
-    <>
+    <FeatureFlagsProvider>
       {children}
-    </>
+      {/* 개발 환경에서 Feature Flag 패널 표시 */}
+      <FeatureFlagPanel />
+    </FeatureFlagsProvider>
   )
 }

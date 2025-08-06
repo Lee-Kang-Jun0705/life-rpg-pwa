@@ -131,7 +131,7 @@ export const setupIndexedDBMocks = () => {
 // 날짜 모킹 헬퍼
 export const mockDate = (dateString: string) => {
   const mockDate = new Date(dateString)
-  jest.spyOn(global, 'Date').mockImplementation(() => mockDate as any)
+  jest.spyOn(global, 'Date').mockImplementation((() => mockDate) as unknown as () => string)
   return mockDate
 }
 

@@ -43,6 +43,10 @@ export function useSpeechRecognition(
 ): UseSpeechRecognitionReturn {
   const serviceRef = useRef<SpeechRecognitionService | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  
+  // options를 ref로 관리하여 안정성 확보
+  const optionsRef = useRef(options)
+  optionsRef.current = options
 
   const [isSupported] = useState(() => SpeechRecognitionService.isSupported())
   const [isListening, setIsListening] = useState(false)
@@ -59,11 +63,11 @@ export function useSpeechRecognition(
     }
 
     const config: SpeechRecognitionConfig = {
-      lang: options.lang || 'ko-KR',
-      continuous: options.continuous ?? false,
-      interimResults: options.interimResults ?? true,
-      maxAlternatives: options.maxAlternatives || 3,
-      grammars: options.grammars || KOREAN_COMMAND_GRAMMARS
+      lang: optionsRef.current.lang || 'ko-KR',
+      continuous: optionsRef.current.continuous ?? false,
+      interimResults: optionsRef.current.interimResults ?? true,
+      maxAlternatives: optionsRef.current.maxAlternatives || 3,
+      grammars: optionsRef.current.grammars || KOREAN_COMMAND_GRAMMARS
     }
 
     const service = new SpeechRecognitionService(config)
@@ -71,27 +75,40 @@ export function useSpeechRecognition(
 
     // 결과 처리
     service.onResult((result) => {
+      console.log('🎙️ useSpeechRecognition: onResult 콜백 호출됨', {
+        originalTranscript: result.transcript,
+        isFinal: result.isFinal,
+        confidence: result.confidence
+      })
+
       let processedTranscript = result.transcript
 
       // 커스텀 사전 적용
-      if (options.customDictionary) {
+      if (optionsRef.current.customDictionary) {
         processedTranscript = SpeechRecognitionUtils.applyCustomDictionary(
           processedTranscript,
-          options.customDictionary
+          optionsRef.current.customDictionary
         )
       }
 
       // 텍스트 정규화
       processedTranscript = SpeechRecognitionUtils.normalizeTranscript(processedTranscript)
 
+      console.log('📝 useSpeechRecognition: 처리된 transcript', {
+        processedTranscript,
+        originalLength: result.transcript.length,
+        processedLength: processedTranscript.length
+      })
+
       setTranscript(processedTranscript)
       setConfidence(result.confidence)
       setError(null)
 
-      options.onResult?.(result)
+      optionsRef.current.onResult?.(result)
 
       // 자동 종료 (최종 결과일 때)
-      if (options.autoStop && result.isFinal) {
+      if (optionsRef.current.autoStop && result.isFinal) {
+        console.log('🛑 useSpeechRecognition: 자동 종료 (최종 결과)')
         serviceRef.current?.stop()
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current)
@@ -108,14 +125,14 @@ export function useSpeechRecognition(
         clearTimeout(timeoutRef.current)
         timeoutRef.current = null
       }
-      options.onError?.(err)
+      optionsRef.current.onError?.(err)
     })
 
     // 상태 변경 처리
     service.onStatusChange((newStatus) => {
       setStatus(newStatus)
       setIsListening(newStatus === 'listening' || newStatus === 'processing')
-      options.onStatusChange?.(newStatus)
+      optionsRef.current.onStatusChange?.(newStatus)
     })
 
     return () => {
@@ -125,7 +142,7 @@ export function useSpeechRecognition(
         timeoutRef.current = null
       }
     }
-  }, [isSupported, options])
+  }, [isSupported]) // options를 의존성에서 제거
 
   // 타임아웃 정리
   const clearListeningTimeout = useCallback(() => {
@@ -155,7 +172,7 @@ export function useSpeechRecognition(
     serviceRef.current.start()
 
     // 타임아웃 설정
-    if (options.timeout) {
+    if (optionsRef.current.timeout) {
       timeoutRef.current = setTimeout(() => {
         stop()
         setError({
@@ -163,9 +180,9 @@ export function useSpeechRecognition(
           code: 'TIMEOUT',
           message: '음성 인식 시간이 초과되었습니다.'
         })
-      }, options.timeout)
+      }, optionsRef.current.timeout)
     }
-  }, [isListening, isSupported, options.timeout, stop])
+  }, [isListening, isSupported, stop])
 
   // 토글
   const toggle = useCallback(() => {
@@ -256,6 +273,11 @@ export function useActivitySpeechRecognition() {
     timeout: 30000, // 30초
     customDictionary,
     onResult: (result) => {
+      console.log('🎯 useActivitySpeechRecognition: onResult 호출됨', {
+        transcript: result.transcript,
+        isFinal: result.isFinal
+      })
+      
       if (result.isFinal) {
         const type = SpeechRecognitionUtils.extractActivityType(result.transcript)
         setActivity({
@@ -274,6 +296,8 @@ export function useActivitySpeechRecognition() {
   return {
     ...speech,
     activity,
-    resetActivity
+    resetActivity,
+    // transcript를 activity.description으로도 노출
+    transcript: activity.description || speech.transcript
   }
 }

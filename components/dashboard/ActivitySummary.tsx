@@ -14,10 +14,12 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    console.log('📊 ActivitySummary: totalActivities changed to', totalActivities)
     const loadActivities = async() => {
       try {
         setIsLoading(true)
         const allActivities = await dbHelpers.getActivities(GAME_CONFIG.DEFAULT_USER_ID)
+        console.log('📊 ActivitySummary: loaded activities', allActivities.length)
         setActivities(allActivities)
       } catch (error) {
         console.error('Failed to load activities:', error)
@@ -28,6 +30,21 @@ export const ActivitySummary = React.memo(function ActivitySummary({ totalActivi
 
     loadActivities()
   }, [totalActivities])
+
+  // activity-added 이벤트 리스너 추가
+  useEffect(() => {
+    const handleActivityAdded = async () => {
+      console.log('📊 ActivitySummary: activity-added event received')
+      const allActivities = await dbHelpers.getActivities(GAME_CONFIG.DEFAULT_USER_ID)
+      setActivities(allActivities)
+    }
+
+    window.addEventListener('activity-added', handleActivityAdded)
+    
+    return () => {
+      window.removeEventListener('activity-added', handleActivityAdded)
+    }
+  }, [])
 
   // 오늘의 활동 필터링
   const todayActivities = useMemo(() => {

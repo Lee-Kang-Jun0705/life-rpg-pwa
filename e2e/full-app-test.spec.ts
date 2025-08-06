@@ -25,6 +25,39 @@ async function measurePageLoadTime(page: Page, url: string) {
   return loadTime
 }
 
+// 탭 전환 시간을 측정하는 헬퍼 함수
+async function measureTabSwitchTime(page: Page, selector: string) {
+  const startTime = Date.now()
+  await page.click(selector)
+  await page.waitForTimeout(100) // 애니메이션 대기
+  const switchTime = Date.now() - startTime
+  return switchTime
+}
+
+// FPS를 측정하는 헬퍼 함수
+async function measureFPS(page: Page, duration: number = 1000): Promise<number> {
+  return await page.evaluate((duration) => {
+    return new Promise<number>((resolve) => {
+      let frames = 0
+      const startTime = performance.now()
+
+      function countFrames() {
+        frames++
+        const currentTime = performance.now()
+        
+        if (currentTime - startTime >= duration) {
+          const fps = (frames * 1000) / (currentTime - startTime)
+          resolve(Math.round(fps))
+        } else {
+          requestAnimationFrame(countFrames)
+        }
+      }
+
+      requestAnimationFrame(countFrames)
+    })
+  }, duration)
+}
+
 test.describe('Life RPG PWA - 전체 앱 테스트', () => {
   test.beforeEach(async ({ page }) => {
     // 로컬 스토리지 초기화
@@ -301,5 +334,288 @@ test.describe('Life RPG PWA - 전체 앱 테스트', () => {
     expect(levelAfterReload).toBe(initialLevel)
     
     expect(consoleErrors).toHaveLength(0)
+  })
+
+  test('모험 페이지 탭 전환 성능 측정', async ({ page }) => {
+    await page.goto('/adventure')
+    await page.waitForLoadState('networkidle')
+
+    const tabs = [
+      { name: '퀘스트', selector: 'button[aria-label="퀘스트 탭"]' },
+      { name: '탐험', selector: 'button[aria-label="탐험 탭"]' },
+      { name: '인벤토리', selector: 'button[aria-label="인벤토리 탭"]' },
+      { name: '장비', selector: 'button[aria-label="장비 탭"]' },
+      { name: '스킬', selector: 'button[aria-label="스킬 탭"]' },
+      { name: '상점', selector: 'button[aria-label="상점 탭"]' }
+    ]
+
+    const results: { tab: string; time: number; status: string }[] = []
+
+    for (const tab of tabs) {
+      const switchTime = await measureTabSwitchTime(page, tab.selector)
+      results.push({
+        tab: tab.name,
+        time: switchTime,
+        status: switchTime < 500 ? 'PASS' : 'FAIL'
+      })
+    }
+
+    console.log('=== 탭 전환 성능 결과 ===')
+    console.table(results)
+
+    // 모든 탭이 500ms 이내에 전환되어야 함
+    results.forEach(result => {
+      expect(result.time).toBeLessThan(500)
+    })
+  })
+
+  test('터치/클릭 반응 속도 측정', async ({ page }) => {
+    await page.goto('/adventure')
+    await page.waitForLoadState('networkidle')
+
+    // 탐험 탭으로 이동
+    await page.click('button[aria-label="탐험 탭"]')
+    await page.waitForTimeout(500)
+
+    const clickTargets = [
+      { name: '던전 선택', selector: 'text=초보자의 숲' },
+      { name: '전투 시작', selector: 'button:has-text("전투 시작")' }
+    ]
+
+    const results: { action: string; responseTime: number; status: string }[] = []
+
+    for (const target of clickTargets) {
+      const element = page.locator(target.selector).first()
+      if (await element.isVisible()) {
+        const startTime = Date.now()
+        await element.click()
+        await page.waitForTimeout(50) // 반응 대기
+        const responseTime = Date.now() - startTime
+
+        results.push({
+          action: target.name,
+          responseTime,
+          status: responseTime < 200 ? 'PASS' : 'FAIL'
+        })
+      }
+    }
+
+    console.log('=== 클릭 반응 속도 결과 ===')
+    console.table(results)
+  })
+
+  test('모바일 성능 테스트', async ({ browser }) => {
+    // 모바일 컨텍스트 생성
+    const context = await browser.newContext({
+      viewport: { width: 375, height: 667 },
+      userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15'
+    })
+    const page = await context.newPage()
+
+    await page.goto('/adventure')
+    await page.waitForLoadState('networkidle')
+
+    // 모바일에서 탭 전환 성능 측정
+    const tabs = ['퀘스트', '탐험', '인벤토리']
+    const results: { tab: string; time: number }[] = []
+
+    for (const tab of tabs) {
+      const selector = `button[aria-label="${tab} 탭"]`
+      const switchTime = await measureTabSwitchTime(page, selector)
+      results.push({ tab, time: switchTime })
+    }
+
+    console.log('=== 모바일 탭 전환 성능 ===')
+    console.table(results)
+
+    // 스크롤 성능 테스트
+    const scrollStartTime = Date.now()
+    await page.evaluate(() => {
+      window.scrollTo({ top: 500, behavior: 'smooth' })
+    })
+    await page.waitForTimeout(500)
+    const scrollTime = Date.now() - scrollStartTime
+
+    console.log(`모바일 스크롤 시간: ${scrollTime}ms`)
+    expect(scrollTime).toBeLessThan(600)
+
+    await context.close()
+  })
+
+  test('애니메이션 FPS 측정', async ({ page }) => {
+    await page.goto('/adventure')
+    await page.waitForLoadState('networkidle')
+
+    // 탭 전환 중 FPS 측정
+    const fpsDuringAnimation = await page.evaluate(async () => {
+      const results: number[] = []
+
+      for (let i = 0; i < 3; i++) {
+        // 탭 클릭
+        const tabs = document.querySelectorAll('button[role="tab"]')
+        if (tabs.length > i) {
+          let frames = 0
+          const startTime = performance.now()
+          
+          // 애니메이션 시작
+          (tabs[i] as HTMLElement).click()
+          
+          // 500ms 동안 프레임 카운트
+          await new Promise<void>((resolve) => {
+            function countFrames() {
+              frames++
+              const currentTime = performance.now()
+              
+              if (currentTime - startTime >= 500) {
+                const fps = (frames * 1000) / (currentTime - startTime)
+                results.push(Math.round(fps))
+                resolve()
+              } else {
+                requestAnimationFrame(countFrames)
+              }
+            }
+            requestAnimationFrame(countFrames)
+          })
+          
+          await new Promise(resolve => setTimeout(resolve, 500))
+        }
+      }
+
+      return results
+    })
+
+    console.log('=== 애니메이션 중 FPS ===')
+    fpsDuringAnimation.forEach((fps, index) => {
+      console.log(`탭 전환 ${index + 1}: ${fps} FPS`)
+      expect(fps).toBeGreaterThanOrEqual(30)
+    })
+  })
+
+  test('메모리 사용량 모니터링', async ({ page }) => {
+    const memoryUsage: { page: string; heapSize: number }[] = []
+
+    // 여러 페이지 방문하며 메모리 측정
+    const pages = [
+      { name: '홈', url: '/' },
+      { name: '모험', url: '/adventure' },
+      { name: '일지', url: '/journal' },
+      { name: '소셜', url: '/social' }
+    ]
+
+    for (let i = 0; i < 3; i++) { // 3번 반복
+      for (const pageInfo of pages) {
+        await page.goto(pageInfo.url)
+        await page.waitForLoadState('networkidle')
+
+        const memory = await page.evaluate(() => {
+          if ('memory' in performance) {
+            return (performance as any).memory.usedJSHeapSize
+          }
+          return 0
+        })
+
+        if (memory > 0) {
+          memoryUsage.push({
+            page: `${pageInfo.name} (${i + 1}회차)`,
+            heapSize: memory
+          })
+        }
+      }
+    }
+
+    console.log('=== 메모리 사용량 (MB) ===')
+    memoryUsage.forEach(({ page, heapSize }) => {
+      console.log(`${page}: ${(heapSize / 1024 / 1024).toFixed(2)}MB`)
+    })
+
+    // 메모리 누수 체크 - 첫 번째와 마지막 측정값 비교
+    if (memoryUsage.length >= 8) {
+      const firstUsage = memoryUsage[0].heapSize
+      const lastUsage = memoryUsage[memoryUsage.length - 1].heapSize
+      const increase = ((lastUsage - firstUsage) / firstUsage) * 100
+
+      console.log(`메모리 증가율: ${increase.toFixed(2)}%`)
+      expect(increase).toBeLessThan(50) // 50% 이상 증가하지 않아야 함
+    }
+  })
+
+  test('리소스 로딩 성능 분석', async ({ page }) => {
+    const resourceTimings: {
+      type: string
+      url: string
+      duration: number
+    }[] = []
+
+    page.on('response', async (response) => {
+      const timing = response.timing()
+      if (timing) {
+        const url = response.url()
+        const duration = timing.responseEnd - timing.requestStart
+        let type = 'other'
+
+        if (url.match(/\.(png|jpg|jpeg|gif|webp|svg)$/i)) type = 'image'
+        else if (url.match(/\.(woff|woff2|ttf|otf)$/i)) type = 'font'
+        else if (url.match(/\.js$/i)) type = 'script'
+        else if (url.match(/\.css$/i)) type = 'stylesheet'
+
+        resourceTimings.push({ type, url, duration })
+      }
+    })
+
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+
+    // 리소스 타입별 통계
+    const stats = resourceTimings.reduce((acc, { type, duration }) => {
+      if (!acc[type]) {
+        acc[type] = { count: 0, total: 0, max: 0 }
+      }
+      acc[type].count++
+      acc[type].total += duration
+      acc[type].max = Math.max(acc[type].max, duration)
+      return acc
+    }, {} as Record<string, { count: number; total: number; max: number }>)
+
+    console.log('=== 리소스 로딩 통계 ===')
+    Object.entries(stats).forEach(([type, data]) => {
+      const avg = data.total / data.count
+      console.log(`${type}: 평균 ${avg.toFixed(2)}ms, 최대 ${data.max.toFixed(2)}ms (${data.count}개)`)
+      expect(data.max).toBeLessThan(2000) // 최대 2초 이내
+    })
+  })
+
+  test('종합 성능 보고서', async ({ page }) => {
+    console.log('\n=== Life RPG PWA 종합 성능 보고서 ===\n')
+
+    // 1. 초기 로딩 성능
+    const homeLoadTime = await measurePageLoadTime(page, '/')
+    console.log(`✓ 홈페이지 초기 로딩: ${homeLoadTime}ms`)
+
+    // 2. 주요 페이지 로딩
+    const mainPages = ['/adventure', '/journal', '/social']
+    let totalLoadTime = homeLoadTime
+
+    for (const url of mainPages) {
+      const loadTime = await measurePageLoadTime(page, url)
+      totalLoadTime += loadTime
+      console.log(`✓ ${url} 로딩: ${loadTime}ms`)
+    }
+
+    const avgLoadTime = totalLoadTime / (mainPages.length + 1)
+    console.log(`\n평균 페이지 로딩 시간: ${avgLoadTime.toFixed(2)}ms`)
+
+    // 3. 인터랙션 성능
+    await page.goto('/adventure')
+    const fps = await measureFPS(page)
+    console.log(`\n기본 FPS: ${fps}`)
+
+    // 4. 성능 등급 부여
+    let grade = 'A'
+    if (avgLoadTime > 3000 || fps < 30) grade = 'F'
+    else if (avgLoadTime > 2000 || fps < 45) grade = 'C'
+    else if (avgLoadTime > 1500 || fps < 55) grade = 'B'
+
+    console.log(`\n종합 성능 등급: ${grade}`)
+    console.log('================================\n')
   })
 })

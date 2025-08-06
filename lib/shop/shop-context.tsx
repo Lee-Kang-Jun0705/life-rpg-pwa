@@ -18,6 +18,7 @@ import { ALL_ITEMS } from '@/lib/data/items'
 import type { Item } from '@/lib/types/item-system'
 import { playerService } from '@/lib/services/player.service'
 import { shopSyncService } from '@/lib/services/shop-sync.service'
+import { shops } from '@/lib/data/shops'
 
 // 아이콘 매핑 함수
 function getItemIcon(item: Item): string {
@@ -109,6 +110,7 @@ interface ShopContextType {
   addCoins: (amount: number) => Promise<void>
   spendCoins: (amount: number) => Promise<boolean>
   addItemToInventory: (item: ShopItem, quantity?: number) => Promise<void>
+  sellItem: (itemId: string, quantity?: number) => Promise<boolean>
 }
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined)
@@ -207,7 +209,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       }
 
       // 모든 아이템을 ShopItem으로 변환
-      const allShopItems = Object.values(ALL_ITEMS).map(item => ({
+      const itemsFromAllItems = Object.values(ALL_ITEMS).map(item => ({
         id: item.id,
         name: item.name,
         description: item.description,
@@ -232,6 +234,26 @@ export function ShopProvider({ children }: { children: ReactNode }) {
           })
         ]
       }))
+
+      // shops.ts에서 스킬 아이템 추가
+      const skillShopItems: ShopItem[] = []
+      if (shops.skillShop) {
+        shops.skillShop.items.forEach(shopItem => {
+          skillShopItems.push({
+            id: shopItem.id,
+            name: shopItem.name,
+            description: shopItem.description,
+            category: 'skill' as ItemCategory,
+            rarity: (shopItem.rarity || 'common') as ItemRarity,
+            price: shopItem.price,
+            icon: shopItem.icon,
+            isEquippable: false,
+            effects: shopItem.itemData?.learnOnPurchase ? ['구매 시 즉시 스킬 습득'] : []
+          })
+        })
+      }
+
+      const allShopItems = [...itemsFromAllItems, ...skillShopItems]
 
       setState({
         items: allShopItems,
@@ -320,6 +342,9 @@ export function ShopProvider({ children }: { children: ReactNode }) {
         return false
       }
 
+      // 인벤토리 서비스와 동기화
+      await shopSyncService.syncInventory('current-user')
+
       // UI 상태 업데이트
       const newInventory = { ...state.inventory }
       const existingItem = newInventory.items.find(invItem => invItem.id === item.id)
@@ -369,31 +394,38 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       return false
     }
 
-    const newInventory = { ...state.inventory }
-    const itemCategory = item.category
+    // shopSyncService를 통해 장착 동기화
+    const success = await shopSyncService.syncEquipItem('current-user', itemId, item.category)
+    
+    if (success) {
+      const newInventory = { ...state.inventory }
+      const itemCategory = item.category
 
-    if (itemCategory === 'weapon' || itemCategory === 'armor' || itemCategory === 'accessory') {
-      // 기존 장착 해제
-      const currentEquippedId = newInventory.equippedItems[itemCategory]
-      if (currentEquippedId) {
-        const currentItem = newInventory.items.find(i => i.id === currentEquippedId)
-        if (currentItem) {
-          currentItem.isEquipped = false
+      if (itemCategory === 'weapon' || itemCategory === 'armor' || itemCategory === 'accessory') {
+        // 기존 장착 해제
+        const currentEquippedId = newInventory.equippedItems[itemCategory]
+        if (currentEquippedId) {
+          const currentItem = newInventory.items.find(i => i.id === currentEquippedId)
+          if (currentItem) {
+            currentItem.isEquipped = false
+          }
         }
-      }
 
-      // 새 아이템 장착
-      newInventory.equippedItems[itemCategory] = itemId
-      const targetItem = newInventory.items.find(i => i.id === itemId)
-      if (targetItem) {
-        targetItem.isEquipped = true
-      }
+        // 새 아이템 장착
+        newInventory.equippedItems[itemCategory] = itemId
+        const targetItem = newInventory.items.find(i => i.id === itemId)
+        if (targetItem) {
+          targetItem.isEquipped = true
+        }
 
-      await saveInventory(newInventory)
-      return true
+        await saveInventory(newInventory)
+        
+        // 장비 변경 이벤트 발생 (스탯 재계산을 위해)
+        window.dispatchEvent(new Event('equipment-changed'))
+      }
     }
-
-    return false
+    
+    return success
   }, [state.inventory, saveInventory])
 
   // 아이템 장착 해제
@@ -521,6 +553,56 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
     await saveInventory(newInventory)
   }, [state.inventory, saveInventory])
+  
+  // 아이템 판매
+  const sellItem = useCallback(async(itemId: string, quantity = 1): Promise<boolean> => {
+    const item = state.inventory.items.find(invItem => invItem.id === itemId)
+    if (!item || item.quantity < quantity) {
+      return false
+    }
+    
+    // 장착된 아이템은 판매 불가
+    if (item.isEquipped) {
+      console.warn('장착된 아이템은 판매할 수 없습니다.')
+      return false
+    }
+    
+    // 판매 가격은 구매 가격의 50%
+    const sellPrice = Math.floor(item.price * 0.5) * quantity
+    
+    const newInventory = { ...state.inventory }
+    const itemIndex = newInventory.items.findIndex(invItem => invItem.id === itemId)
+    
+    if (itemIndex >= 0) {
+      newInventory.items[itemIndex].quantity -= quantity
+      
+      if (newInventory.items[itemIndex].quantity <= 0) {
+        newInventory.items.splice(itemIndex, 1)
+      }
+      
+      // 골드 추가
+      newInventory.coins += sellPrice
+      
+      await saveInventory(newInventory)
+      
+      // 플레이어 서비스와 동기화
+      try {
+        const player = await playerService.getPlayer('current-user')
+        if (player) {
+          await playerService.updatePlayer('current-user', {
+            gold: newInventory.coins
+          })
+        }
+      } catch (error) {
+        console.error('Failed to sync gold with player service:', error)
+      }
+      
+      console.log(`아이템 판매 완료: ${item.name} x${quantity} = ${sellPrice} 골드`)
+      return true
+    }
+    
+    return false
+  }, [state.inventory, saveInventory])
 
   // Context value 메모이제이션
   const value = useMemo<ShopContextType>(() => ({
@@ -537,7 +619,8 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     getEquippedItems,
     addCoins,
     spendCoins,
-    addItemToInventory
+    addItemToInventory,
+    sellItem
   }), [
     state,
     isLoading,
@@ -551,7 +634,8 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     getEquippedItems,
     addCoins,
     spendCoins,
-    addItemToInventory
+    addItemToInventory,
+    sellItem
   ])
 
   return (

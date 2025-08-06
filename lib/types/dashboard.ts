@@ -6,7 +6,7 @@ export interface Stat {
   userId: string
   type: 'health' | 'learning' | 'relationship' | 'achievement'
   level: number
-  _experience: number
+  experience: number
   totalActivities: number
   updatedAt: Date
 }
@@ -14,10 +14,10 @@ export interface Stat {
 export interface Activity {
   id?: number
   userId: string
-  _statType: 'health' | 'learning' | 'relationship' | 'achievement'
+  statType: 'health' | 'learning' | 'relationship' | 'achievement'
   activityName: string
   description?: string
-  _experience: number
+  experience: number
   timestamp: Date
   synced: boolean
 }

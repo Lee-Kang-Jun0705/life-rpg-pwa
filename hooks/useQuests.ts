@@ -233,17 +233,17 @@ export function useQuests() {
 
       // 보상 번들 생성
       const rewardBundle = {
-        exp: quest.rewards.experience,
+        exp: quest.rewards.exp,
         currency: {
           gold: quest.rewards.gold
         },
         items: quest.rewards.items?.map(item => ({
-          id: item.id,
-          name: item.name,
-          type: item.type as 'consumable' | 'equipment' | 'material' | 'special',
-          rarity: item.rarity as 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary',
+          id: item.itemId,
+          name: `Item_${item.itemId}`, // 실제 아이템 데이터에서 가져와야 함
+          type: 'material' as 'consumable' | 'equipment' | 'material' | 'special',
+          rarity: 'common' as 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary',
           quantity: item.quantity,
-          description: item.description
+          description: `Item ${item.itemId}`
         }))
       }
 

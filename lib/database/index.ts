@@ -481,6 +481,12 @@ export class LifeRPGDatabase extends Dexie {
   // 활동 검증 시스템 테이블
   verifications!: Table<ActivityVerification>
 
+  // JRPG 시스템 테이블들
+  jrpgInventory!: Table<import('./types').JRPGInventory>
+  jrpgSkills!: Table<import('./types').JRPGSkills>
+  jrpgBattleLogs!: Table<import('./types').JRPGBattleLog>
+  jrpgProgress!: Table<import('./types').JRPGProgress>
+
   constructor() {
     // SSR 환경에서는 데이터베이스 초기화하지 않음
     if (typeof window === 'undefined') {
@@ -518,6 +524,11 @@ export class LifeRPGDatabase extends Dexie {
       this.metadata = null as unknown as Table<MetadataEntry>
       this.fatigue = null as unknown as Table<FatigueData>
       this.fatigueActivities = null as unknown as Table<FatigueActivity>
+      this.verifications = null as unknown as Table<ActivityVerification>
+      this.jrpgInventory = null as unknown as Table<import('./types').JRPGInventory>
+      this.jrpgSkills = null as unknown as Table<import('./types').JRPGSkills>
+      this.jrpgBattleLogs = null as unknown as Table<import('./types').JRPGBattleLog>
+      this.jrpgProgress = null as unknown as Table<import('./types').JRPGProgress>
       return
     }
 
@@ -849,6 +860,48 @@ export class LifeRPGDatabase extends Dexie {
           updatedAt: new Date()
         })
       }
+    })
+
+    // 버전 15: JRPG 시스템 테이블 추가
+    this.version(15).stores({
+      profiles: '++id, userId, email',
+      stats: '++id, [userId+type], userId',
+      activities: '++id, userId, statType, timestamp',
+      missions: '++id, userId, type, completed, [userId+type]',
+      feedPosts: '++id, userId, createdAt, encrypted',
+      feedComments: '++id, postId, userId, createdAt',
+      feedReactions: '++id, [postId+userId+type], postId, userId',
+      investments: '++id, investorId, recipientId, status, createdAt',
+      characters: '++id, userId',
+      playerData: 'id, updatedAt',
+      settings: 'id, category, userId',
+      userEquipments: '++id, userId, equipmentId, isEquipped',
+      userInventory: '++id, userId, itemId, itemType',
+      userResources: '++id, userId',
+      userAchievements: '++id, [userId+achievementId], userId, achievementId, unlockedAt',
+      achievementStates: 'userId',
+      stageProgress: '++id, [userId+dungeonId+stageId], userId, dungeonId, stageId, status',
+      collectionStates: '++id, [userId+type], userId, type',
+      leaderboardEntries: '++id, [category+rank], userId, category, score',
+      userScores: '++id, [userId+category], userId, category',
+      playerEnergy: '++id, userId',
+      battleTickets: '++id, userId',
+      energyTransactions: '++id, userId, type, timestamp',
+      dailyExpLimits: '++id, [userId+statType+date], userId, date',
+      playerStats: '++id, [userId+statType], userId',
+      dungeonProgress: '++id, [userId+dungeonId], userId, dungeonId, status, completedAt',
+      learnedSkills: '++id, [userId+skillId], userId, skillId, level, slot',
+      quickSlots: '++id, [userId+slot], userId, slot',
+      skillPoints: '++id, userId',
+      metadata: '++id, key',
+      fatigue: '++id, userId',
+      fatigueActivities: '++id, userId, timestamp',
+      verifications: '++id, [userId+activityId], userId, timestamp, type, verified',
+      // JRPG 테이블들
+      jrpgInventory: '++id, userId',
+      jrpgSkills: '++id, userId',
+      jrpgBattleLogs: '++id, userId, dungeonId, timestamp',
+      jrpgProgress: '++id, userId'
     })
   }
 }

@@ -95,6 +95,21 @@ export const AI_PATTERN_TRAITS: Record<AIPattern, {
 }
 
 // AI 결정 로직
+export function getAIAction(monster: any, playerTeam: any[], enemyTeam: any[]): AIDecision {
+  // 간단한 AI 로직 구현
+  const hpPercent = (monster.hp / monster.maxHp) * 100;
+  
+  if (hpPercent < 30) {
+    return { action: 'heal', priority: 90 };
+  }
+  
+  if (Math.random() > 0.7) {
+    return { action: 'special', priority: 70 };
+  }
+  
+  return { action: 'attack', targetId: playerTeam[0]?.id, priority: 50 };
+}
+
 export class MonsterAI {
   // 현재 상태에 따른 mood 업데이트
   static updateMood(

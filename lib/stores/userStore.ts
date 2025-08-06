@@ -23,7 +23,7 @@ interface UserStore {
 }
 
 const defaultUser: User = {
-  id: 'default',
+  id: 'default-user', // GAME_CONFIG와 일치시킴
   name: '모험가',
   level: 1,
   experience: 0,

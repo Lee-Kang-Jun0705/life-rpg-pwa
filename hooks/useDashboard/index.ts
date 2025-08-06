@@ -23,7 +23,7 @@ export function useDashboard(): UseDashboardReturn {
   // 초기 로드
   useEffect(() => {
     loadUserData()
-  }, []) // 의도적으로 의존성 배열 비움
+  }, [loadUserData])
 
   // 스탯 클릭 핸들러
   const handleStatClick = useCallback(async(statType: string) => {
@@ -34,11 +34,27 @@ export function useDashboard(): UseDashboardReturn {
 
   // 음성 입력 핸들러
   const handleVoiceInput = useCallback(async(transcript: string, activityType?: string | null) => {
+    console.log('🎤 handleVoiceInput called:', {
+      transcript,
+      activityType,
+      timestamp: new Date().toISOString()
+    })
+    
+    // 디버깅을 위한 알림
+    console.warn('🎤🎤🎤 음성 입력 감지! 텍스트:', transcript)
+    
     // activityType이 직접 전달된 경우 (스탯 선택 후 녹음)
     if (activityType) {
       const factors = ExperienceCalculatorService.calculateExperience(activityType, transcript)
       console.log('🎤 Voice input experience:', factors)
+      console.log('🎤 Calling updateStat with:', {
+        statType: activityType,
+        experience: factors.finalExp,
+        activityName: transcript
+      })
+      console.warn('🎤🎤🎤 updateStat 호출 전 - activityName:', transcript)
       await updateStat(activityType, factors.finalExp, transcript)
+      console.warn('🎤🎤🎤 updateStat 호출 후 - 완료!')
       return
     }
 
